@@ -27,12 +27,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.AUTH_SECRET,
-    baseURL: process.env.AUTH_BASEURL,
-    clientID: process.env.AUTH_CLIENTID,
-    issuerBaseURL: process.env.AUTH_ISSUERBASEURL
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.AUTH_SECRET,
+  baseURL: process.env.AUTH_BASEURL,
+  clientID: process.env.AUTH_CLIENTID,
+  issuerBaseURL: process.env.AUTH_ISSUERBASEURL
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -56,9 +56,9 @@ app.use(auth(authConfig));
 // })
 
 // req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
+// app.get('/', (req, res) => {
+//   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+// });
 
 // app.get('/profile', requiresAuth(), (req, res) => {
 //   res.send(JSON.stringify(req.oidc.user));
@@ -72,12 +72,12 @@ app.use('/', indexRouter);
 // app.use('/formulas', formulasRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -92,6 +92,6 @@ app.use(function(err, req, res, next) {
 // })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
 // module.exports = app;
