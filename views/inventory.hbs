@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>inventory</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        
+    </head>
+    <body>
+        <!-- https://materializecss.com/cards.html -->
+        <div style="padding:20px">
+            <h1>inventory: </h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    {{#each results}}
+                    <tr>
+                        <td>{{this.formula_id}}</td>
+                        <td>{{this.test_name}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    
+    </body>
+</html>

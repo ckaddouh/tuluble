@@ -4,12 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+// var indexRouter = require('./routes/index');
 // var inventoryRouter = require('./routes/inventory');
 // var formulasRouter = require('./routes/formulas');
 
 const { auth } = require('express-openid-connect');
-// const db = require("./db/db");
+const db = require("./db/db_connection");
 
 const port = 3000;
 var app = express();
@@ -66,16 +66,41 @@ app.use(auth(authConfig));
 // });
 
 
+const read_inventory_all_sql = `
+    SELECT
+        formula_id, test_name
+    FROM
+        test_table
+`
 
-
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 // app.use('/inventory', inventoryRouter);
 // app.use('/formulas', formulasRouter);
+
+app.get("/", (req, res) =>{
+  res.render('index');
+});
+
+app.get( "/inventory", ( req, res ) => {
+  db.execute(read_inventory_all_sql, (error, results) => {
+      if (error)
+          res.status(500).send(error); //Internal Server Error
+      else{
+          res.render('inventory', {results: results} );
+      }
+  });
+});
+// app.use('/inventory', function routeHandler(req, res) {
+//   res.render('inventory');
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
+
+
+
 
 // error handler
 app.use(function (err, req, res, next) {

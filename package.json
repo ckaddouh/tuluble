@@ -7,7 +7,8 @@
     "express-openid-connect": "^2.10.0",
     "hbs": "^4.2.0",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0"
