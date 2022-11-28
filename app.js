@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-  authRequired: false,
+  authRequired: true,
   auth0Logout: true,
   secret: process.env.AUTH_SECRET,
   baseURL: process.env.AUTH_BASEURL,
@@ -80,6 +80,11 @@ const read_inventory_all_sql = `
 // app.use('/inventory', inventoryRouter);
 // app.use('/formulas', formulasRouter);
 
+// app.get('/', (req, res) => {
+//   res.send(
+//     req.oidc.isAuthenticated() ? res.render('index') : open('https://dev-gm9sesne.us.auth0.com/u/login?state=hKFo2SAtUWpZODh1R0tubjBZZFBOUnBjR0RPZzBQS0hxYTFLX6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFRMWRRRUREcWJYS0xtSVhlMzVTTnVIN3pOZUpldjdio2NpZNkgWnV0Z2tQWE9DYWdLNTNoOGdHTkx1RENqbGFLRDJralI')
+//   )
+// });
 app.get("/", (req, res) =>{
   res.render('index');
 });
@@ -93,6 +98,10 @@ app.get( "/inventory", ( req, res ) => {
       }
   });
 });
+
+app.get("/logout", ( req, res ) => {
+  logout();
+})
 // app.use('/inventory', function routeHandler(req, res) {
 //   res.render('inventory');
 // });
