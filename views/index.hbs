@@ -9,8 +9,10 @@
     <body>
         <!-- https://materializecss.com/cards.html -->
         <div style="padding:20px">
-            <h1>tuluble
-                <span class="large material-icons">local_florist
+            <h1 style="color:#50baa4">tuluble
+                {{!-- <p style="color:#fa82be" > </p> --}}
+                <span style= "col
+                or:#000000" class="large material-icons">local_florist
                     {{!-- <a font-size="20"> --}}
                 </span>
 
@@ -20,18 +22,20 @@
             <p>Welcome to the tuluble database!</p>
             <p>For our plumbing project, we have demonstrated our ability to utilize our technologies. </p>
             <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
-            <p>Log in with Google to verify your credentials and access tuluble data.</p>
+            <p>By logging in, you have verified your credentials and may access tuluble data.</p>
 
-            {{!-- <div class = "waves-effect waves-pink btn-large" href="">
-                <a style = "background-color: rgba(224, 102, 185, 0.65)" </a>
-            </div> --}}
+            <div class = ".pink_button">
+                <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
+            </div>
 
             <div class = "buttons">
-                <a class = "waves-effect waves-light btn-large" href="/inventory">Start</a>
-                <a style = "background-color: rgba(224, 102, 185, 0.65)" !important>
+                <a class = "waves-effect waves-light btn-large" href="/inventory">Start </a>
+                {{!-- <i class="material-icons">add</i> --}}
+                <a style = ".pink_button"></a>
                 {{!-- <img src="views/luluble_logo.jpg"> --}}
                 {{!-- <a style = "background-color: rgba(224, 102, 185, 0.65)" </a></a> --}}
             </div>
+
 
             {{!-- <div class = "image">
                 <a style="z-index: 15;" >
