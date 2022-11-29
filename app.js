@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-  authRequired: true,
+  authRequired: false,
   auth0Logout: true,
   secret: process.env.AUTH_SECRET,
   baseURL: process.env.AUTH_BASEURL,
@@ -86,8 +86,13 @@ const read_inventory_all_sql = `
 //   )
 // });
 app.get("/", (req, res) =>{
+  res.render('welcome');
+});
+
+app.get("/index", (req, res) =>{
   res.render('index');
 });
+
 
 app.get( "/inventory", ( req, res ) => {
   db.execute(read_inventory_all_sql, (error, results) => {
@@ -102,6 +107,7 @@ app.get( "/inventory", ( req, res ) => {
 app.get("/logout", ( req, res ) => {
   logout();
 })
+
 // app.use('/inventory', function routeHandler(req, res) {
 //   res.render('inventory');
 // });
@@ -133,3 +139,5 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 // module.exports = app;
+
+
