@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        
+    </head>
+    <body>
+        <!-- https://materializecss.com/cards.html -->
+         {{#with project_data}}  
+        <div style="padding:20px">
+            <h1>{{project_name}}</h1>
+            <p>All of the project details go here</p>
+        </div>
+
+        <button><a href="/projects">Go back</a></button>
+        {{/with}}
+    
+    </body>
+</html>

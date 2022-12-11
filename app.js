@@ -4,7 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-
 // TEST FOR NEW LAPTOP
 
 // var indexRouter = require('./routes/index');
@@ -13,6 +12,7 @@ var logger = require('morgan');
 
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
+const { realpathSync } = require('fs');
 
 const port = 3000;
 var app = express();
@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-  authRequired: false,
+  authRequired: true,
   auth0Logout: true,
   secret: process.env.AUTH_SECRET,
   baseURL: process.env.AUTH_BASEURL,
@@ -73,7 +73,23 @@ const read_inventory_all_sql = `
     SELECT
         formula_id, test_name
     FROM
-        test_table
+        formulas
+`
+
+const read_projects_all_sql = `
+    SELECT
+        project_name, project_id, client, date
+    FROM
+        projects
+`
+
+const singleProjectQuery = `
+    SELECT
+        project_name, project_id, client, date
+    FROM
+        projects
+    WHERE
+        project_id = ?
 `
 
 // app.use('/', indexRouter);
@@ -86,12 +102,12 @@ const read_inventory_all_sql = `
 //   )
 // });
 app.get("/", (req, res) =>{
-  res.render('welcome');
-});
-
-app.get("/index", (req, res) =>{
   res.render('index');
 });
+
+// app.get("/index", (req, res) =>{
+//   res.render('index');
+// });
 
 
 app.get( "/inventory", ( req, res ) => {
@@ -103,6 +119,57 @@ app.get( "/inventory", ( req, res ) => {
       }
   });
 });
+
+app.get( "/projects", ( req, res ) => {
+  db.execute(read_projects_all_sql, (error, results) => {
+      if (error)
+          res.status(500).send(error); //Internal Server Error
+      else{
+          res.render('projects', {results: results} );
+      }
+  });
+});
+
+app.get( "/projects/:project_id", ( req, res ) => {
+  let project_id = req.params.project_id
+  db.execute(singleProjectQuery, [project_id], (error, results) => {
+      if (error)
+          res.status(500).send(error); //Internal Server Error
+      else{
+          // res.render('project', {project_data: results[0]} );
+          res.render('project', { title: 'Project Details', 
+                      styles: ["tables", "event"], 
+                      project_id : project_id, 
+                      project_data: results[0]});
+      }
+  });
+});
+
+
+// app.get('/projects/:project_id', function(req, res, next) {
+//   let project_id = req.params.project_id
+//   // GET FROM DATABASE: Select query where event_id = event_id from URL
+//   //For now, lets pretend
+//   // let event_data = {event_id: event_id,
+//   //                 event_name: "Opening Ceremony", 
+//   //                 event_location: "Auditorium",
+//   //                 event_date: "May 1 (Sat)",
+//   //                 event_time: "10:30 AM",
+//   //                 event_duration: "30m",
+//   //                 event_type: "Main",
+//   //                 event_interest: "100",
+//   //                 event_description: "Be there!"}
+//   db.query(singleProjectQuery, [project_id], (err, results) => {
+//     if (err)
+//       next(err);
+//     console.log(results);
+//     let project_data = results[0]; 
+//     res.render('project', { title: 'Project Details', 
+//                       styles: ["tables", "event"], 
+//                       project_id : project_id, 
+//                       project_data: project_data});
+//   });
+// });
 
 app.get("/logout", ( req, res ) => {
   logout();
@@ -119,11 +186,11 @@ app.use(function (req, res, next) {
 
 
 
-
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
+  console.log(err.message);
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
