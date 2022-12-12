@@ -73,7 +73,7 @@ const read_inventory_all_sql = `
     SELECT
         formula_id, test_name
     FROM
-        test_table
+        formulas
 `
 
 // app.use('/', indexRouter);
@@ -84,7 +84,7 @@ const read_inventory_all_sql = `
 //   res.send(
 //     req.oidc.isAuthenticated() ? res.render('index') : open('https://dev-gm9sesne.us.auth0.com/u/login?state=hKFo2SAtUWpZODh1R0tubjBZZFBOUnBjR0RPZzBQS0hxYTFLX6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFRMWRRRUREcWJYS0xtSVhlMzVTTnVIN3pOZUpldjdio2NpZNkgWnV0Z2tQWE9DYWdLNTNoOGdHTkx1RENqbGFLRDJralI')
 //   )
-// });
+// }); 
 app.get("/", (req, res) =>{
   res.render('index');
 });
@@ -102,6 +102,17 @@ app.get( "/inventory", ( req, res ) => {
 app.get("/logout", ( req, res ) => {
   logout();
 })
+
+app.get("/page", (req, res) =>{
+  db.execute(read_inventory_all_sql, (error, results) => {
+      if (error)
+          res.status(500).send(error); //Internal Server Error
+      else{
+          res.render('page', {results: results} );
+      }
+  });
+});
+
 // app.use('/inventory', function routeHandler(req, res) {
 //   res.render('inventory');
 // });
