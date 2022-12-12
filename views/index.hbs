@@ -8,8 +8,8 @@
 
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="./public/styles/index.css">
-            <script type="text/javascript" src="./routes/index.js"></script>
+            <link rel="stylesheet" href="/styles/index.css">
+            <script type="text/javascript" src="/routes/index.js"></script>
 
         </head>
         
@@ -67,8 +67,12 @@
                 }
             </style>
 
+
+
+
+
             <!-- Use any element to open the sidenav -->
-            <span style="font-size:30px;cursor:pointer; padding:1%" onclick="openNav()">☰ open</span>
+            <span style="font-size:30px;cursor:pointer; padding:1%" onclick="openNav()"</span>☰ open</span>
 
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -78,19 +82,7 @@
                 <a href="#">Contact</a>
             </div>
 
-            <script>
-            /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
-            function openNav() {
-                document.getElementById("mySidenav").style.width = "250px";
-                document.getElementById("main").style.marginLeft = "250px";
-            }
 
-            /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
-            function closeNav() {
-                document.getElementById("mySidenav").style.width = "0";
-                document.getElementById("main").style.marginLeft = "0";
-            }
-            </script>
 
 
 
@@ -117,29 +109,7 @@
 
                 <center>
 
-                    <style>
-                        .tableFixHead {
-                            overflow-y: auto;
-                            height: 106px;
-                        }
-                        .tableFixHead thead th {
-                            position: sticky;
-                            top: 0;
-                        }
-                        table {
-                            border-collapse: collapse;
-                            width: 100%;
-                        }
-                        th,
-                        td {
-                            padding: 8px 16px;
-                            border: 1px solid #ccc;
-                        }
-                        th {
-                            background: #eee;
-                        }
 
-                    </style>
 
                     <table class="tableFixHead">
                         <thead>

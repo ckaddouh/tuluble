@@ -1,14 +1,14 @@
-var mysql = require('mysql');
-//require('dotenv').config();
+var mysql = require('mysql'); // newer library called mysql2 UPGRADE
+require('dotenv').config();
 
 
-/**
+//**
 var con = mysql.createConnection({
-    host: fetch(process.env.DB_HOST),
+    host: process.env.DB_HOST,
     user: fetch(process.env.DB_USER),
     password: fetch(process.env.DB_PASSWORD)
   });
-*/
+//*/
 
 //**
 
