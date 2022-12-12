@@ -3,8 +3,8 @@ var router = express.Router();
 // const {requiresAuth} = require('express-openid-connect');
 
 router.get('/', function(req, res, next) {
-    res.render('index', { title: ' Home Page ',
-                          style: 'index.css'});
+    res.render('welcome', { title: ' Welcome ',
+                          style: 'welcome.css'});
   });
 
 /* GET home page. */
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
   //   username = req.oidc.user.name;
   // res.render('index', { title: 'tuluble ' +  username
   // , style: "index" });
-  res.render('index', {title: 'tuluble', style: "index"});
+  res.render('welcome', {title: 'tuluble', style: 'welcome.css'});
 });
 
 // router.get('/profile', requiresAuth(), (req, res) => {

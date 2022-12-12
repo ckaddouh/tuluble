@@ -1,49 +1,179 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>index</title>
+    <html>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    </head>
-    <body>
-        <!-- https://materializecss.com/cards.html -->
-        <div style="padding:20px">
-            <h1 style="color:#50baa4">tuluble
-                {{!-- <p style="color:#fa82be" > </p> --}}
-                <span style= "col
-                or:#000000" class="large material-icons">local_florist
-                    {{!-- <a font-size="20"> --}}
-                </span>
+        
 
-            </h1>
-            <a href="/logout">Log Out</a>
-            {{!-- <h1 class="large material-icons">filter_vintage</h1> --}}
-            {{!-- <span> tuluble </span> --}}
-            <p>Welcome to the tuluble database!</p>
-            <p>For our plumbing project, we have demonstrated our ability to utilize our technologies. </p>
-            <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
-            <p>By logging in, you have verified your credentials and may access tuluble data.</p>
+        <head>
+            <title>index</title>
 
-            <div class = ".pink_button">
-                <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+            <link rel="stylesheet" href="/styles/index.css">
+            <script type="text/javascript" src="/routes/index.js"></script>
+
+        </head>
+        
+        <body>
+
+            <style>
+                /* The side navigation menu */
+                .sidenav {
+                    height: 100%; /* 100% Full-height */
+                    width: 0; /* 0 width - change this with JavaScript */
+                    position: fixed; /* Stay in place */
+                    z-index: 1; /* Stay on top */
+                    top: 0;
+                    left: 0;
+                    background-color: #111; /* Black*/
+                    overflow-x: hidden; /* Disable horizontal scroll */
+                    padding-top: 60px; /* Place content 60px from the top */
+                    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+                }
+
+                /* The navigation menu links */
+                .sidenav a {
+                    padding: 8px 8px 8px 32px;
+                    text-decoration: none;
+                    font-size: 25px;
+                    color: #2d1ff5;
+                    display: block;
+                    transition: 0.3s
+                }
+
+                /* When you mouse over the navigation links, change their color */
+                .sidenav a:hover, .offcanvas a:focus{
+                    color: #e44c4c;
+                }
+
+                /* Position and style the close button (top right corner) */
+                .closebtn {
+                    position: absolute;
+                    top: 0;
+                    right: 25px;
+                    font-size: 36px !important;
+                    margin-left: 50px;
+                }
+
+                /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+                #main {
+                    transition: margin-left .5s;
+                    padding: 20px;
+                }
+
+                /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+                @media screen and (max-height: 450px) {
+                    .sidenav {padding-top: 15px;}
+                    .sidenav a {font-size: 18px;}
+                }
+            </style>
+
+
+
+
+
+            <!-- Use any element to open the sidenav -->
+            <span style="font-size:30px;cursor:pointer; padding:1%" onclick="openNav()"</span>☰ open</span>
+
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Clients</a>
+                <a href="#">Contact</a>
             </div>
 
-            <div class = "buttons">
-                <a class = "waves-effect waves-light btn-large" href="/inventory">Start </a>
-                {{!-- <i class="material-icons">add</i> --}}
-                <a style = ".pink_button"></a>
-                {{!-- <img src="views/luluble_logo.jpg"> --}}
-                {{!-- <a style = "background-color: rgba(224, 102, 185, 0.65)" </a></a> --}}
+
+
+
+
+
+            <div id="main" style="padding: 0% 2% 0% 2%">
+
+
+
+            <!-- https://materializecss.com/cards.html -->
+
+                <center>            
+                    <h1 id="title" style="color:#50baa4">Welcome {user}
+                    {{!-- <p style="color:#fa82be" > </p> --}}
+                        <span style= "col
+                        or:#000000" class="large material-icons">local_florist
+                            {{!-- <a font-size="20"> --}}
+                        </span>
+                    </h1>
+
+                    <h3><button onclick="lastAccessedProject();">Most Recent Project</button></h3>
+                </center>
+
+                <h3 style="color:#50baa4">Notifications</h3>
+
+                <center>
+
+
+
+                    <table class="tableFixHead">
+                        <thead>
+                            <tr>
+                                <th>Thing 1</th>
+                                <th>Thing 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>things 3</td>
+                                <td>things 4</td>
+                            </tr>
+                            <tr>
+                                <td>things 5</td>
+                                <td>things 6</td>
+                            </tr>
+                            <tr>
+                                <td>things 7</td>
+                                <td>things 8</td>
+                            </tr>
+                            <tr>
+                                <td>things 9</td>
+                                <td>things 10</td>
+                            </tr>
+                            <tr>
+                                <td>things 11</td>
+                                <td>things 12</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </center>
+
+                <a href="/logout">Log Out</a>
+                <!-- should this appear in sidebar or top right corner -->
+
+                {{!-- <h1 class="large material-icons">filter_vintage</h1> --}}
+                {{!-- <span> tuluble </span> --}}
+                <p>Welcome to the tuluble database!</p>
+                <p>For our plumbing project, we have demonstrated our ability to utilize our technologies. </p>
+                <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
+                <p>By logging in, you have verified your credentials and may access tuluble data.</p>
+
+                <div class = ".pink_button">
+                    <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
+                </div>
+
+                <div class = "buttons">
+                    <a class = "waves-effect waves-light btn-large" href="/inventory">Start </a>
+                    {{!-- <i class="material-icons">add</i> --}}
+                    <a style = ".pink_button"></a>
+                    {{!-- <img src="views/luluble_logo.jpg"> --}}
+                    {{!-- <a style = "background-color: rgba(224, 102, 185, 0.65)" </a></a> --}}
+                </div>
+
+
+                {{!-- <div class = "image">
+                    <a style="z-index: 15;" >
+                    <img src="views/luluble_logo.jpg">
+                </div> --}}
+                    
+
             </div>
+        
+        </body>
 
-
-            {{!-- <div class = "image">
-                <a style="z-index: 15;" >
-                <img src="views/luluble_logo.jpg">
-            </div> --}}
-            
-        </div>
-    
-    </body>
-</html>
+    </html>

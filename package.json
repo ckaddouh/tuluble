@@ -9,7 +9,9 @@
     "materialize-css": "^1.0.0-rc.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.26.0",
+    "sqlite3": "^5.1.2"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0"
