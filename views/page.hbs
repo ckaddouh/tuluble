@@ -119,14 +119,37 @@
                 <tbody>
 
                     {{#each results}}
-
-
-
-
                     <tr>
                         <td>{{this.formula_id}}
-                            <a href="#terms" class="btn orange modal-trigger">Terms</a>
-                            <div class="modal" id="terms">test</div>
+                            <a href="#terms" class="modal-trigger">
+                                <span class="large material-icons">info_outline</span>
+                            </a>
+                            <div class="modal" id="terms">
+                                <div class="row">
+                                    <div class="col s12">&nbsp;</div>
+                                    <div class="col s12"><b>Ingredient Information</b></div>
+                                    <div class="col s12">&nbsp;</div>
+                                    <div class="col s6">
+                                        <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span>
+                                    </div>
+                                    <div class="col s6">
+                                        <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span>
+                                    </div>
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s12 m6 l3"><p></p></div>
+                                        <div class="col s12 m6 l3"><p></p></div>
+                                        <div class="col s12 m6 l3"><p></p>
+                                            <div class="delete_button">
+                                                <a href="#" class="btn-small">Edit</a>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6 l3"><p></p>
+                                            <div class="delete_button">
+                                                <a href="#" class="btn-small">Delete</a>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
 
                             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
                             <script
