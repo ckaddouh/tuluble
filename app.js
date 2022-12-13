@@ -71,9 +71,9 @@ app.use(auth(authConfig));
 
 const read_inventory_all_sql = `
     SELECT
-        formula_id, test_name
+        ingredient_id, trade_name
     FROM
-        formulas
+        ingredient
 `
 
 const read_projects_all_sql = `
