@@ -15,72 +15,52 @@
         
         <body>
 
-            <style>
-                /* The side navigation menu */
-                .sidenav {
-                    height: 100%; /* 100% Full-height */
-                    width: 0; /* 0 width - change this with JavaScript */
-                    position: fixed; /* Stay in place */
-                    z-index: 1; /* Stay on top */
-                    top: 0;
-                    left: 0;
-                    background-color: #111; /* Black*/
-                    overflow-x: hidden; /* Disable horizontal scroll */
-                    padding-top: 60px; /* Place content 60px from the top */
-                    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-                }
+        <!-- NAVIGATION SIDEBAR -->
+        <div class="row" style="padding: 2% 2% 0% 2%">
+            <div class="col s6">
+                <ul class="sidenav" id="mysidenav">
+                    <li>
+                        <div class="user-view">
+                            <div class="background">
+                                <img src="./views/luluble_hlogo.jpg" style="height:250px;" alt="">
 
-                /* The navigation menu links */
-                .sidenav a {
-                    padding: 8px 8px 8px 32px;
-                    text-decoration: none;
-                    font-size: 25px;
-                    color: #2d1ff5;
-                    display: block;
-                    transition: 0.3s
-                }
+                            </div>
+                            <span style="color:#000000" class="large material-icons">local_florist
+                            </span>
+                            <a href="#" data-target="side_nav"></a>
+                            {{!-- <a href="#email"><span class="email white-text">web@gmail.com</span></a> --}}
+                        </div>
+                    </li>
+                    <li><a href="/"><i class="material-icons">home</i>Index Page</a></li>
+                    <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
+                    <li><a href="/formulas"><i class="material-icons">insert_chart</i>Formulas</a></li>
+                    <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
+                    <li><a href="#"><i class="material-icons">create</i>Other</a></li>
+                </ul>
 
-                /* When you mouse over the navigation links, change their color */
-                .sidenav a:hover, .offcanvas a:focus{
-                    color: #e44c4c;
-                }
+                {{!-- <a href="#" data-target="mysidenav" class="btn sidenav-trigger">Sidenav</a> --}}
 
-                /* Position and style the close button (top right corner) */
-                .closebtn {
-                    position: absolute;
-                    top: 0;
-                    right: 25px;
-                    font-size: 36px !important;
-                    margin-left: 50px;
-                }
+                <a href="#" data-target="mysidenav" class="btn sidenav-trigger">
+                    <i class="material-icons">menu</i>
+                    <span class="blue-text text-darken-2"></span>
+                </a>
 
-                /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-                #main {
-                    transition: margin-left .5s;
-                    padding: 20px;
-                }
+                <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
+                {{!-- <div class="col s6">
+                    <img src="/luluble_hlogo.jpg" class="responsive-img">
+                </div> --}}
+                {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
 
-                /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-                @media screen and (max-height: 450px) {
-                    .sidenav {padding-top: 15px;}
-                    .sidenav a {font-size: 18px;}
-                }
-            </style>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-
-
-
-
-            <!-- Use any element to open the sidenav -->
-            <span style="font-size:30px;cursor:pointer; padding:1%" onclick="openNav()"</span>☰ open</span>
-
-            <div id="mySidenav" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="#">About</a>
-                <a href="#">Services</a>
-                <a href="#">Clients</a>
-                <a href="#">Contact</a>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var side = document.querySelectorAll('.sidenav');
+                        M.Sidenav.init(side)
+                    })
+                </script>
             </div>
+        </div>
 
 
 
