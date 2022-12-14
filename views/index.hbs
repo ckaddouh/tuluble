@@ -16,48 +16,57 @@
         <body>
 
         <!-- NAVIGATION SIDEBAR -->
-        <div style="padding: 2% 2% 0% 2%">
-            <ul class="sidenav" id="mysidenav">
-                <li>
-                    <div class="user-view">
-                        <div class="background">
-                            <img src="./views/luluble_hlogo.jpg" style="height:250px;" alt="">
+        <div style="display: flex; justify-content:space-between;">
+            <div class="navbar" style="padding: 2% 2% 0% 2%">
+                <ul class="sidenav" id="mysidenav">
+                    <li>
+                        <div class="user-view">
+                            <div class="background">
+                                <img src="./views/luluble_hlogo.jpg" style="height:250px;" alt="">
 
+                            </div>
+                            <span style="color:#000000" class="large material-icons">local_florist
+                            </span>
+                            <span style="color:#25b5af"><b><font size="+2">&nbsp;tuluble database</font></b></span>
+                            <a href="#" data-target="side_nav"></a>
+                            {{!-- <a href="#email"><span class="email white-text">web@gmail.com</span></a> --}}
                         </div>
-                        <span style="color:#000000" class="large material-icons">local_florist
-                        </span>
-                        <a href="#" data-target="side_nav"></a>
-                        {{!-- <a href="#email"><span class="email white-text">web@gmail.com</span></a> --}}
-                    </div>
-                </li>
-                <li><a href="/"><i class="material-icons">home</i>Index Page</a></li>
-                <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
-                <li><a href="/formulas"><i class="material-icons">insert_chart</i>Formulas</a></li>
-                <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
-                <li><a href="#"><i class="material-icons">create</i>Other</a></li>
-            </ul>
+                    </li>
+                    <li><a href="/"><i class="material-icons">home</i>Index Page</a></li>
+                    <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
+                    <li><a href="/formulas"><i class="material-icons">insert_chart</i>Formulas</a></li>
+                    <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
+                    {{!-- <li><a href="#"><i class="material-icons">create</i>Other</a></li> --}}
+                </ul>
 
-            {{!-- <a href="#" data-target="mysidenav" class="btn sidenav-trigger">Sidenav</a> --}}
+                {{!-- <a href="#" data-target="mysidenav" class="btn sidenav-trigger">Sidenav</a> --}}
 
-            <a href="#" data-target="mysidenav" class="btn sidenav-trigger">
-                <i class="material-icons">menu</i>
-                <span class="blue-text text-darken-2"></span>
-            </a>
+                <a href="#" data-target="mysidenav" class="btn sidenav-trigger">
+                    <i class="material-icons">menu</i>
+                    <span class="blue-text text-darken-2"></span>
+                </a>
 
-            <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
-            {{!-- <div class="col s6">
-                <img src="/luluble_hlogo.jpg" class="responsive-img">
-            </div> --}}
-            {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
+                <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
+                {{!-- <div class="col s6">
+                    <img src="/luluble_hlogo.jpg" class="responsive-img">
+                </div> --}}
+                {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    var side = document.querySelectorAll('.sidenav');
-                    M.Sidenav.init(side)
-                })
-            </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var side = document.querySelectorAll('.sidenav');
+                        M.Sidenav.init(side)
+                    })
+                </script>
+            </div>
+
+            <div class="logoutButton">
+                <a class = "waves-effect waves-light btn-small" class="logout" href="/logout">Log Out </a>
+                <a style = ".pink_button"></a>
+                {{!-- <a class="logout" href="/logout">Log Out</a> --}}
+            </div>
         </div>
 
 
@@ -66,13 +75,9 @@
 
 
             <div id="main" style="padding: 0% 2% 0% 2%">
-
-
-
             <!-- https://materializecss.com/cards.html -->
-
                 <center>            
-                    <h1 id="title" style="color:#50baa4">Welcome {user}
+                    <h1 id="title" style="color:#50baa4">Welcome {user}!
                     {{!-- <p style="color:#fa82be" > </p> --}}
                         <span style= "col
                         or:#000000" class="large material-icons">local_florist
@@ -80,7 +85,7 @@
                         </span>
                     </h1>
 
-                    <h3><button onclick="lastAccessedProject();">Most Recent Project</button></h3>
+                    <h3><button background-color="color: black" style="color: black;" onclick="lastAccessedProject();">&nbsp;Most Recent Project&nbsp;</button></h3>
                 </center>
 
                 <h3 style="color:#50baa4">Notifications</h3>
@@ -92,56 +97,57 @@
                     <table class="tableFixHead">
                         <thead>
                             <tr>
-                                <th>Thing 1</th>
-                                <th>Thing 2</th>
+                                <th>Ingredient</th>
+                                <th>Alert</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>things 3</td>
-                                <td>things 4</td>
+                                <td>Aristoflex AVC</td>
+                                <td>25g left</td>
                             </tr>
                             <tr>
-                                <td>things 5</td>
-                                <td>things 6</td>
+                                <td>AM-Hebeatol CG</td>
+                                <td>Expired: 5/7/2022</td>
                             </tr>
                             <tr>
-                                <td>things 7</td>
-                                <td>things 8</td>
+                                <td>Licorice Extract PT-40</td>
+                                <td>Expires soon: 1/8/2023</td>
                             </tr>
                             <tr>
-                                <td>things 9</td>
-                                <td>things 10</td>
+                                <td>Cerasynt SD</td>
+                                <td>3g left</td>
                             </tr>
                             <tr>
-                                <td>things 11</td>
-                                <td>things 12</td>
+                                <td>AM-Chemysoap S 3R W</td>
+                                <td>11g left</td>
                             </tr>
                         </tbody>
                     </table>
                 </center>
 
-                <a href="/logout">Log Out</a>
+                {{!-- <a class="logout" href="/logout">Log Out</a> --}}
                 <!-- should this appear in sidebar or top right corner -->
 
                 {{!-- <h1 class="large material-icons">filter_vintage</h1> --}}
                 {{!-- <span> tuluble </span> --}}
-                <p>Welcome to the tuluble database!</p>
-                <p>For our plumbing project, we have demonstrated our ability to utilize our technologies. </p>
-                <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
-                <p>By logging in, you have verified your credentials and may access tuluble data.</p>
+                <center>
+                    <p>&nbsp;</p>
+                    <p>Welcome to the tuluble database!</p>
+                    <p>You have access to luluble's inventory, projects, and formulas all within one place.</p>
+                    <p>Take a moment and explore.  </p>
+                    {{!-- <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
+                    <p>By logging in, you have verified your credentials and may access tuluble data.</p> --}}
+                </center>
 
                 <div class = ".pink_button">
                     <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
                 </div>
 
-                <div class = "buttons">
+                {{!-- <div class = "buttons">
                     <a class = "waves-effect waves-light btn-large" href="/inventory">Start </a>
-                    {{!-- <i class="material-icons">add</i> --}}
                     <a style = ".pink_button"></a>
-                    {{!-- <img src="views/luluble_logo.jpg"> --}}
-                    {{!-- <a style = "background-color: rgba(224, 102, 185, 0.65)" </a></a> --}}
-                </div>
+                </div> --}}
 
 
                 {{!-- <div class = "image">
@@ -151,7 +157,49 @@
                     
 
             </div>
+
+            <a>&nbsp;</a>
         
         </body>
+
+        <footer class="page-footer grey darken-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 l6">
+                        <h5>About luluble</h5>
+                        <p>Boutique laboratory focused on innovative thinking in product development.
+                            Offer full-service development from “concept to counter”</p>
+                    </div>
+                    <div class="col s12 l4 offset-l2">
+                        <h5>Connect</h5>
+                        <ul>
+                            <li>
+                                {{!-- <span class="large material-icons">open_in_browser</span> --}}
+                                <a href="https://www.luluble.com/" class="grey-text text-lighten-3">Website</a>
+                            </li>
+                            <li>
+                                {{!-- <span class="large material-icons">open_in_browser</span> --}}
+                                <a href="https://www.instagram.com/luluble_inc/?igshid=zkxn18fwn7fy"
+                                    class="grey-text text-lighten-3">Instagram</a>
+                            </li>
+                            <li>
+                                {{!-- <span class="large material-icons">open_in_browser</span> --}}
+                                <a href="https://www.pinterest.com/luluble_inc/"
+                                    class="grey-text text-lighten-3">Pinterest</a>
+                            </li>
+                            <li>
+                                {{!-- <span class="large material-icons">open_in_browser</span> --}}
+                                <a href="https://www.linkedin.com/company/luluble/about/"
+                                    class="grey-text text-lighten-3">LinkedIn</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright grey darken-4">
+                <div class="container center-align">&copy; 2022 tuluble</div>
+            </div>
+        </footer>
+
 
     </html>
