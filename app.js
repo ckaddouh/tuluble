@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-  authRequired: false,
+  authRequired: true,
   auth0Logout: false,
   secret: process.env.AUTH_SECRET,
   baseURL: process.env.AUTH_BASEURL,
