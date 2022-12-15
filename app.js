@@ -130,6 +130,16 @@ app.get( "/projects", ( req, res ) => {
   });
 });
 
+app.get( "/formulas", ( req, res ) => {
+  db.execute(read_projects_all_sql, (error, results) => {
+      if (error)
+          res.status(500).send(error); //Internal Server Error
+      else{
+          res.render('formulas', {results: results} );
+      }
+  });
+});
+
 app.get( "/projects/:project_id", ( req, res ) => {
   let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, results) => {
