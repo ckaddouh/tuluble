@@ -31,8 +31,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('dotenv').config()
 
 const authConfig = {
-  authRequired: false,
-  auth0Logout: false,
+  authRequired: true,
+  auth0Logout: true,
   secret: process.env.AUTH_SECRET,
   baseURL: process.env.AUTH_BASEURL,
   clientID: process.env.AUTH_CLIENTID,
@@ -71,7 +71,7 @@ app.use(auth(authConfig));
 
 const read_inventory_all_sql = `
     SELECT
-        ingredient_id, trade_name
+        trade_name, inci_name, lot_num, amt, expiration
     FROM
         ingredient
 `
@@ -101,7 +101,7 @@ const singleProjectQuery = `
 //     req.oidc.isAuthenticated() ? res.render('index') : open('https://dev-gm9sesne.us.auth0.com/u/login?state=hKFo2SAtUWpZODh1R0tubjBZZFBOUnBjR0RPZzBQS0hxYTFLX6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFRMWRRRUREcWJYS0xtSVhlMzVTTnVIN3pOZUpldjdio2NpZNkgWnV0Z2tQWE9DYWdLNTNoOGdHTkx1RENqbGFLRDJralI')
 //   )
 // }); 
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
   res.render('index');
 });
 
@@ -110,48 +110,50 @@ app.get("/", (req, res) =>{
 // });
 
 
-app.get( "/inventory", ( req, res ) => {
+app.get("/inventory", (req, res) => {
   db.execute(read_inventory_all_sql, (error, results) => {
-      if (error)
-          res.status(500).send(error); //Internal Server Error
-      else{
-          res.render('inventory', {results: results} );
-      }
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('inventory', { results: results });
+    }
   });
 });
 
-app.get( "/projects", ( req, res ) => {
+app.get("/projects", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
-      if (error)
-          res.status(500).send(error); //Internal Server Error
-      else{
-          res.render('projects', {results: results} );
-      }
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('projects', { results: results });
+    }
   });
 });
 
-app.get( "/formulas", ( req, res ) => {
+app.get("/formulas", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
-      if (error)
-          res.status(500).send(error); //Internal Server Error
-      else{
-          res.render('formulas', {results: results} );
-      }
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('formulas', { results: results });
+    }
   });
 });
 
-app.get( "/projects/:project_id", ( req, res ) => {
+app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, results) => {
-      if (error)
-          res.status(500).send(error); //Internal Server Error
-      else{
-          // res.render('project', {project_data: results[0]} );
-          res.render('project', { title: 'Project Details', 
-                      styles: ["tables", "event"], 
-                      project_id : project_id, 
-                      project_data: results[0]});
-      }
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      // res.render('project', {project_data: results[0]} );
+      res.render('project', {
+        title: 'Project Details',
+        styles: ["tables", "event"],
+        project_id: project_id,
+        project_data: results[0]
+      });
+    }
   });
 });
 
@@ -181,17 +183,17 @@ app.get( "/projects/:project_id", ( req, res ) => {
 //   });
 // });
 
-app.get("/logout", ( req, res ) => {
+app.get("/logout", (req, res) => {
   logout();
 })
 
-app.get("/page", (req, res) =>{
+app.get("/page", (req, res) => {
   db.execute(read_inventory_all_sql, (error, results) => {
-      if (error)
-          res.status(500).send(error); //Internal Server Error
-      else{
-          res.render('page', {results: results} );
-      }
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('page', { results: results });
+    }
   });
 });
 

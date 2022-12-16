@@ -71,6 +71,124 @@
                 <p></p>
                 <h1>Inventory </h1>
             </div>
+
+            <div class = "row">
+                <form action="#">
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Thickeners</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Oils</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Butters</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Surfactants</span>
+                    </label>
+                    </p>    
+                    </div>    
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Functional/Active</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Preservatives</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Extracts/Fragrances/Flavors</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Experimental</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Colorants</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Absorbents</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>pH Adjusters (Acids)</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>pH Adjusters (Bases)</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Distilled Water/Ethyl Alcohol</span>
+                    </label>
+                    </p>    
+                    </div>
+                    <div  class = "col s3">
+                    <p>
+                    <label>
+                        <input type="checkbox" />
+                        <span>Retest</span>
+                    </label>
+                    </p>    
+                    </div>
+                </form>         
+            </div>
+
             <div class="col s12 m4 l2">
                 <p></p>
                 <div class="delete_button">
@@ -99,13 +217,51 @@
 
         <!-- INVENTORY TABLE -->
         <div style="padding:20px">
-            <table>
+            {{!-- <div class="col s6"> 
+                <table class="inv-table" class="striped" class="responsive-table">
+                <tr>
+                    <th>Thickeners
+                        <span class="large material-icons">import_export</span>
+                    </th>
+                    <th>Oils</th>
+                    <th>Butters</th>
+                    <th>Surfactants</th>
+                    <th>Functional/Active</th>
+                    <th>Preservatives</th>
+                    <th>Extracts/Fagrances/Flavors</th>
+                    <th>Experimental</th>
+                    <th>Colorants</th>
+                    <th>Absorbents</th>
+                    <th>pH Adjusters (Acids)</th>
+                    <th>pH Adjusters (Bases)</th>
+                    <th>Distilled Water/Ethyl Alcohol</th>
+
+                    
+                </tr>
+                <tr>
+                    <td>Water 1</td>
+                    <td>Trade name 1</td>
+                    <td>INCI 1</td>
+                    <td>47.30</td>
+                    <td>94.6</td>
+                </tr>
+                <tr>
+                    <td>Water 1</td>
+                    <td>Trade name 1</td>
+                    <td>INCI 1</td>
+                    <td>47.30</td>
+                    <td>94.6</td>
+                </tr>
+                </table>
+            </div> --}}
+
+            <table class="sortable">
                 <thead>
                     <tr>
-                        <th>ID
+                        <th>First Name
                             <span class="large material-icons">import_export</span>
                         </th>
-                        <th>Name
+                        <th>Last Name
                             <span class="large material-icons">import_export</span>
                         </th>
                         <th></th>
@@ -115,20 +271,22 @@
 
                     {{#each results}}
                     <tr>
-                        <td>{{this.formula_id}}
+                        <td>{{this.inci_name}}
                             <a href="#terms" class="modal-trigger">
                                 <span class="large material-icons">info_outline</span>
                             </a>
                             <div class="modal" id="terms">
                                 <div class="row">
                                     <div class="col s12">&nbsp;</div>
-                                    <div class="col s12"><b>Ingredient Information</b></div>
+                                    <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
                                     <div class="col s12">&nbsp;</div>
                                     <div class="col s6">
-                                        <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span>
+                                        <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Received:</b> {{this.amt}} grams</span>
+                                        {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span> --}}
                                     </div>
                                     <div class="col s6">
-                                        <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span>
+                                        {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span> --}}
+                                        <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Expiration Date:</b> {{this.expiration}}</span>
                                     </div>
                                         <div class="col s12">&nbsp;</div>
                                         <div class="col s12 m6 l3"><p></p></div>
@@ -156,7 +314,7 @@
                             </script>
                         </td>
 
-                        <td>{{this.test_name}}</td>
+                        <td>{{this.trade_name}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
