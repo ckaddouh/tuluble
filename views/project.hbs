@@ -9,15 +9,22 @@
         
     </head>
     <body>
-        <!-- https://materializecss.com/cards.html -->
-         {{#with project_data}}  
-        <div style="padding:20px">
-            <h1>{{project_name}}</h1>
-            <p>All of the project details go here</p>
-        </div>
+        <div style="padding: 2% 2% 0% 2%">
+            <!-- https://materializecss.com/cards.html -->
+            {{#with project_data}}  
+            <div>
+                <h1>{{project_name}}</h1>
+                <p>All of the project details go here</p>
+                <p>More information goes here</p>
+                <p>Woah there's a lot of information</p>
+                <p>There's still more???</p>
+                <p>Okay I think we're finally done</p>
+            </div>
 
-        <button><a href="/projects">Go back</a></button>
-        {{/with}}
-    
+            <div class="back_button">
+                <a href="/projects" class="btn waves-effect waves-light">Go Back</a>
+            </div>
+            {{/with}}
+        </div>
     </body>
 </html>
