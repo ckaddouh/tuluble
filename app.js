@@ -98,6 +98,20 @@ const singleProjectQuery = `
         project_id = ?
 `
 
+// FIX THIS
+const read_formulas = `
+    SELECT
+        formula_id, project_id, trial_num, trade_name, INCI, phase, percent_of_ingredient, total_amount
+    FROM
+        formulas, formula_ingredient, ingredient
+    WHERE
+        formulas.project_id = ? 
+        AND formulas.formula_id = formula_ingredient.formula_id 
+        AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+`
+
+
+
 // app.use('/', indexRouter);
 // app.use('/inventory', inventoryRouter);
 // app.use('/formulas', formulasRouter);
