@@ -4,14 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// TEST FOR NEW LAPTOP
-
-// var indexRouter = require('./routes/index');
-// var inventoryRouter = require('./routes/inventory');
-// var formulasRouter = require('./routes/formulas');
+var indexRouter = require('./public/routes/index');
+var inventoryRouter = require('./public/routes/inventory');
+var formulasRouter = require('./public/routes/formulas');
+var projectsRouter = require('./public/routes/projects');
 
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
+
 const { realpathSync } = require('fs');
 
 const port = 3000;
@@ -29,6 +29,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // loads environment variables from env file
 require('dotenv').config()
+
+// //Routers for different parts of the website
+// app.use('/', indexRouter);
+// app.use('/inventory', inventoryRouter);
+// app.use('/formulas', formulasRouter);
+// app.use('/projects', projectsRouter);
 
 const authConfig = {
   authRequired: true,
@@ -119,6 +125,7 @@ app.get("/inventory", (req, res) => {
     }
   });
 });
+
 
 app.get("/projects", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
@@ -227,6 +234,7 @@ app.use(function (err, req, res, next) {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-// module.exports = app;
 
+// module.exports = router;
+module.exports = app
 

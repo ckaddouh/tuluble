@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../db/db');
+var db = require('../../db/db_connection');
 
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +14,7 @@ const { redirect } = require('express/lib/response');
 //     // next("AGHHH NOT ALLOWED");
 // }
 
-let projectsQuery = fs.readFileSync(path.join(__dirname, "../db/select_projects.sql"), "utf-8");
+let projectsQuery = fs.readFileSync(path.resolve(__dirname, "../../db/select_projects.sql"), "utf-8");
 
 /* GET events "home" page - a list of all events. */
 router.get('/', async function(req, res, next) {
@@ -39,8 +39,8 @@ router.get('/', async function(req, res, next) {
 // let event_locations_query = fs.readFileSync(path.join(__dirname, "../db/select_event_locations.sql"), "utf-8");
 // let event_types_query = fs.readFileSync(path.join(__dirname, "../db/select_event_types.sql"), "utf-8");
 
-
-router.get('/create', requireAdmin ,async function(req, res, next) {
+// router.get('/create', requireAdmin ,async function(req, res, next) {
+router.get('/create',async function(req, res, next) {
   try {
 
     let event_locations = await db.queryPromise(event_locations_query);
@@ -52,7 +52,7 @@ router.get('/create', requireAdmin ,async function(req, res, next) {
   }
 })
 
-let singleProjectQuery = fs.readFileSync(path.join(__dirname, "../db/select_project_single.sql"), "utf-8");
+let singleProjectQuery = fs.readFileSync(path.resolve(__dirname, "../../db/select_project_single.sql"), "utf-8");
 
 router.get('/:project_id', function(req, res, next) {
   let project_id = req.params.project_id
