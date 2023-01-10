@@ -4,3 +4,5 @@ FROM
     projects
 WHERE
     project_id = ?
+
+-- WILL DELETE SOON

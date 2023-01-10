@@ -36,9 +36,6 @@ router.get('/', async function(req, res, next) {
 
 });
 
-// let event_locations_query = fs.readFileSync(path.join(__dirname, "../db/select_event_locations.sql"), "utf-8");
-// let event_types_query = fs.readFileSync(path.join(__dirname, "../db/select_event_types.sql"), "utf-8");
-
 // router.get('/create', requireAdmin ,async function(req, res, next) {
 router.get('/create',async function(req, res, next) {
   try {
