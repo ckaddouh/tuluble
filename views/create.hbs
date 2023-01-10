@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Createlk</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script type="text/javascript" src="/routes/projects.js"></script>
+
+    </head>
+
+    <body>
+        <div style="padding: 2% 2% 0% 2%">
+
+            {{!-- {{#with project_data}}  --}}
+            <div class="row">
+                <div class="col s12 m4 l6">
+                    <div class="input-field">
+                        <input type="text" id="name">
+                        <label for="name">Project Name</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="email" class="validate" id="emailid">
+                        <label for="emailid">Client</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="txtid">
+                        <label for="txtid">Number of Formulas</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="txtid">
+                        <label for="txtid">Date</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="txtid">
+                        <label for="txtid">Other Information</label>
+                    </div>
+
+                    {{!-- <div class="create_button">
+                        <a href="/projects" class="btn waves-effect waves-light">Create</a>
+                    </div>
+
+                    <div class="back_button">
+                        <a href="/projects" class="btn waves-effect waves-light">Back to Projects</a>
+                    </div> --}}
+
+                    <div class="col s12 m6 l3"><p></p>
+                        <div class="delete_button">
+                            <a href="/projects" class="btn waves-effect waves-light">Create</a>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l8"><p></p>
+                        <div class="delete_button">
+                            <a href="/projects" class="btn waves-effect waves-light">Back to Projects</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

@@ -164,6 +164,10 @@ app.get("/projects/:project_id", (req, res) => {
   });
 });
 
+app.get("/create", (req, res) => {
+  res.render('create');
+});
+
 
 // app.get('/projects/:project_id', function(req, res, next) {
 //   let project_id = req.params.project_id
