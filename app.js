@@ -74,20 +74,11 @@ app.use(auth(authConfig));
 //   res.send(JSON.stringify(req.oidc.user));
 // });
 
-
 const read_inventory_all_sql = `
     SELECT
         ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
     FROM
         ingredient
-`
-
-const read_inventory_classifier_sql = `
-    SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
-    FROM
-        ingredient
-    WHERE classifier_id = ?
 `
 
 const read_projects_all_sql = `
@@ -173,7 +164,7 @@ app.get("/inventory", (req, res) => {
   });
 });
 
-app.get("/inventory/:classifier_ud", (req, res) => {
+app.get("/inventory/:classifier_id", (req, res) => {
   let classifier_id = req.params.classifier_id
   db.execute(read_inventory_classifier_sql, (error, results) => {
     if (error)
