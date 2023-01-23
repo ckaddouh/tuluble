@@ -74,10 +74,9 @@ app.use(auth(authConfig));
 //   res.send(JSON.stringify(req.oidc.user));
 // });
 
-
 const read_inventory_all_sql = `
     SELECT
-        trade_name, inci_name, lot_num, amt, expiration
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
     FROM
         ingredient
 `
@@ -98,17 +97,31 @@ const singleProjectQuery = `
         project_id = ?
 `
 
+
 // FIX THIS
-const read_formulas = `
-    SELECT
-        formula_id, project_id, trial_num, trade_name, INCI, phase, percent_of_ingredient, total_amount
-    FROM
-        formulas, formula_ingredient, ingredient
-    WHERE
-        formulas.project_id = ? 
-        AND formulas.formula_id = formula_ingredient.formula_id 
-        AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+// SELECT
+//     formulas.formula_id, projects.project_id, trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date
+//   FROM
+//     formulas, formula_ingredient, ingredient, projects
+//   WHERE
+//     formulas.project_id = 1
+//     AND formulas.project_id = projects.project_id
+//     AND formula_ingredient.formula_id = formulas.formula_id
+//     AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+
+
+const selectAllProjectFormulas = `
+  SELECT
+    formulas.formula_id, projects.project_id, trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date
+  FROM
+    formulas, formula_ingredient, ingredient, projects
+  WHERE
+    formulas.project_id = ?
+    AND formulas.project_id = projects.project_id
+    AND formula_ingredient.formula_id = formulas.formula_id
+    AND formula_ingredient.ingredient_id = ingredient.ingredient_id
 `
+
 
 
 
@@ -129,6 +142,17 @@ app.get("/", (req, res) => {
 //   res.render('index');
 // });
 
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
 
 app.get("/inventory", (req, res) => {
   db.execute(read_inventory_all_sql, (error, results) => {
@@ -140,16 +164,19 @@ app.get("/inventory", (req, res) => {
   });
 });
 
-
-app.get("/projects", (req, res) => {
-  db.execute(read_projects_all_sql, (error, results) => {
+app.get("/inventory/:classifier_id", (req, res) => {
+  let classifier_id = req.params.classifier_id
+  db.execute(read_inventory_classifier_sql, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
-      res.render('projects', { results: results });
-    }
+      res.render('inventory', {
+        classifier_id: classifier_id,
+        inventory_data: results[0]
+      });    }
   });
 });
+
 
 app.get("/formulas", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
@@ -157,6 +184,16 @@ app.get("/formulas", (req, res) => {
       res.status(500).send(error); //Internal Server Error
     else {
       res.render('formulas', { results: results });
+    }
+  });
+});
+
+app.get("/projects", (req, res) => {
+  db.execute(read_projects_all_sql, (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('projects', { results: results });
     }
   });
 });
@@ -176,10 +213,6 @@ app.get("/projects/:project_id", (req, res) => {
       });
     }
   });
-});
-
-app.get("/create", (req, res) => {
-  res.render('create');
 });
 
 
