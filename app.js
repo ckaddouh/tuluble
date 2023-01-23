@@ -82,6 +82,14 @@ const read_inventory_all_sql = `
         ingredient
 `
 
+const read_inventory_classifier_sql = `
+    SELECT
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    FROM
+        ingredient
+    WHERE classifier_id = ?
+`
+
 const read_projects_all_sql = `
     SELECT
         project_name, project_id, client, date
@@ -162,6 +170,19 @@ app.get("/inventory", (req, res) => {
     else {
       res.render('inventory', { results: results });
     }
+  });
+});
+
+app.get("/inventory/:classifier_ud", (req, res) => {
+  let classifier_id = req.params.classifier_id
+  db.execute(read_inventory_classifier_sql, (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('inventory', {
+        classifier_id: classifier_id,
+        inventory_data: results[0]
+      });    }
   });
 });
 
