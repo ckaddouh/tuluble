@@ -14,11 +14,69 @@
             {{#with project_data}}  
             <div>
                 <h1>{{project_name}}</h1>
-                <p>All of the project details go here</p>
-                <p>More information goes here</p>
-                <p>Woah there's a lot of information</p>
-                <p>There's still more???</p>
-                <p>Okay I think we're finally done</p>
+                <p><b>Client:</b> {{this.client}}</p>
+                <p><b>Number of Formulas:</b> 3</p>
+                <p><b>Date:</b> {{this.date}}</p>
+                <p><b>Other Information:</b> </p>
+
+                {{!-- <a class="modal-trigger" href="#hi">
+                    <span class="large material-icons">info_outline</span>
+                </a>
+                <div class="modal" id={{this}}>
+                    <div class="row">
+
+                </div>
+                <div class="input-field" id="hi">
+                    <input type="text" id="name">
+                    <label for="name">Name</label>
+                </div> --}}
+
+                <a class="modal-trigger" href="#hi">
+                    <span class="large material-icons">info_outline</span>
+                    </a>
+                    <div class="modal" id="hi">
+                        <div class="row">
+                            <div class="col s12">&nbsp;</div>
+                            <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
+                            <div class="col s12">&nbsp;</div>
+                            <div class="col s6">
+                                <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Received:</b> {{this.amt}} grams</span>
+                                {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span> --}}
+                            </div>
+                            <div class="col s6">
+                                {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span> --}}
+                                <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Expiration Date:</b> {{this.expiration}}</span>
+                            </div>
+                                <div class="col s12">&nbsp;</div>
+                                <div class="col s12 m6 l3"><p></p></div>
+                                <div class="col s12 m6 l3"><p></p></div>
+                                <div class="col s12 m6 l3"><p></p>
+                                    <div class="delete_button">
+                                        <a href="" class="btn-small">Edit</a>
+                                    </div>
+                                </div>
+                                <div class="col s12 m6 l3"><p></p>
+                                    <div class="delete_button">
+                                        <a href="" class="btn-small">Delete</a>
+                                    </div>
+                                </div>
+
+                            <div class="input-field">
+                                <input type="email" id="emailid">
+                                <label for="emailid">Email</label>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                    <script
+                        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $('.modal').modal();
+                        })
+                    </script>
             </div>
 
             <div class="back_button">

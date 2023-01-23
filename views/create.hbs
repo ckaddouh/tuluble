@@ -5,12 +5,21 @@
         <title>Createlk</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <script type="text/javascript" src="/routes/projects.js"></script>
+        <script type="text/javascript" src="/routes/create.js"></script>
 
     </head>
 
     <body>
         <div style="padding: 2% 2% 0% 2%">
+
+            <form action="/action_page.php" id="numform"
+oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+<input type="range" id="a" name="a" value="50">
++ <input type="number" id="b" name="b" value="25">
+<input type="submit">
+</form>
+
+<output form="numform" id="x" name="x" for="a+b"></output>
 
             {{!-- {{#with project_data}}  --}}
             <div class="row">
@@ -20,25 +29,51 @@
                         <label for="name">Project Name</label>
                     </div>
 
-                    <div class="input-field">
+                    {{!-- <div class="input-field">
                         <input type="email" class="validate" id="emailid">
                         <label for="emailid">Client</label>
+                    </div> --}}
+
+                    <div class="input-field">
+                        <input type="email" id="emailid">
+                        <label for="emailid">Client</label>
                     </div>
+{{!-- 
+                    <div class="input-field">
+                        <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+                        <label for="first_name">First Name</label>
+                    </div> --}}
 
                     <div class="input-field">
                         <input type="text" id="txtid">
                         <label for="txtid">Number of Formulas</label>
+                        <span class="helper-text" data-error="Please input a number">Please input a number</span>
+
                     </div>
 
                     <div class="input-field">
-                        <input type="text" id="txtid">
-                        <label for="txtid">Date</label>
+                        <input type="text" id="userInput" placeholder="Enter">
+                        <button onclick="returnText()">Submit</button>
+                        {{!-- <label for="txtid">Date</label> --}}
+
+                        <script src="script.js"></script>
                     </div>
 
+                    <div class="button">
+                            <a id="userInput" href="/projects" class="btn waves-effect waves-light"></a>
+                        </div>
+
                     <div class="input-field">
-                        <input type="text" id="txtid">
-                        <label for="txtid">Other Information</label>
+                        {{!-- <input type="text" id="txtid">
+                        <label for="txtid">Other Information</label> --}}
+                        <textarea id="textarea1" class="materialize-textarea"></textarea>
+                        <label for="textarea1">Other Information</label>
                     </div>
+
+                    {{!-- <div class="input-field">
+                        <input value="Alvin" id="first_name2" type="text" class="validate">
+                        <label class="active" for="first_name2">First Name</label>
+                    </div> --}}
 
                     {{!-- <div class="create_button">
                         <a href="/projects" class="btn waves-effect waves-light">Create</a>
@@ -61,6 +96,7 @@
                 </div>
             </div>
         </div>
+
     </body>
 
 </html>
