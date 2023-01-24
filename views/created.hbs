@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Create</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script type="text/javascript" src="/routes/projects.js"></script>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div style="padding: 2% 2% 0% 2%">
+            <h1><span>Create a New Project</span></h1>
+
+            <div class="back_button">
+                <a href="/projects" class="btn waves-effect waves-light">Return to Projects</a>
+            </div>
+
+            <p><b>Input New Information:</b></p>
+
+            <article class="regular">
+                {{!-- <h2>Textbook</h2> --}}
+
+                {{!-- Field 1 --}}
+                <label for="tbuser">Project Name:</label>
+                <input type="text" id="userInput1" placeholder="Enter Project Name" maxlength="20">
+
+                <p class="output" id="output1"></p>
+
+                {{!-- Field 2 --}}
+                <label for="tbuser">Client Name:</label>
+                <input type="text" id="userInput2" placeholder="Enter Client Name" maxlength="20">
+
+                <p class="output" id="output1"></p>
+
+                {{!-- Field 3 --}}          
+                <label for="tbuser">Date Created:</label>
+                <input type="date" id="userInput3" placeholder="Enter Date" maxlength="20">
+
+                {{!-- <input type="button" id="btn1" value="Create Project"> --}}
+
+                <button id="btn" onclick="myFunction()">Create Project</button>
+                <h1 id="message1"></h1>
+                <h1 id="message2"></h1>
+                <h1 id="message3"></h1>
+
+                <div id="msg">
+                    <pre></pre>
+                </div>
+
+                <p class="output" id="output1"></p>                
+
+            </article>
+
+            <script>
+                const txt1 = document.getElementById('tbuser');
+                const btn1 = document.getElementById('btn1');
+                const out1 = document.getElementById('output1');
+
+                function fun1() {
+                    //out1.innerHTML = txt1.value;
+                    let input = document.getElementById('out1').value
+                    alert(input);
+                }
+
+                //btn1.addEventListener('click', fun1);
+            </script>
+
+            <script>
+                function myFunction() {
+                    //alert("testing");
+                    let userInput1 = document.querySelector("#userInput1");
+                    let userInput2 = document.querySelector("#userInput2");
+                    let userInput3 = document.querySelector("#userInput3");
+                    let message1 = document.querySelector("#message1");
+                    let message2 = document.querySelector("#message2");
+                    let message3 = document.querySelector("#message3");
+
+                    message1.innerHTML = userInput1.value;
+                    message2.innerHTML = userInput2.value;
+                    message3.innerHTML = userInput3.value;
+                }
+            </script>
+
+            <script>
+                let projects = [];
+
+                const addProject = (ev) =>{
+                    ev.preventDefault();
+                    let project = {
+                        id: document.getElementById('userInput1').value,
+                        client: document.getElementById('userInput2').value,
+                        date: document.getElementById('userInput3').value
+                    }
+                    projects.push(project);
+                    //document.forms[0].reset();
+                    //document.querySelector('form').reset();
+
+                    console.warn('added',{projects});
+                    let pre = document.querySelector('#msg pre');
+                    pre.textContent = '\n' + JSON.stringify(projects, '\t', 2);
+
+                    localStorage.setItem('ProjectList', JSON.stringify(projects));
+                }
+                document.addEventListener('DOMContentLoaded', ()=>{
+                    document.getElementById('btn').addEventListener('click', addProject);
+                });
+
+            </script>
+        </div>
+
+    </body>
+
+</html>
