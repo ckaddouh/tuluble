@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 </head>
 
 <body>
@@ -51,12 +52,7 @@
 
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var side = document.querySelectorAll('.sidenav');
-                        M.Sidenav.init(side)
-                    })
-                </script>
+                
 
         <!-- BLANK TEAL DIVIDER -->
         {{!-- <div class="row">
@@ -72,123 +68,40 @@
                 <h1>Inventory </h1>
             </div>
 
-            <div class = "row">
-                <form action="#">
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Thickeners</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Oils</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Butters</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Surfactants</span>
-                    </label>
-                    </p>    
-                    </div>    
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Functional/Active</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Preservatives</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Extracts/Fragrances/Flavors</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Experimental</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Colorants</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Absorbents</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>pH Adjusters (Acids)</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>pH Adjusters (Bases)</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Distilled Water/Ethyl Alcohol</span>
-                    </label>
-                    </p>    
-                    </div>
-                    <div  class = "col s3">
-                    <p>
-                    <label>
-                        <input type="checkbox" />
-                        <span>Retest</span>
-                    </label>
-                    </p>    
-                    </div>
-                </form>         
-            </div>
+            <label>Classifier select</label>
+            <select class="browser-default">
+                <option value="0" disabled selected>Choose your classifier</option>
+                <option value="1">Thickeners</option>
+                <option value="2">Oils</option>
+                <option value="3">Butters</option>
+                <option value="4">Surfactants</option>
+                <option value="5">Functional/Active</option>
+                <option value="6">Preservatives</option>
+                <option value="7">Extracts/Fragrances/Flavor</option>
+                <option value="8">Experimental</option>
+                <option value="9">Colorants</option>
+                <option value="10">Absorbents</option>
+                <option value="11">pH Adjusters (Acids)</option>
+                <option value="12">pH Adjusters (Bases)</option>
+                <option value="13">Distilled Water/Ethyl Alcohol</option>
+            </select>
 
+            <script>
+                function myfunc() {
+                    console.log("hello");
+                }
+                $(document).ready(function(){
+                    $('browser-default').formSelect();
+                });
+
+                $('browser-default').formSelect('myfunc');
+                // $('select').formSelect('methodName', paramName);
+                
+
+            </script>
+
+            
+           
             <div class="col s12 m4 l2">
                 <p></p>
                 <div class="delete_button">
@@ -319,6 +232,8 @@
                                     $('.modal').modal();
                                 })
                             </script>
+
+
                         </td>
 
                         <td>{{this.trade_name}}</td>

@@ -64,12 +64,26 @@
                 </script>
             </div>
 
-
+            {{#with project_data}}
             <!-- https://materializecss.com/cards.html -->
                 <div>
-                    <h1>Project Formulas </h1>
-
+                    <h1>{{formula.formula_id}}</h1>
+                    <h1>{{projects.project_name}} Formulas </h1>
                     <h4>Total Amt of Formula: 200g</h4>
+                </div>
+            {{/with}}
+
+            {{#each formula_data}}
+                <div>
+                    <p>Trial {{formulas.trial_num}}</p>
+                    <p>{{ingredient.trade_name}}</p>
+                </div>
+
+{{!-- trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date --}}
+
+
+                {{!-- Nice side by side formatting --}}
+                {{!-- <div>
                     <div class = "row">
                     <form action="#">
                         <div  class = "col s2">
@@ -160,8 +174,8 @@
                             </tr>
                             </table>
                         </div>
-                     </div>
-                    
+                     </div> --}}
+            {{/each}}
 
 
             </div>
