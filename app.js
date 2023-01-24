@@ -255,6 +255,10 @@ app.get("/page", (req, res) => {
   });
 });
 
+app.get("/created", (req, res) => {
+  res.render('created');
+});
+
 // app.use('/inventory', function routeHandler(req, res) {
 //   res.render('inventory');
 // });
