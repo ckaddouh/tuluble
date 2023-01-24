@@ -79,6 +79,8 @@ const read_inventory_all_sql = `
         ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
     FROM
         ingredient
+    WHERE 
+      classifier_id = "Oils"
 `
 
 const read_projects_all_sql = `
@@ -90,11 +92,11 @@ const read_projects_all_sql = `
 
 const singleProjectQuery = `
     SELECT
-        project_name, project_id, client, date
+        projects.project_name, projects.project_id, projects.client, projects.date, formulas.formula_id, formulas.trial_num
     FROM
-        projects
+        projects, formulas
     WHERE
-        project_id = ?
+        projects.project_id = ? AND projects.project_id = formulas.project_id
 `
 
 
@@ -209,7 +211,26 @@ app.get("/projects/:project_id", (req, res) => {
         title: 'Project Details',
         styles: ["tables", "event"],
         project_id: project_id,
-        project_data: results[0]
+        project_data: results[0],
+        formula_data: results
+      });
+    }
+  });
+});
+
+app.get("/projects/:project_id/formulas", (req, res) => {
+  let project_id = req.params.project_id
+  db.execute(selectAllProjectFormulas, [project_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      // res.render('project', {project_data: results[0]} );
+      res.render('formulas', {
+        title: 'Project Details',
+        styles: ["tables", "event"],
+        project_id: project_id,
+        project_data: results[0],
+        formula_data: results,
       });
     }
   });
