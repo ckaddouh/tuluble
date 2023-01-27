@@ -13,16 +13,13 @@
 </head>
 
 <body>
-    {{> navbar}}
+    <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
+
+           {{> logout}}
+    </div>
     <div style="padding: 2% 2% 0% 2%">
         
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var side = document.querySelectorAll('.sidenav');
-                        M.Sidenav.init(side)
-                    })
-                </script>
             </div>
 
 
