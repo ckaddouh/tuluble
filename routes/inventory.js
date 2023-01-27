@@ -1,5 +1,5 @@
 var express = require('express');
-var db = require('../../db/db_connection');
+var db = require('../db/db_connection');
 
 var router = express.Router();
 

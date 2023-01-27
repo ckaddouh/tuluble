@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../../db/db_connection');
+var db = require('../db/db_connection');
 
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +14,6 @@ const { redirect } = require('express/lib/response');
 //     // next("AGHHH NOT ALLOWED");
 // }
 
-let projectsQuery = fs.readFileSync(path.resolve(__dirname, "../../db/select_projects.sql"), "utf-8");
 
 /* GET events "home" page - a list of all events. */
 router.get('/', async function(req, res, next) {
@@ -26,7 +25,7 @@ router.get('/', async function(req, res, next) {
   // });
 
   try {
-    let results = await db.queryPromise(projectsQuery)
+    let results = await db.queryPromise(db.get_all_projects())
     console.log(results);
     res.render('projects', { title: 'Projects', style: "tables", events: results});
   } catch (err) {
@@ -49,8 +48,6 @@ router.get('/create',async function(req, res, next) {
   }
 })
 
-let singleProjectQuery = fs.readFileSync(path.resolve(__dirname, "../../db/select_project_single.sql"), "utf-8");
-
 router.get('/:project_id', function(req, res, next) {
   let project_id = req.params.project_id
   // GET FROM DATABASE: Select query where event_id = event_id from URL
@@ -64,7 +61,7 @@ router.get('/:project_id', function(req, res, next) {
   //                 event_type: "Main",
   //                 event_interest: "100",
   //                 event_description: "Be there!"}
-  db.query(singleProjectQuery, [project_id], (err, results) => {
+  db.query(db.get_single_project(), [project_id], (err, results) => {
     if (err)
       next(err);
     console.log(results);
