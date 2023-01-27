@@ -11,8 +11,10 @@ var projectsRouter = require('./public/routes/projects');
 
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
+const hbs = require("hbs");
 
 const { realpathSync } = require('fs');
+const { hasSubscribers } = require('diagnostics_channel');
 
 const port = 3000;
 var app = express();
@@ -136,8 +138,16 @@ const selectAllProjectFormulas = `
 //     req.oidc.isAuthenticated() ? res.render('index') : open('https://dev-gm9sesne.us.auth0.com/u/login?state=hKFo2SAtUWpZODh1R0tubjBZZFBOUnBjR0RPZzBQS0hxYTFLX6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFRMWRRRUREcWJYS0xtSVhlMzVTTnVIN3pOZUpldjdio2NpZNkgWnV0Z2tQWE9DYWdLNTNoOGdHTkx1RENqbGFLRDJralI')
 //   )
 // }); 
+
+const partialsPath = path.join(__dirname, "public/partials");
+hbs.registerPartials(partialsPath);
+
 app.get("/", (req, res) => {
   res.render('index');
+});
+
+app.get("/test", (req, res) => {
+  res.render('testpage');
 });
 
 // app.get("/index", (req, res) =>{
