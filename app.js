@@ -6,7 +6,6 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var inventoryRouter = require('./routes/inventory');
-var formulasRouter = require('./routes/formulas');
 var projectsRouter = require('./routes/projects');
 
 const { auth } = require('express-openid-connect');
@@ -196,6 +195,16 @@ app.get("/formulas", (req, res) => {
       res.status(500).send(error); //Internal Server Error
     else {
       res.render('formulas', { results: results });
+    }
+  });
+});
+
+app.get("/archive", (req, res) => {
+  db.execute(read_projects_all_sql, (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.render('archive', { results: results });
     }
   });
 });
