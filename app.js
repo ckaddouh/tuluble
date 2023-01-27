@@ -4,10 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./public/routes/index');
-var inventoryRouter = require('./public/routes/inventory');
-var formulasRouter = require('./public/routes/formulas');
-var projectsRouter = require('./public/routes/projects');
+var indexRouter = require('./routes/index');
+var inventoryRouter = require('./routes/inventory');
+var formulasRouter = require('./routes/formulas');
+var projectsRouter = require('./routes/projects');
 
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
