@@ -12,6 +12,54 @@
 
 <body>
     <div style="padding: 2% 2% 0% 2%">
+                <!-- NAVIGATION SIDEBAR -->
+            <div >
+                <ul class="sidenav" id="mysidenav">
+                    <li>
+                        <div class="user-view">
+                            <div class="background">
+                                <img src="./views/luluble_hlogo.jpg" style="height:250px;" alt="">
+                            </div>
+                            
+                            <span style="color:#000000" class="large material-icons">local_florist
+                            </span>
+                            <span style="color:#25b5af"><b><font size="+2">&nbsp;tuluble database</font></b></span>
+                            
+                            <a href="#" data-target="side_nav"></a>
+                            {{!-- <a href="#email"><span class="email white-text">web@gmail.com</span></a> --}}
+                        </div>
+                    </li>
+                    <li><a href="/"><i class="material-icons">home</i>Index Page</a></li>
+                    <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
+                    <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
+                    <li><a href="/archive"><i class="material-icons">archive</i>Archive</a></li>
+                    {{!-- <li><a href="#"><i class="material-icons">create</i>Other</a></li> --}}
+                </ul>
+
+                {{!-- <a href="#" data-target="mysidenav" class="btn sidenav-trigger">Sidenav</a> --}}
+
+                <a href="#" data-target="mysidenav" class="btn sidenav-trigger">
+                    <i class="material-icons">menu</i>
+                    <span class="blue-text text-darken-2"></span>
+                </a>
+
+                <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
+                {{!-- <div class="col s6">
+                    <img src="/luluble_hlogo.jpg" class="responsive-img">
+                </div> --}}
+                {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var side = document.querySelectorAll('.sidenav');
+                        M.Sidenav.init(side)
+                    })
+                </script>
+            </div>
+
+    <div style="padding: 2% 2% 0% 2%">
         <!-- https://materializecss.com/cards.html -->
         {{#with project_data}}
         <div>
