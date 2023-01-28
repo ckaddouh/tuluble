@@ -97,6 +97,7 @@
                 <div id="ingredients" class="col s12">
                     <p>Ingredients</p>
                     {{!-- pull all non active ingredients --}}
+                    <table>
                     <tbody>
 
                         {{#each results}}
@@ -150,9 +151,15 @@
                             <td>{{this.trade_name}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>
+                            <td>
+                                <div class="delete_button">
+                                <a href="unarchive-ingredient/{{this.ingredient_id}}" class="btn waves-effect waves-light">Unarchive</a>
+                            </div>
+                        </td>
                         </tr>
                         {{/each}}
                     </tbody>
+                    </table>
 
                     </div>
                     <div id="projects" class="col s12">Projects

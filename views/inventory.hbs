@@ -218,6 +218,18 @@
                         <td>{{this.trade_name}}</td>
                         <td>{{this.amt}} {{this.unit}}</td>
                         <td>{{this.shelf}}</td>
+
+{{!-- 
+                        {{#if this.amt = 0}}
+                        <td>EMPTY</td>
+                        {{/if}} --}}
+
+                        <td>
+                            <div class="delete_button">
+                            <a href="archive-ingredient/{{this.ingredient_id}}" class="btn waves-effect waves-light">Archive</a>
+                            </div>
+                        </td>
+
                     </tr>
                     {{/each}}
                 </tbody>

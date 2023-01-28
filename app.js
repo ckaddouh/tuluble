@@ -100,6 +100,17 @@ const singleProjectQuery = `
         projects.project_id = ? AND projects.project_id = formulas.project_id
 `
 
+const archiveIngredient = `
+  UPDATE ingredient
+  SET active = 0
+  WHERE ingredient_id = ?
+`
+
+const unarchiveIngredient = `
+  UPDATE ingredient
+  SET active = 1
+  WHERE ingredient_id = ?
+`
 
 // FIX THIS
 // SELECT
@@ -262,7 +273,25 @@ app.get("/projects/:project_id/formulas", (req, res) => {
   });
 });
 
+app.get("/archive-ingredient/:ingredient_id", (req, res) => {
+  let ingredient_id = req.params.ingredient_id
+  db.execute(archiveIngredient, [ingredient_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else
+      app.route('/inventory');
+  });
+});
 
+app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
+  let ingredient_id = req.params.ingredient_id
+  db.execute(unarchiveIngredient, [ingredient_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else
+      app.route('/archive');
+  });
+});
 
 app.get("/logout", (req, res) => {
   logout();

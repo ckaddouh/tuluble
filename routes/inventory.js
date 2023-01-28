@@ -3,9 +3,6 @@ var db = require('../db/db_connection');
 
 var router = express.Router();
 
-
-
-
 router.get("/inventory", (req, res) => {
     db.execute(read_inventory_all_sql, (error, results) => {
       if (error)
