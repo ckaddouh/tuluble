@@ -89,6 +89,8 @@ const read_projects_all_sql = `
         project_name, project_id, client, date
     FROM
         projects
+    WHERE 
+      active = 1
 `
 
 const singleProjectQuery = `
@@ -112,17 +114,17 @@ const unarchiveIngredient = `
   WHERE ingredient_id = ?
 `
 
-// FIX THIS
-// SELECT
-//     formulas.formula_id, projects.project_id, trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date
-//   FROM
-//     formulas, formula_ingredient, ingredient, projects
-//   WHERE
-//     formulas.project_id = 1
-//     AND formulas.project_id = projects.project_id
-//     AND formula_ingredient.formula_id = formulas.formula_id
-//     AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+const archiveProject = `
+  UPDATE projects
+  SET active = 0
+  WHERE project_id = ?
+`
 
+const unarchiveProject = `
+  UPDATE projects
+  SET active = 1
+  WHERE project_id = ?
+`
 
 const selectAllProjectFormulas = `
   SELECT
@@ -145,16 +147,14 @@ const read_inactive_ingredients_all_sql = `
     active = 0
 `
 
-
-// app.use('/', indexRouter);
-// app.use('/inventory', inventoryRouter);
-// app.use('/formulas', formulasRouter);
-
-// app.get('/', (req, res) => {
-//   res.send(
-//     req.oidc.isAuthenticated() ? res.render('index') : open('https://dev-gm9sesne.us.auth0.com/u/login?state=hKFo2SAtUWpZODh1R0tubjBZZFBOUnBjR0RPZzBQS0hxYTFLX6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFRMWRRRUREcWJYS0xtSVhlMzVTTnVIN3pOZUpldjdio2NpZNkgWnV0Z2tQWE9DYWdLNTNoOGdHTkx1RENqbGFLRDJralI')
-//   )
-// }); 
+const read_inactive_projects_all_sql = `
+  SELECT
+    project_name, project_id, client, date
+  FROM
+    projects
+  WHERE 
+    active = 0
+`
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -217,6 +217,7 @@ app.get("/formulas", (req, res) => {
   });
 });
 
+// figure out how to pull inactive projects too
 app.get("/archive", (req, res) => {
   db.execute(read_inactive_ingredients_all_sql, (error, results) => {
     if (error)
@@ -286,6 +287,26 @@ app.get("/archive-ingredient/:ingredient_id", (req, res) => {
 app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(unarchiveIngredient, [ingredient_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else
+      app.route('/archive');
+  });
+});
+
+app.get("/archive-project/:project_id", (req, res) => {
+  let project_id = req.params.project_id
+  db.execute(archiveProject, [project_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else
+      app.route('/projects');
+  });
+});
+
+app.get("/unarchive-project/:project_id", (req, res) => {
+  let project_id = req.params.project_id
+  db.execute(unarchiveProject, [project_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else
