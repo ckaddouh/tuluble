@@ -94,122 +94,78 @@
                         <li class="tab col s3"><a href="#projects">Projects</a></li>
                     </ul>
                 </div>
-                <div id="ingredients" class="col s12">Ingredients</div>
-                <div id="projects" class="col s12">Projects</div>
-            </div>
-        
-            <script>
-                f $(document).ready(function(){
-                    $('.tabs').tabs();
-                });
+                <div id="ingredients" class="col s12">
+                    <p>Ingredients</p>
+                    {{!-- pull all non active ingredients --}}
+                    <tbody>
 
-            </script>
-
-            
-           
-            <div class="col s12 m4 l2">
-                <p></p>
-                <div class="delete_button">
-                    <a href="#" class="btn waves-effect waves-light">Add</a>
-                </div>
-            </div>
-            <div class="col s12 m4 l4">
-                <p></p>
-                <div class="delete_button">
-                    <a href="#" class="btn waves-effect waves-light">Delete</a>
-                </div>
-            </div>
-            <div class="col s12 m4 l6">
-                <p></p>
-                <nav>
-                    <div class="nav-wrapper grey">
-                        <div class="input-field">
-                            <input type="search" name="" id="">
-                            <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                            <i class="material-icons">close</i>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </div>
-
-        <!-- INVENTORY TABLE -->
-        <div style="padding:20px">
-
-            <table class="sortable">
-                <thead>
-                    <tr>
-                        <th>INCI Name
-                            <span class="large material-icons">import_export</span>
-                        </th>
-                        <th>Trade Name
-                            <span class="large material-icons">import_export</span>
-                        </th>
-                        <th>Amount Available
-                            <span class="large material-icons">import_export</span>
-                        </th>
-                        <th>Shelf
-                            <span class="large material-icons">import_export</span>
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {{#each results}}
-                    <tr>
-                        <td>{{this.inci_name}}
-                            <a href="#terms" class="modal-trigger">
-                                <span class="large material-icons">info_outline</span>
-                            </a>
-                            <div class="modal" id="terms">
-                                <div class="row">
-                                    <div class="col s12">&nbsp;</div>
-                                    <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
-                                    <div class="col s12">&nbsp;</div>
-                                    <div class="col s6">
-                                        <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}} {{this.unit}}<b></b><b>Supplier:</b> {{this.supplier}}<br></br><b>TSCA Approved:</b> {{this.tsca_approved}}</span>
-                                        {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span> --}}
-                                    </div>
-                                    <div class="col s6">
-                                        {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span> --}}
-                                        <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Date Receieved:</b> {{this.date_received}}<br></br><b>Expiration Date:</b> {{this.expiration}}<br></br><b>COA: </b>Link<br></br><b>MSDS: </b>Link</span>
-                                    </div>
-
+                        {{#each results}}
+                        <tr>
+                            <td>{{this.inci_name}}
+                                <a href="#terms" class="modal-trigger">
+                                    <span class="large material-icons">info_outline</span>
+                                </a>
+                                <div class="modal" id="terms">
+                                    <div class="row">
                                         <div class="col s12">&nbsp;</div>
-                                        <div class="col s12 m6 l3"><p></p></div>
-                                        <div class="col s12 m6 l3"><p></p></div>
-                                        <div class="col s12 m6 l3"><p></p>
-                                            <div class="delete_button">
-                                                <a href="" class="btn-small">Edit</a>
-                                            </div>
+                                        <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s6">
+                                            <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}} {{this.unit}}<b></b><b>Supplier:</b> {{this.supplier}}<br></br><b>TSCA Approved:</b> {{this.tsca_approved}}</span>
+                                            {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span> --}}
                                         </div>
-                                        <div class="col s12 m6 l3"><p></p>
-                                            <div class="delete_button">
-                                                <a href="" class="btn-small">Delete</a>
-                                            </div>
+                                        <div class="col s6">
+                                            {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span> --}}
+                                            <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Date Receieved:</b> {{this.date_received}}<br></br><b>Expiration Date:</b> {{this.expiration}}<br></br><b>COA: </b>Link<br></br><b>MSDS: </b>Link</span>
                                         </div>
+
+                                            <div class="col s12">&nbsp;</div>
+                                            <div class="col s12 m6 l3"><p></p></div>
+                                            <div class="col s12 m6 l3"><p></p></div>
+                                            <div class="col s12 m6 l3"><p></p>
+                                                <div class="delete_button">
+                                                    <a href="" class="btn-small">Edit</a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6 l3"><p></p>
+                                                <div class="delete_button">
+                                                    <a href="" class="btn-small">Delete</a>
+                                                </div>
+                                            </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-                            <script
-                                src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-                            <script>
-                                $(document).ready(function () {
-                                    $('.modal').modal();
-                                })
-                            </script>
+                                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                                <script
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('.modal').modal();
+                                    })
+                                </script>
 
 
-                        </td>
+                            </td>
 
-                        <td>{{this.trade_name}}</td>
-                        <td>{{this.amt}} {{this.unit}}</td>
-                        <td>{{this.shelf}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
+                            <td>{{this.trade_name}}</td>
+                            <td>{{this.amt}} {{this.unit}}</td>
+                            <td>{{this.shelf}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+
+                    </div>
+                    <div id="projects" class="col s12">Projects
+                        <p>All inactive projects here.</p>
+                    </div>
+                </div>
+            
+                <script>
+                    $(document).ready(function(){
+                        $('.tabs').tabs();
+                    });
+
+                </script>
             </table>
         </div>
         </div>
