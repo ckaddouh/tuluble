@@ -81,7 +81,7 @@ const read_inventory_all_sql = `
     FROM
         ingredient
     WHERE 
-      classifier_id = "Oils"
+      classifier_id = "Oils" AND active = 1
 `
 
 const read_projects_all_sql = `
@@ -125,7 +125,14 @@ const selectAllProjectFormulas = `
     AND formula_ingredient.ingredient_id = ingredient.ingredient_id
 `
 
-
+const read_inactive_ingredients_all_sql = `
+  SELECT
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+  FROM
+    ingredient
+  WHERE 
+    active = 0
+`
 
 
 // app.use('/', indexRouter);
@@ -200,7 +207,7 @@ app.get("/formulas", (req, res) => {
 });
 
 app.get("/archive", (req, res) => {
-  db.execute(read_projects_all_sql, (error, results) => {
+  db.execute(read_inactive_ingredients_all_sql, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -256,30 +263,6 @@ app.get("/projects/:project_id/formulas", (req, res) => {
 });
 
 
-// app.get('/projects/:project_id', function(req, res, next) {
-//   let project_id = req.params.project_id
-//   // GET FROM DATABASE: Select query where event_id = event_id from URL
-//   //For now, lets pretend
-//   // let event_data = {event_id: event_id,
-//   //                 event_name: "Opening Ceremony", 
-//   //                 event_location: "Auditorium",
-//   //                 event_date: "May 1 (Sat)",
-//   //                 event_time: "10:30 AM",
-//   //                 event_duration: "30m",
-//   //                 event_type: "Main",
-//   //                 event_interest: "100",
-//   //                 event_description: "Be there!"}
-//   db.query(singleProjectQuery, [project_id], (err, results) => {
-//     if (err)
-//       next(err);
-//     console.log(results);
-//     let project_data = results[0]; 
-//     res.render('project', { title: 'Project Details', 
-//                       styles: ["tables", "event"], 
-//                       project_id : project_id, 
-//                       project_data: project_data});
-//   });
-// });
 
 app.get("/logout", (req, res) => {
   logout();
