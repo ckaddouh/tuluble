@@ -95,11 +95,22 @@ const read_projects_all_sql = `
 
 const singleProjectQuery = `
     SELECT
-        projects.project_name, projects.project_id, projects.client, projects.date, formulas.formula_id, formulas.trial_num
+        projects.project_name, projects.project_id, projects.client, projects.date
     FROM
-        projects, formulas
+        projects
     WHERE
-        projects.project_id = ? AND projects.project_id = formulas.project_id
+        projects.project_id = ?
+`
+
+const selectTrialNums = `
+  SELECT 
+    trial_num, project_id
+  FROM
+    formulas
+  WHERE
+    formulas.project_id = ?
+  GROUP BY
+    trial_num
 `
 
 const archiveIngredient = `
@@ -126,16 +137,27 @@ const unarchiveProject = `
   WHERE project_id = ?
 `
 
-const selectAllProjectFormulas = `
+// const selectAllProjectFormulas = `
+//   SELECT
+//     formulas.formula_id, projects.project_id, trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date
+//   FROM
+//     formulas, formula_ingredient, ingredient, projects
+//   WHERE
+//     formulas.project_id = ?
+//     AND formulas.project_id = projects.project_id
+//     AND formula_ingredient.formula_id = formulas.formula_id
+//     AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+// `
+
+const selectFormulaIngredients = `
   SELECT
-    formulas.formula_id, projects.project_id, trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date
-  FROM
-    formulas, formula_ingredient, ingredient, projects
+    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id
+  FROM 
+    formulas, formula_ingredient, ingredient
   WHERE
-    formulas.project_id = ?
-    AND formulas.project_id = projects.project_id
-    AND formula_ingredient.formula_id = formulas.formula_id
-    AND formula_ingredient.ingredient_id = ingredient.ingredient_id
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.trial_num = ?
 `
 
 const read_inactive_ingredients_all_sql = `
@@ -243,36 +265,45 @@ app.get("/projects", (req, res) => {
 app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      // res.render('project', {project_data: results[0]} );
-      res.render('project', {
-        title: 'Project Details',
-        styles: ["tables", "event"],
-        project_id: project_id,
-        project_data: results[0],
-        formula_data: results
+      db.execute(selectTrialNums, [project_id], (error, formula_results) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error
+        else {
+          // res.render('project', {project_data: results[0]} );
+          res.render('project', {
+            title: 'Project Details',
+            styles: ["tables", "event"],
+            project_id: project_id,
+            results: results,
+            formula_results: formula_results
+          });
+        }
       });
-    }
   });
 });
 
 app.get("/projects/:project_id/formulas", (req, res) => {
   let project_id = req.params.project_id
-  db.execute(selectAllProjectFormulas, [project_id], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      // res.render('project', {project_data: results[0]} );
-      res.render('formulas', {
-        title: 'Project Details',
-        styles: ["tables", "event"],
-        project_id: project_id,
-        project_data: results[0],
-        formula_data: results,
+  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
+      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
+      // perhaps retrieve based on trial_nums that user selects to view? 
+      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error
+        else {
+          // res.render('project', {project_data: results[0]} );
+          res.render('formulas', {
+            title: 'Project Details',
+            styles: ["tables", "event"],
+            project_id: project_id,
+            project_data: project_data,
+            formula_data: formula_data,
+            formula_ingredient_data: formula_ingredient_data
+          });
+        }
       });
-    }
+    });
   });
 });
 

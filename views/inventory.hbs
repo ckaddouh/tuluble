@@ -29,8 +29,6 @@
                 </div> --}}
                 {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
 
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
                 
 
         <!-- BLANK TEAL DIVIDER -->
@@ -65,21 +63,24 @@
                 <option value="13">Distilled Water/Ethyl Alcohol</option>
             </select>
 
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            
             <script>
                 function myfunc() {
                     console.log("hello");
                 }
                 $(document).ready(function(){
                     $('browser-default').formSelect();
+                    $('.modal').modal();
                 });
 
                 $('browser-default').formSelect('myfunc');
                 // $('select').formSelect('methodName', paramName);
-                
 
             </script>
 
-            
+         
            
             <div class="col s12 m4 l2">
                 <p></p>
@@ -166,14 +167,7 @@
                                 </div>
                             </div>
 
-                            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-                            <script
-                                src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-                            <script>
-                                $(document).ready(function () {
-                                    $('.modal').modal();
-                                })
-                            </script>
+                           
 
 
                         </td>

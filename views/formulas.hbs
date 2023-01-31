@@ -2,8 +2,9 @@
 <html>
 
     <head>
-        <title>Formulas</title>
-
+        {{#each project_data}}
+        <title>{{project_name}} Formulas</title>
+        {{/each}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script type="text/javascript" src="/routes/projects.js"></script>
@@ -19,20 +20,22 @@
         <div style="padding: 2% 2% 0% 2%">
         {{> navbar}}
 
-            {{#with project_data}}
+            {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
                 <div>
-                    <h1>{{formula.formula_id}}</h1>
-                    <h1>{{projects.project_name}} Formulas </h1>
+                    <h1>{{project_name}} Formulas </h1>
                     <h4>Total Amt of Formula: 200g</h4>
                 </div>
-            {{/with}}
+            {{/each}}
 
             {{#each formula_data}}
                 <div>
-                    <p>Trial {{formulas.trial_num}}</p>
-                    <p>{{ingredient.trade_name}}</p>
+                    <p>Trial {{trial_num}}</p>
+                    {{#each formula_ingredient_data}}
+                        <p>{{ingredient_id}}</p>
+                    {{/each}}
                 </div>
+        
 
 {{!-- trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date --}}
 

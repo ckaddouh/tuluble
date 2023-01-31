@@ -19,7 +19,7 @@
     <div style="padding: 2% 2% 0% 2%">
     <div style="padding: 2% 2% 0% 2%">
         <!-- https://materializecss.com/cards.html -->
-        {{#with project_data}}
+        {{#each results}}
             <h1>{{project_name}}</h1>
             <p><b>Client:</b> {{this.client}}</p>
             <p><b>Number of Formulas:</b> 3</p>
@@ -87,10 +87,10 @@
                 <a href="/projects" class="btn waves-effect waves-light">Go Back</a>
             </div>
         </div>
-        {{/with}}
+        {{/each}}
 
-        {{#each formula_data}}
-            <p><a href="/projects/{{this.project_id}}/formulas">Trial {{trial_num}}</a></p>
+        {{#each formula_results}}
+            <p><a href="/projects/{{project_id}}/formulas">Trial {{trial_num}}</a></p>
         {{/each}}
 
             {{!-- <a class="modal-trigger" href="#hi">
