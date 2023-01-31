@@ -220,11 +220,13 @@ app.get("/formulas", (req, res) => {
 // figure out how to pull inactive projects too
 app.get("/archive", (req, res) => {
   db.execute(read_inactive_ingredients_all_sql, (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.render('archive', { results: results });
-    }
+    db.execute(read_inactive_projects_all_sql, (error, project_results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error
+      else {
+        res.render('archive', { results: results, project_results: project_results});
+      }
+    });
   });
 });
 
