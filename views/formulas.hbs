@@ -20,120 +20,90 @@
         <div style="padding: 2% 2% 0% 2%">
         {{> navbar}}
 
-            {{#each project_data}}
+        {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
                     <h4>Total Amt of Formula: 200g</h4>
                 </div>
             {{/each}}
-
-            {{#each formula_data}}
-                <div>
-                    <p>Trial {{trial_num}}</p>
-                    {{#each formula_ingredient_data}}
-                        <p>{{ingredient_id}}</p>
-                    {{/each}}
-                </div>
         
-
-{{!-- trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date --}}
-
-
-                {{!-- Nice side by side formatting --}}
-                {{!-- <div>
-                    <div class = "row">
-                    <form action="#">
-                        <div  class = "col s2">
-                        <p>
-                        <label>
-                            <input type="checkbox" />
-                            <span>Formula 1</span>
-                        </label>
-                        </p>    
-                        </div>
-                        <div  class = "col s2">
-                        <p>
-                        <label>
-                            <input type="checkbox" />
-                            <span>Formula 2</span>
-                        </label>
-                        </p>    
-                        </div>
-                        <div  class = "col s2">
-                        <p>
-                        <label>
-                            <input type="checkbox" />
-                            <span>Formula 3</span>
-                        </label>
-                        </p>    
-                        </div>
-                        <div  class = "col s2">
-                        <p>
-                        <label>
-                            <input type="checkbox" />
-                            <span>Formula 4</span>
-                        </label>
-                        </p>    
-                        </div>      
-                    </form>         
-                    </div>
+                <div class="row">
+                <div class="col s6">
+                    <ul class="tabs">
+                        {{#each formula_data}}
+                        <li class="tab col s3"><a href="#trial{{trial_num}}">Trial {{trial_num}}</a></li>
+                        {{/each}}
+                    </ul>
                 </div>
-                    <div class = "row">
-                        <div class="col s6"> 
-                            <p>Formula 3</p>
-                            <table>
+
+                <div class="col s6">
+                    <ul class="tabs">
+                        {{#each formula_data}}
+                        <li class="tab col s3"><a href="#2trial{{trial_num}}">Trial {{trial_num}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+                
+                <div class="row">
+                <div id="trial{{trial_num}}" class = "col s12 m4 l5">
+                    <table>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Ingredient</th>
+                            <th>INCI</th>
+                            <th>% of Ingredient</th>
+                            <th>Total Amt of Ing</th>
+                        </tr>
+                        {{#each formula_ingredient_data}}
                             <tr>
-                                <th>Phase</th>
-                                <th>Ingredient Name</th>
-                                <th>INCI</th>
-                                <th>% of Ingredient</th>
-                                <th>Total Amount of Ingredient (g)</th>
+                                <td>{{phase}}</td>
+                                <td>{{trade_name}}</td>
+                                <td>{{inci_name}}</td>
+                                <td>{{percent_of_ingredient}}</td>
+                                <td>{{total_amount}} {{unit}}</td>
                             </tr>
+                        {{/each}}
+                    </table>
+                </div>
+             
+        
+                
+                <div id="2trial{{trial_num}}" class = "col s12 m4 l4">
+                    <table>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Ingredient</th>
+                            <th>INCI</th>
+                            <th>% of Ingredient</th>
+                            <th>Total Amt of Ing</th>
+                        </tr>
+                            {{#each formula_ingredient_data}}
                             <tr>
-                                <td>Water 1</td>
-                                <td>Trade name 1</td>
-                                <td>INCI 1</td>
-                                <td>47.30</td>
-                                <td>94.6</td>
+                                <td>{{phase}}</td>
+                                <td>{{trade_name}}</td>
+                                <td>{{inci_name}}</td>
+                                <td>{{percent_of_ingredient}}</td>
+                                <td>{{total_amount}} {{unit}}</td>
                             </tr>
-                            <tr>
-                                <td>Water 1</td>
-                                <td>Trade name 1</td>
-                                <td>INCI 1</td>
-                                <td>47.30</td>
-                                <td>94.6</td>
-                            </tr>
-                            </table>
-                        </div>
-                        <div class = "col s6"> 
-                            <p>Formula 4</p>
-                            <table>
-                            <tr>
-                                <th>Phase</th>
-                                <th>Ingredient Name</th>
-                                <th>INCI</th>
-                                <th>% of Ingredient</th>
-                                <th>Total Amount of Ingredient (g)</th>
-                            </tr>
-                            <tr>
-                                <td>Water 1</td>
-                                <td>Trade name 1</td>
-                                <td>INCI 1</td>
-                                <td>47.30</td>
-                                <td>94.6</td>
-                            </tr>
-                            <tr>
-                                <td>Water 1</td>
-                                <td>Trade name 1</td>
-                                <td>INCI 1</td>
-                                <td>47.30</td>
-                                <td>94.6</td>
-                            </tr>
-                            </table>
-                        </div>
-                     </div> --}}
-            {{/each}}
+                            {{/each}}
+                    </table>
+                </div>
+
+                </div>
+                </div>
+
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"> 
+                </script>
+                <script>
+                    $(document).ready(function(){
+                        $('.tabs').tabs();
+                    });
+                </script>
+            
+                {{!-- trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date --}}
 
 
             </div>
@@ -141,6 +111,9 @@
                 <i class="large material-icons">create</i>
             </a>
         </div>
+
+       
+
     </body>
 
 </html>

@@ -157,7 +157,8 @@ const selectFormulaIngredients = `
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
     AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
+    AND formulas.trial_num = 1
+    AND formulas.project_id = ?
 `
 
 const read_inactive_ingredients_all_sql = `
@@ -282,13 +283,41 @@ app.get("/projects/:project_id", (req, res) => {
   });
 });
 
+app.get("/projects/:project_id/formulas#2trial:trial_num", (req, res) => {
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
+      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
+      // perhaps retrieve based on trial_nums that user selects to view? 
+      // [project_id, trial_num]
+      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error
+        else {
+          // res.render('project', {project_data: results[0]} );
+          res.render('formulas', {
+            title: 'Project Details',
+            styles: ["tables", "event"],
+            project_id: project_id,
+            project_data: project_data,
+            formula_data: formula_data,
+            formula_ingredient_data: formula_ingredient_data
+          });
+        }
+      });
+    });
+  });
+});
+
 app.get("/projects/:project_id/formulas", (req, res) => {
   let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
     db.execute(selectTrialNums, [project_id], (error, formula_data) => {
       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
       // perhaps retrieve based on trial_nums that user selects to view? 
-      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
+      // [project_id, trial_num]
+      db.execute(selectFormulaIngredients, [project_id], (error, formula_ingredient_data) => {
         if (error)
           res.status(500).send(error); //Internal Server Error
         else {
