@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// var userInput = inventory.get(inputValue1);
+
 var indexRouter = require('./routes/index');
 var inventoryRouter = require('./routes/inventory');
 var projectsRouter = require('./routes/projects');
@@ -11,6 +13,7 @@ var projectsRouter = require('./routes/projects');
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
 const hbs = require("hbs");
+// const style = require("css");
 
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');
@@ -184,6 +187,11 @@ const insertIntoInventory = `
     ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
   VALUES (?, ?, ?, "3A", "thickener", "AM09348", "0000-00-00", "Alban Muller", "g")
 `
+const insertIntoInventory1 = `
+  INSERT INTO 
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
+  VALUES (?, "Trade Name", "23", "3A", "thickener", "AM09348", "0000-00-00", "Alban Muller", "g")
+`
 
 const read_inventory_classifier_sql = `
   SELECT
@@ -196,6 +204,7 @@ const read_inventory_classifier_sql = `
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
+// style.registerPartials(partialsPath);
 
 app.get("/", (req, res) => {
   res.render('index');
@@ -235,7 +244,7 @@ app.get("/inventory/:classifier_id", (req, res) => {
   let classifier_id = req.params.classifier_id
   db.execute(read_inventory_classifier_sql, [classifier_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.status(500).send(error); //Internal Server Error 
     else {
       res.render('inventory', {
         classifier_id: classifier_id,
@@ -245,11 +254,25 @@ app.get("/inventory/:classifier_id", (req, res) => {
   });
 });
 
-app.get("/inventoryformsubmit/:value1/:value2/:value3", (req, res) => {
+// app.get("/inventoryformsubmit/:value1/:value2/:value3", (req, res) => {
+//   let value1 = req.params.value1
+//   let value2 = req.params.value2
+//   let value3 = req.params.value3
+//   db.execute(insertIntoInventory, [value1, value2, value3], (error, results) => {
+//     if (error)
+//       res.status(500).send(error); //Internal Server Error
+//     else {
+//       app.route('/inventory')
+//     }
+//   });
+// });
+
+app.get("/inventoryformsubmit/:value1", (req, res) => {
   let value1 = req.params.value1
-  let value2 = req.params.value2
-  let value3 = req.params.value3
-  db.execute(insertIntoInventory, [value1, value2, value3], (error, results) => {
+  // let value2 = req.params.value2
+  // let value3 = req.params.value3
+  db.execute(insertIntoInventory1, inputValue1, (error, results) => {
+    //interchange inputValue1 (takes you to page, but error) and [value1] (doesn't take you to page, just keeps loading)
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -259,15 +282,6 @@ app.get("/inventoryformsubmit/:value1/:value2/:value3", (req, res) => {
 });
 
 
-app.get("/formulas", (req, res) => {
-  db.execute(read_projects_all_sql, (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.render('formulas', { results: results });
-    }
-  });
-});
 
 // figure out how to pull inactive projects too
 app.get("/archive", (req, res) => {
@@ -307,7 +321,7 @@ app.get("/projects/:project_id", (req, res) => {
           results: results,
           formula_results: formula_results
         });
-       //app.route("/projects/:{{project_id}}/formulas");
+        //app.route("/projects/:{{project_id}}/formulas");
       }
     });
   });
@@ -315,13 +329,12 @@ app.get("/projects/:project_id", (req, res) => {
 
 app.get("/projects/:project_id/formulas", (req, res) => {
   let project_id = req.params.project_id
-  let trial_num = req.params.trial_num
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
     db.execute(selectTrialNums, [project_id], (error, formula_data) => {
       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
       // perhaps retrieve based on trial_nums that user selects to view? 
       // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
+      db.execute(selectFormulaIngredients, [project_id], (error, formula_ingredient_data) => {
         if (error)
           res.status(500).send(error); //Internal Server Error
         else {
