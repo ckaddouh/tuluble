@@ -179,6 +179,21 @@ const read_inactive_projects_all_sql = `
     active = 0
 `
 
+const insertIntoInventory = `
+  INSERT INTO 
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
+  VALUES (?, ?, ?, "3A", "thickener", "AM09348", "0000-00-00", "Alban Muller", "g")
+`
+
+const read_inventory_classifier_sql = `
+  SELECT
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+  FROM
+    ingredient
+  WHERE 
+    classifier_id = ?
+`
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 
@@ -195,7 +210,7 @@ app.get("/test", (req, res) => {
 // });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -218,14 +233,28 @@ app.get("/inventory", (req, res) => {
 
 app.get("/inventory/:classifier_id", (req, res) => {
   let classifier_id = req.params.classifier_id
-  db.execute(read_inventory_classifier_sql, (error, results) => {
+  db.execute(read_inventory_classifier_sql, [classifier_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
       res.render('inventory', {
         classifier_id: classifier_id,
-        inventory_data: results[0]
-      });    }
+        results: results
+      });
+    }
+  });
+});
+
+app.get("/inventoryformsubmit/:value1/:value2/:value3", (req, res) => {
+  let value1 = req.params.value1
+  let value2 = req.params.value2
+  let value3 = req.params.value3
+  db.execute(insertIntoInventory, [value1, value2, value3], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      app.route('/inventory')
+    }
   });
 });
 
@@ -247,7 +276,7 @@ app.get("/archive", (req, res) => {
       if (error)
         res.status(500).send(error); //Internal Server Error
       else {
-        res.render('archive', { results: results, project_results: project_results});
+        res.render('archive', { results: results, project_results: project_results });
       }
     });
   });
@@ -266,24 +295,25 @@ app.get("/projects", (req, res) => {
 app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, results) => {
-      db.execute(selectTrialNums, [project_id], (error, formula_results) => {
-        if (error)
-          res.status(500).send(error); //Internal Server Error
-        else {
-          // res.render('project', {project_data: results[0]} );
-          res.render('project', {
-            title: 'Project Details',
-            styles: ["tables", "event"],
-            project_id: project_id,
-            results: results,
-            formula_results: formula_results
-          });
-        }
-      });
+    db.execute(selectTrialNums, [project_id], (error, formula_results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error
+      else {
+        // res.render('project', {project_data: results[0]} );
+        res.render('project', {
+          title: 'Project Details',
+          styles: ["tables", "event"],
+          project_id: project_id,
+          results: results,
+          formula_results: formula_results
+        });
+       //app.route("/projects/:{{project_id}}/formulas");
+      }
+    });
   });
 });
 
-app.get("/projects/:project_id/formulas#2trial:trial_num", (req, res) => {
+app.get("/projects/:project_id/formulas", (req, res) => {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
