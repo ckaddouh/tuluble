@@ -385,7 +385,7 @@ app.get("/archive-ingredient/:ingredient_id", (req, res) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else
-      app.route('/inventory');
+      res.redirect('/inventory');
   });
 });
 
@@ -395,7 +395,7 @@ app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else
-      app.route('/archive');
+      res.redirect('/archive');
   });
 });
 
@@ -405,7 +405,7 @@ app.get("/archive-project/:project_id", (req, res) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else
-      app.route('/projects');
+      res.redirect('/projects');
   });
 });
 
@@ -415,7 +415,7 @@ app.get("/unarchive-project/:project_id", (req, res) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else
-      app.route('/archive');
+      res.redirect('/archive#projects');
   });
 });
 
