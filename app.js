@@ -160,7 +160,7 @@ const selectFormulaIngredients = `
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
     AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = 1
+    AND formulas.trial_num = ?
     AND formulas.project_id = ?
 `
 
@@ -272,7 +272,7 @@ app.post("/inventoryformsubmit", async function(req, res, next) {
   console.log(req.body.userInput1);
   try {
     let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, 
-      req.body.userInput3, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+      req.bxody.userInput3, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
       req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
 
       res.redirect("/inventory");
@@ -309,33 +309,12 @@ app.get("/projects", (req, res) => {
 
 app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
-  db.execute(singleProjectQuery, [project_id], (error, results) => {
-    db.execute(selectTrialNums, [project_id], (error, formula_results) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error
-      else {
-        // res.render('project', {project_data: results[0]} );
-        res.render('project', {
-          title: 'Project Details',
-          styles: ["tables", "event"],
-          project_id: project_id,
-          results: results,
-          formula_results: formula_results
-        });
-        //app.route("/projects/:{{project_id}}/formulas");
-      }
-    });
-  });
-});
-
-app.get("/projects/:project_id/formulas", (req, res) => {
-  let project_id = req.params.project_id
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
     db.execute(selectTrialNums, [project_id], (error, formula_data) => {
       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
       // perhaps retrieve based on trial_nums that user selects to view? 
       // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id], (error, formula_ingredient_data) => {
+      db.execute(selectFormulaIngredients, [project_id,1], (error, formula_ingredient_data) => {
         if (error)
           res.status(500).send(error); //Internal Server Error
         else {
@@ -354,14 +333,15 @@ app.get("/projects/:project_id/formulas", (req, res) => {
   });
 });
 
-app.get("/projects/:project_id/formulas", (req, res) => {
+app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
   let project_id = req.params.project_id
-  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
+  let trial_num = req.params.trial_num
+  db.execute(singleProjectQuery, [project_id,trial_num], (error, project_data) => {
+    db.execute(selectTrialNums, [project_id,trial_num], (error, formula_data) => {
       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
       // perhaps retrieve based on trial_nums that user selects to view? 
       // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id], (error, formula_ingredient_data) => {
+      db.execute(selectFormulaIngredients, [project_id,trial_num], (error, formula_ingredient_data) => {
         if (error)
           res.status(500).send(error); //Internal Server Error
         else {

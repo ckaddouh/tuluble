@@ -69,7 +69,7 @@
                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                     <h1 style="font-size:40px;">Add a New Ingredient</h1>
 
-                    <form method="POST" action="/inventoryformsubmit/{{project.project_id}}">
+                    <form method="POST" action="/inventoryformsubmit">
                         <article class="regular">
                             {{!-- <h2>Textbook</h2> --}}
 
@@ -168,9 +168,7 @@
                 var inputValue7 = $("#userInput7").val();
                 var inputValue8 = $("#userInput8").val();
                 var inputValue9 = $("#userInput9").val();
-                console.log(inputValue1);
-                console.log(inputValue2);
-                console.log(inputValue3);
+
                 window.location = "/inventoryformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
@@ -195,10 +193,13 @@
                 else {
                     window.location.href = "inventory/" + selectedOption;
                 }
+                sleep(1000);
+                let header = document.getElementById("inventoryTitle");
+                console.log(header);
             });
-            let header = document.getElementById("inventoryTitle");
             header.innerHTML = "Inventory - " + selectedOption;
-            console.log(header);
+
+           
 
         </script>
 

@@ -24,13 +24,15 @@
             <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
+                    <p><b>Client:</b> {{this.client}}</p>
+                    <p><b>Number of Formulas:</b> 2</p>
                     <h4>Total Amt of Formula: 200g</h4>
                 </div>
             {{/each}}
         
                 <div class="row">
                 <div class="col s6">
-                    <ul class="tabs">
+                    <ul class="tabs" id = "two">
                         {{#each formula_data}}
                         <li class="tab col s3"><a href="#trial{{trial_num}}">Trial {{trial_num}}</a></li>
                         {{/each}}
@@ -38,7 +40,7 @@
                 </div>
 
                 <div class="col s6">
-                    <ul class="tabs">
+                    <ul class="tabs" id = "two">
                         {{#each formula_data}}
                         <li class="tab col s3"><a href="#2trial{{trial_num}}">Trial {{trial_num}}</a></li>
                         {{/each}}
@@ -100,7 +102,17 @@
                 <script>
                     $(document).ready(function(){
                         $('.tabs').tabs();
+                        console.log("Active Tab:"+$(".active").attr('id'));
+                        console.log("Active Tab Div:"+$(".active").attr('href'));
+                        //window.location.href += "/trial/{{trial_num}}"
                     });
+                    $('ul.tabs').click(function() {
+                        console.log("Active Tab ONE Div:"+$(".active").attr('href'));
+                    });      
+                    $('ul.tabs').click(function() {
+                        console.log("Active Tab TWO Div:"+$(".active").attr('href'));
+                    });                
+                    
                 </script>
             
                 {{!-- trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, projects.project_name, projects.project_id, projects.client, projects.date --}}
