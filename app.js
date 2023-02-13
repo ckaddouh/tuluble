@@ -185,7 +185,7 @@ const read_inactive_projects_all_sql = `
 const insertIntoInventory = `
   INSERT INTO 
     ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
-  VALUES (?, ?, ?, "3A", "thickener", "AM09348", "0000-00-00", "Alban Muller", "g")
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 const insertIntoInventory1 = `
   INSERT INTO 
@@ -267,18 +267,19 @@ app.get("/inventory/:classifier_id", (req, res) => {
 //   });
 // });
 
-app.get("/inventoryformsubmit/:value1", (req, res) => {
-  let value1 = req.params.value1
-  // let value2 = req.params.value2
-  // let value3 = req.params.value3
-  db.execute(insertIntoInventory1, inputValue1, (error, results) => {
-    //interchange inputValue1 (takes you to page, but error) and [value1] (doesn't take you to page, just keeps loading)
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      app.route('/inventory')
-    }
-  });
+app.post("/inventoryformsubmit", async function(req, res, next) {
+  console.log("HELLO");
+  console.log(req.body.userInput1);
+  try {
+    let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, 
+      req.body.userInput3, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+      req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
+
+      res.redirect("/inventory");
+  }
+  catch(error) {
+    next(error);
+  }
 });
 
 
