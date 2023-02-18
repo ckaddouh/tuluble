@@ -154,12 +154,23 @@ const unarchiveProject = `
 
 const selectFormulaIngredients = `
   SELECT
-    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id
+    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
     AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.trial_num = ?
+    AND formulas.project_id = ?
+`
+
+const selectTrialData = `
+  SELECT
+    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s
+  FROM 
+    formulas, formula_ingredient
+  WHERE
+    formulas.formula_id = formula_ingredient.formula_id
     AND formulas.trial_num = ?
     AND formulas.project_id = ?
 `
@@ -202,12 +213,75 @@ const read_inventory_classifier_sql = `
     classifier_id = ?
 `
 
+const getLowAmounts = `
+
+  SELECT
+    ingredient_id, inci_name, trade_name, amt, expiration, unit
+  FROM 
+    ingredient
+  WHERE
+    ingredient.low = 1 
+    AND ingredient.active = 1
+`
+
+const getExpired = `
+  SELECT
+    ingredient_id, inci_name, trade_name, amt, expiration, unit
+  FROM 
+    ingredient
+  WHERE
+    ingredient.expiration <= UTC_DATE()
+    AND ingredient.active = 1
+`
+
+const checkFormulaSum = `
+  UPDATE
+    
+
+`
+
+const insertIntoFormulas = `
+  INSERT INTO formulas (project_id, trial_num, batch_date, formulator)
+  VALUES (?, ?, ?, ?)
+`
+
+const findIngredientID = `
+  SELECT ingredient_id
+  FROM ingredient
+  WHERE ingredient.lot_num = ?
+`
+
+const insertIntoPhase = `
+  INSERT INTO formula_ingredient (formula_id, phase, percent_of_ingredient, total_amount, ingredient_id)
+  VALUES (?, ?, ?, ?, ?)
+`
+
+const selectSearchedIngredients = `
+  SELECT
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+  FROM
+    ingredient
+  WHERE 
+    ingredient_id IN ?
+    AND classifier_id = ?
+`
+
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
 
+
 app.get("/", (req, res) => {
-  res.render('index');
+  db.execute(getLowAmounts, (error, results) => {
+    db.execute(getExpired, (error, results2) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error
+      else {
+        res.render('index', { runningLow: results, expired:results2});
+      }
+    });
+  });
 });
 
 app.get("/test", (req, res) => {
@@ -217,6 +291,47 @@ app.get("/test", (req, res) => {
 // app.get("/index", (req, res) =>{
 //   res.render('index');
 // });
+
+app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
+  let project_id = req.params.project_id
+  let trial_num1 = req.params.trial_num
+  let trial_num2 = req.params.trial_num2
+
+  console.log(trial_num1)
+  console.log(trial_num2)
+
+  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
+      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
+      // perhaps retrieve based on trial_nums that user selects to view? 
+      // [project_id, trial_num]
+      db.execute(selectFormulaIngredients, [trial_num1, project_id], (error, formula_ingredient_data1) => {
+        db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
+        db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
+          db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
+            if (error)
+              res.status(500).send(error); //Internal Server Error
+            else {
+              // res.render('project', {project_data: results[0]} );
+              res.render('formulas', {
+                title: 'Project Details',
+                styles: ["tables", "event"],
+                project_id: project_id,
+                project_data: project_data,
+                formula_data: formula_data,
+                formula_ingredient_data1: formula_ingredient_data1,
+                formula_ingredient_data2: formula_ingredient_data2,
+                trial_data1: trial_data1,
+                trial_data2: trial_data2
+              });
+            }
+          });
+          });
+        });
+      });
+    });
+  });
+});
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -254,28 +369,55 @@ app.get("/inventory/:classifier_id", (req, res) => {
   });
 });
 
-// app.get("/inventoryformsubmit/:value1/:value2/:value3", (req, res) => {
-//   let value1 = req.params.value1
-//   let value2 = req.params.value2
-//   let value3 = req.params.value3
-//   db.execute(insertIntoInventory, [value1, value2, value3], (error, results) => {
-//     if (error)
-//       res.status(500).send(error); //Internal Server Error
-//     else {
-//       app.route('/inventory')
-//     }
-//   });
-// });
-
 app.post("/inventoryformsubmit", async function(req, res, next) {
   console.log("HELLO");
-  console.log(req.body.userInput1);
+  console.log(req.body.userInput3);
   try {
-    let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, 
-      req.bxody.userInput3, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+    let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
       req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
 
       res.redirect("/inventory");
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+app.post("/projects/:project_id/formulaformsubmit", async function(req, res, next) {
+  let project_id = req.params.project_id;
+  console.log("HELLO");
+  console.log(project_id);
+  console.log(req.body.userInput1);
+  console.log(req.body.userInput2);
+  console.log(req.body.userInput3);
+  try {
+    let results = await db.promise(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2]); 
+    console.log("FINISHED");
+
+    let newRef = "/projects/" + project_id;
+    res.redirect(newRef);
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+// FIX THESE HREFS LATER
+app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req, res, next) {
+  let project_id = req.params.project_id;
+  let formula_id = req.params.formula_id;
+
+  console.log("HELLO");
+  console.log(project_id);
+  console.log(req.body.userInput1);
+  console.log(req.body.userInput2);
+  console.log(req.body.userInput3);
+  try {
+    let ing_id = await db.promise(findIngredientID, [req.body.userInput3]);
+    let results = await db.promise(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput4, req.body.userInput5, ing_id]); 
+    console.log("FINISHED");
+    let newRef = "/projects/" + project_id + "/" + formula_id;
+    res.redirect(newRef);
   }
   catch(error) {
     next(error);
@@ -304,32 +446,6 @@ app.get("/projects", (req, res) => {
     else {
       res.render('projects', { results: results });
     }
-  });
-});
-
-app.get("/projects/:project_id", (req, res) => {
-  let project_id = req.params.project_id
-  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
-      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
-      // perhaps retrieve based on trial_nums that user selects to view? 
-      // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id,1], (error, formula_ingredient_data) => {
-        if (error)
-          res.status(500).send(error); //Internal Server Error
-        else {
-          // res.render('project', {project_data: results[0]} );
-          res.render('formulas', {
-            title: 'Project Details',
-            styles: ["tables", "event"],
-            project_id: project_id,
-            project_data: project_data,
-            formula_data: formula_data,
-            formula_ingredient_data: formula_ingredient_data
-          });
-        }
-      });
-    });
   });
 });
 

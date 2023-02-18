@@ -61,27 +61,21 @@
                                 <th>Alert</th>
                             </tr>
                         </thead>
+
                         <tbody>
+                        {{#each runningLow}}
                             <tr>
-                                <td>Aristoflex AVC</td>
-                                <td>25g left</td>
+                                <td>{{inci_name}} {{trade_name}}</td>
+                                <td>{{amt}}{{unit}} left</td>
                             </tr>
+                        {{/each}}
+
+                        {{#each expired}}
                             <tr>
-                                <td>AM-Hebeatol CG</td>
-                                <td>Expired: 5/7/2022</td>
+                                <td>{{inci_name}} {{trade_name}}</td>
+                                <td>Expiration date: {{expiration}}</td>
                             </tr>
-                            <tr>
-                                <td>Licorice Extract PT-40</td>
-                                <td>Expires soon: 1/8/2023</td>
-                            </tr>
-                            <tr>
-                                <td>Cerasynt SD</td>
-                                <td>3g left</td>
-                            </tr>
-                            <tr>
-                                <td>AM-Chemysoap S 3R W</td>
-                                <td>11g left</td>
-                            </tr>
+                        {{/each}}
                         </tbody>
                     </table>
                 </center>

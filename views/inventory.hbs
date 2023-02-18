@@ -118,7 +118,7 @@
                                 {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                             </div>
                             <p> </p>
-                        </form>
+                    </form>
                         {{!-- <form>
                             <input type="text" id="input1">
                             <button type="button" id="submitBtn">Submit</button>
@@ -235,7 +235,7 @@
             <nav>
                 <div class="nav-wrapper grey">
                     <div class="input-field">
-                        <input type="search" name="" id="">
+                        <input type="search" id = "search" data-search>
                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
                         <i class="material-icons">close</i>
                     </div>
@@ -244,22 +244,50 @@
         </div>
     </div>
 
+    <script>
+        const searchInput = document.querySelector("[data-search]");
+        searchInput.addEventListener("input", e => {
+            const value = e.target.value.toLowerCase()
+            console.log(value)
+
+            // for each ingredient
+            /* var ing = document.getElementById("ing");
+            var inci = document.getElementById("inci");
+            var trade = document.getElementById("trade");
+            var shelf = document.getElementById("shelf");
+
+
+            console.log(innerHTML);
+            const isVisible = (inci.innerHTML.toLowerCase().includes(value) || trade.toLowerCase().includes(value) || shelf.toLowerCase().includes(value))
+            ing.classList.toggle("hide", !isVisible);
+            */
+        
+            
+            //for (int i = 0; i < results.size(); i++) {
+              //  if (results[i].inci_name.toLowerCase().includes(value) || results[i].lot_num.toLowerCase().includes(value) || results[i].trade_name.toLowerCase().includes(value) || results[i].shelf.toLowerCase().includes(value)) {
+                //    results[i].visible
+               // }
+            //}
+        })
+    </script>
+    {{!-- https://www.youtube.com/watch?v=TlP5WIxVirU  --}}
+
     <!-- INVENTORY TABLE -->
     <div style="padding:20px">
 
         <table class="sortable">
             <thead>
-                <tr>
-                    <th>INCI Name
+                <tr id = "ing">
+                    <th id = "inci">INCI Name
                         <span class="large material-icons">import_export</span>
                     </th>
-                    <th>Trade Name
+                    <th id = "trade">Trade Name
                         <span class="large material-icons">import_export</span>
                     </th>
                     <th>Amount Available
                         <span class="large material-icons">import_export</span>
                     </th>
-                    <th>Shelf
+                    <th id = "shelf">Shelf
                         <span class="large material-icons">import_export</span>
                     </th>
                     <th></th>
