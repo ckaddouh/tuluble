@@ -163,7 +163,7 @@ const unarchiveProject = `
 
 const selectFormulaIngredients = `
   SELECT
-    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
+    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE
