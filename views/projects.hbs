@@ -37,7 +37,7 @@
                                 <div class="col s12">&nbsp;</div>
                                 <div class="row">
                                     <div class = "col s12 m4 l4">
-                                        <a href="#terms" class="modal-trigger">
+                                        <a href="#term" class="modal-trigger">
                                             <span class="btn-small luluble-light-grey">See More</span>
                                         </a>
                                     </div>
@@ -52,7 +52,7 @@
                 </div>
                 {{!-- </a> --}}
 
-                <div class="modal" id="terms">
+                <div class="modal" id="term">
                     <div class="row">
                         <div class="col s12">&nbsp;</div>
                         <div class="col s12"><b><font size="+2">{{this.project_name}}</font></b></div>
@@ -109,10 +109,91 @@
 
 
             </div>
-            <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
+            {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
                 <i class="large material-icons">create</i>
+            </a> --}}
+
+            <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
+                <i class="large material-icons">create</i>
+                {{!-- <span class="large material-icons">create</span> --}}
             </a>
+            <div class="modal" id="terms">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Add a New Project</h1>
+
+                        <form method="POST" action="/projectformsubmit">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
+
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">Project Name:</label></b>
+                                <input type="text" name = "userInput1" id="userInput1" placeholder="Enter Project Name" maxlength="20">
+                                <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Client Name:</label></b>
+                                <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Client Name" maxlength="20">
+                                <p> </p>
+
+                                {{!-- Field 3 --}}
+                                <b><label for="tuluble">Date Started:</label></b>
+                                <input type="date" name = "userInput3" id="userInput3" placeholder="Enter Date Started" maxlength="20">
+                                <p> </p>
+
+                                {{!-- Field 4 --}}
+                                <b><label for="tuluble">Active:</label></b>
+                                <input type="number" name = "userInput4" id="userInput4" placeholder="Enter 1 for Yes, 0 for No" maxlength="20">
+                                <p> </p>
+
+                                <div class="add_project_button">
+                                <button id = "add_project_button" type="submit">Add Project</button>
+                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                </div>
+                                <p> </p>
+                            </form>
+                        </article>
+                    </div>
+                </div>
+            
         </div>
+
+        <script>
+            function myfunc() {
+                console.log("hello");
+            }
+            $(document).ready(function () {
+                $('browser-default').formSelect();
+                $('.modal').modal();
+            });
+
+            $('browser-default').formSelect('myfunc');
+                // $('select').formSelect('methodName', paramName);
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('.modal').modal();
+            })
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $("#add_project_button").click(function() {
+
+                var inputValue1 = $("#userInput1").val();
+                var inputValue2 = $("#userInput2").val();
+                var inputValue3 = $("#userInput3").val();
+                var inputValue4 = $("#userInput4").val();
+
+                window.location = "/projectformsubmit";
+                });
+            });
+        </script>
+
+        <script src="app.js"></script>
+
     </body>
 
 </html>
