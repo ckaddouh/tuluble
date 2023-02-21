@@ -94,8 +94,25 @@
                             <p> </p>
 
                             <b><label for="tuluble">Classifier:</label></b>
-                            <input type="text" name = "userInput5" id="userInput5" placeholder="Enter Classifier" maxlength="20">
+                            {{!-- <input type="text" name = "userInput5" id="userInput5" placeholder="Enter Classifier" maxlength="20"> --}}
+                            <select name="userInput5" id="userInput5" class="browser-default">
+                                <option value="0" disabled selected>Choose your classifier</option>
+                                <option value="Thickener">Thickeners</option>
+                                <option value="Oils">Oils</option>
+                                <option value="Butters">Butters</option>
+                                <option value="Surfactants">Surfactants</option>
+                                <option value="Functional-Active">Functional/Active</option>
+                                <option value="Preservatives">Preservatives</option>
+                                <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
+                                <option value="Experimental">Experimental</option>
+                                <option value="Colorants">Colorants</option>
+                                <option value="Absorbents">Absorbents</option>
+                                <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
+                                <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
+                                <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                            </select>
                             <p> </p>
+                            <p> &nbsp;</p>
 
                             <b><label for="tuluble">Lot Number:</label></b>
                             <input type="text" name = "userInput6" id="userInput6" placeholder="Enter Lot Number" maxlength="20">
@@ -159,11 +176,20 @@
         <script>
             $(document).ready(function() {
                 $("#add_button").click(function() {
+                    
+                const selects = document.querySelector('#userInput5');
+                let theSelectedOption;
+
+                select.addEventListener('change', (event) => {
+                    //window.location.href = "inventory/"
+                    theSelectedOption = event.target.value;
+                });
+
                 var inputValue1 = $("#userInput1").val();
                 var inputValue2 = $("#userInput2").val();
                 var inputValue3 = $("#userInput3").val();
                 var inputValue4 = $("#userInput4").val();
-                var inputValue5 = $("#userInput5").val();
+                var inputValue5 = theSelectedOption;
                 var inputValue6 = $("#userInput6").val();
                 var inputValue7 = $("#userInput7").val();
                 var inputValue8 = $("#userInput8").val();
