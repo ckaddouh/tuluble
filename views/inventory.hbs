@@ -226,21 +226,20 @@
                 //window.location.href = "inventory/"
                 selectedOption = event.target.value;
                 console.log(selectedOption);
+                //window.location.assign("/inventory");
                 //window.location.href += "/" + selectedOption;
                 if (window.location.href.indexOf("inventory/") !== -1) {
+                    window.location.href = "/inventory/";
                     window.location.href = selectedOption;
                 }
                 else {
-                    window.location.href = "inventory/" + selectedOption;
+                    window.location.href = "/inventory/" + selectedOption;
                 }
                 sleep(1000);
                 let header = document.getElementById("inventoryTitle");
                 console.log(header);
             });
             header.innerHTML = "Inventory - " + selectedOption;
-
-           
-
         </script>
 
 
@@ -309,17 +308,23 @@
             //searchTerm = searchBar.value;
             searchTerm = searchBar.value.trim();
             searchBar.value = searchTerm;
+            //window.location.replace("inventory");
             //console.log(searchTerm);
             //window.location.href += "/" + selectedOption;
-            if (window.location.href.indexOf("inventory/") !== -1) {
-                //window.location.href = searchTerm;
-                console.log(searchTerm);
-                window.location.assign("inventory/search/" + searchTerm);
+            if (searchTerm.length === 0) {
+                window.location.assign("/inventory");
             }
             else {
-                //window.location.href = "inventory/" + searchTerm;
-                console.log("inventory/" + searchTerm);
-                window.location.assign("/inventory/search/" + searchTerm);
+                if (window.location.href.indexOf("inventory/") !== -1) {
+                    //window.location.href = searchTerm;
+                    console.log(searchTerm);
+                    window.location.assign("/inventory/search/" + searchTerm);
+                }
+                else {
+                    //window.location.href = "inventory/" + searchTerm;
+                    console.log("inventory/" + searchTerm);
+                    window.location.assign("/inventory/search/" + searchTerm);
+                }
             }
             //sleep(1000);
             //let header = document.getElementById("inventoryTitle");
@@ -520,6 +525,28 @@
         </table>
     </div>
     </div>
+
+    <script>
+        const sort = document.querySelector('#sort-button');
+        //let selectedOption;
+        
+        sort.addEventListener('change', (event) => {
+            //window.location.href = "inventory/"
+            //selectedOption = event.target.value;
+            alert("hello");
+            //window.location.href += "/" + selectedOption;
+            //if (window.location.href.indexOf("inventory/") !== -1) {
+                //window.location.href = selectedOption;
+            //}
+            //else {
+                //window.location.href = "inventory/" + selectedOption;
+            //}
+            //sleep(1000);
+            //let header = document.getElementById("inventoryTitle");
+            //console.log(header);
+        });
+        //header.innerHTML = "Inventory - " + selectedOption;
+    </script>
 
 
     <script>
