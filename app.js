@@ -163,7 +163,7 @@ const unarchiveProject = `
 
 const selectFormulaIngredients = `
   SELECT
-    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
+    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE
@@ -175,7 +175,7 @@ const selectFormulaIngredients = `
 
 const selectTrialData = `
   SELECT
-    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s
+    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s, SUM(percent_of_ingredient) as percent
   FROM 
     formulas, formula_ingredient
   WHERE
@@ -403,11 +403,19 @@ app.get("/inventory/search/:input", (req, res) => {
 
 app.post("/inventoryformsubmit", async function(req, res, next) {
   console.log("HELLO");
+  console.log(req.body.userInput1);
+  console.log(req.body.userInput2);
   console.log(req.body.userInput3);
+  console.log(req.body.userInput4);
+  console.log(req.body.userInput5);
+  console.log(req.body.userInput6);
+  console.log(req.body.userInput7);
+  console.log(req.body.userInput8);
+  console.log(req.body.userInput9);
+
   try {
     let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
       req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
-
       res.redirect("/inventory");
   }
   catch(error) {
@@ -426,7 +434,7 @@ app.post("/projects/:project_id/formulaformsubmit", async function(req, res, nex
     let results = await db.promise(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2]); 
     console.log("FINISHED");
 
-    let newRef = "/projects/" + project_id;
+    let newRef = "/projects/" + project_id + "/trial1/trial1";
     res.redirect(newRef);
   }
   catch(error) {

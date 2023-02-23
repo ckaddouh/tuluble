@@ -188,6 +188,8 @@
                             <p>Batch date: {{batch_date}}</p>
                             <p>Formulator: {{formulator}}</p>
                             <p>Total Amt of Formula: {{s}}</p>
+                            <p>Total Percentage: {{percent}}</p>
+                            <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
                         {{/each}}
 
 
@@ -198,7 +200,7 @@
                                 <td>{{inci_name}}</td>
                                 <td>{{lot_num}}</td>
                                 <td>{{percent_of_ingredient}}</td>
-                                <td>{{total_amount}} {{unit}}</td>
+                                <td>{{total_amount}}</td>
                             </tr>
                         {{/each}}
                     
@@ -248,8 +250,40 @@
                                 </article>
                             </div>
                         </div>
-                    </div>
+                        </div>
                     </td>
+
+                    <td>
+                        <div class="col s12 m4 l2">
+                        <a href="#makeTrial" class="btn waves-effect waves-light luluble-pink modal-trigger">MAKE TRIAL</a>
+                        <div class="modal" id="makeTrial">
+                            <div style="padding: 5% 5% 5% 5%">
+                                {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                <h1 style="font-size:40px;">Make Trial {{trial_num}}</h1>
+
+                                {{!-- somehow get the formula of the tab clicked on --}}
+                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                    <article class="regular">
+                                        {{!-- <h2>Textbook</h2> --}}
+
+                                        {{!-- Field 1 --}}
+                                        <b><label for="tuluble">Quantity ({{unit}}):</label></b>
+                                        <input type="range" min = "0" max = "100" name = "userInput1" id="userInput1">
+                                        <p> </p>
+                                        {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
+
+                                       
+                                        <div class="make_trial_button">
+                                            <button id = "make_trial_button" type="submit">Make Trial</button>
+                                            {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                        </div>
+                                        <p> </p>
+                                    </form>
+                                </article>
+                            </div>
+                        </div>
+                    </td>
+
                     </table>
 
                 </div>
@@ -271,6 +305,15 @@
                                 <p>Batch date: {{batch_date}}</p>
                                 <p>Formulator: {{formulator}}</p>
                                 <p>Total Amt of Formula: {{s}}</p>
+                                <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
+                                
+                                {{!-- <script>
+                                    var tp = document.getElementByClassName("totalPercent");
+                                    if ({{percent}} != 100) {
+                                        tp.innerHTML = "WARNING: Total Percentage is NOT 100%"
+                                    }
+                                </script> --}}
+                                
                             {{/each}}
 
                             {{#each formula_ingredient_data2}}
@@ -284,6 +327,9 @@
                             </tr>
                             {{/each}}
                     <td>
+
+                        
+
                         <div class="col s12 m4 l2">
                         <a href="#openIng2" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Ingredient</a>
 
@@ -332,6 +378,71 @@
                         </div>
                     </div>
                     </td>
+
+                    <td>
+                        <div class="col s12 m4 l2">
+                        <a href="#makeTrial2" class="btn waves-effect waves-light luluble-pink modal-trigger">MAKE TRIAL</a>
+                        <div class="modal" id="makeTrial2">
+                            <div style="padding: 5% 5% 5% 5%">
+                                {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                <h1 style="font-size:40px;">Make Trial {{trial_num}}</h1>
+
+                                {{!-- somehow get the formula of the tab clicked on --}}
+                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                    <article class="regular">
+                                        {{!-- <h2>Textbook</h2> --}}
+
+                                        {{!-- Field 1 --}}
+                                        <b><label for="tuluble">Quantity ({{unit}}):</label></b>
+                                        <input type="range" min = "0" max = "100" name = "userInput1" id="userInput1">
+                                        <p> </p>
+                                        {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
+
+                                       
+                                        <div class="make_trial_button">
+                                            <button id = "make_trial_button2" type="submit">Make Trial</button>
+                                            {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                        </div>
+                                        <p> </p>
+                                    </form>
+                                </article>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="col s12 m4 l2">
+                        <a href="#printTrial2" class="btn waves-effect waves-light luluble-pink modal-trigger">PRINT TRIAL</a>
+                        <div class="modal" id="makeTrial2">
+                            <div style="padding: 5% 5% 5% 5%">
+                                {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                <h1 style="font-size:40px;">Print Trial {{trial_num}}</h1>
+
+                                {{!-- somehow get the formula of the tab clicked on --}}
+                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                    <article class="regular">
+                                        {{!-- <h2>Textbook</h2> --}}
+
+                                        {{!-- Field 1 --}}
+                                        <b><label for="tuluble">Quantity {{unit}}:</label></b>
+                                        <p class="range-field">
+                                            <input type="range" name = "userInput1" id="userInput1" min="0" max="100" />
+                                        </p>
+                                        <p> </p>
+                                        {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
+
+                                       
+                                        <div class="make_trial_button">
+                                            <button id = "make_trial_button2" type="submit">Make Trial</button>
+                                            {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                        </div>
+                                        <p> </p>
+                                    </form>
+                                </article>
+                            </div>
+                        </div>
+                    </td>
+
                     </table>
                 </div>
 
@@ -369,7 +480,28 @@
                         });
                     </script>
 
-             
+                    <script>
+                        $(document).ready(function() {
+                            $("#make_trial_button").click(function() {
+                            var inputValue1 = $("#userInput1").val();
+                          
+                            window.location += "/makeformsubmit";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                            });
+                        });
+                    </script>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#make_trial_button2").click(function() {
+                            var inputValue1 = $("#userInput1").val();
+                          
+
+                            window.location += "/makeformsubmit";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                            });
+                        });
+                    </script>
             
 
 
