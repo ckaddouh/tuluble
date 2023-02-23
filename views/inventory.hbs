@@ -119,7 +119,7 @@
                             <p> </p>
 
                             <b><label for="tuluble">Date Recieved:</label></b>
-                            <input type="date" name = "userInput7" id="userInput7" placeholder="Enter Date Received" maxlength="20">
+                            <input type="date" name = "userInput7" id="userInput7" placeholder="Enter Date Received">
                             <p> </p>
 
                             <b><label for="tuluble">Supplier:</label></b>
@@ -131,7 +131,7 @@
                             <p> </p>
 
                             <div class="add_button">
-                                <button id = "add_button" type="submit">Add Ingredient</button>
+                                <button id = "add_button" name="add_button" type="submit">Add Ingredient</button>
                                 {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                             </div>
                             <p> </p>
@@ -185,15 +185,25 @@
                     theSelectedOption = event.target.value;
                 });
 
-                var inputValue1 = $("#userInput1").val();
-                var inputValue2 = $("#userInput2").val();
-                var inputValue3 = $("#userInput3").val();
-                var inputValue4 = $("#userInput4").val();
-                var inputValue5 = theSelectedOption;
-                var inputValue6 = $("#userInput6").val();
-                var inputValue7 = $("#userInput7").val();
-                var inputValue8 = $("#userInput8").val();
-                var inputValue9 = $("#userInput9").val();
+                const inputValue1 = $("#userInput1").val();
+                const inputValue2 = $("#userInput2").val();
+                const inputValue3 = $("#userInput3").val();
+                const inputValue4 = $("#userInput4").val();
+                const inputValue5 = theSelectedOption;
+                const inputValue6 = $("#userInput6").val();
+                const inputValue7 = $("#userInput7").val();
+                const inputValue8 = $("#userInput8").val();
+                const inputValue9 = $("#userInput9").val();
+
+                module.exports = {inputValue1};
+                module.exports = {inputValue2};
+                module.exports = {inputValue3};
+                module.exports = {inputValue4};
+                module.exports = {inputValue5};
+                module.exports = {inputValue6};
+                module.exports = {inputValue7};
+                module.exports = {inputValue8};
+                module.exports = {inputValue9};
 
                 window.location = "/inventoryformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
@@ -259,53 +269,72 @@
         <div class="col s12 m4 l6">
             <p></p>
             <nav>
-                <div class="nav-wrapper grey">
+                {{!-- <div class="nav-wrapper grey">
                     <div class="input-field">
                         <input type="search" id = "search" data-search>
                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                        <input type="submit">
                         <i class="material-icons">close</i>
                     </div>
-                </div>
+                </div> --}}
+
+                {{!-- <form>
+                    {{!-- <label for="gsearch">Search Google:</label> --}}
+                    <input type="search" id="gsearch" name="gsearch">
+                    <button id="search-button">Search</button>
+                </form> --}}
+
+                {{!-- <form action="/inventory/search/"> --}}
+                    {{!-- <input type="text" id="gsearch" name="q" placeholder="Search For An Ingredient"> --}}
+                    {{!-- <button type="submit" id="search-button">Search</button> --}}
+                {{!-- </form> --}}
             </nav>
         </div>
     </div>
 
     <script>
-        const searchInput = document.querySelector("[data-search]");
-        searchInput.addEventListener("input", e => {
-            const value = e.target.value.toLowerCase()
-            console.log(value)
+        const search = document.querySelector('#gsearch');
 
-            // for each ingredient
-            /* var ing = document.getElementById("ing");
-            var inci = document.getElementById("inci");
-            var trade = document.getElementById("trade");
-            var shelf = document.getElementById("shelf");
+        let searchBar = document.getElementById('gsearch');
+        let searchButton = document.getElementById('search-button');
+        let searchTerm;
 
-
-            console.log(innerHTML);
-            const isVisible = (inci.innerHTML.toLowerCase().includes(value) || trade.toLowerCase().includes(value) || shelf.toLowerCase().includes(value))
-            ing.classList.toggle("hide", !isVisible);
-            */
-        
-            
-            //for (int i = 0; i < results.size(); i++) {
-              //  if (results[i].inci_name.toLowerCase().includes(value) || results[i].lot_num.toLowerCase().includes(value) || results[i].trade_name.toLowerCase().includes(value) || results[i].shelf.toLowerCase().includes(value)) {
-                //    results[i].visible
-               // }
-            //}
-        })
+        search.addEventListener('change', (event) => {
+            //window.location.href = "inventory/"
+            console.log("ok")
+            //searchTerm = searchBar.value;
+            searchTerm = searchBar.value.trim();
+            searchBar.value = searchTerm;
+            //console.log(searchTerm);
+            //window.location.href += "/" + selectedOption;
+            if (window.location.href.indexOf("inventory/") !== -1) {
+                //window.location.href = searchTerm;
+                console.log(searchTerm);
+                window.location.assign("inventory/search/" + searchTerm);
+            }
+            else {
+                //window.location.href = "inventory/" + searchTerm;
+                console.log("inventory/" + searchTerm);
+                window.location.assign("/inventory/search/" + searchTerm);
+            }
+            //sleep(1000);
+            //let header = document.getElementById("inventoryTitle");
+            //console.log(header);
+        });
+        //header.innerHTML = "Inventory - " + selectedOption;
     </script>
+
     {{!-- https://www.youtube.com/watch?v=TlP5WIxVirU  --}}
 
     <!-- INVENTORY TABLE -->
     <div style="padding:20px">
 
-        <table class="sortable">
+        <table id="my-table" class="sortable">
             <thead>
                 <tr id = "ing">
                     <th id = "inci">INCI Name
-                        <span class="large material-icons">import_export</span>
+                        {{!-- <span class="large material-icons">import_export</span> --}}
+                        <button id="sort-button">Sort Alphabetically</button>
                     </th>
                     <th id = "trade">Trade Name
                         <span class="large material-icons">import_export</span>
@@ -487,6 +516,35 @@
         $(document).ready(function () {
             $('.modal').modal();
         })
+    </script>
+
+    <script>
+        document.getElementById('sort-button').addEventListener('click', function() {
+            sortTable(0); // Sort by the first column
+        });
+
+        function sortTable(columnIndex) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById('my-table');
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName('TD')[columnIndex];
+                y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+                }
+                if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                }
+            }
+        }
     </script>
 
 </body>

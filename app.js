@@ -78,6 +78,15 @@ app.use(auth(authConfig));
 //   res.send(JSON.stringify(req.oidc.user));
 // });
 
+const { inputValue1 } = require('./views/inventory.hbs');
+const { inputValue2 } = require('./views/inventory.hbs');
+const { inputValue3 } = require('./views/inventory.hbs');
+const { inputValue5 } = require('./views/inventory.hbs');
+const { inputValue6 } = require('./views/inventory.hbs');
+const { inputValue7 } = require('./views/inventory.hbs');
+const { inputValue8 } = require('./views/inventory.hbs');
+const { inputValue9 } = require('./views/inventory.hbs');
+
 const read_inventory_all_sql = `
     SELECT
         ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
@@ -266,6 +275,14 @@ const selectSearchedIngredients = `
     AND classifier_id = ?
 `
 
+const read_inventory_search = `
+  SELECT
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+  FROM
+    ingredient
+  WHERE 
+    ingredient.inci_name LIKE ?
+`
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -363,6 +380,21 @@ app.get("/inventory/:classifier_id", (req, res) => {
     else {
       res.render('inventory', {
         classifier_id: classifier_id,
+        results: results
+      });
+    }
+  });
+});
+
+app.get("/inventory/search/:input", (req, res) => {
+  let input = req.params.input
+  let searchStr = `%${input}%`;
+  db.execute(read_inventory_search, [searchStr], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('inventory', {
+        input: input,
         results: results
       });
     }
