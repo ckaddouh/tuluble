@@ -175,7 +175,7 @@ const selectFormulaIngredients = `
 
 const selectTrialData = `
   SELECT
-    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s
+    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s, SUM(percent_of_ingredient) as percent
   FROM 
     formulas, formula_ingredient
   WHERE

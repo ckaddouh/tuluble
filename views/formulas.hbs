@@ -188,6 +188,8 @@
                             <p>Batch date: {{batch_date}}</p>
                             <p>Formulator: {{formulator}}</p>
                             <p>Total Amt of Formula: {{s}}</p>
+                            <p>Total Percentage: {{percent}}</p>
+                            <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
                         {{/each}}
 
 
@@ -303,6 +305,15 @@
                                 <p>Batch date: {{batch_date}}</p>
                                 <p>Formulator: {{formulator}}</p>
                                 <p>Total Amt of Formula: {{s}}</p>
+                                <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
+                                
+                                {{!-- <script>
+                                    var tp = document.getElementByClassName("totalPercent");
+                                    if ({{percent}} != 100) {
+                                        tp.innerHTML = "WARNING: Total Percentage is NOT 100%"
+                                    }
+                                </script> --}}
+                                
                             {{/each}}
 
                             {{#each formula_ingredient_data2}}
@@ -316,6 +327,9 @@
                             </tr>
                             {{/each}}
                     <td>
+
+                        
+
                         <div class="col s12 m4 l2">
                         <a href="#openIng2" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Ingredient</a>
 
@@ -410,8 +424,10 @@
                                         {{!-- <h2>Textbook</h2> --}}
 
                                         {{!-- Field 1 --}}
-                                        <b><label for="tuluble">Quantity ({{unit}}):</label></b>
-                                        <input type="range" min = "0" max = "100" name = "userInput1" id="userInput1">
+                                        <b><label for="tuluble">Quantity {{unit}}:</label></b>
+                                        <p class="range-field">
+                                            <input type="range" name = "userInput1" id="userInput1" min="0" max="100" />
+                                        </p>
                                         <p> </p>
                                         {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
 
