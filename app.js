@@ -559,7 +559,7 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
   }
 });
 
-app.get("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
+app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
   console.log("HELLO");
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
@@ -582,7 +582,7 @@ app.get("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) =
       if (error)
       res.status(500).send(error); //Internal Server Error 
       else {
-        res.redirect("/projects" + "TEST" + project_id + "procedure" + trial_num);
+        res.redirect("/projects/" + project_id + "/procedure" + trial_num);
       }
   });
 });
