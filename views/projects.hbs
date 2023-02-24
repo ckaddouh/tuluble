@@ -37,7 +37,7 @@
                                 <div class="col s12">&nbsp;</div>
                                 <div class="row">
                                     <div class = "col s12 m4 l4">
-                                        <a href="#term" class="modal-trigger">
+                                        <a href="#term{{project_id}}" class="modal-trigger">
                                             <span class="btn-small luluble-light-grey">See More</span>
                                         </a>
                                     </div>
@@ -53,7 +53,7 @@
                 {{!-- </a> --}}
             {{/each}}
             {{#each results}}
-                <div class="modal" id="term">
+                <div class="modal" id="term{{project_id}}">
                     <div class="row">
                         <div class="col s12">&nbsp;</div>
                         <div class="col s12"><b><font size="+2">{{project_name}}</font></b></div>

@@ -297,7 +297,7 @@ const get_procedure = `
 
 const get_procedure_info = `
   SELECT 
-    projects.project_name, procedure_item.trial_num
+    projects.project_name, procedure_item.trial_num, projects.project_id
   FROM
     projects, procedure_item
   WHERE
@@ -317,6 +317,13 @@ const select_ing_per_phase = `
     AND formulas.project_id = ?
     AND formulas.trial_num = ?
     AND formula_ingredient.phase = ?
+`
+
+const insert_procedure = `
+  INSERT INTO 
+    procedure_item (phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, trial_num)
+  VALUES 
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 
@@ -501,9 +508,39 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
   }
 });
 
+app.get("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
+  console.log("HELLO");
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+
+  console.log(project_id);
+  let userInput1 = req.body.userInput1;
+  let userInput2 = req.body.userInput2;
+  let userInput3 = req.body.userInput3;
+  let userInput4 = req.body.userInput4;
+  let userInput5 = req.body.userInput5;
+  let userInput6 = req.body.userInput6;
+  let userInput7 = req.body.userInput7;
+  let userInput8 = req.body.userInput8;
+  let userInput9 = req.body.userInput9;
+  let userInput10 = req.body.userInput10;
+
+
+  db.execute(insert_procedure, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6, userInput7,
+    userInput8, userInput9, userInput10, project_id, trial_num], (error, results) => {
+      if (error)
+      res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects" + "TEST" + project_id + "procedure" + trial_num);
+      }
+  });
+});
+
 app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
+
+  console.log("opening procedure");
 
   db.execute(get_procedure, [project_id, trial_num], (error, results) => {
     db.execute(get_procedure_info, [project_id, trial_num], (error, proc_info) => {
