@@ -128,22 +128,22 @@
 
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">Project Name:</label></b>
-                                <input type="text" name = "userInput1" id="userInput1" placeholder="Enter Project Name" maxlength="20">
+                                <input type="text" name = "userInputP1" id="userInputP1" placeholder="Enter Project Name" maxlength="20">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Client Name:</label></b>
-                                <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Client Name" maxlength="20">
+                                <input type="text" name = "userInputP2" id="userInputP2" placeholder="Enter Client Name" maxlength="20">
                                 <p> </p>
 
                                 {{!-- Field 3 --}}
                                 <b><label for="tuluble">Date Started:</label></b>
-                                <input type="date" name = "userInput3" id="userInput3" placeholder="Enter Date Started" maxlength="20">
+                                <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started" maxlength="20">
                                 <p> </p>
 
                                 {{!-- Field 4 --}}
                                 <b><label for="tuluble">Active:</label></b>
-                                <input type="number" name = "userInput4" id="userInput4" placeholder="Enter 1 for Yes, 0 for No" maxlength="20">
+                                <input type="number" name = "userInputP4" id="userInputP4" placeholder="Enter 1 for Yes, 0 for No" maxlength="20">
                                 <p> </p>
 
                                 <div class="add_project_button">
@@ -157,6 +157,36 @@
                 </div>
             
         </div>
+
+        <script>
+            $(document).ready(function() {
+                $("#add_project_button").click(function() {
+                    
+                //const selects = document.querySelector('#userInput5');
+                //let theSelectedOption;
+
+                //select.addEventListener('change', (event) => {
+                    //window.location.href = "inventory/"
+                    //theSelectedOption = event.target.value;
+                //});
+
+                const inputValue1 = $("#userInput1").val();
+                const inputValue2 = $("#userInput2").val();
+                const inputValue3 = $("#userInput3").val();
+                const inputValue4 = $("#userInput4").val();
+                const inputValue5 = $("#userInput5").val();
+
+                module.exports = {inputValue1};
+                module.exports = {inputValue2};
+                module.exports = {inputValue3};
+                module.exports = {inputValue4};
+                module.exports = {inputValue5};
+
+                window.location = "/projectformsubmit";
+                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                });
+            });
+        </script>
 
         <script>
             function myfunc() {
@@ -182,10 +212,10 @@
             $(document).ready(function() {
                 $("#add_project_button").click(function() {
 
-                var inputValue1 = $("#userInput1").val();
-                var inputValue2 = $("#userInput2").val();
-                var inputValue3 = $("#userInput3").val();
-                var inputValue4 = $("#userInput4").val();
+                var inputValue1 = $("#userInputP1").val();
+                var inputValue2 = $("#userInputP2").val();
+                var inputValue3 = $("#userInputP3").val();
+                var inputValue4 = $("#userInputP4").val();
 
                 window.location = "/projectformsubmit";
                 });

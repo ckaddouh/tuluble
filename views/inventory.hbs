@@ -184,7 +184,7 @@
                 const selects = document.querySelector('#userInput5');
                 let theSelectedOption;
 
-                select.addEventListener('change', (event) => {
+                selects.addEventListener('change', (event) => {
                     //window.location.href = "inventory/"
                     theSelectedOption = event.target.value;
                 });
@@ -427,33 +427,37 @@
                                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                     <h1 style="font-size:40px;">Edit Ingredient</h1>
 
-                                    <form method="POST" action="/inventoryformsubmit">
+                                    <form method="POST" action="/inventoryingredientupdate">
                                         <article class="regular">
                                             {{!-- <h2>Textbook</h2> --}}
 
                                             {{!-- Field 1 --}}
+                                            <b><label for="tuluble">Ingredient ID: (Do not Edit)</label></b>
+                                            <input type="text" name = "userInputU0" id="userInputU0" value="{{this.ingredient_id}}" maxlength="200" readonly>
+                                            <p> </p>
+
                                             <b><label for="tuluble">INCI Name:</label></b>
-                                            <input type="text" name = "userInput1" id="userInput1" value="{{this.inci_name}}" maxlength="200">
+                                            <input type="text" name = "userInputU1" id="userInputU1" value="{{this.inci_name}}" maxlength="200">
                                             <p> </p>
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInput2" id="userInput2" value={{this.trade_name}} maxlength="200">
+                                            <input type="text" name = "userInputU2" id="userInputU2" value={{this.trade_name}} maxlength="200">
                                             <p> </p>
 
                                             {{!-- Field 3 --}}
                                             <b><label for="tuluble">Amount Available:</label></b>
-                                            <input type="number" name = "userInput3" id="userInput3" value="{{this.amt}}" maxlength="200">
+                                            <input type="number" name = "userInputU3" id="userInputU3" value="{{this.amt}}" maxlength="200">
                                             <p> </p>
 
                                             {{!-- Field 4 --}}
                                             <b><label for="tuluble">Shelf:</label></b>
-                                            <input type="text" name = "userInput4" id="userInput4" value={{this.shelf}} maxlength="20">
+                                            <input type="text" name = "userInputU4" id="userInputU4" value={{this.shelf}} maxlength="20">
                                             <p> </p>
 
                                             <b><label for="tuluble">Classifier:</label></b>
                                             {{!-- <input type="text" name = "userInput5" id="userInput5" placeholder="Enter Classifier" maxlength="20"> --}}
-                                            <select name="userInput5" id="userInput5" class="browser-default">
+                                            <select name="userInputU5" id="userInputU5" class="browser-default">
                                                 <option value={{this.classifier_id}} disabled selected>{{this.classifier_id}}</option>
                                                 <option value="Thickener">Thickeners</option>
                                                 <option value="Oils">Oils</option>
@@ -473,27 +477,27 @@
                                             <p> &nbsp;</p>
 
                                             <b><label for="tuluble">Lot Number:</label></b>
-                                            <input type="text" name = "userInput6" id="userInput6" value={{this.lot_num}} maxlength="20">
+                                            <input type="text" name = "userInputU6" id="userInputU6" value={{this.lot_num}} maxlength="20">
                                             <p> </p>
 
                                             <b><label for="tuluble">Date Recieved:</label></b>
-                                            <input type="date" name = "userInput7" id="userInput7" value={{this.date_recieved}} maxlength="20">
+                                            <input type="text" name = "userInputU7" id="userInputU7" value={{this.date_received}}>
                                             <p> </p>
 
                                             <b><label for="tuluble">Supplier:</label></b>
-                                            <input type="text" name = "userInput8" id="userInput8" value={{this.supplier}} maxlength="20">
+                                            <input type="text" name = "userInputU8" id="userInputU8" value={{this.supplier}} maxlength="20">
                                             <p> </p>
 
                                             <b><label for="tuluble">Unit:</label></b>
-                                            <input type="text" name = "userInput9" id="userInput9" value={{this.unit}} maxlength="20">
+                                            <input type="text" name = "userInputU9" id="userInputU9" value={{this.unit}} maxlength="20">
                                             <p> </p>
 
                                             <b><label for="tuluble">Link:</label></b>
-                                            <input type="hyperlink" name = "userInput10" id="userInput10" value={{this.link}} maxlength="100">
+                                            <input type="hyperlink" name = "userInputU10" id="userInputU10" value={{this.link}} maxlength="100">
                                             <p> </p>
 
-                                            <div class="finish_button">
-                                                <button id = "finish_button" type="submit">Finish Editing</button>
+                                            <div class="update_button">
+                                                <button id = "update_button" name = "update_button" type="submit">Finish Editing</button>
                                                 {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                             </div>
                                             <p> </p>
@@ -511,6 +515,47 @@
         </table>
     </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#update_button").click(function() {
+                
+            const selected = document.querySelector('#userInputU5');
+            let newSelectedOption;
+
+            selected.addEventListener('change', (event) => {
+                //window.location.href = "inventory/"
+                newSelectedOption = event.target.value;
+            });
+
+            const inputValueU0 = $("#userInputU0").val();
+            const inputValueU1 = $("#userInputU1").val();
+            const inputValueU2 = $("#userInputU2").val();
+            const inputValueU3 = $("#userInputU3").val();
+            const inputValueU4 = $("#userInputU4").val();
+            const inputValueU5 = newSelectedOption;
+            const inputValueU6 = $("#userInputU6").val();
+            const inputValueU7 = $("#userInputU7").val();
+            const inputValueU8 = $("#userInputU8").val();
+            const inputValueU9 = $("#userInputU9").val();
+            const inputValueU10 = $("#userInputU10").val();
+            
+
+            module.exports = {inputValue1};
+            module.exports = {inputValue2};
+            module.exports = {inputValue3};
+            module.exports = {inputValue4};
+            module.exports = {inputValue5};
+            module.exports = {inputValue6};
+            module.exports = {inputValue7};
+            module.exports = {inputValue8};
+            module.exports = {inputValue9};
+
+            window.location = "/inventoryingredientupdate";
+            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+            });
+        });
+    </script>
 
     <script>
         const sort = document.querySelector('#sort-button');
