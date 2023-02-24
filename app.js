@@ -175,7 +175,7 @@ const selectFormulaIngredients = `
 
 const selectTrialData = `
   SELECT
-    formulas.batch_date, formulas.trial_num, formulas.formulator, SUM(total_amount) as s, SUM(percent_of_ingredient) as percent
+    formulas.batch_date, formulas.trial_num, formulas.formulator, formulas.project_id, SUM(total_amount) as s, SUM(percent_of_ingredient) as percent
   FROM 
     formulas, formula_ingredient
   WHERE
@@ -298,6 +298,50 @@ const read_inventory_search = `
   WHERE 
     ingredient.inci_name LIKE ?
 `
+
+
+
+const get_procedure = `
+  SELECT 
+    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, trial_num
+  FROM 
+    procedure_item
+  WHERE 
+    project_id = ? AND trial_num = ?
+`
+
+const get_procedure_info = `
+  SELECT 
+    projects.project_name, procedure_item.trial_num, projects.project_id
+  FROM
+    projects, procedure_item
+  WHERE
+    projects.project_id = ?
+    AND procedure_item.trial_num = ?
+  LIMIT 1
+`
+
+const select_ing_per_phase = `
+  SELECT
+    trade_name
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.project_id = ?
+    AND formulas.trial_num = ?
+    AND formula_ingredient.phase = ?
+`
+
+const insert_procedure = `
+  INSERT INTO 
+    procedure_item (phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, trial_num)
+  VALUES 
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`
+
+
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -510,6 +554,76 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
     next(error);
   }
 });
+
+app.get("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
+  console.log("HELLO");
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+
+  console.log(project_id);
+  let userInput1 = req.body.userInput1;
+  let userInput2 = req.body.userInput2;
+  let userInput3 = req.body.userInput3;
+  let userInput4 = req.body.userInput4;
+  let userInput5 = req.body.userInput5;
+  let userInput6 = req.body.userInput6;
+  let userInput7 = req.body.userInput7;
+  let userInput8 = req.body.userInput8;
+  let userInput9 = req.body.userInput9;
+  let userInput10 = req.body.userInput10;
+
+
+  db.execute(insert_procedure, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6, userInput7,
+    userInput8, userInput9, userInput10, project_id, trial_num], (error, results) => {
+      if (error)
+      res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects" + "TEST" + project_id + "procedure" + trial_num);
+      }
+  });
+});
+
+app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+
+  console.log("opening procedure");
+
+  db.execute(get_procedure, [project_id, trial_num], (error, results) => {
+    db.execute(get_procedure_info, [project_id, trial_num], (error, proc_info) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.render('procedure', {
+          results: results,
+          procedure_info: proc_info,
+        });
+      }
+    });
+  });
+});
+
+// app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
+//   let project_id = req.params.project_id
+//   let trial_num = req.params.trial_num
+
+//   db.execute(get_procedure, [project_id, trial_num], (error, results) => {
+//     db.execute(get_procedure_info, [project_id, trial_num], (error, proc_info) => {
+//       db.execute(select_ing_per_phase, [project_id, trial_num, phase_num], (error, ing_data) => {
+//         if (error)
+//           res.status(500).send(error); //Internal Server Error 
+//         else {
+//           res.render('procedure', {
+//             results: results,
+//             procedure_info: proc_info,
+//             ing_data: ing_data
+//           });
+//         }
+//       });
+//     });
+//   });
+// });
+
 
 
 

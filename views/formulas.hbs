@@ -190,6 +190,7 @@
                             <p>Total Amt of Formula: {{s}}</p>
                             <p>Total Percentage: {{percent}}</p>
                             <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
+                            <a href = "/projects/{{project_id}}/procedure{{trial_num}}">Procedure</a>
                         {{/each}}
 
 
@@ -306,7 +307,7 @@
                                 <p>Formulator: {{formulator}}</p>
                                 <p>Total Amt of Formula: {{s}}</p>
                                 <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
-                                
+                                <a href = "/projects/{{project_id}}/procedure{{trial_num}}">Procedure</a>
                                 {{!-- <script>
                                     var tp = document.getElementByClassName("totalPercent");
                                     if ({{percent}} != 100) {
