@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        
+        {{#each procedure_info}}
+            <title>{{project_name}} Trial {{trial_num}} Procedure</title>
+        {{/each}}
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <script type="text/javascript" src="/routes/projects.js"></script>
+        <link rel="stylesheet" href="/styles/color.css">
+
+    </head>
+    <style>
+        .container {
+        display: flex;
+        }
+</style>
+
+    <body style="display: flex; flex-direction: column;">
+        <div style="padding: 2% 2% 0% 2%">
+        {{> navbar}}
+
+
+         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+
+        {{#each procedure_info}}
+            <header>{{project_name}} Trial {{trial_num}} Procedure</header>
+        {{/each}}
+        <table id="my-table" class="sortable">
+            <thead>
+                <tr id = "ing">
+                    <th>Phase</th>
+                    <th>Procedure</th>
+                    <th>Comments/Ingredients</th>
+                    <th>Initial Temperature (C)</th>
+                    <th>Final Temperature (C)</th>
+                    <th>Timing (min)</th>
+                    <th>Initial Mixing (rpm)</th>
+                    <th>Final Mixing (rpm)</th>
+                    <th>Mixer Type</th>
+                    <th>Blade</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each results}}
+                <tr>
+                    <td>{{phase_num}}</td>
+                    <td>{{proc}}</td>
+                    <td>{{comments}}</td>
+                    <td>{{temp_init}}</td>
+                    <td>{{temp_final}}</td>
+                    <td>{{timing}}</td>
+                    <td>{{mixing_init}}</td>
+                    <td>{{mixing_final}}</td>
+                    <td>{{mixer_type}}</td>
+                    <td>{{blade}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+
+        
+
+    </body>
+
+</html>
