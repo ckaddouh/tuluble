@@ -78,14 +78,6 @@ app.use(auth(authConfig));
 //   res.send(JSON.stringify(req.oidc.user));
 // });
 
-const { inputValue1 } = require('./views/inventory.hbs');
-const { inputValue2 } = require('./views/inventory.hbs');
-const { inputValue3 } = require('./views/inventory.hbs');
-const { inputValue5 } = require('./views/inventory.hbs');
-const { inputValue6 } = require('./views/inventory.hbs');
-const { inputValue7 } = require('./views/inventory.hbs');
-const { inputValue8 } = require('./views/inventory.hbs');
-const { inputValue9 } = require('./views/inventory.hbs');
 
 const read_inventory_all_sql = `
     SELECT
@@ -464,7 +456,7 @@ app.get("/inventory/search/:input", (req, res) => {
   });
 });
 
-app.post("/inventoryformsubmit", async function(req, res, next) {
+app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
   console.log("HELLO");
   console.log(req.body.userInput1);
   console.log(req.body.userInput2);
@@ -476,14 +468,14 @@ app.post("/inventoryformsubmit", async function(req, res, next) {
   console.log(req.body.userInput8);
   console.log(req.body.userInput9);
 
-  try {
-    db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
-      req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
-      res.redirect("/inventory");
-  }
-  catch(error) {
-    next(error);
-  }
+  db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+    req.body.userInput7, req.body.userInput8, req.body.userInput9], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect('/inventory');
+    }
+  });
 });
 
 app.post("/inventoryingredientupdate", async function(req, res, next) {
@@ -525,16 +517,14 @@ app.post("/projects/:project_id/formulaformsubmit", async function(req, res, nex
   console.log(req.body.userInput1);
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
-  try {
-    let results = await db.promise(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2]); 
-    console.log("FINISHED");
 
-    let newRef = "/projects/" + project_id + "/trial1/trial1";
-    res.redirect(newRef);
-  }
-  catch(error) {
-    next(error);
-  }
+  db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/projects/" + project_id + "/trial1/trial1");
+    }
+  });
 });
 
 // FIX THESE HREFS LATER
@@ -547,16 +537,17 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
   console.log(req.body.userInput1);
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
-  try {
-    let ing_id = await db.promise(findIngredientID, [req.body.userInput3]);
-    let results = await db.promise(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput4, req.body.userInput5, ing_id]); 
-    console.log("FINISHED");
-    let newRef = "/projects/" + project_id + "/" + formula_id;
-    res.redirect(newRef);
-  }
-  catch(error) {
-    next(error);
-  }
+
+  db.execute(findIngredientID, [req.body.userInput3], (error, ing_id) => {
+    console.log(ing_id);
+    db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput4, req.body.userInput5, ing_id], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects/" + project_id + "/trial1/trial1");
+      }
+    });
+  });
 });
 
 app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
