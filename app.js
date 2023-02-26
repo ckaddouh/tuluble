@@ -332,6 +332,10 @@ const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
 
+app.get('/profile', (req, res) => {
+  const user = req.oidc.user.nickname;
+  console.log(user);
+});
 
 app.get("/", (req, res) => {
   db.execute(getLowAmounts, (error, results) => {
@@ -339,7 +343,7 @@ app.get("/", (req, res) => {
       if (error)
         res.status(500).send(error); //Internal Server Error
       else {
-        res.render('index', { runningLow: results, expired:results2});
+        res.render('index', { runningLow: results, expired:results2, profileInfo: req.oidc.user.nickname});
       }
     });
   });
