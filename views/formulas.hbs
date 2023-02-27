@@ -97,21 +97,21 @@
         </script>
         
                 <div class="row">
-                <div class="col s6">
-                    <ul class="tabs" id = "one">
-                        {{#each formula_data}}
-                            <li class="tab col s3"><a href="/trial{{trial_num}}">Trial {{trial_num}}</a></li>
-                        {{/each}}
-                    </ul>
-                </div>
+                        <div class="col s6">
+                            <ul class="tabs scrollable" id = "one">
+                                {{#each formula_data}}
+                                    <li class="tab col s3"><a href="/trial{{trial_num}}">Trial {{trial_num}}</a></li>
+                                {{/each}}
+                            </ul>
+                        </div>
 
-                <div class="col s6">
-                    <ul class="tabs" id = "two">
-                        {{#each formula_data}}
-                            <li class="tab col s3"><a href="/trial{{trial_num}}">Trial {{trial_num}}</a></li>
-                        {{/each}}
-                    </ul>
-                </div>
+                        <div class="col s6">
+                            <ul class="tabs" id = "two">
+                                {{#each formula_data}}
+                                    <li class="tab col s3"><a href="/trial{{trial_num}}">Trial {{trial_num}}</a></li>
+                                {{/each}}
+                            </ul>
+                        </div>
 
                 <script>
                     $(document).ready(function(){
@@ -207,12 +207,12 @@
                     
                     <td>
                         <div class="col s12 m4 l2">
-                        <a href="#openIng" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Ingredient</a>
+                        <a href="#openIng" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Phase</a>
 
                         <div class="modal" id="openIng">
                             <div style="padding: 5% 5% 5% 5%">
                                 {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                <h1 style="font-size:40px;">Add a New Ingredient</h1>
+                                <h1 style="font-size:40px;">Add a New Phase</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
                                 <form method="POST" action="/projects/{{project_id}}/1/phaseformsubmit">
@@ -226,7 +226,13 @@
 
                                         {{!-- Field 2 --}}
                                         <b><label for="tuluble">Ingredient:</label></b>
-                                        <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Ingredient Name" maxlength="20">
+                                        {{!-- <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Ingredient Name" maxlength="20"> --}}
+                                        <select name="userInput2" id="userInput2" class="browser-default">
+                                            <option value="0" disabled selected>Choose your ingredient</option>
+                                            {{#each inventory_data}}
+                                                <option value="{{inci_name}}">{{inci_name}}</option>
+                                            {{/each}}
+                                        </select>
                                         <p> </p>
 
                                         {{!-- Field 3 --}}
@@ -332,12 +338,12 @@
                         
 
                         <div class="col s12 m4 l2">
-                        <a href="#openIng2" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Ingredient</a>
+                        <a href="#openIng2" class="btn waves-effect waves-light luluble-pink modal-trigger">Add Phase</a>
 
                         <div class="modal" id="openIng2">
                             <div style="padding: 5% 5% 5% 5%">
                                 {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                <h1 style="font-size:40px;">Add a New Ingredient</h1>
+                                <h1 style="font-size:40px;">Add a New Phase</h1>
 
                                 <form method="POST" action="/phaseformsubmit">
                                     <article class="regular">
@@ -350,8 +356,27 @@
 
                                         {{!-- Field 2 --}}
                                         <b><label for="tuluble">Ingredient:</label></b>
-                                        <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Formulator Name" maxlength="20">
+                                        {{!-- <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Formulator Name" maxlength="20"> --}}
+                                        <div class="input-field">
+                                            <input type="text" id="userInput2-search" placeholder="Search for an ingredient">
+                                                <select name="userInput2" id="userInput2" class="browser-default">
+                                                    <option value="0" disabled selected>Choose your ingredient</option>
+                                                    {{#each inventory_data}}
+                                                        <option value="{{inci_name}}">{{inci_name}}</option>
+                                                    {{/each}}
+                                                </select>
+                                        </div>
                                         <p> </p>
+
+                                        <div class="input-field">
+                                            <select searchable="Search here...">
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="1">Option 1</option>
+                                                <option value="2">Option 2</option>
+                                                <option value="3">Option 3</option>
+                                            </select>
+                                            <label>Dropdown Label</label>
+                                        </div>
 
                                         {{!-- Field 3 --}}
                                         <b><label for="tuluble">Lot Number:</label></b>
@@ -501,6 +526,21 @@
                             window.location += "/makeformsubmit";
                             //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                             });
+                        });
+                    </script>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var elems = document.querySelectorAll('#userInput2');
+                            var options = {
+                            data: {
+                                // Replace 'data' below with the actual data from your mySQL database
+                                {{#each inventory_data}}
+                                    "{{inci_name}}": null,
+                                {{/each}}
+                            }
+                            };
+                            var instances = M.Autocomplete.init(elems, options);
                         });
                     </script>
             

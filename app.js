@@ -87,6 +87,7 @@ const { inputValue7 } = require('./views/inventory.hbs');
 const { inputValue8 } = require('./views/inventory.hbs');
 const { inputValue9 } = require('./views/inventory.hbs');
 
+//this one only shows oils...
 const read_inventory_all_sql = `
     SELECT
         ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
@@ -94,6 +95,18 @@ const read_inventory_all_sql = `
         ingredient
     WHERE 
       classifier_id = "Oils" AND active = 1
+`
+
+const read_inventory_all_alph = `
+    SELECT
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    FROM
+        ingredient
+    WHERE 
+      active = 1
+      AND inci_name != ''
+    ORDER BY 
+      inci_name ASC
 `
 
 const read_projects_all_sql = `
@@ -235,6 +248,15 @@ const updateIngredient = `
     inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?
   WHERE 
     ingredient_id = ?
+`
+
+const updateProject = `
+  UPDATE 
+    projects
+  SET 
+    project_name = ?, client = ?, date = ?, active = ?
+  WHERE 
+    project_id = ?
 `
 
 const getLowAmounts = `
@@ -385,6 +407,7 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
         db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
         db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
           db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
+            db.execute(read_inventory_all_alph, (error, results) => {
             if (error)
               res.status(500).send(error); //Internal Server Error
             else {
@@ -398,16 +421,17 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
                 formula_ingredient_data1: formula_ingredient_data1,
                 formula_ingredient_data2: formula_ingredient_data2,
                 trial_data1: trial_data1,
-                trial_data2: trial_data2
+                trial_data2: trial_data2,
+                inventory_data: results
               });
             }
+          });
           });
           });
         });
       });
     });
   });
-});
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -483,21 +507,20 @@ app.post("/inventoryformsubmit", async function(req, res, next) {
 });
 
 app.post("/inventoryingredientupdate", async function(req, res, next) {
-  console.log(req.body.userInputU1);
-  console.log(req.body.userInputU2);
-  console.log(req.body.userInputU3);
-  console.log(req.body.userInputU4);
-  console.log(req.body.userInputU5);
-  console.log(req.body.userInputU6);
-  console.log(req.body.userInputU7);
-  console.log(req.body.userInputU8);
-  console.log(req.body.userInputU9);
-  console.log(req.body.userInputU0);
-
   try {
     db.execute(updateIngredient, [req.body.userInputU1, req.body.userInputU2, req.body.userInputU3, req.body.userInputU4, req.body.userInputU5, req.body.userInputU6, 
       req.body.userInputU7, req.body.userInputU8, req.body.userInputU9, req.body.userInputU0]); 
       res.redirect("/inventory");
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+app.post("/projectupdate", async function(req, res, next) {
+  try {
+    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput0]); 
+      res.redirect("/projects");
   }
   catch(error) {
     next(error);

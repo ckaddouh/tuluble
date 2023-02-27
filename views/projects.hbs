@@ -46,6 +46,53 @@
                                             <a href="archive-project/{{project_id}}" class="btn waves-effect waves-light luluble-light-grey">Archive</a>
                                         </div>
                                     </div>
+                                    <div class = "col s12 m4 l4">
+                                        <div class="edit_button">
+                                            <a href="#edit_project{{project_id}}" class="btn waves-effect waves-light luluble-light-grey modal-trigger">Edit</a>
+                                            <div class="modal" id="edit_project{{project_id}}">
+                                                <div style="padding: 5% 5% 5% 5%">
+                                                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                                    <h1 style="font-size:40px;">Edit Project</h1>
+
+                                                    <form method="POST" action="/projectupdate">
+                                                        <article class="regular">
+                                                            {{!-- <h2>Textbook</h2> --}}
+
+                                                            {{!-- Field 1 --}}
+                                                            <b><label for="tuluble">Project ID: (Do not Edit)</label></b>
+                                                            <input type="text" name = "userInput0" id="userInput0" value="{{this.project_id}}" readonly>
+                                                            <p> </p>
+
+                                                            <b><label for="tuluble">Project Name:</label></b>
+                                                            <input type="text" name = "userInput1" id="userInput1" value="{{this.project_name}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 2 --}}
+                                                            <b><label for="tuluble">Client Name:</label></b>
+                                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.client}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 3 --}}
+                                                            <b><label for="tuluble">Date Started:</label></b>
+                                                            <input type="date" name = "userInput3" id="userInput3" value="{{this.date}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 4 --}}
+                                                            <b><label for="tuluble">Active (1 for Yes, 0 for No):</label></b>
+                                                            <input type="text" name = "userInput4" id="userInput4" value="{{this.active}}">
+                                                            <p> </p>
+
+                                                            <div class="update_button">
+                                                                <button id = "update_button" name = "update_button" type="submit">Finish Editing</button>
+                                                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                                            </div>
+                                                            <p> </p>
+                                                        </form>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,6 +154,22 @@
             <div class="card-action"></div>
 
             {{/each}}
+
+            <script>
+                $(document).ready(function() {
+                    $("#update_button").click(function() {
+
+                    const inputValueU0 = $("#userInputU0").val();
+                    const inputValueU1 = $("#userInputU1").val();
+                    const inputValueU2 = $("#userInputU2").val();
+                    const inputValueU3 = $("#userInputU3").val();
+                    const inputValueU4 = $("#userInputU4").val();
+
+                    window.location = "/projectupdate";
+                    //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    });
+                });
+            </script>
 
 
             </div>

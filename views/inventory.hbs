@@ -229,8 +229,8 @@
                 //window.location.assign("/inventory");
                 //window.location.href += "/" + selectedOption;
                 if (window.location.href.indexOf("inventory/") !== -1) {
-                    window.location.href = "/inventory/";
-                    window.location.href = selectedOption;
+                    window.location.href = "/inventory/" + selectedOption;
+                    //window.location.href = selectedOption;
                 }
                 else {
                     window.location.href = "/inventory/" + selectedOption;
@@ -238,6 +238,7 @@
                 sleep(1000);
                 let header = document.getElementById("inventoryTitle");
                 console.log(header);
+                //history.replaceState(null, null, 'http://localhost:3000/inventory');
             });
             header.innerHTML = "Inventory - " + selectedOption;
         </script>
@@ -294,27 +295,41 @@
             //searchTerm = searchBar.value;
             searchTerm = searchBar.value.trim();
             searchBar.value = searchTerm;
+
+            const stateObj = { url: '/inventory' };
+            const title = '';
+            const newUrl = '/inventory';
             //window.location.replace("inventory");
             //console.log(searchTerm);
             //window.location.href += "/" + selectedOption;
             if (searchTerm.length === 0) {
                 window.location.assign("/inventory");
+                //location.replace('http://localhost:3000/inventory');
+                //history.pushState(stateObj, title, newUrl);
+
             }
             else {
                 if (window.location.href.indexOf("inventory/") !== -1) {
                     //window.location.href = searchTerm;
                     console.log(searchTerm);
                     window.location.assign("/inventory/search/" + searchTerm);
+                    //location.replace('http://localhost:3000/inventory');
+                    //history.pushState(stateObj, title, newUrl);
+
                 }
                 else {
                     //window.location.href = "inventory/" + searchTerm;
                     console.log("inventory/" + searchTerm);
                     window.location.assign("/inventory/search/" + searchTerm);
+                    //location.replace('http://localhost:3000/inventory');
+                    //history.pushState(stateObj, title, newUrl);
+
                 }
             }
             //sleep(1000);
             //let header = document.getElementById("inventoryTitle");
             //console.log(header);
+            //history.pushState(stateObj, title, newUrl);
         });
         //header.innerHTML = "Inventory - " + selectedOption;
     </script>
@@ -324,7 +339,7 @@
     <!-- INVENTORY TABLE -->
     <div style="padding:20px">
 
-        <table id="my-table" class="sortable">
+        <table id="my-table" class="scrollable">
             <thead>
                 <tr id = "ing">
                     <th id = "inci">INCI Name
@@ -369,7 +384,7 @@
                                 <div class="col s6">
                                     <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b>
                                         {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}}
-                                        {{this.unit}}<b></b><b>Supplier:</b> {{this.supplier}}<br></br><b>TSCA
+                                        {{this.unit}}<br></br><b>Supplier:</b> {{this.supplier}}<br></br><b>TSCA
                                             Approved:</b> {{this.tsca_approved}}</span>
                                     {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI
                                         Name:</span> --}}
@@ -422,8 +437,8 @@
                     
                     <td>
                         <div class="edit_button">
-                            <a href="#termss" class="btn waves-effect waves-light luluble-pink modal-trigger">Edit</a>
-                            <div class="modal" id="termss">
+                            <a href="#termss{{ingredient_id}}" class="btn waves-effect waves-light luluble-pink modal-trigger">Edit</a>
+                            <div class="modal" id="termss{{ingredient_id}}">
                                 <div style="padding: 5% 5% 5% 5%">
                                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                     <h1 style="font-size:40px;">Edit Ingredient</h1>
@@ -434,32 +449,32 @@
 
                                             {{!-- Field 1 --}}
                                             <b><label for="tuluble">Ingredient ID: (Do not Edit)</label></b>
-                                            <input type="text" name = "userInputU0" id="userInputU0" value="{{this.ingredient_id}}" maxlength="200" readonly>
+                                            <input type="text" name = "userInputU0" id="userInputU0" value="{{this.ingredient_id}}" readonly>
                                             <p> </p>
 
                                             <b><label for="tuluble">INCI Name:</label></b>
-                                            <input type="text" name = "userInputU1" id="userInputU1" value="{{this.inci_name}}" maxlength="200">
+                                            <input type="text" name = "userInputU1" id="userInputU1" value="{{this.inci_name}}">
                                             <p> </p>
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInputU2" id="userInputU2" value={{this.trade_name}} maxlength="200">
+                                            <input type="text" name = "userInputU2" id="userInputU2" value="{{this.trade_name}}">
                                             <p> </p>
 
                                             {{!-- Field 3 --}}
                                             <b><label for="tuluble">Amount Available:</label></b>
-                                            <input type="number" name = "userInputU3" id="userInputU3" value="{{this.amt}}" maxlength="200">
+                                            <input type="number" name = "userInputU3" id="userInputU3" value="{{this.amt}}">
                                             <p> </p>
 
                                             {{!-- Field 4 --}}
                                             <b><label for="tuluble">Shelf:</label></b>
-                                            <input type="text" name = "userInputU4" id="userInputU4" value={{this.shelf}} maxlength="20">
+                                            <input type="text" name = "userInputU4" id="userInputU4" value="{{this.shelf}}">
                                             <p> </p>
 
                                             <b><label for="tuluble">Classifier:</label></b>
                                             {{!-- <input type="text" name = "userInput5" id="userInput5" placeholder="Enter Classifier" maxlength="20"> --}}
                                             <select name="userInputU5" id="userInputU5" class="browser-default">
-                                                <option value={{this.classifier_id}} disabled selected>{{this.classifier_id}}</option>
+                                                <option value="{{this.classifier_id}}" disabled selected>{{this.classifier_id}}</option>
                                                 <option value="Thickener">Thickeners</option>
                                                 <option value="Oils">Oils</option>
                                                 <option value="Butters">Butters</option>
@@ -478,24 +493,24 @@
                                             <p> &nbsp;</p>
 
                                             <b><label for="tuluble">Lot Number:</label></b>
-                                            <input type="text" name = "userInputU6" id="userInputU6" value={{this.lot_num}} maxlength="20">
+                                            <input type="text" name = "userInputU6" id="userInputU6" value="{{this.lot_num}}">
                                             <p> </p>
 
                                             <b><label for="tuluble">Date Recieved:</label></b>
-                                            <input type="text" name = "userInputU7" id="userInputU7" value={{this.date_received}}>
+                                            <input type="date" name = "userInputU7" id="userInputU7" value="{{this.date_received}}">
                                             <p> </p>
 
                                             <b><label for="tuluble">Supplier:</label></b>
-                                            <input type="text" name = "userInputU8" id="userInputU8" value={{this.supplier}} maxlength="20">
+                                            <input type="text" name = "userInputU8" id="userInputU8" value="{{this.supplier}}">
                                             <p> </p>
 
                                             <b><label for="tuluble">Unit:</label></b>
-                                            <input type="text" name = "userInputU9" id="userInputU9" value={{this.unit}} maxlength="20">
+                                            <input type="text" name = "userInputU9" id="userInputU9" value="{{this.unit}}" maxlength="5">
                                             <p> </p>
 
-                                            <b><label for="tuluble">Link:</label></b>
+                                            {{!-- <b><label for="tuluble">Link:</label></b>
                                             <input type="hyperlink" name = "userInputU10" id="userInputU10" value={{this.link}} maxlength="100">
-                                            <p> </p>
+                                            <p> </p> --}}
 
                                             <div class="update_button">
                                                 <button id = "update_button" name = "update_button" type="submit">Finish Editing</button>
@@ -541,6 +556,7 @@
             const inputValueU9 = $("#userInputU9").val();
             const inputValueU10 = $("#userInputU10").val();
             
+            console.log(newSelectedOption);
 
             module.exports = {inputValue1};
             module.exports = {inputValue2};

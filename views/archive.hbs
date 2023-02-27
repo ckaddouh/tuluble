@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/styles/archive.css">
+    <link rel="stylesheet" href="/partials/color.css">
 
 </head>
 
@@ -118,26 +119,29 @@
                             <div class="row">
                                 <div class="col s7 m6 l6">
                                     {{!-- <a href="#terms" class="modal-trigger"> --}}
-                                        <div class="card blue-grey darken-1">
+                                        <div class="card luluble-light-pink darken-1">
                                             <div class="card-content white-text">
                                                 {{!-- projects/{{this.project_name}} --}}
-                                                <span class="card-title"><a
-                                                        href="/projects/{{this.project_id}}">{{this.project_name}}</a></span>
-                                                <p>Client: {{this.client}}</p>
-                                                <p>{{this.date}}</p>
+                                                <span class="card-title"><a style="color: black;"
+                                                        href="/projects/{{this.project_id}}"><b>{{this.project_name}}</a></b></span>
+                                                <p style="color: black;">Client: {{this.client}}</p>
+                                                <p style="color: black;">{{this.date}}</p>
                                                 <div class="col s12">&nbsp;</div>
-                                                <a href="#terms" class="modal-trigger">
-                                                    <span class="btn-small">See More</span>
-                                                </a>
-                                                <div class="delete_button">
-                                                    <a href="unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light">Unarchive</a>
-                                                </div>
-                                            </div>
+                                                <div class="row">
+                                                    <div class = "col s12 m4 l4">
+                                                        <a href="#terms{{project_id}}" class="modal-trigger">
+                                                            <span class="btn-small luluble-light-grey">See More</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class = "col s12 m4 l2"></div>
+                                                        <div class="delete_button">
+                                                            <a href="unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light luluble-light-grey">Unarchive</a>
+                                                        </div>
                                         </div>
                                 </div>
                                 {{!-- </a> --}}
 
-                                <div class="modal" id="terms">
+                                <div class="modal" id="terms{{project_id}}">
                                     <div class="row">
                                         <div class="col s12">&nbsp;</div>
                                         <div class="col s12"><b><font size="+2">{{this.project_name}}</font></b></div>
@@ -177,7 +181,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
                             
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -204,5 +208,6 @@
             </table>
         </div>
         </div>
+    </div>
     </body>
 </html>
