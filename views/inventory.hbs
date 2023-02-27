@@ -69,7 +69,7 @@
                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                     <h1 style="font-size:40px;">Add a New Ingredient</h1>
 
-                    <form method="POST" action="/inventoryformsubmit">
+                    <form method="POST" action="/inventory/inventoryformsubmit">
                         <article class="regular">
                             {{!-- <h2>Textbook</h2> --}}
 
@@ -130,8 +130,12 @@
                             <input type="text" name = "userInput9" id="userInput9" placeholder="Enter Unit" maxlength="20">
                             <p> </p>
 
-                            <b><label for="tuluble">Link:</label></b>
-                            <input type="hyperlink" name = "userInput10" id="userInput10" placeholder="Enter Link" maxlength="100">
+                            <b><label for="tuluble">COA Documents:</label></b>
+                            <input type="url" name = "userInput10" id="userInput10" placeholder="Enter Link" maxlength="200">
+                            <p> </p>
+
+                            <b><label for="tuluble">MSDS Documents:</label></b>
+                            <input type="url" name = "userInput11" id="userInput11" placeholder="Enter Link" maxlength="200">
                             <p> </p>
 
                             <div class="add_button">
@@ -209,7 +213,7 @@
                 module.exports = {inputValue8};
                 module.exports = {inputValue9};
 
-                window.location = "/inventoryformsubmit";
+                window.location = "inventory/inventoryformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
@@ -355,13 +359,13 @@
                     <th id = "shelf">Shelf
                         <span class="large material-icons">import_export</span>
                     </th>
+                    <th id = "lot_number">Lot Number
+                        <span class="large material-icons">import_export</span>
+                    </th>
                     <th id = "archive">Archive
                         <span class="large material-icons">import_export</span>
                     </th>
                     <th id = "edit">Edit
-                        <span class="large material-icons">import_export</span>
-                    </th>
-                    <th id = "link">Link
                         <span class="large material-icons">import_export</span>
                     </th>
                 </tr>
@@ -382,24 +386,27 @@
                                     </b></div>
                                 <div class="col s12">&nbsp;</div>
                                 <div class="col s6">
-                                    <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b>
-                                        {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}}
-                                        {{this.unit}}<br></br><b>Supplier:</b> {{this.supplier}}<br></br><b>TSCA
-                                            Approved:</b> {{this.tsca_approved}}</span>
+                                    <span><b>Trade Name:</b> {{this.trade_name}}<br></br>
+                                    <b>INCI Name:</b>{{this.inci_name}}<br></br>
+                                    <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
+                                    <b>Supplier:</b> {{this.supplier}}<br></br>
+                                    <b>TSCA Approved:</b> {{this.tsca_approved}}</span>
                                     {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI
                                         Name:</span> --}}
                                 </div>
                                 <div class="col s6">
                                     {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount
                                         Available:</span> --}}
-                                    <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Date Receieved:</b>
-                                        {{this.date_received}}<br></br><b>Expiration Date:</b>
-                                        {{this.expiration}}<br></br><b>COA: </b>Link<br></br><b>MSDS: </b>Link</span>
+                                    <span><b>Lot Number:</b> {{this.lot_num}}<br></br>
+                                    <b>Date Receieved:</b>{{this.date_received}}<br></br>
+                                    <b>Expiration Date:</b>{{this.expiration}}<br></br>
+                                    <b>COA: </b>{{this.coalink}}<br></br>
+                                    <b>MSDS: </b>{{this.msdslink}}</span>
                                 </div>
 
                                 <div class="col s12">&nbsp;</div>
                                 <div class="col s12 m6 l3">
-                                    <div class="delete_button">
+                                    <div class="edit_button">
                                         <a href="" class="btn-small">Edit</a>
                                     </div>
                                 </div>
@@ -421,6 +428,7 @@
                     <td>{{this.trade_name}}</td>
                     <td>{{this.amt}} {{this.unit}}</td>
                     <td>{{this.shelf}}</td>
+                    <td>{{this.lot_num}}</td>
 
                     {{!--
                     {{#if this.amt = 0}}
@@ -508,9 +516,13 @@
                                             <input type="text" name = "userInputU9" id="userInputU9" value="{{this.unit}}" maxlength="5">
                                             <p> </p>
 
-                                            {{!-- <b><label for="tuluble">Link:</label></b>
-                                            <input type="hyperlink" name = "userInputU10" id="userInputU10" value={{this.link}} maxlength="100">
-                                            <p> </p> --}}
+                                            <b><label for="tuluble">COA Link:</label></b>
+                                            <input type="url" name = "userInputU10" id="userInputU10" value={{this.coalink}} maxlength="100">
+                                            <p> </p>
+
+                                            <b><label for="tuluble">MSDS Link:</label></b>
+                                            <input type="url" name = "userInputU11" id="userInputU10" value={{this.msdslink}} maxlength="100">
+                                            <p> </p>
 
                                             <div class="update_button">
                                                 <button id = "update_button" name = "update_button" type="submit">Finish Editing</button>
@@ -555,6 +567,7 @@
             const inputValueU8 = $("#userInputU8").val();
             const inputValueU9 = $("#userInputU9").val();
             const inputValueU10 = $("#userInputU10").val();
+            const inputValueU11 = $("#userInputU11").val();
             
             console.log(newSelectedOption);
 

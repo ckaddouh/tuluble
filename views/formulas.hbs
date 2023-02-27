@@ -18,8 +18,15 @@
 </style>
 
     <body style="display: flex; flex-direction: column;">
+        
+        <!-- NAVIGATION SIDEBAR -->
+        <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
+
+           {{> logout}}
+        </div>
+
         <div style="padding: 2% 2% 0% 2%">
-        {{> navbar}}
 
         {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
@@ -184,14 +191,16 @@
                             <th>% of Ingredient</th>
                             <th>Total Amt of Ing</th>
                         </tr>
-                        {{#each trial_data1}}
+                        {{#each trialData1}}
                             <p>Batch date: {{batch_date}}</p>
                             <p>Formulator: {{formulator}}</p>
-                            <p>Total Amt of Formula: {{s}}</p>
-                            <p>Total Percentage: {{percent}}</p>
-                            <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
-                            <a href = "/projects/{{project_id}}/procedure{{trial_num}}">Procedure</a>
                         {{/each}}
+                        {{#each trial_data1}}
+                            <p>Total Amt of Formula: {{s}}</p>
+                            <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
+                        {{/each}}
+                            <a href = "/projects/{{project_id}}/procedure{{trial_num1}}">Procedure</a>
+                        
 
 
                         {{#each formula_ingredient_data1}}
@@ -308,12 +317,15 @@
                             <th>% of Ingredient</th>
                             <th>Total Amt of Ing</th>
                         </tr>
-                            {{#each trial_data2}}
+                            {{#each trialData2}}
                                 <p>Batch date: {{batch_date}}</p>
                                 <p>Formulator: {{formulator}}</p>
+                            {{/each}}
+                            {{#each trial_data2}}
                                 <p>Total Amt of Formula: {{s}}</p>
                                 <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
-                                <a href = "/projects/{{project_id}}/procedure{{trial_num}}">Procedure</a>
+                            {{/each}}
+                                <a href = "/projects/{{project_id}}/procedure{{trial_num2}}">Procedure</a>
                                 {{!-- <script>
                                     var tp = document.getElementByClassName("totalPercent");
                                     if ({{percent}} != 100) {
@@ -321,7 +333,7 @@
                                     }
                                 </script> --}}
                                 
-                            {{/each}}
+                           
 
                             {{#each formula_ingredient_data2}}
                             <tr>
@@ -475,10 +487,27 @@
                 </div>
                 </div>
 
+
                 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
                 <script
                     src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"> 
                 </script>
+
+                {{!-- <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            console.log("HELLOOO");
+                            const inputField = document.querySelector('.autocomplete');
+                            M.autocomplete.init(inputField, {
+                                data:{
+                                    'Google': null, // null instead of images
+                                    'Yahoo': null,
+                                    'Youtube': null
+                                },
+                                limit:10,
+                                minlength:2
+                            });
+                        });
+                    </script> --}}
 
                     <script>
                         $(document).ready(function() {
