@@ -3,9 +3,9 @@
 
     <head>
         
-        {{#each procedure_info}}
-            <title>{{project_name}} Trial {{trial_num}} Procedure</title>
-        {{/each}}
+        
+            <title>{{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure</title>
+        
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -29,9 +29,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
 
-        {{#each procedure_info}}
-            <header>{{project_name}} Trial {{trial_num}} Procedure</header>
-        {{/each}}
+       
+        <header> {{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure</header>
+       
         <table id="my-table" class="sortable">
             <thead>
                 <tr id = "ing">
@@ -73,7 +73,6 @@
                                 <h1 style="font-size:40px;">Add a New Step</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                {{#each procedure_info}}
                                 <form method="POST" action="/projects/{{project_id}}/procedure{{trial_num}}/procformsubmit">
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
@@ -127,7 +126,7 @@
                                         </div>
                                         <p> </p>
                                     </form>
-                                    {{/each}}
+
                                 </article>
                             </div>
                         </div>

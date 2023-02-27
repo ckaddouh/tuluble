@@ -176,6 +176,17 @@ const selectTrialData = `
     AND formulas.project_id = ?
 `
 
+const selectBasicTrialData = `
+  SELECT 
+    formulas.batch_date, formulas.formulator
+  FROM 
+    formulas
+  WHERE
+    formulas.trial_num = ?
+    AND formulas.project_id = ?
+  LIMIT 1
+`
+
 const read_inactive_ingredients_all_sql = `
   SELECT
     ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
@@ -304,13 +315,11 @@ const get_procedure = `
 
 const get_procedure_info = `
   SELECT 
-    projects.project_name, procedure_item.trial_num, projects.project_id
+    projects.project_name
   FROM
-    projects, procedure_item
+    projects
   WHERE
     projects.project_id = ?
-    AND procedure_item.trial_num = ?
-  LIMIT 1
 `
 
 const select_ing_per_phase = `
@@ -381,22 +390,30 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
         db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
         db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
           db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
-            if (error)
-              res.status(500).send(error); //Internal Server Error
-            else {
-              // res.render('project', {project_data: results[0]} );
-              res.render('formulas', {
-                title: 'Project Details',
-                styles: ["tables", "event"],
-                project_id: project_id,
-                project_data: project_data,
-                formula_data: formula_data,
-                formula_ingredient_data1: formula_ingredient_data1,
-                formula_ingredient_data2: formula_ingredient_data2,
-                trial_data1: trial_data1,
-                trial_data2: trial_data2
+            db.execute(selectBasicTrialData, [trial_num1, project_id], (error, trialData1) => {
+              db.execute(selectBasicTrialData, [trial_num2, project_id], (error, trialData2) => {
+                if (error)
+                  res.status(500).send(error); //Internal Server Error
+                else {
+                  // res.render('project', {project_data: results[0]} );
+                  res.render('formulas', {
+                    title: 'Project Details',
+                    styles: ["tables", "event"],
+                    project_id: project_id,
+                    project_data: project_data,
+                    formula_data: formula_data,
+                    formula_ingredient_data1: formula_ingredient_data1,
+                    formula_ingredient_data2: formula_ingredient_data2,
+                    trial_data1: trial_data1,
+                    trial_data2: trial_data2,
+                    trial_num1:req.params.trial_num,
+                    trial_num2: req.params.trial_num2,
+                    trialData1: trialData1,
+                    trialData2: trialData2
+                  });
+                }
               });
-            }
+            });
           });
           });
         });
@@ -585,13 +602,15 @@ app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
   console.log("opening procedure");
 
   db.execute(get_procedure, [project_id, trial_num], (error, results) => {
-    db.execute(get_procedure_info, [project_id, trial_num], (error, proc_info) => {
+    db.execute(get_procedure_info, [project_id], (error, proc_info) => {
       if (error)
         res.status(500).send(error); //Internal Server Error 
       else {
         res.render('procedure', {
           results: results,
           procedure_info: proc_info,
+          trial_num: trial_num,
+          project_id: project_id
         });
       }
     });
