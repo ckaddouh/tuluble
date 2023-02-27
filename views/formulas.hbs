@@ -18,8 +18,15 @@
 </style>
 
     <body style="display: flex; flex-direction: column;">
+        
+        <!-- NAVIGATION SIDEBAR -->
+        <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
+
+           {{> logout}}
+        </div>
+
         <div style="padding: 2% 2% 0% 2%">
-        {{> navbar}}
 
         {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->

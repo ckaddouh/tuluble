@@ -222,6 +222,21 @@ const read_inventory_classifier_sql = `
     classifier_id = ?
 `
 
+const insertIntoProjects = `
+  INSERT INTO 
+    projects (project_name, client, date, active)
+  VALUES (?, ?, ?, ?)
+`
+
+const updateIngredient = `
+  UPDATE 
+    ingredient
+  SET 
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?
+  WHERE 
+    ingredient_id = ?
+`
+
 const getLowAmounts = `
 
   SELECT
@@ -462,9 +477,41 @@ app.post("/inventoryformsubmit", async function(req, res, next) {
   console.log(req.body.userInput9);
 
   try {
-    let results = await db.promise(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+    db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
       req.body.userInput7, req.body.userInput8, req.body.userInput9]); 
       res.redirect("/inventory");
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+app.post("/inventoryingredientupdate", async function(req, res, next) {
+  console.log(req.body.userInputU1);
+  console.log(req.body.userInputU2);
+  console.log(req.body.userInputU3);
+  console.log(req.body.userInputU4);
+  console.log(req.body.userInputU5);
+  console.log(req.body.userInputU6);
+  console.log(req.body.userInputU7);
+  console.log(req.body.userInputU8);
+  console.log(req.body.userInputU9);
+  console.log(req.body.userInputU0);
+
+  try {
+    db.execute(updateIngredient, [req.body.userInputU1, req.body.userInputU2, req.body.userInputU3, req.body.userInputU4, req.body.userInputU5, req.body.userInputU6, 
+      req.body.userInputU7, req.body.userInputU8, req.body.userInputU9, req.body.userInputU0]); 
+      res.redirect("/inventory");
+  }
+  catch(error) {
+    next(error);
+  }
+});
+
+app.post("/projectformsubmit", async function(req, res, next) {
+  try {
+    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.userInputP4]); 
+      res.redirect("/projects");
   }
   catch(error) {
     next(error);
