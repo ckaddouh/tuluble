@@ -52,7 +52,7 @@
                                             <div class="modal" id="edit_project{{project_id}}">
                                                 <div style="padding: 5% 5% 5% 5%">
                                                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                                    <h1 style="font-size:40px;">Edit Project</h1>
+                                                    <h1 style="color: black;" style="font-size:40px;" >Edit Project</h1>
 
                                                     <form method="POST" action="/projectupdate">
                                                         <article class="regular">
@@ -75,11 +75,6 @@
                                                             {{!-- Field 3 --}}
                                                             <b><label for="tuluble">Date Started:</label></b>
                                                             <input type="date" name = "userInput3" id="userInput3" value="{{this.date}}">
-                                                            <p> </p>
-
-                                                            {{!-- Field 4 --}}
-                                                            <b><label for="tuluble">Active (1 for Yes, 0 for No):</label></b>
-                                                            <input type="text" name = "userInput4" id="userInput4" value="{{this.active}}">
                                                             <p> </p>
 
                                                             <div class="update_button">

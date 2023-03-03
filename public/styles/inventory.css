@@ -1,4 +1,4 @@
-.luluble-pink {
-    background-color: #e700a2 !important;
-    /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
-  }
+.table-container {
+  overflow-x: auto; /* horizontal scroll */
+  overflow-y: scroll; /* vertical scroll */
+}

@@ -443,6 +443,7 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
           });
         });
       });
+      });
   });
 });
 

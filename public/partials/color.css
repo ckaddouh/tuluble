@@ -1,9 +1,26 @@
 .luluble-light-pink {
-    background-color: #fedeec !important;
-    /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
-  }
+  background-color: #fedeec !important;
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
+}
 
 .luluble-light-grey {
-    background-color: #7f7f7f !important;
-    /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
-  }
+  background-color: #7f7f7f !important;
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
+}
+
+.waves-effect.waves-luluble-pink .waves-ripple {
+  /* The alpha value allows the text and background color
+  of the button to still show through. */
+   background-color: #e700a2 !important; 
+} 
+
+
+.luluble-pink {
+  background-color: #e700a2 !important;
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
+}
+
+.waves-effect.waves-luluble-grey .waves-ripple {
+  background-color: #eeeeee !important;
+  /* box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important; */
+}
