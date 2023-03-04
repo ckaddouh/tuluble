@@ -365,6 +365,38 @@ const insert_procedure = `
 `
 
 
+const getIngredientIDs = `
+  SELECT
+    ingredient_id
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.trial_num = ?
+    AND formulas.project_id = ?
+`
+
+const getAmount = `
+  SELECT
+    DISTINCT total_amount
+  FROM 
+    formula_ingredient, formulas
+  WHERE
+    formulas.project_id = ?
+    AND formulas.trial_num = ?
+    AND formula_ingredient.ingredient_id = ?
+`
+
+const subtractAmounts = `
+  UPDATE
+    ingredient
+  SET 
+    amt = amt - ?
+  WHERE 
+    ingredient_id = ?
+`
+
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -429,7 +461,7 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
                     formula_ingredient_data2: formula_ingredient_data2,
                     trial_data1: trial_data1,
                     trial_data2: trial_data2,
-                    trial_num1:req.params.trial_num,
+                    trial_num1: req.params.trial_num,
                     trial_num2: req.params.trial_num2,
                     trialData1: trialData1,
                     trialData2: trialData2,
@@ -590,6 +622,27 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
     });
   });
 });
+
+
+app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function(req, res, next) {
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+
+  db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
+    for (int i = 0; i < ings.length; i++) {
+      db.execute(getAmount, [project_id, trial_num, ings[i]], (error, amount) => {
+        db.execute(subtractAmounts, [amount, ings[i]], (error, results) => {
+          if (error)
+            res.status(500).send(error); 
+          else {
+            res.redirect('/projects/' + project_id + '/trial1/trial1');
+          }
+        });
+      });
+    }
+  });
+});
+
 
 app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
   console.log("HELLO");
