@@ -151,8 +151,11 @@
                             <p> </p>
 
                             <div class="add_button">
-                                <button id="add_button" name="add_button" type="submit">Add Ingredient</button>
-
+                                <button id="add_button" 
+                                name="add_button" 
+                                type="submit" 
+                                class="btn waves-effect waves-luluble-pink luluble-pink">
+                                Add Ingredient</button>
                             </div>
                             <p> </p>
                     </form>
@@ -410,8 +413,8 @@
                                         <span><b>Lot Number:</b> {{this.lot_num}}<br></br>
                                             <b>Date Receieved:</b>{{this.date_received}}<br></br>
                                             <b>Expiration Date:</b>{{this.expiration}}<br></br>
-                                            <b>COA: </b>{{this.coalink}}<br></br>
-                                            <b>MSDS: </b>{{this.msdslink}}</span>
+                                            <b>COA:</b> <a href="{{this.coa}}">{{this.coa}}</a><br>
+                                            <b>MSDS:</b> <a href="{{this.msds}}">{{this.msds}}</a><br>
                                     </div>
 
                                     <div class="col s12">&nbsp;</div>
@@ -537,21 +540,21 @@
                                                 <p> </p>
 
                                                 <b><label for="tuluble">COA Link:</label></b>
-                                                <input type="url" name="userInputU10" id="userInputU10"
-                                                    value={{this.coalink}} maxlength="100">
+                                                <input type="text" name="userInputU10" id="userInputU10"
+                                                    value={{this.coa}} maxlength="100">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">MSDS Link:</label></b>
-                                                <input type="url" name="userInputU11" id="userInputU10"
-                                                    value={{this.msdslink}} maxlength="100">
+                                                <input type="text" name="userInputU11" id="userInputU10"
+                                                    value={{this.msds}} maxlength="100">
                                                 <p> </p>
 
                                                 <div class="update_button">
-                                                    <button id="update_button" name="update_button" type="submit">Finish
-                                                        Editing</button>
-                                                    {{!-- <a id="add_button"
-                                                        class="btn waves-effect waves-light luluble-pink">Add
-                                                        Ingredient</a> --}}
+                                                    <button id="update_button" 
+                                                    name="update_button" 
+                                                    type="submit"
+                                                    class="btn waves-effect waves-luluble-pink luluble-pink">
+                                                    Finish Editing</button>
                                                 </div>
                                                 <p> </p>
                                         </form>
