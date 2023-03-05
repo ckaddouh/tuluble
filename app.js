@@ -398,6 +398,15 @@ const subtractAmounts = `
     ingredient_id = ?
 `
 
+const computeMax = `
+  UPDATE
+    ingredient
+  SET 
+    amt = amt - (? * (?/?))
+  WHERE 
+    ingredient_id = ?
+`
+
 const getTotalAmountOfFormula = `
   SELECT
     SUM(total_amount) as s
@@ -631,6 +640,31 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
     }
   });
 });
+
+
+// app.post("/projects/:project_id/trial:trial_num/computeMax", async function(req, res, next) {
+//   let project_id = req.params.project_id
+//   let trial_num = req.params.trial_num
+
+//   console.log("IN COMPUTE SECTION")
+
+//   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
+//     console.log(totalAmount[0].s);
+//     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
+//       for (let i = 0; i < ings.length; i++) {
+//         console.log(ings[i].ingredient_id);
+//         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
+//           console.log(amount[0].total_amount);
+//           db.execute(computeMax, [amount[0].total_amount, req.body.userInput1, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+//             if (error)
+//               res.status(500).send(error); 
+//           });
+//         });
+//       }
+//     });
+//   });
+//   res.redirect('/projects/' + project_id + '/trial1/trial1');
+// });
 
 
 app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function(req, res, next) {
