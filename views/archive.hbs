@@ -55,10 +55,10 @@
                         {{#each results}}
                         <tr>
                             <td>{{this.inci_name}}
-                                <a href="#terms" class="modal-trigger">
+                                <a href="#terms{{ingredient_id}}" class="modal-trigger">
                                     <span class="large material-icons">info_outline</span>
                                 </a>
-                                <div class="modal" id="terms">
+                                <div class="modal" id="terms{{ingredient_id}}">
                                     <div class="row">
                                         <div class="col s12">&nbsp;</div>
                                         <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
