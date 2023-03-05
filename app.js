@@ -83,7 +83,7 @@ app.use(auth(authConfig));
 //this one only shows oils...
 const read_inventory_all_sql = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
     FROM
         ingredient
     WHERE 
@@ -92,7 +92,7 @@ const read_inventory_all_sql = `
 
 const read_inventory_all_alph = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
     FROM
         ingredient
     WHERE 
@@ -221,8 +221,8 @@ const read_inactive_projects_all_sql = `
 
 const insertIntoInventory = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit, coa, msds)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 const insertIntoInventory1 = `
   INSERT INTO 
@@ -249,7 +249,7 @@ const updateIngredient = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?
   WHERE 
     ingredient_id = ?
 `
@@ -318,7 +318,7 @@ const selectSearchedIngredients = `
 
 const read_inventory_search = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
   FROM
     ingredient
   WHERE 
@@ -562,12 +562,18 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
   console.log(req.body.userInput7);
   console.log(req.body.userInput8);
   console.log(req.body.userInput9);
+  console.log(req.body.userInput10);
+  console.log(req.body.userInput11);
+  //console.log(typeof(req.body.userInput11))
 
   db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
-    req.body.userInput7, req.body.userInput8, req.body.userInput9], (error, results) => {
-    if (error)
+    req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11], (error, results) => {
+    if (error) {
+      console.error("Error executing SQL query:", err);
       res.status(500).send(error); //Internal Server Error 
+    }
     else {
+      console.log("Success! :D")
       res.redirect('/inventory');
     }
   });
@@ -575,8 +581,8 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
 
 app.post("/inventoryingredientupdate", async function(req, res, next) {
   try {
-    db.execute(updateIngredient, [req.body.userInputU1, req.body.userInputU2, req.body.userInputU3, req.body.userInputU4, req.body.userInputU5, req.body.userInputU6, 
-      req.body.userInputU7, req.body.userInputU8, req.body.userInputU9, req.body.userInputU0]); 
+    db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+      req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11]); 
       res.redirect("/inventory");
   }
   catch(error) {
@@ -588,8 +594,9 @@ app.post("/projects/:project_id/projectupdate", async function(req, res, next) {
   let project_id = req.params.project_id
 
   try {
-    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, project_id]); 
-      res.redirect("/projects");
+    db.execute(updateIngredient, [req.body.userInputU1, req.body.userInputU2, req.body.userInputU3, req.body.userInputU4, req.body.userInputU5, req.body.userInputU6, 
+      req.body.userInputU7, req.body.userInputU8, req.body.userInputU9, req.body.userInputU10, req.body.userInputU11, req.body.userInputU0]); 
+      res.redirect("/inventory");
   }
   catch(error) {
     next(error);
@@ -613,14 +620,21 @@ app.post("/projects/:project_id/formulaformsubmit", async function(req, res, nex
   console.log(req.body.userInput1);
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
+  try {
+    db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2]); 
+    console.log("FINISHED");
 
-  db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error 
-    else {
-      res.redirect("/projects/" + project_id + "/trial1/trial1");
-    }
-  });
+    db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects/" + project_id + "/trial1/trial1");
+      }
+    })
+  }
+  catch(error) {
+    next(error);
+  }
 });
 
 

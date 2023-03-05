@@ -196,25 +196,29 @@
                         theSelectedOption = event.target.value;
                     });
 
-                    const inputValue1 = $("#userInput1").val();
-                    const inputValue2 = $("#userInput2").val();
-                    const inputValue3 = $("#userInput3").val();
-                    const inputValue4 = $("#userInput4").val();
-                    const inputValue5 = theSelectedOption;
-                    const inputValue6 = $("#userInput6").val();
-                    const inputValue7 = $("#userInput7").val();
-                    const inputValue8 = $("#userInput8").val();
-                    const inputValue9 = $("#userInput9").val();
+                const inputValue1 = $("#userInput1").val();
+                const inputValue2 = $("#userInput2").val();
+                const inputValue3 = $("#userInput3").val();
+                const inputValue4 = $("#userInput4").val();
+                const inputValue5 = theSelectedOption;
+                const inputValue6 = $("#userInput6").val();
+                const inputValue7 = $("#userInput7").val();
+                const inputValue8 = $("#userInput8").val();
+                const inputValue9 = $("#userInput9").val();
+                const inputValue10 = $("#userInput10").val();
+                const inputValue11 = $("#userInput11").val();
 
-                    module.exports = { inputValue1 };
-                    module.exports = { inputValue2 };
-                    module.exports = { inputValue3 };
-                    module.exports = { inputValue4 };
-                    module.exports = { inputValue5 };
-                    module.exports = { inputValue6 };
-                    module.exports = { inputValue7 };
-                    module.exports = { inputValue8 };
-                    module.exports = { inputValue9 };
+                module.exports = {inputValue1};
+                module.exports = {inputValue2};
+                module.exports = {inputValue3};
+                module.exports = {inputValue4};
+                module.exports = {inputValue5};
+                module.exports = {inputValue6};
+                module.exports = {inputValue7};
+                module.exports = {inputValue8};
+                module.exports = {inputValue9};
+                module.exports = {inputValue10};
+                module.exports = {inputValue11};
 
                     window.location = "inventory/inventoryformsubmit";
                     //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
@@ -470,11 +474,10 @@
                                                     value="{{this.inci_name}}">
                                                 <p> </p>
 
-                                                {{!-- Field 2 --}}
-                                                <b><label for="tuluble">Trade Name:</label></b>
-                                                <input type="text" name="userInputU2" id="userInputU2"
-                                                    value="{{this.trade_name}}">
-                                                <p> </p>
+                                            {{!-- Field 2 --}}
+                                            <b><label for="tuluble">Trade Name:</label></b>
+                                            <input type="text" name = "userInputU2" id="userInputU2" value={{this.trade_name}} maxlength="200">
+                                            <p> </p>
 
                                                 {{!-- Field 3 --}}
                                                 <b><label for="tuluble">Amount Available:</label></b>
@@ -594,15 +597,17 @@
 
                 console.log(newSelectedOption);
 
-                module.exports = { inputValue1 };
-                module.exports = { inputValue2 };
-                module.exports = { inputValue3 };
-                module.exports = { inputValue4 };
-                module.exports = { inputValue5 };
-                module.exports = { inputValue6 };
-                module.exports = { inputValue7 };
-                module.exports = { inputValue8 };
-                module.exports = { inputValue9 };
+            module.exports = {inputValue1};
+            module.exports = {inputValue2};
+            module.exports = {inputValue3};
+            module.exports = {inputValue4};
+            module.exports = {inputValue5};
+            module.exports = {inputValue6};
+            module.exports = {inputValue7};
+            module.exports = {inputValue8};
+            module.exports = {inputValue9};
+            module.exports = {inputValue10};
+            module.exports = {inputValue11};
 
                 window.location = "/inventoryingredientupdate";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
