@@ -431,9 +431,18 @@
 
                         <td>
                             <div class="archive_button">
-                                <a href="archive-ingredient/{{this.ingredient_id}}"
+                                <a href="/inventory/archive-ingredient/{{this.ingredient_id}}"
                                     class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a>
+                                {{!-- <a onclick="archive()"
+                                    class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a> --}}
+
+                               
                             </div>
+                            <script>
+                                function archive() {
+                                    window.location = "/inventory/archive-ingredient/" + {{this.ingredient_id}};
+                                }
+                            </script>
                         </td>
 
 

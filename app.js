@@ -584,9 +584,11 @@ app.post("/inventoryingredientupdate", async function(req, res, next) {
   }
 });
 
-app.post("/projectupdate", async function(req, res, next) {
+app.post("/projects/:project_id/projectupdate", async function(req, res, next) {
+  let project_id = req.params.project_id
+
   try {
-    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput0]); 
+    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, project_id]); 
       res.redirect("/projects");
   }
   catch(error) {
@@ -816,7 +818,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
   });
 });
 
-app.get("/archive-ingredient/:ingredient_id", (req, res) => {
+app.get("/inventory/archive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(archiveIngredient, [ingredient_id], (error, results) => {
     if (error)
