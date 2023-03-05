@@ -266,11 +266,14 @@
         <div class="col s12 m4 l6">
             <p></p>
             <nav>
-
-                <form action="/inventory/search/">
-                    <input type="text" id="gsearch" name="q" placeholder="Search For An Ingredient">
-                    <button type="submit" id="search-button">Search</button>
-                </form>
+                <div class="nav-wrapper pink">
+                    <div class="input-field">
+                        <input type="search" id="gsearch" name="gsearch">
+                        <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                        {{!-- <input type="submit"> --}}
+                        <i class="material-icons">close</i>
+                    </div>
+                </div>
             </nav>
         </div>
     </div>
