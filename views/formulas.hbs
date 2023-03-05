@@ -239,22 +239,17 @@
                                         <select name="userInput2" id="userInput2" class="browser-default">
                                             <option value="0" disabled selected>Choose your ingredient</option>
                                             {{#each inventory_data}}
-                                                <option value="{{inci_name}}">{{inci_name}}</option>
+                                                <option value="{{ingredient_id}}">{{inci_name}} (LOT {{lot_num}})</option>
                                             {{/each}}
                                         </select>
                                         <p> </p>
 
-                                        {{!-- Field 3 --}}
-                                        <b><label for="tuluble">Lot Number:</label></b>
-                                        <input type="text" name = "userInput3" id="userInput3" placeholder="Enter Lot Number" maxlength="20">
-                                        <p> </p>
-
                                         <b><label for="tuluble">Percent of Ingredient:</label></b>
-                                        <input type="number" name = "userInput4" id="userInput4" placeholder="Enter Percent" maxlength="20">
+                                        <input type="number" name = "userInput3" id="userInput3" placeholder="Enter Percent" maxlength="20">
                                         <p> </p>
 
                                         <b><label for="tuluble">Total Amount of Ingredient:</label></b>
-                                        <input type="number" name = "userInput5" id="userInput5" placeholder="Enter Total Amount" maxlength="20">
+                                        <input type="number" name = "userInput4" id="userInput4" placeholder="Enter Total Amount" maxlength="20">
                                         <p> </p>
 
                                         <div class="add_trial_button">
@@ -268,7 +263,7 @@
                         </div>
                         </div>
                     </td>
-
+                    
                     <td>
                         <div class="col s12 m4 l2">
                         <a href="#makeTrial" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE TRIAL</a>
@@ -278,7 +273,7 @@
                                 <h1 style="font-size:40px;">Make Trial {{trial_num}}</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                <form method="POST" action="/projects/{{project_id}}/trial{{trial_num1}}/makeformsubmit">
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
@@ -430,7 +425,7 @@
                                 <h1 style="font-size:40px;">Make Trial {{trial_num}}</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                <form method="POST" action="/projects/{{project_id}}/trial{{trial_num2}}/makeformsubmit">
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
@@ -461,7 +456,7 @@
                                 <h1 style="font-size:40px;">Print Trial {{trial_num}}</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                <form method="POST" action="/projects/{{project_id}}/{{trial_num}}/makeformsubmit">
+                                <form method="POST" action="/projects/{{project_id}}/trial{{trial_num2}}/makeformsubmit">
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
@@ -519,6 +514,7 @@
                             var inputValue1 = $("#userInput1").val();
                             var inputValue2 = $("#userInput2").val();
                             var inputValue3 = $("#userInput3").val();
+                            var inputValue4 = $("#userInput4").val();
 
                             window.location.href += "/phaseformsubmit";
                             //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
@@ -544,7 +540,7 @@
                             $("#make_trial_button").click(function() {
                             var inputValue1 = $("#userInput1").val();
                           
-                            window.location += "/makeformsubmit";
+                            window.location += "makeformsubmit";
                             //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                             });
                         });
@@ -556,7 +552,7 @@
                             var inputValue1 = $("#userInput1").val();
                           
 
-                            window.location += "/makeformsubmit";
+                            window.location += "makeformsubmit";
                             //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                             });
                         });
