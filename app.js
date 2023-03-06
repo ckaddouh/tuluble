@@ -242,7 +242,7 @@ const read_inventory_classifier_sql = `
 const insertIntoProjects = `
   INSERT INTO 
     projects (project_name, client, date, active)
-  VALUES (?, ?, ?, ?)
+  VALUES (?, ?, ?, 1)
 `
 
 const updateIngredient = `
@@ -603,9 +603,13 @@ app.post("/projects/:project_id/projectupdate", async function(req, res, next) {
   }
 });
 
-app.post("/projectformsubmit", async function(req, res, next) {
+app.post("/projects/projectformsubmit", async function(req, res, next) {
+  console.log("Project Form Submit Details:");
+  console.log(req.body.userInputP1);
+  console.log(req.body.userInputP2);
+  console.log(req.body.userInputP3);
   try {
-    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.userInputP4]); 
+    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3]); 
       res.redirect("/projects");
   }
   catch(error) {

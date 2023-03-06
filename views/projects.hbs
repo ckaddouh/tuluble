@@ -160,27 +160,30 @@
                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                         <h1 style="font-size:40px;">Add a New Project</h1>
 
-                        <form method="POST" action="/projectformsubmit">
+                        <form method="POST" action="/projects/projectformsubmit">
                             <article class="regular">
                                 {{!-- <h2>Textbook</h2> --}}
 
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">Project Name:</label></b>
-                                <input type="text" name = "userInputP1" id="userInputP1" placeholder="Enter Project Name" maxlength="20">
+                                <input type="text" name = "userInputP1" id="userInputP1" placeholder="Enter Project Name" maxlength="100">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Client Name:</label></b>
-                                <input type="text" name = "userInputP2" id="userInputP2" placeholder="Enter Client Name" maxlength="20">
+                                <input type="text" name = "userInputP2" id="userInputP2" placeholder="Enter Client Name" maxlength="100">
                                 <p> </p>
 
                                 {{!-- Field 3 --}}
                                 <b><label for="tuluble">Date Started:</label></b>
-                                <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started" maxlength="20">
+                                <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started">
                                 <p> </p>
 
                                 <div class="add_project_button">
-                                <button id = "add_project_button" type="submit">Add Project</button>
+                                <button id = "add_project_button" 
+                                type="submit"
+                                class="btn waves-effect waves-luluble-pink luluble-pink"
+                                >Add Project</button>
                                 {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                 </div>
                                 <p> </p>
@@ -215,7 +218,7 @@
                 module.exports = {inputValue4};
                 module.exports = {inputValue5};
 
-                window.location = "/projectformsubmit";
+                window.location = "/projects/projectformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
@@ -250,7 +253,7 @@
                 var inputValue3 = $("#userInputP3").val();
                 var inputValue4 = $("#userInputP4").val();
 
-                window.location = "/projectformsubmit";
+                window.location = "projects/projectformsubmit";
                 });
             });
         </script>

@@ -132,12 +132,12 @@
 
                             <b><label for="tuluble">Supplier:</label></b>
                             <input type="text" name="userInput8" id="userInput8" placeholder="Enter Supplier"
-                                maxlength="20">
+                                maxlength="45">
                             <p> </p>
 
                             <b><label for="tuluble">Unit:</label></b>
                             <input type="text" name="userInput9" id="userInput9" placeholder="Enter Unit"
-                                maxlength="20">
+                                maxlength="45">
                             <p> </p>
 
                             <b><label for="tuluble">COA Documents:</label></b>
@@ -400,21 +400,22 @@
                                     <div class="col s12">&nbsp;</div>
                                     <div class="col s6">
                                         <span><b>Trade Name:</b> {{this.trade_name}}<br></br>
-                                            <b>INCI Name:</b>{{this.inci_name}}<br></br>
+                                            <b>INCI Name:</b> {{this.inci_name}}<br></br>
                                             <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
                                             <b>Supplier:</b> {{this.supplier}}<br></br>
-                                            <b>TSCA Approved:</b> {{this.tsca_approved}}</span>
+                                            <b>Lot Number:</b> {{this.lot_num}}<br></br>
+                                            <b>Shelf:</b> {{this.shelf}}<br></br>
                                         {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI
                                             Name:</span> --}}
                                     </div>
                                     <div class="col s6">
                                         {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount
                                             Available:</span> --}}
-                                        <span><b>Lot Number:</b> {{this.lot_num}}<br></br>
+                                        <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
                                             <b>Date Receieved:</b>{{this.date_received}}<br></br>
                                             <b>Expiration Date:</b>{{this.expiration}}<br></br>
-                                            <b>COA:</b> <a href="{{this.coa}}">{{this.coa}}</a><br>
-                                            <b>MSDS:</b> <a href="{{this.msds}}">{{this.msds}}</a><br>
+                                            <b>COA:</b> <a href="{{this.coa}}">Link</a><br></br>
+                                            <b>MSDS:</b> <a href="{{this.msds}}">Link</a><br></br>
                                     </div>
 
                                     <div class="col s12">&nbsp;</div>
