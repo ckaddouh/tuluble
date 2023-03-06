@@ -34,7 +34,7 @@
                                 <span class="card-title"><a style="color: black;"
                                         href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span>
                                 <p style="color: black;">Client: {{client}}</p>
-                                <p style="color: black;">October 12, 2021</p>
+                                <p style="color: black;">{{date}}</p>
                                 <div class="col s12">&nbsp;</div>
                                 <div class="row">
                                     <div class = "col s12 m4 l4">
@@ -133,13 +133,11 @@
                 $(document).ready(function() {
                     $("#update_button").click(function() {
 
-                    const inputValueU0 = $("#userInputU0").val();
                     const inputValueU1 = $("#userInputU1").val();
                     const inputValueU2 = $("#userInputU2").val();
                     const inputValueU3 = $("#userInputU3").val();
-                    const inputValueU4 = $("#userInputU4").val();
 
-                    window.location = "/projects/projectupdate";
+                    window.location += "projectupdate";
                     //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                     });
                 });

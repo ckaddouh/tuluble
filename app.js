@@ -192,7 +192,7 @@ const selectTrialData = `
 
 const selectBasicTrialData = `
   SELECT 
-    formulas.batch_date, formulas.formulator
+    formulas.batch_date, formulas.formulator, formulas.formula_id
   FROM 
     formulas
   WHERE
@@ -258,7 +258,7 @@ const updateProject = `
   UPDATE 
     projects
   SET 
-    project_name = ?, client = ?, date = ?, active = ?
+    project_name = ?, client = ?, date = ?
   WHERE 
     project_id = ?
 `
@@ -594,9 +594,8 @@ app.post("/projects/:project_id/projectupdate", async function(req, res, next) {
   let project_id = req.params.project_id
 
   try {
-    db.execute(updateIngredient, [req.body.userInputU1, req.body.userInputU2, req.body.userInputU3, req.body.userInputU4, req.body.userInputU5, req.body.userInputU6, 
-      req.body.userInputU7, req.body.userInputU8, req.body.userInputU9, req.body.userInputU10, req.body.userInputU11, req.body.userInputU0]); 
-      res.redirect("/inventory");
+    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, project_id]); 
+      res.redirect("/projects");
   }
   catch(error) {
     next(error);
@@ -625,9 +624,6 @@ app.post("/projects/:project_id/formulaformsubmit", async function(req, res, nex
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
   try {
-    db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2]); 
-    console.log("FINISHED");
-
     db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
       if (error)
         res.status(500).send(error); //Internal Server Error 

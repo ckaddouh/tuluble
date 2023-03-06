@@ -224,7 +224,9 @@
                                 <h1 style="font-size:40px;">Add a New Phase</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                <form method="POST" action="/projects/{{project_id}}/1/phaseformsubmit">
+                                
+                                <form method="POST" action="/projects/{{project_id}}/{{#each trialData1}}{{formula_id}}{{/each}}/phaseformsubmit">
+                                
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
@@ -253,7 +255,7 @@
                                         <p> </p>
 
                                         <div class="add_trial_button">
-                                            <button id = "add_trial_button" type="submit">Add Trial</button>
+                                            <button id = "add_trial_button" type="submit">Add Ingredient</button>
                                             {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                         </div>
                                         <p> </p>
@@ -355,55 +357,38 @@
                             <div style="padding: 5% 5% 5% 5%">
                                 {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                 <h1 style="font-size:40px;">Add a New Phase</h1>
-
-                                <form method="POST" action="/phaseformsubmit">
+                                
+                                    <form method="POST" action="/projects/{{project_id}}/{{#each trialData2}}{{formula_id}}{{/each}}/phaseformsubmit">
+                                
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
                                         {{!-- Field 1 --}}
                                         <b><label for="tuluble">Phase:</label></b>
-                                        <input type="text" name = "userInput1" id="userInput1" placeholder="Enter Trial Number" maxlength="20">
+                                        <input type="text" name = "userInput1" id="userInput1" placeholder="Enter Phase Name" maxlength="20">
                                         <p> </p>
 
                                         {{!-- Field 2 --}}
                                         <b><label for="tuluble">Ingredient:</label></b>
-                                        {{!-- <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Formulator Name" maxlength="20"> --}}
-                                        <div class="input-field">
-                                            <input type="text" id="userInput2-search" placeholder="Search for an ingredient">
-                                                <select name="userInput2" id="userInput2" class="browser-default">
-                                                    <option value="0" disabled selected>Choose your ingredient</option>
-                                                    {{#each inventory_data}}
-                                                        <option value="{{inci_name}}">{{inci_name}}</option>
-                                                    {{/each}}
-                                                </select>
-                                        </div>
-                                        <p> </p>
-
-                                        <div class="input-field">
-                                            <select searchable="Search here...">
-                                                <option value="" disabled selected>Select an option</option>
-                                                <option value="1">Option 1</option>
-                                                <option value="2">Option 2</option>
-                                                <option value="3">Option 3</option>
-                                            </select>
-                                            <label>Dropdown Label</label>
-                                        </div>
-
-                                        {{!-- Field 3 --}}
-                                        <b><label for="tuluble">Lot Number:</label></b>
-                                        <input type="text" name = "userInput3" id="userInput3" placeholder="Enter Lot Number" maxlength="20">
+                                        {{!-- <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Ingredient Name" maxlength="20"> --}}
+                                        <select name="userInput2" id="userInput2" class="browser-default">
+                                            <option value="0" disabled selected>Choose your ingredient</option>
+                                            {{#each inventory_data}}
+                                                <option value="{{ingredient_id}}">{{inci_name}} (LOT {{lot_num}})</option>
+                                            {{/each}}
+                                        </select>
                                         <p> </p>
 
                                         <b><label for="tuluble">Percent of Ingredient:</label></b>
-                                        <input type="number" name = "userInput4" id="userInput3" placeholder="Enter Percent of Ingredient" maxlength="20">
+                                        <input type="number" name = "userInput3" id="userInput3" placeholder="Enter Percent" maxlength="20">
                                         <p> </p>
 
                                         <b><label for="tuluble">Total Amount of Ingredient:</label></b>
-                                        <input type="number" name = "userInput5" id="userInput3" placeholder="Enter Total Amount" maxlength="20">
+                                        <input type="number" name = "userInput4" id="userInput4" placeholder="Enter Total Amount" maxlength="20">
                                         <p> </p>
 
                                         <div class="add_trial_button2">
-                                            <button id = "add_trial_button2" type="submit">Add Trial</button>
+                                            <button id = "add_trial_button2" type="submit">Add Ingredient</button>
                                             {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                         </div>
                                         <p> </p>
