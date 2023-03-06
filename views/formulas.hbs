@@ -181,15 +181,15 @@
                 </script>
                 
                 <div class="row">
-                <div style="overflow-x: scroll;" id="trial{{trial_num}}" class = "col s12 m4 l6">
+                <div style="overflow-x: scroll;" class = "col s12 m4 l6">
                     <table class="scrollable">
                         <tr>
                             <th>Phase</th>
                             <th>Ingredient</th>
                             <th>INCI</th>
-                            <th>Lot Number</th>
-                            <th>% of Ingredient</th>
-                            <th>Total Amt of Ing</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Lot Number</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
                         </tr>
                         {{#each trialData1}}
                             <p>Batch date: {{batch_date}}</p>
@@ -314,9 +314,9 @@
                             <th>Phase</th>
                             <th>Ingredient</th>
                             <th>INCI</th>
-                            <th>Lot Number</th>
-                            <th>% of Ingredient</th>
-                            <th>Total Amt of Ing</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Lot Number</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
+                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
                         </tr>
                             {{#each trialData2}}
                                 <p>Batch date: {{batch_date}}</p>
