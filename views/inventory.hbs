@@ -364,9 +364,9 @@
                         </th>
                         <th id="shelf">Shelf
                             {{!-- <span class="large material-icons">import_export</span> --}}
-                            <a id="sort-shelf-button" class="waves-effect">
+                            {{!-- <a id="sort-shelf-button" class="waves-effect">
                                 <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a>
+                            </a> --}}
                         </th>
                         <th id="lot_number">Lot Number
                             {{!-- <span class="large material-icons">import_export</span> --}}
@@ -477,7 +477,7 @@
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInputU2" id="userInputU2" value={{this.trade_name}} maxlength="200">
+                                            <input type="text" name = "userInputU2" id="userInputU2" value="{{this.trade_name}}" maxlength="200">
                                             <p> </p>
 
                                                 {{!-- Field 3 --}}
@@ -710,7 +710,7 @@
         }
     </script>
 
-    <script>
+    {{!-- <script>
         document.getElementById('sort-shelf-button').addEventListener('click', function () {
             sortTableByShelf(3); // Sort by the first column
         });
@@ -743,7 +743,7 @@
                 }
             }
         }
-    </script>
+    </script> --}}
 
 
 </body>
