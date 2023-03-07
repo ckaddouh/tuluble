@@ -579,15 +579,18 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
   });
 });
 
-app.post("/inventoryingredientupdate", async function(req, res, next) {
-  try {
-    db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
-      req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11]); 
-      res.redirect("/inventory");
-  }
-  catch(error) {
-    next(error);
-  }
+
+app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function(req, res, next) {
+  let ingredient_id = req.params.ingredient_id
+
+  db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
+    req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/inventory");
+      }
+    });
 });
 
 app.post("/projects/:project_id/projectupdate", async function(req, res, next) {

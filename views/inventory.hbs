@@ -460,15 +460,9 @@
                                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                         <h1 style="font-size:40px;">Edit Ingredient</h1>
 
-                                        <form method="POST" action="/inventoryingredientupdate">
+                                        <form method="POST" action="inventory/{{ingredient_id}}/inventoryingredientupdate">
                                             <article class="regular">
                                                 {{!-- <h2>Textbook</h2> --}}
-
-                                                {{!-- Field 1 --}}
-                                                <b><label for="tuluble">Ingredient ID: (Do not Edit)</label></b>
-                                                <input type="text" name="userInputU0" id="userInputU0"
-                                                    value="{{this.ingredient_id}}" readonly>
-                                                <p> </p>
 
                                                 <b><label for="tuluble">INCI Name:</label></b>
                                                 <input type="text" name="userInputU1" id="userInputU1"
@@ -543,7 +537,7 @@
                                                 <p> </p>
 
                                                 <b><label for="tuluble">MSDS Link:</label></b>
-                                                <input type="text" name="userInputU11" id="userInputU10"
+                                                <input type="text" name="userInputU11" id="userInputU11"
                                                     value={{this.msds}} maxlength="100">
                                                 <p> </p>
 
@@ -583,34 +577,21 @@
                     newSelectedOption = event.target.value;
                 });
 
-                const inputValueU0 = $("#userInputU0").val();
-                const inputValueU1 = $("#userInputU1").val();
-                const inputValueU2 = $("#userInputU2").val();
-                const inputValueU3 = $("#userInputU3").val();
-                const inputValueU4 = $("#userInputU4").val();
-                const inputValueU5 = newSelectedOption;
-                const inputValueU6 = $("#userInputU6").val();
-                const inputValueU7 = $("#userInputU7").val();
-                const inputValueU8 = $("#userInputU8").val();
-                const inputValueU9 = $("#userInputU9").val();
-                const inputValueU10 = $("#userInputU10").val();
-                const inputValueU11 = $("#userInputU11").val();
+                const inputValue1 = $("#userInputU1").val();
+                const inputValue2 = $("#userInputU2").val();
+                const inputValue3 = $("#userInputU3").val();
+                const inputValue4 = $("#userInputU4").val();
+                const inputValue5 = newSelectedOption;
+                const inputValue6 = $("#userInputU6").val();
+                const inputValue7 = $("#userInputU7").val();
+                const inputValue8 = $("#userInputU8").val();
+                const inputValue9 = $("#userInputU9").val();
+                const inputValue10 = $("#userInputU10").val();
+                const inputValue11 = $("#userInputU11").val();
 
                 console.log(newSelectedOption);
 
-            module.exports = {inputValue1};
-            module.exports = {inputValue2};
-            module.exports = {inputValue3};
-            module.exports = {inputValue4};
-            module.exports = {inputValue5};
-            module.exports = {inputValue6};
-            module.exports = {inputValue7};
-            module.exports = {inputValue8};
-            module.exports = {inputValue9};
-            module.exports = {inputValue10};
-            module.exports = {inputValue11};
-
-                window.location = "/inventoryingredientupdate";
+                window.location = "/inventory/{{ingredient_id}}/inventoryingredientupdate";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
             });
         });
