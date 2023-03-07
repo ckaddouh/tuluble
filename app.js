@@ -245,7 +245,8 @@ const insertIntoProjects = `
   VALUES (?, ?, ?, 1)
 `
 
-const updateIngredient = `
+const 
+updateIngredient = `
   UPDATE 
     ingredient
   SET 
@@ -582,6 +583,19 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
 
 app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function(req, res, next) {
   let ingredient_id = req.params.ingredient_id
+  console.log("HELLO");
+  console.log("UserInput1" + req.body.userInput1);
+  console.log("UserInput2" + req.body.userInput2);
+  console.log("UserInput3" + req.body.userInput3);
+  console.log("UserInput4" + req.body.userInput4);
+  console.log("UserInput5" + req.body.userInput5);
+  console.log("UserInput6" + req.body.userInput6);
+  console.log("UserInput7" + req.body.userInput7);
+  console.log("UserInput8" + req.body.userInput8);
+  console.log("UserInput9" + req.body.userInput9);
+  console.log("UserInput10" + req.body.userInput10);
+  console.log("UserInput11" + req.body.userInput11);
+  console.log("UserInput12" + ingredient_id)
 
   db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
     req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {

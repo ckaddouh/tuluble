@@ -465,31 +465,31 @@
                                                 {{!-- <h2>Textbook</h2> --}}
 
                                                 <b><label for="tuluble">INCI Name:</label></b>
-                                                <input type="text" name="userInputU1" id="userInputU1"
+                                                <input type="text" name="userInput1" id="userInput1"
                                                     value="{{this.inci_name}}">
                                                 <p> </p>
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInputU2" id="userInputU2" value="{{this.trade_name}}" maxlength="200">
+                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200">
                                             <p> </p>
 
                                                 {{!-- Field 3 --}}
                                                 <b><label for="tuluble">Amount Available:</label></b>
-                                                <input type="number" name="userInputU3" id="userInputU3"
+                                                <input type="number" name="userInput3" id="userInput3"
                                                     value="{{this.amt}}">
                                                 <p> </p>
 
                                                 {{!-- Field 4 --}}
                                                 <b><label for="tuluble">Shelf:</label></b>
-                                                <input type="text" name="userInputU4" id="userInputU4"
+                                                <input type="text" name="userInput4" id="userInput4"
                                                     value="{{this.shelf}}">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Classifier:</label></b>
                                                 {{!-- <input type="text" name="userInput5" id="userInput5"
                                                     placeholder="Enter Classifier" maxlength="20"> --}}
-                                                <select name="userInputU5" id="userInputU5" class="browser-default">
+                                                <select name="userInput5" id="userInput5" class="browser-default">
                                                     <option value="{{this.classifier_id}}" disabled selected>
                                                         {{this.classifier_id}}</option>
                                                     <option value="Thickener">Thickeners</option>
@@ -512,32 +512,32 @@
                                                 <p> &nbsp;</p>
 
                                                 <b><label for="tuluble">Lot Number:</label></b>
-                                                <input type="text" name="userInputU6" id="userInputU6"
+                                                <input type="text" name="userInput6" id="userInput6"
                                                     value="{{this.lot_num}}">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Date Recieved:</label></b>
-                                                <input type="date" name="userInputU7" id="userInputU7"
+                                                <input type="date" name="userInput7" id="userInput7"
                                                     value="{{this.date_received}}">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Supplier:</label></b>
-                                                <input type="text" name="userInputU8" id="userInputU8"
+                                                <input type="text" name="userInput8" id="userInput8"
                                                     value="{{this.supplier}}">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Unit:</label></b>
-                                                <input type="text" name="userInputU9" id="userInputU9"
+                                                <input type="text" name="userInput9" id="userInput9"
                                                     value="{{this.unit}}" maxlength="5">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">COA Link:</label></b>
-                                                <input type="text" name="userInputU10" id="userInputU10"
+                                                <input type="text" name="userInput10" id="userInput10"
                                                     value={{this.coa}} maxlength="100">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">MSDS Link:</label></b>
-                                                <input type="text" name="userInputU11" id="userInputU11"
+                                                <input type="text" name="userInput11" id="userInput11"
                                                     value={{this.msds}} maxlength="100">
                                                 <p> </p>
 
@@ -569,7 +569,7 @@
         $(document).ready(function () {
             $("#update_button").click(function () {
 
-                const selected = document.querySelector('#userInputU5');
+                const selected = document.querySelector('#userInput5');
                 let newSelectedOption;
 
                 selected.addEventListener('change', (event) => {
@@ -577,19 +577,20 @@
                     newSelectedOption = event.target.value;
                 });
 
-                const inputValue1 = $("#userInputU1").val();
-                const inputValue2 = $("#userInputU2").val();
-                const inputValue3 = $("#userInputU3").val();
-                const inputValue4 = $("#userInputU4").val();
+                const inputValue1 = $("#userInput1").val();
+                const inputValue2 = $("#userInput2").val();
+                const inputValue3 = $("#userInput3").val();
+                const inputValue4 = $("#userInput4").val();
                 const inputValue5 = newSelectedOption;
-                const inputValue6 = $("#userInputU6").val();
-                const inputValue7 = $("#userInputU7").val();
-                const inputValue8 = $("#userInputU8").val();
-                const inputValue9 = $("#userInputU9").val();
-                const inputValue10 = $("#userInputU10").val();
-                const inputValue11 = $("#userInputU11").val();
+                const inputValue6 = $("#userInput6").val();
+                const inputValue7 = $("#userInput7").val();
+                const inputValue8 = $("#userInput8").val();
+                const inputValue9 = $("#userInput9").val();
+                const inputValue10 = $("#userInput10").val();
+                const inputValue11 = $("#userInput11").val();
 
                 console.log(newSelectedOption);
+
 
                 window.location = "/inventory/{{ingredient_id}}/inventoryingredientupdate";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
