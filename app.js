@@ -445,6 +445,16 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
+app.get("/project-assign", (req, res) => {
+  db.execute(read_projects_all_sql, (error, results) => {
+    if (error)
+        res.status(500).send(error); //Internal Server Error
+      else {
+        res.render('project_assign', { results: results});
+      }
+  });
+});
+
 // app.get("/index", (req, res) =>{
 //   res.render('index');
 // });

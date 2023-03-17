@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title style="color:#e700a2">Project Assign</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="/styles/projects.css">
+        <link rel="stylesheet" href="/partials/color.css">
+        <script type="text/javascript" src="/routes/projects.js"></script>
+
+    </head>
+
+    <body>
+        <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
+
+            {{> logout}}
+        </div>
+        <div style="padding: 2% 2% 0% 2%">
+
+            <!-- https://materializecss.com/cards.html -->
+
+                    <h1>Project Assign </h1>
+
+            {{#each results}}
+            <div class="row">
+                <div class="col s7 m6 l6">
+                    {{!-- <a href="#terms" class="modal-trigger"> --}}
+                        <div class="card luluble-light-pink darken-1">
+                            <div class="card-content white-text">
+                                {{!-- projects/{{this.project_name}} --}}
+                                <span class="card-title"><a style="color: black;"
+                                        href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span>
+                                <p style="color: black;">Client: {{client}}</p>
+                                <p style="color: black;">{{date}}</p>
+                                <div class="col s12">&nbsp;</div>
+                                <div class="row">
+                                    <div class = "col s12 m4 l4">
+                                        <a href="#term{{project_id}}" class="modal-trigger">
+                                            <span class="btn-small luluble-light-grey">See More</span>
+                                        </a>
+                                    </div>
+                                    <div class = "col s12 m4 l4">
+                                        <div class="delete_button">
+                                            <a href="archive-project/{{project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Archive</a>
+                                        </div>
+                                    </div>
+                                    <div class = "col s12 m4 l4">
+                                        <div class="edit_button">
+                                            <a href="#edit_project{{project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey modal-trigger">Edit</a>
+                                            <div class="modal" id="edit_project{{project_id}}">
+                                                <div style="padding: 5% 5% 5% 5%">
+                                                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                                    <h1 style="color: black;" style="font-size:40px;" >Edit Project</h1>
+
+                                                    <form method="POST" action="/projects/{{project_id}}/projectupdate">
+                                                        <article class="regular">
+                                                            {{!-- <h2>Textbook</h2> --}}
+
+                                                            <b><label for="tuluble">Project Name:</label></b>
+                                                            <input type="text" name = "userInput1" id="userInput1" value="{{this.project_name}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 2 --}}
+                                                            <b><label for="tuluble">Client Name:</label></b>
+                                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.client}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 3 --}}
+                                                            <b><label for="tuluble">Date Started:</label></b>
+                                                            <input type="date" name = "userInput3" id="userInput3" value="{{this.date}}">
+                                                            <p> </p>
+
+                                                            <div class="update_button">
+                                                                <button id = "update_button" name = "update_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Finish Editing</button>
+                                                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                                            </div>
+                                                            <p> </p>
+                                                        </form>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {{!-- </a> --}}
+            {{/each}}
+            {{#each results}}
+                <div class="modal" id="term{{project_id}}">
+                    <div class="row">
+                        <div class="col s12">&nbsp;</div>
+                        <div class="col s12"><b><font size="+2">{{project_name}}</font></b></div>
+                        <div class="col s12">&nbsp;</div>
+                        <div class="col s6">
+                            <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
+                        </div>
+                        <div class="col s6">
+                            <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
+                        </div>
+                        <div class="col s12">&nbsp;</div>
+                        {{!-- <div class="col s12 m6 l3">
+                            <p></p>
+                        </div>
+                        <div class="col s12 m6 l3">
+                            <p></p>
+                        </div> --}}
+
+                      
+                    </div>
+                </div>
+            </div>
+            
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+            
+            <script>
+                $(document).ready(function () {
+                    $('.modal').modal();
+                })
+            </script>
+
+            <div class="card-action"></div>
+
+            {{/each}}
+
+            <script>
+                $(document).ready(function() {
+                    $("#update_button").click(function() {
+
+                    const inputValueU1 = $("#userInputU1").val();
+                    const inputValueU2 = $("#userInputU2").val();
+                    const inputValueU3 = $("#userInputU3").val();
+
+                    window.location += "projectupdate";
+                    //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    });
+                });
+            </script>
+
+
+            </div>
+            {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
+                <i class="large material-icons">create</i>
+            </a> --}}
+
+            <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
+                <i class="large material-icons">create</i>
+                {{!-- <span class="large material-icons">create</span> --}}
+            </a>
+            <div class="modal" id="terms">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Add a New Project</h1>
+
+                        <form method="POST" action="/projects/projectformsubmit">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
+
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">Project Name:</label></b>
+                                <input type="text" name = "userInputP1" id="userInputP1" placeholder="Enter Project Name" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Client Name:</label></b>
+                                <input type="text" name = "userInputP2" id="userInputP2" placeholder="Enter Client Name" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 3 --}}
+                                <b><label for="tuluble">Date Started:</label></b>
+                                <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started">
+                                <p> </p>
+
+                                <div class="add_project_button">
+                                <button id = "add_project_button" 
+                                type="submit"
+                                class="btn waves-effect waves-luluble-pink luluble-pink"
+                                >Add Project</button>
+                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                </div>
+                                <p> </p>
+                            </form>
+                        </article>
+                    </div>
+                </div>
+            
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $("#add_project_button").click(function() {
+                    
+                //const selects = document.querySelector('#userInput5');
+                //let theSelectedOption;
+
+                //select.addEventListener('change', (event) => {
+                    //window.location.href = "inventory/"
+                    //theSelectedOption = event.target.value;
+                //});
+
+                const inputValue1 = $("#userInput1").val();
+                const inputValue2 = $("#userInput2").val();
+                const inputValue3 = $("#userInput3").val();
+                const inputValue4 = $("#userInput4").val();
+                const inputValue5 = $("#userInput5").val();
+
+                module.exports = {inputValue1};
+                module.exports = {inputValue2};
+                module.exports = {inputValue3};
+                module.exports = {inputValue4};
+                module.exports = {inputValue5};
+
+                window.location = "/projects/projectformsubmit";
+                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                });
+            });
+        </script>
+
+        <script>
+            function myfunc() {
+                console.log("hello");
+            }
+            $(document).ready(function () {
+                $('browser-default').formSelect();
+                $('.modal').modal();
+            });
+
+            $('browser-default').formSelect('myfunc');
+                // $('select').formSelect('methodName', paramName);
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('.modal').modal();
+            })
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $("#add_project_button").click(function() {
+
+                var inputValue1 = $("#userInputP1").val();
+                var inputValue2 = $("#userInputP2").val();
+                var inputValue3 = $("#userInputP3").val();
+                var inputValue4 = $("#userInputP4").val();
+
+                window.location = "projects/projectformsubmit";
+                });
+            });
+        </script>
+
+        <script src="app.js"></script>
+
+    </body>
+
+</html>
+
+{{!-- <div style="padding:20px">
+    <table>
+        <thead>
+            <tr>
+                <th>ID
+                    <span class="large material-icons">import_export</span>
+                </th>
+                <th>Name
+                    <span class="large material-icons">import_export</span>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each results}}
+            <tr>
+                <td>{{this.formula_id}}
+
+                </td>
+
+                <td>{{this.test_name}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div> --}}
