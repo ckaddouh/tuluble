@@ -42,46 +42,10 @@
                                             <span class="btn-small luluble-light-grey">See More</span>
                                         </a>
                                     </div>
-                                    <div class = "col s12 m4 l4">
-                                        <div class="delete_button">
-                                            <a href="archive-project/{{project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Archive</a>
+                                    <div class = "col s10 m4 l7">
+                                        <div class="chips">
+                                            {{!-- <i class="material-icons close">close</i> --}}
                                         </div>
-                                    </div>
-                                    <div class = "col s12 m4 l4">
-                                        <div class="edit_button">
-                                            <a href="#edit_project{{project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey modal-trigger">Edit</a>
-                                            <div class="modal" id="edit_project{{project_id}}">
-                                                <div style="padding: 5% 5% 5% 5%">
-                                                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                                    <h1 style="color: black;" style="font-size:40px;" >Edit Project</h1>
-
-                                                    <form method="POST" action="/projects/{{project_id}}/projectupdate">
-                                                        <article class="regular">
-                                                            {{!-- <h2>Textbook</h2> --}}
-
-                                                            <b><label for="tuluble">Project Name:</label></b>
-                                                            <input type="text" name = "userInput1" id="userInput1" value="{{this.project_name}}">
-                                                            <p> </p>
-
-                                                            {{!-- Field 2 --}}
-                                                            <b><label for="tuluble">Client Name:</label></b>
-                                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.client}}">
-                                                            <p> </p>
-
-                                                            {{!-- Field 3 --}}
-                                                            <b><label for="tuluble">Date Started:</label></b>
-                                                            <input type="date" name = "userInput3" id="userInput3" value="{{this.date}}">
-                                                            <p> </p>
-
-                                                            <div class="update_button">
-                                                                <button id = "update_button" name = "update_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Finish Editing</button>
-                                                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                                            </div>
-                                                            <p> </p>
-                                                        </form>
-                                                    </article>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -143,54 +107,28 @@
                 });
             </script>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                    var mychips=document.querySelectorAll('.chips');
+                    {{#each scientists}}
+                    M.Chips.init(mychips,{
+                        data:[{tag:'Scientist 4'}, {tag: scientists}],
+                        placeholder: 'Assign Scientists',
+                        secondaryPlaceholder: '+Scientist',
+                        autocompleteOptions:{data:{'Scientists 1':null, 'Scientists 2':null, 'Scientists 3':null} } //get all scientist names
+                    })
+                    {{/each}}
+                })
+            </script>
+
 
             </div>
             {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
                 <i class="large material-icons">create</i>
             </a> --}}
 
-            <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
-                <i class="large material-icons">create</i>
-                {{!-- <span class="large material-icons">create</span> --}}
-            </a>
-            <div class="modal" id="terms">
-                    <div style="padding: 5% 5% 5% 5%">
-                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                        <h1 style="font-size:40px;">Add a New Project</h1>
-
-                        <form method="POST" action="/projects/projectformsubmit">
-                            <article class="regular">
-                                {{!-- <h2>Textbook</h2> --}}
-
-                                {{!-- Field 1 --}}
-                                <b><label for="tuluble">Project Name:</label></b>
-                                <input type="text" name = "userInputP1" id="userInputP1" placeholder="Enter Project Name" maxlength="100">
-                                <p> </p>
-
-                                {{!-- Field 2 --}}
-                                <b><label for="tuluble">Client Name:</label></b>
-                                <input type="text" name = "userInputP2" id="userInputP2" placeholder="Enter Client Name" maxlength="100">
-                                <p> </p>
-
-                                {{!-- Field 3 --}}
-                                <b><label for="tuluble">Date Started:</label></b>
-                                <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started">
-                                <p> </p>
-
-                                <div class="add_project_button">
-                                <button id = "add_project_button" 
-                                type="submit"
-                                class="btn waves-effect waves-luluble-pink luluble-pink"
-                                >Add Project</button>
-                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                </div>
-                                <p> </p>
-                            </form>
-                        </article>
-                    </div>
-                </div>
             
-        </div>
+
 
         <script>
             $(document).ready(function() {

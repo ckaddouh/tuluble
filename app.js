@@ -483,7 +483,7 @@ app.get("/project-assign", (req, res) => {
       if (error)
         res.status(500).send(error); //Internal Server Error
       else {
-        res.render('project_assign', { results: results});
+        res.render('project_assign', { results: results, scientists: scientists});
       }
     });
   });
