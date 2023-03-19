@@ -419,6 +419,38 @@ const getTotalAmountOfFormula = `
     AND formulas.project_id = ?
 `
 
+const getAllScientists = `
+  SELECT 
+    name, scientist_id
+  FROM 
+    scientist
+`
+
+const getScientistForProject = `
+  SELECT
+    name, scientist_id
+  FROM
+    scientist, project_assign
+  WHERE
+    project_id = ?
+    AND scientist.scientist_id = project_assign.scientist_id
+`
+
+const assignScientistToProject = `
+  INSERT INTO 
+    project_assign (project_id, scientist_id)
+    VALUES (?, ?)
+`
+
+const removeScientistFromProject = `
+  DELETE FROM 
+    project_assign 
+  WHERE
+    project_id = ?
+    AND scientist_id = ?
+`
+
+
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -447,11 +479,39 @@ app.get("/test", (req, res) => {
 
 app.get("/project-assign", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
-    if (error)
+    db.execute(getAllScientists, (error, scientists) => {
+      if (error)
         res.status(500).send(error); //Internal Server Error
       else {
         res.render('project_assign', { results: results});
       }
+    });
+  });
+});
+
+db.post("/project-assign/:project_id/:scientist_id", (req, res) => {
+  let project_id = req.params.project_id
+  let scientist_id = req.params.scientist_id
+
+  db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.redirect('/project_assign');
+    }
+  });
+});
+
+db.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
+  let project_id = req.params.project_id
+  let scientist_id = req.params.scientist_id
+
+  db.execute(removeScientistFromProject, [project_id, scientist_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.redirect('/project_assign');
+    }
   });
 });
 
