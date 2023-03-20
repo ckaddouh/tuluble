@@ -110,14 +110,20 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function(){
                     var mychips=document.querySelectorAll('.chips');
-                    {{#each scientists}}
+                    var scientists_json = JSON.stringify(scientists);
+                    var scientists = JSON.parse(scientists_json);
+    
+                    // Use the "scientists" variable in your JavaScript code
+                    console.log(scientists);
+                    scientists.forEach(function(scientist) {
+                        console.log(scientist.name);
+                    });
                     M.Chips.init(mychips,{
-                        data:[{tag:'Scientist 4'}, {tag: scientists}],
+                        data:[{tag:'Scientist 4'}, {tag: "hello"}],
                         placeholder: 'Assign Scientists',
                         secondaryPlaceholder: '+Scientist',
                         autocompleteOptions:{data:{'Scientists 1':null, 'Scientists 2':null, 'Scientists 3':null} } //get all scientist names
                     })
-                    {{/each}}
                 })
             </script>
 

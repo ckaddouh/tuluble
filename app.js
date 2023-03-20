@@ -22,6 +22,8 @@ const { literal } = require('sequelize');
 const port = 3000;
 var app = express();
 
+var isAdmin = false;
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 // app.set('view engine', 'html');
@@ -53,6 +55,15 @@ const authConfig = {
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(authConfig));
 
+function requireAdmin(req, res, next){
+  console.log("res admin");
+  console.log(isAdmin);
+  if(isAdmin)
+    next();
+  else
+    res.redirect("/");
+    // next("AGHHH NOT ALLOWED");
+}
 // app.use( async (req, res, next) => {
 //   res.locals.isAuthenticated = req.oidc.isAuthenticated();
 //   if (res.locals.isAuthenticated){
@@ -428,7 +439,7 @@ const getAllScientists = `
 
 const getScientistForProject = `
   SELECT
-    name, scientist_id
+    name, scientist.scientist_id
   FROM
     scientist, project_assign
   WHERE
@@ -456,6 +467,29 @@ const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
 
+app.use( async (req, res, next) => {
+  res.locals.isAuthenticated = req.oidc.isAuthenticated();
+
+  if (res.locals.isAuthenticated){
+    //check if admin
+    db.execute("SELECT admin FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
+      if (results.length > 0) {
+        res.locals.isAdmin = (results[0].admin == 1)
+        isAdmin = (results[0].admin == 1)
+        console.log(res.locals.isAdmin);
+      } else {
+        //if no account yet, set up user row in database (account information)
+        //For now, we'll just make a quick "account" with just the email info
+        db.execute("INSERT INTO scientist (email) VALUES (?)", [req.oidc.user.email], (error, results2) => {
+          res.locals.isAdmin = false;
+        });
+      }
+    })
+    
+  }
+  next();
+})
+
 app.get('/profile', (req, res) => {
   const user = req.oidc.user.nickname;
   console.log(user);
@@ -477,19 +511,27 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
-app.get("/project-assign", (req, res) => {
-  db.execute(read_projects_all_sql, (error, results) => {
-    db.execute(getAllScientists, (error, scientists) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error
-      else {
-        res.render('project_assign', { results: results, scientists: scientists});
-      }
+app.get("/project-assign", requireAdmin, (req, res) => {
+  // res.locals.isAuthenticated = req.oidc.isAuthenticated();
+  console.log("TEST");
+  console.log(res.locals.isAdmin);
+    console.log("TRUE");
+    db.execute(read_projects_all_sql, (error, results) => {
+      db.execute(getAllScientists, (error, scientists) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error
+        else {
+          res.render('project_assign', { results: results, scientists: scientists});
+        }
+      });
     });
-  });
+  // }
+  // else {
+  //   res.render("error");
+  // }
 });
 
-db.post("/project-assign/:project_id/:scientist_id", (req, res) => {
+app.post("/project-assign/:project_id/:scientist_id", (req, res) => {
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
@@ -502,7 +544,7 @@ db.post("/project-assign/:project_id/:scientist_id", (req, res) => {
   });
 });
 
-db.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
+app.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
