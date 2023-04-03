@@ -122,6 +122,17 @@ const read_projects_all_sql = `
       active = 1
 `
 
+const read_project_data_for_assign = `
+  SELECT
+    project_name, projects.project_id, client, date, scientist.name, scientist.scientist_id
+  FROM
+    projects, scientist, project_assign
+  WHERE 
+    active = 1
+    AND project_assign.project_id = projects.project_id
+    AND project_assign.scientist_id = scientist.scientist_id
+`
+
 const singleProjectQuery = `
     SELECT
         projects.project_name, projects.project_id, projects.client, projects.date
@@ -307,15 +318,21 @@ const insertIntoFormulas = `
   VALUES (?, ?, ?, ?)
 `
 
+
 const findIngredientID = `
   SELECT ingredient_id
   FROM ingredient
   WHERE ingredient.lot_num = ?
 `
 
-const insertIntoPhase = `
+const insertIntoPhaseOLD = `
   INSERT INTO formula_ingredient (formula_id, phase, percent_of_ingredient, total_amount, ingredient_id)
   VALUES (?, ?, ?, ?, ?)
+`
+
+const insertIntoPhase = `
+  INSERT INTO formula_ingredient (formula_id, trial_num, phase, percent_of_ingredient, total_amount, ingredient_id)
+  VALUES (?, ?, ?, ?, ?, ?)
 `
 
 const selectSearchedIngredients = `
@@ -461,6 +478,25 @@ const removeScientistFromProject = `
     AND scientist_id = ?
 `
 
+const newFormulaDisplay = `
+  SELECT
+    formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.project_id = ?
+    ORDER BY formulas.trial_num
+`
+
+const getTrials = `
+  SELECT DISTINCT trial_num, formula_id
+  FROM formulas
+  WHERE project_id = ?
+  ORDER BY trial_num
+`
+
 
 
 const partialsPath = path.join(__dirname, "public/partials");
@@ -476,7 +512,6 @@ app.use( async (req, res, next) => {
       if (results.length > 0) {
         res.locals.isAdmin = (results[0].admin == 1)
         isAdmin = (results[0].admin == 1)
-        console.log(res.locals.isAdmin);
       } else {
         //if no account yet, set up user row in database (account information)
         //For now, we'll just make a quick "account" with just the email info
@@ -511,24 +546,40 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
-app.get("/project-assign", requireAdmin, (req, res) => {
+app.get("/project-assign", requireAdmin, async function(req, res, next) {
   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  console.log("TEST");
-  console.log(res.locals.isAdmin);
-    console.log("TRUE");
+    var scientistDict = {};
+    var results;
+    var scientists;
+
     db.execute(read_projects_all_sql, (error, results) => {
-      db.execute(getAllScientists, (error, scientists) => {
-        if (error)
-          res.status(500).send(error); //Internal Server Error
-        else {
-          res.render('project_assign', { results: results, scientists: scientists});
-        }
-      });
+      for (let i = 0; i < results.length; i++) {
+        console.log(results[i].project_id);
+
+        db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
+          console.log("hello");
+          scientistDict[results[i].project_id] = scientists;
+          console.log(scientistDict);
+
+          
+          if (error)
+            res.status(500).send(error); //Internal Server Error            
+            
+        });
+        console.log("test");
+      }
+        console.log("Dict:");
+        console.log(scientistDict);
+        
+        console.log(results); 
+
     });
-  // }
-  // else {
-  //   res.render("error");
-  // }
+      console.log(scientistDict);
+    
+
+      console.log("GOING TO PROJECT ASSIGN PAGE");
+      res.render('project_assign', { scientistDict: scientistDict, results:results, scientists: scientists});
+  
 });
 
 app.post("/project-assign/:project_id/:scientist_id", (req, res) => {
@@ -777,11 +828,11 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
 
-  db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
+  db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput0, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
-      res.redirect("/projects/" + project_id + "/trial1/trial1");
+      res.redirect("/projects/" + project_id);
     }
   });
 });
@@ -811,6 +862,26 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
+app.get("/projects/:project_id", (req, res) => {
+  let project_id = req.params.project_id
+
+  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    db.execute(getTrials, [project_id], (error, trial_data) => {
+      db.execute(newFormulaDisplay, [project_id], (error, results) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error 
+        else {
+          res.render('formulas', {
+            project_id: project_id,
+            results: results,
+            project_data: project_data,
+            trial_data: trial_data
+          });
+        }
+      });
+    });
+  });
+});
 
 app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function(req, res, next) {
   let project_id = req.params.project_id
