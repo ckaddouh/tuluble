@@ -35,8 +35,21 @@
                                         </a>
                                     </div>
                                     <div class = "col s10 m4 l7">
-                                        <div class="chips">
-                                            {{!-- <i class="material-icons close">close</i> --}}
+                                        <form method="POST">
+                                            <select name="select_assign" id="select_assign" data-project-id="{{project_id}}"
+                                                class="browser-default">
+                                                <option value="0" disabled selected>Assign a Scientist to This Project
+                                                </option>
+                                                {{#each scientist_data}}
+                                                <option value="{{scientist_data.scientist_id}}">{{scientist_data.name}}
+                                                </option>
+                                                {{/each}}
+                                                <option value="Scientist1">Scientist 1</option>
+                                                <option value="Scientist2">Scientist 2</option>
+                                                <option value="Scientist3">Scientist 3</option>
+                                                <option value="Scientist4">Scientist 4</option>
+                                            </select>
+                                        </form>
                                         </div>
                                         </div>
                                     </div>
