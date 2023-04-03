@@ -546,6 +546,42 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
+// app.get("/project-assign", requireAdmin, async function (req, res, next) {
+//   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
+//   var scientistDict = {};
+//   var results;
+//   var scientists;
+
+//   db.execute(read_projects_all_sql, (error, results) => {
+//     for (let i = 0; i < results.length; i++) {
+//       console.log(results[i].project_id);
+
+//       db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
+//         console.log("hello");
+//         scientistDict[results[i].project_id] = scientists;
+//         console.log(scientistDict);
+
+
+//         if (error)
+//           res.status(500).send(error); //Internal Server Error            
+
+//       });
+//       console.log("test");
+//     }
+//     console.log("Dict:");
+//     console.log(scientistDict);
+
+//     console.log(results);
+
+//   });
+//   console.log(scientistDict);
+
+
+//   console.log("GOING TO PROJECT ASSIGN PAGE");
+//   res.render('project_assign', { scientistDict: scientistDict, results: results, scientists: scientists });
+
+// });
+
 app.get("/project-assign", requireAdmin, async function (req, res, next) {
   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
   var scientistDict = {};
@@ -553,34 +589,17 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
   var scientists;
 
   db.execute(read_projects_all_sql, (error, results) => {
-    for (let i = 0; i < results.length; i++) {
-      console.log(results[i].project_id);
-
-      db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
-        console.log("hello");
-        scientistDict[results[i].project_id] = scientists;
-        console.log(scientistDict);
-
-
-        if (error)
-          res.status(500).send(error); //Internal Server Error            
-
-      });
-      console.log("test");
-    }
-    console.log("Dict:");
-    console.log(scientistDict);
-
-    console.log(results);
-
+    
+      res.render('project_assign', {results: results});
+    
   });
-  console.log(scientistDict);
 
 
-  console.log("GOING TO PROJECT ASSIGN PAGE");
-  res.render('project_assign', { scientistDict: scientistDict, results: results, scientists: scientists });
+
+  
 
 });
+
 
 app.get("/project-assign/:project_id/assignscientist", (req, res) => {
   console.log("BRUH");
