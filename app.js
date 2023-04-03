@@ -421,14 +421,14 @@ const getTotalAmountOfFormula = `
 
 const getAllScientists = `
   SELECT 
-    name, scientist_id
+    scientist.name, scientist.scientist_id
   FROM 
     scientist
 `
 
 const getScientistForProject = `
   SELECT
-    name, scientist_id
+    name, scientist.scientist_id
   FROM
     scientist, project_assign
   WHERE
@@ -479,21 +479,28 @@ app.get("/test", (req, res) => {
 
 app.get("/project-assign", (req, res) => {
   db.execute(read_projects_all_sql, (error, results) => {
-    db.execute(getAllScientists, (error, scientists) => {
+    db.execute(getAllScientists, (error, scientist_data) => {
+      //db.execute(getScientistForProject, [req.body.project_id], (error, scientist_per_project) => {
       if (error)
         res.status(500).send(error); //Internal Server Error
       else {
-        res.render('project_assign', { results: results, scientists: scientists});
+        res.render('project_assign', { 
+          results: results, 
+          scientist_data: scientist_data 
+        });
       }
+      //});
     });
   });
 });
 
-db.post("/project-assign/:project_id/:scientist_id", (req, res) => {
+app.get("/project-assign/:project_id/assignscientist", (req, res) => {
+  console.log("BRUH");
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
-  db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
+  db.execute(assignScientistToProject, [req.params.project_id, req.body.select_assign], (error, results) => {
+    console.log("WE ARE HERE");
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -502,7 +509,7 @@ db.post("/project-assign/:project_id/:scientist_id", (req, res) => {
   });
 });
 
-db.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
+app.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
