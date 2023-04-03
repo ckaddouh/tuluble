@@ -91,6 +91,12 @@
                     <p></p>
                 </div> --}}
 
+                <link rel="stylesheet"
+                    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+                <link rel="stylesheet" href="/styles/projects.css">
+                <link rel="stylesheet" href="/partials/color.css">
+                <script src="app.js"></script>
 
             </div>
         </div>
@@ -109,138 +115,246 @@
     <div class="card-action"></div>
 
     {{/each}}
+    {{#each scientistDict}}
+    <p>Project {{@key}}</p>
+    {{#each this}}
+    <p>{{this.name}}</p>
+    {{/each}}
+    <div class="row">
+        <div class="col s7 m6 l6">
+            {{!-- <a href="#terms" class="modal-trigger"> --}}
+                <div class="card luluble-light-pink darken-1">
+                    <div class="card-content white-text">
+                        {{!-- projects/{{this.project_name}} --}}
+                        {{!-- <span class="card-title"><a style="color: black;"
+                                href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span> --}}
+                        {{!-- <p style="color: black;">Client: {{client}}</p> --}}
+                        {{!-- <p style="color: black;">{{date}}</p> --}}
 
-    <script>
-        const select = document.querySelector('#select_assign');
-        const projectId = select.dataset.projectId;
-        let selectedOption;
+                        <div class="col s12">&nbsp;</div>
+                        <div class="row">
+                            <div class="col s12 m4 l4">
+                                <a href="#term{{@key}}" class="modal-trigger">
+                                    <span class="btn-small luluble-light-grey">See More</span>
+                                </a>
+                            </div>
+                            <div class="col s10 m4 l7">
+                                <div class="chips">
+                                    {{!-- <i class="material-icons close">close</i> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        {{!-- </a> --}}
+        {{/each}}
+
+        {{#each results}}
+        <div class="modal" id="term{{project_id}}">
+            <div class="row">
+                <div class="col s12">&nbsp;</div>
+                <div class="col s12"><b>
+                        <font size="+2">{{project_name}}</font>
+                    </b></div>
+                <div class="col s12">&nbsp;</div>
+                <div class="col s6">
+                    <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
+                </div>
+                <div class="col s6">
+                    <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
+                </div>
+                <div class="col s12">&nbsp;</div>
+                {{!-- <div class="col s12 m6 l3">
+                    <p></p>
+                </div>
+                <div class="col s12 m6 l3">
+                    <p></p>
+                </div> --}}
+
+                <script>
+                    const select = document.querySelector('#select_assign');
+                    const projectId = select.dataset.projectId;
+                    let selectedOption;
 
 
-        select.addEventListener('change', (event) => {
-            //window.location.href = "inventory/"
-            selectedOption = event.target.value;
-            console.log(selectedOption);
-            //window.location.assign("/inventory");
-            //window.location.href += "/" + selectedOption;
-            var l = "/project-assign/" + projectId + "/assignscientist";
-            if (window.location.href.indexOf(l) !== -1) {
-                //window.location.href = "/proejct-assign/assignscientist/" + selectedOption;
-                window.location.href = l;
-                //window.location.href = selectedOption;
-            }
-            else {
-                //window.location.href = "/project-assign/assignscientist/" + selectedOption;
-                window.location.href = l;
-            }
-            //history.replaceState(null, null, 'http://localhost:3000/inventory');
-        });
-        header.innerHTML = "Inventory - " + selectedOption;
-    </script>
+                    select.addEventListener('change', (event) => {
+                        //window.location.href = "inventory/"
+                        selectedOption = event.target.value;
+                        console.log(selectedOption);
+                        //window.location.assign("/inventory");
+                        //window.location.href += "/" + selectedOption;
+                        var l = "/project-assign/" + projectId + "/assignscientist";
+                        if (window.location.href.indexOf(l) !== -1) {
+                            //window.location.href = "/proejct-assign/assignscientist/" + selectedOption;
+                            window.location.href = l;
+                            //window.location.href = selectedOption;
+                        }
+                        else {
+                            //window.location.href = "/project-assign/assignscientist/" + selectedOption;
+                            window.location.href = l;
+                        }
+                        //history.replaceState(null, null, 'http://localhost:3000/inventory');
+                    });
+                    header.innerHTML = "Inventory - " + selectedOption;
+                </script>
 
-    <script>
-        $(document).ready(function () {
-            $("#update_button").click(function () {
+                <script>
+                    $(document).ready(function () {
+                        $("#update_button").click(function () {
 
-                const inputValueU1 = $("#userInputU1").val();
-                const inputValueU2 = $("#userInputU2").val();
-                const inputValueU3 = $("#userInputU3").val();
+                            const inputValueU1 = $("#userInputU1").val();
+                            const inputValueU2 = $("#userInputU2").val();
+                            const inputValueU3 = $("#userInputU3").val();
 
-                window.location += "projectupdate";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-            });
-        });
-    </script>
+                            window.location += "projectupdate";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                        });
+                    });
+                </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var mychips = document.querySelectorAll('.chips');
-            { { #each scientists } }
-            M.Chips.init(mychips, {
-                data: [{ tag: 'Scientist 4' }, { tag: scientists }],
-                placeholder: 'Assign Scientists',
-                secondaryPlaceholder: '+Scientist',
-                autocompleteOptions: { data: { 'Scientists 1': null, 'Scientists 2': null, 'Scientists 3': null } } //get all scientist names
-            })
-            {
-                {
-                    /each}}
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var mychips = document.querySelectorAll('.chips');
+                        { { #each scientists } }
+                        M.Chips.init(mychips, {
+                            data: [{ tag: 'Scientist 4' }, { tag: scientists }],
+                            placeholder: 'Assign Scientists',
+                            secondaryPlaceholder: '+Scientist',
+                            autocompleteOptions: { data: { 'Scientists 1': null, 'Scientists 2': null, 'Scientists 3': null } } //get all scientist names
+                        })
+                        {
+                            {
+                                /each}}
+                            })
+                </script>
+
+
+            </div>
+            {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
+                <i class="large material-icons">create</i>
+            </a> --}}
+            <script>
+                console.log("TEST TEST");
+                console.log(scientistDict);
+            </script>
+
+
+
+            {{!--
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var mychips = document.querySelectorAll('.chips');
+                    var scientists_json = JSON.stringify(scientists);
+                    var scientists = JSON.parse(scientists_json);
+
+                    // Use the "scientists" variable in your JavaScript code
+                    console.log(scientists);
+                    scientists.forEach(function (scientist) {
+                        console.log(scientist.name);
+                    });
+                    M.Chips.init(mychips, {
+                        data: [{ tag: 'Scientist 4' }, { tag: "hello" }],
+                        placeholder: 'Assign Scientists',
+                        secondaryPlaceholder: '+Scientist',
+                        autocompleteOptions: { data: { 'Scientists 1': null, 'Scientists 2': null, 'Scientists 3': null } } //get all scientist names
+                    })
                 })
-    </script>
-
-
-    </div>
-    {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
-        <i class="large material-icons">create</i>
-    </a> --}}
+            </script> --}}
 
 
 
 
-    <script>
-        $(document).ready(function () {
-            $("#add_project_button").click(function () {
+            <script>
+                $(document).ready(function () {
+                    $("#add_project_button").click(function () {
 
-                //const selects = document.querySelector('#userInput5');
-                //let theSelectedOption;
+                        //const selects = document.querySelector('#userInput5');
+                        //let theSelectedOption;
 
-                //select.addEventListener('change', (event) => {
-                //window.location.href = "inventory/"
-                //theSelectedOption = event.target.value;
-                //});
+                        //select.addEventListener('change', (event) => {
+                        //window.location.href = "inventory/"
+                        //theSelectedOption = event.target.value;
+                        //});
 
-                const inputValue1 = $("#userInput1").val();
-                const inputValue2 = $("#userInput2").val();
-                const inputValue3 = $("#userInput3").val();
-                const inputValue4 = $("#userInput4").val();
-                const inputValue5 = $("#userInput5").val();
+                        const inputValue1 = $("#userInput1").val();
+                        const inputValue2 = $("#userInput2").val();
+                        const inputValue3 = $("#userInput3").val();
+                        const inputValue4 = $("#userInput4").val();
+                        const inputValue5 = $("#userInput5").val();
 
-                module.exports = { inputValue1 };
-                module.exports = { inputValue2 };
-                module.exports = { inputValue3 };
-                module.exports = { inputValue4 };
-                module.exports = { inputValue5 };
+                        module.exports = { inputValue1 };
+                        module.exports = { inputValue2 };
+                        module.exports = { inputValue3 };
+                        module.exports = { inputValue4 };
+                        module.exports = { inputValue5 };
 
-                window.location = "/projects/projectformsubmit";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-            });
-        });
-    </script>
+                        window.location = "/projects/projectformsubmit";
+                        //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    });
+                });
+            </script>
 
-    <script>
-        function myfunc() {
-            console.log("hello");
-        }
-        $(document).ready(function () {
-            $('browser-default').formSelect();
-            $('.modal').modal();
-        });
+            <script>
+                function myfunc() {
+                    console.log("hello");
+                }
+                $(document).ready(function () {
+                    $('browser-default').formSelect();
+                    $('.modal').modal();
+                });
 
-        $('browser-default').formSelect('myfunc');
+                $('browser-default').formSelect('myfunc');
                 // $('select').formSelect('methodName', paramName);
 
-    </script>
+            </script>
 
-    <script>
-        $(document).ready(function () {
-            $('.modal').modal();
-        })
-    </script>
+            <script>
+                $(document).ready(function () {
+                    $('.modal').modal();
+                })
+            </script>
 
-    <script>
-        $(document).ready(function () {
-            $("#add_project_button").click(function () {
+            <script>
+                $(document).ready(function () {
+                    $("#add_project_button").click(function () {
 
-                var inputValue1 = $("#userInputP1").val();
-                var inputValue2 = $("#userInputP2").val();
-                var inputValue3 = $("#userInputP3").val();
-                var inputValue4 = $("#userInputP4").val();
+                        var inputValue1 = $("#userInputP1").val();
+                        var inputValue2 = $("#userInputP2").val();
+                        var inputValue3 = $("#userInputP3").val();
+                        var inputValue4 = $("#userInputP4").val();
 
-                window.location = "projects/projectformsubmit";
-            });
-        });
-    </script>
+                        window.location = "projects/projectformsubmit";
+                    });
+                });
+            </script>
 
-    <script src="app.js"></script>
+            <script src="app.js"></script>
+
+
+            {{!--
+            <script>
+                function myfunc() {
+                    console.log("hello");
+                }
+                $(document).ready(function () {
+                    $('browser-default').formSelect();
+                    $('.modal').modal();
+                });
+
+                $('browser-default').formSelect('myfunc');
+                // $('select').formSelect('methodName', paramName);
+
+            </script> --}}
+
+            {{!--
+            <script>
+                $(document).ready(function () {
+                    $('.modal').modal();
+                })
+            </script> --}}
+
+
 
 </body>
 
