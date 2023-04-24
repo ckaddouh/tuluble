@@ -584,19 +584,18 @@ app.get("/test", (req, res) => {
 
 app.get("/project-assign", requireAdmin, async function (req, res, next) {
   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  var scientistDict = {};
-  var results;
-  var scientists;
 
   db.execute(read_projects_all_sql, (error, results) => {
-    
-      res.render('project_assign', {results: results});
-    
+    db.execute(getAllScientists, (error, scientistResults) => {
+      res.render('project_assign', { results: results, scientist_data: scientistResults });
+
+    })
+
   });
 
 
 
-  
+
 
 });
 
