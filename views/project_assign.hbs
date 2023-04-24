@@ -29,6 +29,9 @@
                                     href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span>
                             <p style="color: black;">Client: {{client}}</p>
                             <p style="color: black;">{{date}}</p>
+                            {{#each ../scientistForProject}}
+                            <p style="color: black;">Scientists Assigned to this Project: {{name}}</p>
+                            {{/each}}
                             <div class="col s12">&nbsp;</div>
                             <div class="row">
                                 <div class="col s12 m4 l4">
