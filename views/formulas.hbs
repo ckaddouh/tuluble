@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <script type="text/javascript" src="/routes/projects.js"></script>
+        <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
         <link rel="stylesheet" href="/partials/color.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
 
     </head>
     <style>
@@ -76,11 +79,14 @@
                 
                     </article>
                 </div>
+
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+        <script src="/routes/formulas.js"></script>
 
 
         {{!-- clicking new ingredient button --}}
@@ -236,6 +242,42 @@
                     </td>
 
                     </table>
+
+                    //PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR
+
+                    <!-- Add the jsPDF library script tag -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
+
+                    <!-- Define the printing2() function after the jsPDF library is loaded -->
+                    <script>
+                    function printing2() {
+                        console.log("PRINTING ATTEMPT2")
+
+                        // Create a new jsPDF instance
+                        var doc = new jsPDF();
+                    
+                        // Define the table columns and rows
+                        var columns = ["Name", "Country", "Population"];
+                        var rows = [
+                        ["China", "Asia", "1,439,323,776"],
+                        ["India", "Asia", "1,380,004,385"],
+                        ["United States", "North America", "331,002,651"],
+                        ["Indonesia", "Asia", "273,523,615"],
+                        ["Pakistan", "Asia", "220,892,340"]
+                        ];
+                    
+                        // Call the autoTable function to generate the table
+                        doc.autoTable(columns, rows);
+                    
+                        // Save the PDF
+                        doc.save("table.pdf");
+                    }
+                    </script>
+
+                    <!-- Call the printing2() function when the button is clicked -->
+                    <button onclick="printing2()" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Print</button>
+
+
                 </div>
             </div>
 
