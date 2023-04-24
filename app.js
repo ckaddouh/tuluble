@@ -331,7 +331,7 @@ const insertIntoPhaseOLD = `
 `
 
 const insertIntoPhase = `
-  INSERT INTO formula_ingredient (formula_id, trial_num, phase, percent_of_ingredient, total_amount, ingredient_id)
+  INSERT INTO formula_ingredient (project_id, trial_num, phase, percent_of_ingredient, total_amount, ingredient_id)
   VALUES (?, ?, ?, ?, ?, ?)
 `
 
@@ -485,7 +485,21 @@ const newFormulaDisplay = `
     formulas, formula_ingredient, ingredient
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.project_id = formula_ingredient.project_id
+    AND formulas.trial_num = formula_ingredient.trial_num
+    AND formulas.project_id = ?
+    ORDER BY formulas.trial_num
+`
+
+const formulaDisplayAttempt3 = `
+  SELECT DISTINCT 
+    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.unit, ingredient.lot_num
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE 
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.project_id = formula_ingredient.project_id
+    AND formulas.trial_num = formula_ingredient.trial_num
     AND formulas.project_id = ?
     ORDER BY formulas.trial_num
 `
@@ -497,6 +511,18 @@ const getTrials = `
   ORDER BY trial_num
 `
 
+const getTrialInfo = `
+  SELECT DISTINCT 
+    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.unit, ingredient.lot_num
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE 
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.project_id = formula_ingredient.project_id
+    AND formulas.trial_num = formula_ingredient.trial_num
+    AND formulas.project_id = ?
+    AND formulas.trial_num = ?
+`
 
 
 const partialsPath = path.join(__dirname, "public/partials");
@@ -828,7 +854,7 @@ app.post("/projects/:project_id/formulaformsubmit", async function (req, res, ne
       if (error)
         res.status(500).send(error); //Internal Server Error 
       else {
-        res.redirect("/projects/" + project_id + "/trial1/trial1");
+        res.redirect("/projects/" + project_id);
       }
     })
   }
@@ -838,9 +864,8 @@ app.post("/projects/:project_id/formulaformsubmit", async function (req, res, ne
 });
 
 
-app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function (req, res, next) {
+app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
-  let formula_id = req.params.formula_id;
 
   console.log("HELLO");
   console.log(project_id);
@@ -848,7 +873,7 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function (re
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
 
-  db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput0, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
+  db.execute(insertIntoPhase, [project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
@@ -882,25 +907,52 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function (re
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
+// app.get("/projects/:project_id", (req, res) => {
+//   let project_id = req.params.project_id
+
+//   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+//     db.execute(getTrials, [project_id], (error, trial_data) => {
+//       db.execute(newFormulaDisplay, [project_id], (error, results) => {
+//         db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+//           db.execute(read_inventory_all_alph, (error, inventory_data) => {
+//             if (error)
+//               res.status(500).send(error); //Internal Server Error 
+//             else {
+//               res.render('formulas', {
+//                 project_id: project_id,
+//                 results: results,
+//                 ing_data: ing_data,
+//                 project_data: project_data,
+//                 trial_data: trial_data,
+//                 inventory_data: inventory_data
+//               });
+//             }
+//           });
+//         });
+//       });
+//     });
+//   });
+// });
+
+
 app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
 
+  var trialDict = {};
+
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
     db.execute(getTrials, [project_id], (error, trial_data) => {
-      db.execute(newFormulaDisplay, [project_id], (error, results) => {
-        if (error)
-          res.status(500).send(error); //Internal Server Error 
-        else {
-          res.render('formulas', {
-            project_id: project_id,
-            results: results,
-            project_data: project_data,
-            trial_data: trial_data
-          });
-        }
-      });
+      for (let i = 0; i < trial_data.length; i++) {
+        console.log(trial_data[i].trial_num);
+        db.execute(getTrialInfo, [project_id, trial_data[i].trial_num], (error, trial_info) => {
+            console.log(trial_info);
+        });
+        
+      }
     });
   });
+  
+
 });
 
 app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function (req, res, next) {

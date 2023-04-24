@@ -182,7 +182,7 @@
                                         </select>
                                         <p> </p>
 
-
+ 
                                         <b><label for="tuluble">Percent of Ingredient:</label></b>
                                         <input type="number" name = "userInput3" id="userInput3" placeholder="Enter Percent" maxlength="20">
                                         <p> </p>
@@ -258,7 +258,41 @@
 
                     </table>
 
-                    //PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR
+                    {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
+                            <a href = "/projects/{{project_id}}/procedure"> _</a>
+
+                        <div style="overflow-x: scroll;" class = "col s12 m4 l6">
+                        <table class = "scrollable">
+                            <tr>
+                                {{#each trial_data}}
+                                    <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
+                                {{/each}}
+                            </tr>
+                            <tr>
+                                {{#each trial_data}}
+                                    <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
+                                    <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
+                                {{/each}}
+                            </tr>
+                                {{!-- {{#each trial_data}}
+                                    <td>hello1</td>
+                                    <td>hello2</td>
+                                {{/each}} --}}
+                                {{#each ing_data}}
+                                <tr>
+                                    <td>trial {{trial_num}}, {{percent_of_ingredient}}%</td>
+                                    <td>trial {{trial_num}}, {{total_amount}}g</td>
+                                </tr>
+                                {{/each}}
+                                    {{!-- {{#each results}}
+                                        <tr>
+                                            <td>p{{percent_of_ingredient}}</td>
+                                            <td>t{{total_amount}}</td>
+                                        </tr>
+                                    {{/each}} --}}
+                        </table>
+                        </div>
+                    </div>
 
                     <!-- Add the jsPDF library script tag -->
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
@@ -295,7 +329,30 @@
 
                 </div>
             </div>
+{{!-- 
+    {{#each trial_data}}
+        <script>
+            function loadSection1Data() {
+            // make an AJAX request to the server to retrieve data for section1
+            // define the SQL query to retrieve the specific data required for section1
 
+            // update the HTML content of section1 with the retrieved data
+            document.getElementById("section1").innerHTML = "<p>Section 1 Data</p>";
+            }
+
+            function loadSection2Data() {
+            // make an AJAX request to the server to retrieve data for section2
+            // define the SQL query to retrieve the specific data required for section2
+
+            // update the HTML content of section2 with the retrieved data
+            document.getElementById("section2").innerHTML = "<p>Section 2 Data</p>";
+            }
+
+            // call each function to load the data for the corresponding section when the page loads
+            loadSection1Data();
+            loadSection2Data();
+        </script>
+    {{#each}} --}}
     </body>
 
 
