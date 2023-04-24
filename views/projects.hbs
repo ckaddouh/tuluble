@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="/styles/projects.css">
+        <link rel="stylesheet" href="/public/styles/projects.css">
         <link rel="stylesheet" href="/partials/color.css">
         <script type="text/javascript" src="/routes/projects.js"></script>
 
@@ -31,7 +31,8 @@
                         <div class="card luluble-light-pink darken-1">
                             <div class="card-content white-text">
                                 {{!-- projects/{{this.project_name}} --}}
-                                <span class="card-title"><a style="color: black;"
+                                <span class="card-title"><a style="color: black;" onMouseOver="this.style.color='#0087ca'"
+                                onMouseOut="this.style.color='#000000'" 
                                         href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
                                 <p style="color: black;">Client: {{client}}</p>
                                 <p style="color: black;">{{date}}</p>
