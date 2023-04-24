@@ -55,14 +55,14 @@ const authConfig = {
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(authConfig));
 
-function requireAdmin(req, res, next){
+function requireAdmin(req, res, next) {
   console.log("res admin");
   console.log(isAdmin);
-  if(isAdmin)
+  if (isAdmin)
     next();
   else
     res.redirect("/");
-    // next("AGHHH NOT ALLOWED");
+  // next("AGHHH NOT ALLOWED");
 }
 // app.use( async (req, res, next) => {
 //   res.locals.isAuthenticated = req.oidc.isAuthenticated();
@@ -120,6 +120,17 @@ const read_projects_all_sql = `
         projects
     WHERE 
       active = 1
+`
+
+const read_project_data_for_assign = `
+  SELECT
+    project_name, projects.project_id, client, date, scientist.name, scientist.scientist_id
+  FROM
+    projects, scientist, project_assign
+  WHERE 
+    active = 1
+    AND project_assign.project_id = projects.project_id
+    AND project_assign.scientist_id = scientist.scientist_id
 `
 
 const singleProjectQuery = `
@@ -256,8 +267,8 @@ const insertIntoProjects = `
   VALUES (?, ?, ?, 1)
 `
 
-const 
-updateIngredient = `
+const
+  updateIngredient = `
   UPDATE 
     ingredient
   SET 
@@ -307,15 +318,21 @@ const insertIntoFormulas = `
   VALUES (?, ?, ?, ?)
 `
 
+
 const findIngredientID = `
   SELECT ingredient_id
   FROM ingredient
   WHERE ingredient.lot_num = ?
 `
 
-const insertIntoPhase = `
+const insertIntoPhaseOLD = `
   INSERT INTO formula_ingredient (formula_id, phase, percent_of_ingredient, total_amount, ingredient_id)
   VALUES (?, ?, ?, ?, ?)
+`
+
+const insertIntoPhase = `
+  INSERT INTO formula_ingredient (formula_id, trial_num, phase, percent_of_ingredient, total_amount, ingredient_id)
+  VALUES (?, ?, ?, ?, ?, ?)
 `
 
 const selectSearchedIngredients = `
@@ -432,7 +449,7 @@ const getTotalAmountOfFormula = `
 
 const getAllScientists = `
   SELECT 
-    name, scientist_id
+    scientist.name, scientist.scientist_id
   FROM 
     scientist
 `
@@ -461,22 +478,40 @@ const removeScientistFromProject = `
     AND scientist_id = ?
 `
 
+const newFormulaDisplay = `
+  SELECT
+    formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
+  FROM 
+    formulas, formula_ingredient, ingredient
+  WHERE
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formulas.formula_id = formula_ingredient.formula_id
+    AND formulas.project_id = ?
+    ORDER BY formulas.trial_num
+`
+
+const getTrials = `
+  SELECT DISTINCT trial_num, formula_id
+  FROM formulas
+  WHERE project_id = ?
+  ORDER BY trial_num
+`
+
 
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
 
-app.use( async (req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
 
-  if (res.locals.isAuthenticated){
+  if (res.locals.isAuthenticated) {
     //check if admin
     db.execute("SELECT admin FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
       if (results.length > 0) {
         res.locals.isAdmin = (results[0].admin == 1)
         isAdmin = (results[0].admin == 1)
-        console.log(res.locals.isAdmin);
       } else {
         //if no account yet, set up user row in database (account information)
         //For now, we'll just make a quick "account" with just the email info
@@ -485,7 +520,7 @@ app.use( async (req, res, next) => {
         });
       }
     })
-    
+
   }
   next();
 })
@@ -501,7 +536,7 @@ app.get("/", (req, res) => {
       if (error)
         res.status(500).send(error); //Internal Server Error
       else {
-        res.render('index', { runningLow: results, expired:results2, profileInfo: req.oidc.user.nickname});
+        res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname });
       }
     });
   });
@@ -511,31 +546,68 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
-app.get("/project-assign", requireAdmin, (req, res) => {
+// app.get("/project-assign", requireAdmin, async function (req, res, next) {
+//   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
+//   var scientistDict = {};
+//   var results;
+//   var scientists;
+
+//   db.execute(read_projects_all_sql, (error, results) => {
+//     for (let i = 0; i < results.length; i++) {
+//       console.log(results[i].project_id);
+
+//       db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
+//         console.log("hello");
+//         scientistDict[results[i].project_id] = scientists;
+//         console.log(scientistDict);
+
+
+//         if (error)
+//           res.status(500).send(error); //Internal Server Error            
+
+//       });
+//       console.log("test");
+//     }
+//     console.log("Dict:");
+//     console.log(scientistDict);
+
+//     console.log(results);
+
+//   });
+//   console.log(scientistDict);
+
+
+//   console.log("GOING TO PROJECT ASSIGN PAGE");
+//   res.render('project_assign', { scientistDict: scientistDict, results: results, scientists: scientists });
+
+// });
+
+app.get("/project-assign", requireAdmin, async function (req, res, next) {
   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  console.log("TEST");
-  console.log(res.locals.isAdmin);
-    console.log("TRUE");
-    db.execute(read_projects_all_sql, (error, results) => {
-      db.execute(getAllScientists, (error, scientists) => {
-        if (error)
-          res.status(500).send(error); //Internal Server Error
-        else {
-          res.render('project_assign', { results: results, scientists: scientists});
-        }
-      });
-    });
-  // }
-  // else {
-  //   res.render("error");
-  // }
+  var scientistDict = {};
+  var results;
+  var scientists;
+
+  db.execute(read_projects_all_sql, (error, results) => {
+    
+      res.render('project_assign', {results: results});
+    
+  });
+
+
+
+  
+
 });
 
-app.post("/project-assign/:project_id/:scientist_id", (req, res) => {
+
+app.get("/project-assign/:project_id/assignscientist", (req, res) => {
+  console.log("BRUH");
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
-  db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
+  db.execute(assignScientistToProject, [req.params.project_id, req.body.select_assign], (error, results) => {
+    console.log("WE ARE HERE");
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -561,7 +633,7 @@ app.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
 //   res.render('index');
 // });
 
-app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
+app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req, res) => {
   let project_id = req.params.project_id
   let trial_num1 = req.params.trial_num
   let trial_num2 = req.params.trial_num2
@@ -576,40 +648,40 @@ app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req,res) => {
       // [project_id, trial_num]
       db.execute(selectFormulaIngredients, [trial_num1, project_id], (error, formula_ingredient_data1) => {
         db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
-        db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
-          db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
-            db.execute(selectBasicTrialData, [trial_num1, project_id], (error, trialData1) => {
-              db.execute(selectBasicTrialData, [trial_num2, project_id], (error, trialData2) => {
-                db.execute(read_inventory_all_alph, (error, results) => {
-            if (error)
-                  res.status(500).send(error); //Internal Server Error
-                else {
-                  // res.render('project', {project_data: results[0]} );
-                  res.render('formulas', {
-                    title: 'Project Details',
-                    styles: ["tables", "event"],
-                    project_id: project_id,
-                    project_data: project_data,
-                    formula_data: formula_data,
-                    formula_ingredient_data1: formula_ingredient_data1,
-                    formula_ingredient_data2: formula_ingredient_data2,
-                    trial_data1: trial_data1,
-                    trial_data2: trial_data2,
-                    trial_num1: req.params.trial_num,
-                    trial_num2: req.params.trial_num2,
-                    trialData1: trialData1,
-                    trialData2: trialData2,
-                    inventory_data: results
+          db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
+            db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
+              db.execute(selectBasicTrialData, [trial_num1, project_id], (error, trialData1) => {
+                db.execute(selectBasicTrialData, [trial_num2, project_id], (error, trialData2) => {
+                  db.execute(read_inventory_all_alph, (error, results) => {
+                    if (error)
+                      res.status(500).send(error); //Internal Server Error
+                    else {
+                      // res.render('project', {project_data: results[0]} );
+                      res.render('formulas', {
+                        title: 'Project Details',
+                        styles: ["tables", "event"],
+                        project_id: project_id,
+                        project_data: project_data,
+                        formula_data: formula_data,
+                        formula_ingredient_data1: formula_ingredient_data1,
+                        formula_ingredient_data2: formula_ingredient_data2,
+                        trial_data1: trial_data1,
+                        trial_data2: trial_data2,
+                        trial_num1: req.params.trial_num,
+                        trial_num2: req.params.trial_num2,
+                        trialData1: trialData1,
+                        trialData2: trialData2,
+                        inventory_data: results
+                      });
+                    }
                   });
-                }
+                });
               });
-            });
-            });
             });
           });
         });
       });
-      });
+    });
   });
 });
 
@@ -664,7 +736,7 @@ app.get("/inventory/search/:input", (req, res) => {
   });
 });
 
-app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
+app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   console.log("HELLO");
   console.log(req.body.userInput1);
   console.log(req.body.userInput2);
@@ -679,8 +751,8 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
   console.log(req.body.userInput11);
   //console.log(typeof(req.body.userInput11))
 
-  db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
-    req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11], (error, results) => {
+  db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
+  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11], (error, results) => {
     if (error) {
       console.error("Error executing SQL query:", err);
       res.status(500).send(error); //Internal Server Error 
@@ -693,7 +765,7 @@ app.post("/inventory/inventoryformsubmit", async function(req, res, next) {
 });
 
 
-app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function(req, res, next) {
+app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id
   console.log("HELLO");
   console.log("UserInput1" + req.body.userInput1);
@@ -709,43 +781,43 @@ app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function(r
   console.log("UserInput11" + req.body.userInput11);
   console.log("UserInput12" + ingredient_id)
 
-  db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6, 
-    req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error 
-      else {
-        res.redirect("/inventory");
-      }
-    });
+  db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
+  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/inventory");
+    }
+  });
 });
 
-app.post("/projects/:project_id/projectupdate", async function(req, res, next) {
+app.post("/projects/:project_id/projectupdate", async function (req, res, next) {
   let project_id = req.params.project_id
 
   try {
-    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, project_id]); 
-      res.redirect("/projects");
+    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, project_id]);
+    res.redirect("/projects");
   }
-  catch(error) {
+  catch (error) {
     next(error);
   }
 });
 
-app.post("/projects/projectformsubmit", async function(req, res, next) {
+app.post("/projects/projectformsubmit", async function (req, res, next) {
   console.log("Project Form Submit Details:");
   console.log(req.body.userInputP1);
   console.log(req.body.userInputP2);
   console.log(req.body.userInputP3);
   try {
-    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3]); 
-      res.redirect("/projects");
+    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3]);
+    res.redirect("/projects");
   }
-  catch(error) {
+  catch (error) {
     next(error);
   }
 });
 
-app.post("/projects/:project_id/formulaformsubmit", async function(req, res, next) {
+app.post("/projects/:project_id/formulaformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
   console.log("HELLO");
   console.log(project_id);
@@ -761,13 +833,13 @@ app.post("/projects/:project_id/formulaformsubmit", async function(req, res, nex
       }
     })
   }
-  catch(error) {
+  catch (error) {
     next(error);
   }
 });
 
 
-app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req, res, next) {
+app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
   let formula_id = req.params.formula_id;
 
@@ -777,11 +849,11 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
   console.log(req.body.userInput2);
   console.log(req.body.userInput3);
 
-  db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
+  db.execute(insertIntoPhase, [formula_id, req.body.userInput1, req.body.userInput0, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
-      res.redirect("/projects/" + project_id + "/trial1/trial1");
+      res.redirect("/projects/" + project_id);
     }
   });
 });
@@ -811,8 +883,28 @@ app.post("/projects/:project_id/:formula_id/phaseformsubmit", async function(req
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
+app.get("/projects/:project_id", (req, res) => {
+  let project_id = req.params.project_id
 
-app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function(req, res, next) {
+  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    db.execute(getTrials, [project_id], (error, trial_data) => {
+      db.execute(newFormulaDisplay, [project_id], (error, results) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error 
+        else {
+          res.render('formulas', {
+            project_id: project_id,
+            results: results,
+            project_data: project_data,
+            trial_data: trial_data
+          });
+        }
+      });
+    });
+  });
+});
+
+app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
 
@@ -827,7 +919,7 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function(
           console.log(amount[0].total_amount);
           db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput1, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
             if (error)
-              res.status(500).send(error); 
+              res.status(500).send(error);
           });
         });
       }
@@ -858,11 +950,11 @@ app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) 
   db.execute(insert_procedure, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6, userInput7,
     userInput8, userInput9, userInput10, project_id, trial_num], (error, results) => {
       if (error)
-      res.status(500).send(error); //Internal Server Error 
+        res.status(500).send(error); //Internal Server Error 
       else {
         res.redirect("/projects/" + project_id + "/procedure" + trial_num);
       }
-  });
+    });
 });
 
 app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
@@ -937,12 +1029,12 @@ app.get("/projects", (req, res) => {
 app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
-  db.execute(singleProjectQuery, [project_id,trial_num], (error, project_data) => {
-    db.execute(selectTrialNums, [project_id,trial_num], (error, formula_data) => {
+  db.execute(singleProjectQuery, [project_id, trial_num], (error, project_data) => {
+    db.execute(selectTrialNums, [project_id, trial_num], (error, formula_data) => {
       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
       // perhaps retrieve based on trial_nums that user selects to view? 
       // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id,trial_num], (error, formula_ingredient_data) => {
+      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
         if (error)
           res.status(500).send(error); //Internal Server Error
         else {

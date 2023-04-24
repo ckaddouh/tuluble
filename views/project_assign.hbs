@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <title style="color:#e700a2">Project Assign</title>
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="/styles/projects.css">
         <link rel="stylesheet" href="/partials/color.css">
         <script type="text/javascript" src="/routes/projects.js"></script>
-
     </head>
-
     <body>
         <div style="display: flex; justify-content:space-between;">
             {{> navbar}}
-
             {{> logout}}
         </div>
         <div style="padding: 2% 2% 0% 2%">
-
             <!-- https://materializecss.com/cards.html -->
-
                     <h1>Project Assign </h1>
-
             {{#each results}}
             <div class="row">
                 <div class="col s7 m6 l6">
@@ -43,8 +35,21 @@
                                         </a>
                                     </div>
                                     <div class = "col s10 m4 l7">
-                                        <div class="chips">
-                                            {{!-- <i class="material-icons close">close</i> --}}
+                                        <form method="POST">
+                                            <select name="select_assign" id="select_assign" data-project-id="{{project_id}}"
+                                                class="browser-default">
+                                                <option value="0" disabled selected>Assign a Scientist to This Project
+                                                </option>
+                                                {{#each scientist_data}}
+                                                <option value="{{scientist_data.scientist_id}}">{{scientist_data.name}}
+                                                </option>
+                                                {{/each}}
+                                                <option value="Scientist1">Scientist 1</option>
+                                                <option value="Scientist2">Scientist 2</option>
+                                                <option value="Scientist3">Scientist 3</option>
+                                                <option value="Scientist4">Scientist 4</option>
+                                            </select>
+                                        </form>
                                         </div>
                                         </div>
                                     </div>
@@ -73,7 +78,6 @@
                         <div class="col s12 m6 l3">
                             <p></p>
                         </div> --}}
-
                       
                     </div>
                 </div>
@@ -88,25 +92,19 @@
                     $('.modal').modal();
                 })
             </script>
-
             <div class="card-action"></div>
-
             {{/each}}
-
             <script>
                 $(document).ready(function() {
                     $("#update_button").click(function() {
-
                     const inputValueU1 = $("#userInputU1").val();
                     const inputValueU2 = $("#userInputU2").val();
                     const inputValueU3 = $("#userInputU3").val();
-
                     window.location += "projectupdate";
                     //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                     });
                 });
             </script>
-
             <script>
                 document.addEventListener('DOMContentLoaded', function(){
                     var mychips=document.querySelectorAll('.chips');
@@ -128,44 +126,45 @@
             </script>
 
 
+    
+          
+            
+    
+
+          
+    
+    
+  
             </div>
             {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
                 <i class="large material-icons">create</i>
             </a> --}}
-
             
-
-
         <script>
             $(document).ready(function() {
                 $("#add_project_button").click(function() {
                     
                 //const selects = document.querySelector('#userInput5');
                 //let theSelectedOption;
-
                 //select.addEventListener('change', (event) => {
                     //window.location.href = "inventory/"
                     //theSelectedOption = event.target.value;
                 //});
-
                 const inputValue1 = $("#userInput1").val();
                 const inputValue2 = $("#userInput2").val();
                 const inputValue3 = $("#userInput3").val();
                 const inputValue4 = $("#userInput4").val();
                 const inputValue5 = $("#userInput5").val();
-
                 module.exports = {inputValue1};
                 module.exports = {inputValue2};
                 module.exports = {inputValue3};
                 module.exports = {inputValue4};
                 module.exports = {inputValue5};
-
                 window.location = "/projects/projectformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
         </script>
-
         <script>
             function myfunc() {
                 console.log("hello");
@@ -174,38 +173,28 @@
                 $('browser-default').formSelect();
                 $('.modal').modal();
             });
-
             $('browser-default').formSelect('myfunc');
                 // $('select').formSelect('methodName', paramName);
-
         </script>
-
         <script>
             $(document).ready(function () {
                 $('.modal').modal();
             })
         </script>
-
         <script>
             $(document).ready(function() {
                 $("#add_project_button").click(function() {
-
                 var inputValue1 = $("#userInputP1").val();
                 var inputValue2 = $("#userInputP2").val();
                 var inputValue3 = $("#userInputP3").val();
                 var inputValue4 = $("#userInputP4").val();
-
                 window.location = "projects/projectformsubmit";
                 });
             });
         </script>
-
         <script src="app.js"></script>
-
     </body>
-
 </html>
-
 {{!-- <div style="padding:20px">
     <table>
         <thead>
@@ -220,13 +209,10 @@
             </tr>
         </thead>
         <tbody>
-
             {{#each results}}
             <tr>
                 <td>{{this.formula_id}}
-
                 </td>
-
                 <td>{{this.test_name}}</td>
             </tr>
             {{/each}}
