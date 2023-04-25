@@ -146,7 +146,7 @@
                                 {{/each}}
                             </tr>
                         {{/each}}
-                    
+
                     <td>
                         <div class="col s12 m4 l2">
                         <a href="#openIng" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Phase</a>
@@ -200,8 +200,8 @@
                                 </article>
                             </div>
                         </div>
-                        </div>
                     </td>
+                    </div>
 
                     <script>
                         $(document).ready(function() {
@@ -255,13 +255,16 @@
                             </div>
                         </div>
                     </td>
+                    </div>
 
                     </table>
+                </div>
 
                     {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
-                            <a href = "/projects/{{project_id}}/procedure"> _</a>
+                    {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
+                    <p>&nbsp;</p>
 
-                        <div style="overflow-x: scroll;" class = "col s12 m4 l6">
+                    <div style="overflow-x: scroll;" class = "col s12 m4 l6">
                         <table class = "scrollable">
                             <tr>
                                 {{#each trial_data}}
@@ -291,8 +294,8 @@
                                         </tr>
                                     {{/each}} --}}
                         </table>
-                        </div>
                     </div>
+                </div>
 
                     <!-- Add the jsPDF library script tag -->
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
@@ -324,7 +327,7 @@
                     </script>
 
                     <!-- Call the printing2() function when the button is clicked -->
-                    <button onclick="printing2()" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Print</button>
+                    {{!-- <button onclick="printing2()" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Print</button> --}}
 
 
                 </div>

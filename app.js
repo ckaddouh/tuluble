@@ -17,12 +17,13 @@ const hbs = require("hbs");
 
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');
-const { literal } = require('sequelize');
+const { literal, INTEGER } = require('sequelize');
 
 const port = 3000;
 var app = express();
 
 var isAdmin = false;
+var projectsOfScientist = 0;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -478,6 +479,12 @@ const removeScientistFromProject = `
     AND scientist_id = ?
 `
 
+const addScientist = `
+  INSERT INTO 
+    scientist (name, email, admin)
+    VALUES (?, ?, 0)
+`
+
 const newFormulaDisplay = `
   SELECT
     formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
@@ -610,19 +617,29 @@ app.get("/test", (req, res) => {
 
 app.get("/project-assign", requireAdmin, async function (req, res, next) {
   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-
+  console.log("SCIENTIST BRUH");
+console.log(req.body.scientist_project);
   db.execute(read_projects_all_sql, (error, results) => {
     db.execute(getAllScientists, (error, scientistResults) => {
-      res.render('project_assign', { results: results, scientist_data: scientistResults });
-
+      db.execute(getScientistForProject, [2], (error, scientistForProject) => {
+      res.render('project_assign', { results: results, scientist_data: scientistResults , scientistForProject:scientistForProject});
+    })
     })
 
   });
+  //only show projects assigned to person logged in
+});
 
-
-
-
-
+app.post("/project_assign/scientistformsubmit", async function (req, res, next) {
+  console.log("inside app.get");
+  db.execute(addScientist, [req.body.scientistInput1, req.body.scientistInput2], (error, results) => {
+    console.log("inside addscientist");
+    if (error)
+      res.status(500).send(error); //Internal Server Error
+    else {
+      res.redirect('/project-assign');
+    }
+  });
 });
 
 
@@ -907,53 +924,54 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
-// app.get("/projects/:project_id", (req, res) => {
-//   let project_id = req.params.project_id
-
-//   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-//     db.execute(getTrials, [project_id], (error, trial_data) => {
-//       db.execute(newFormulaDisplay, [project_id], (error, results) => {
-//         db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
-//           db.execute(read_inventory_all_alph, (error, inventory_data) => {
-//             if (error)
-//               res.status(500).send(error); //Internal Server Error 
-//             else {
-//               res.render('formulas', {
-//                 project_id: project_id,
-//                 results: results,
-//                 ing_data: ing_data,
-//                 project_data: project_data,
-//                 trial_data: trial_data,
-//                 inventory_data: inventory_data
-//               });
-//             }
-//           });
-//         });
-//       });
-//     });
-//   });
-// });
-
-
 app.get("/projects/:project_id", (req, res) => {
   let project_id = req.params.project_id
 
-  var trialDict = {};
-
   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
     db.execute(getTrials, [project_id], (error, trial_data) => {
-      for (let i = 0; i < trial_data.length; i++) {
-        console.log(trial_data[i].trial_num);
-        db.execute(getTrialInfo, [project_id, trial_data[i].trial_num], (error, trial_info) => {
-            console.log(trial_info);
-        });
+      db.execute(newFormulaDisplay, [project_id], (error, results) => {
+        db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+          db.execute(read_inventory_all_alph, (error, inventory_data) => {
+            if (error)
+              res.status(500).send(error); //Internal Server Error 
+            else {
+              res.render('formulas', {
+                project_id: project_id,
+                results: results,
+                ing_data: ing_data,
+                project_data: project_data,
+                trial_data: trial_data,
+                inventory_data: inventory_data
+              });
         
-      }
+            }
+          });
+        });
+      });
     });
   });
+});
+
+
+// app.get("/projects/:project_id", (req, res) => {
+//   let project_id = req.params.project_id
+
+//   var trialDict = {};
+
+//   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+//     db.execute(getTrials, [project_id], (error, trial_data) => {
+//       for (let i = 0; i < trial_data.length; i++) {
+//         console.log(trial_data[i].trial_num);
+//         db.execute(getTrialInfo, [project_id, trial_data[i].trial_num], (error, trial_info) => {
+//             console.log(trial_info);
+//         });
+        
+//       }
+//     });
+//   });
   
 
-});
+// });
 
 app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id

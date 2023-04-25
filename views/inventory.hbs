@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/styles/inventory.css">
     <link rel="stylesheet" href="/partials/color.css">
@@ -44,6 +45,12 @@
             <p></p>
             <h1 id="inventoryTitle">Inventory </h1>
 
+            {{!-- <button id="create-pdf-button">Create PDF</button> --}}
+            {{!-- <a id="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Create PDF</a> --}}
+            <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
+
+            {{!-- <button onclick="window.print()">Print Screen</button> --}}
+            <p>&nbsp;</p>
             <label>Classifier select</label>
             <select id="myDropdown" class="browser-default">
                 <option value="0" disabled selected>Filter by classifier</option>
@@ -169,6 +176,12 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+        <script src="/libs/jspdf.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 
         {{!--
         <script>
@@ -726,6 +739,48 @@
             }
         }
     </script> --}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <script>
+
+        import jsPDF from 'jspdf';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var createPdfButton = document.getElementById('create-pdf-button');
+            createPdfButton.addEventListener('click', createPdf);
+
+            function createPdf() {
+                console.log("PRINTING");
+                // Create a new jsPDF instance
+                //var doc = new jsPDF();
+                //console.log("pdf...");
+                if (typeof jsPDF !== 'undefined') {
+                    // jsPDF library is available
+                    var doc = new jsPDF();
+                    } else {
+                    // jsPDF library is not available
+                    console.error('jsPDF library is not loaded');
+                }
+
+                // Get the HTML content of the current screen
+                var html = document.querySelector('html');
+
+                // Use the html2canvas library to convert the HTML content to a canvas element
+                html2canvas(html).then(function(canvas) {
+                    // Convert the canvas element to a PNG image
+                    var imgData = canvas.toDataURL('image/png');
+
+                    // Add the PNG image to the PDF document
+                    doc.addImage(imgData, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
+
+                    // Save the PDF document
+                    doc.save('screen.pdf');
+                });
+            }
+        });
+
+    </script>
 
 
 </body>

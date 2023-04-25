@@ -25,13 +25,15 @@
                     <div class="card luluble-light-pink darken-1">
                         <div class="card-content white-text">
                             {{!-- projects/{{this.project_name}} --}}
-                            <span class="card-title"><a style="color: black;"
+                            <span id="project_id" class="card-title"><a style="color: black;"
                                     href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span>
-                            <p style="color: black;">Client: {{client}}</p>
-                            <p style="color: black;">{{date}}</p>
-                            {{#each ../scientistForProject}}
-                            <p style="color: black;">Scientists Assigned to this Project: {{name}}</p>
-                            {{/each}}
+                            {{!-- <p id="project_id_scientist" style="color: black;"><b>Project_id:</b> {{project_id}}</p>  --}}
+                            {{!-- <input type="text" name="scientist_project" id="scientist_project" value={{project_id}}>        --}}
+                            <p style="color: black;"><b>Client:</b> {{client}}</p>
+                            <p style="color: black;"><b>Created:</b> {{date}}</p>
+                            
+                            <p style="color: black;"><b>Scientists Assigned to this Project:</b> {{#each ../scientistForProject}} {{name}}, {{/each}}</p>
+                            
                             <div class="col s12">&nbsp;</div>
                             <div class="row">
                                 <div class="col s12 m4 l4">
@@ -65,9 +67,9 @@
     {{!-- </a> --}}
     {{/each}}
 
-    {{#each scientist_data}}
+    {{!-- {{#each scientist_data}}
     <p>{{name}}, {{scientist_id}}</p>
-    {{/each}}
+    {{/each}} --}}
 
     {{#each results}}
     <div class="modal" id="term{{project_id}}">
@@ -93,6 +95,44 @@
 
         </div>
     </div>
+
+
+    <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
+                <i class="large material-icons">create</i>
+                {{!-- <span class="large material-icons">create</span> --}}
+            </a>
+            <div class="modal" id="terms">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Add a New Scientist</h1>
+
+                        <form method="POST" action="/project_assign/scientistformsubmit">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
+
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">Scientist Name:</label></b>
+                                <input type="text" name = "scientistInput1" id="scientistInput1" placeholder="Enter Scientist Name" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Email:</label></b>
+                                <input type="text" name = "scientistInput2" id="scientistInput2" placeholder="Enter Email" maxlength="100">
+                                <p> </p>
+
+                                <div class="add_scientist_button">
+                                <button id = "add_scientist_button" 
+                                type="submit"
+                                class="btn waves-effect waves-luluble-pink luluble-pink"
+                                >Add Scientist</button>
+                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                </div>
+                                <p> </p>
+                            </form>
+                        </article>
+                    </div>
+                </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -204,6 +244,17 @@
             });
         });
     </script>
+
+    <script>
+            $(document).ready(function() {
+                $("#add_scientist_button").click(function() {
+
+                window.location = "/project_assign/scientistformsubmit";
+                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                });
+            });
+        </script>
+
     <script src="app.js"></script>
 </body>
 
