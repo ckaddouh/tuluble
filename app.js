@@ -531,6 +531,18 @@ const getTrialInfo = `
     AND formulas.trial_num = ?
 `
 
+const getProjectsAssignedToScientist = `
+  SELECT
+    DISTINCT project_name, projects.project_id, client, date
+  FROM
+    projects, project_assign
+  WHERE 
+    active = 1
+    AND project_assign.scientist_id = ?
+    AND project_assign.project_id = projects.project_id
+
+`
+
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -579,61 +591,141 @@ app.get("/test", (req, res) => {
   res.render('testpage');
 });
 
+
+
 // app.get("/project-assign", requireAdmin, async function (req, res, next) {
 //   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-//   var scientistDict = {};
-//   var results;
-//   var scientists;
-
+  
 //   db.execute(read_projects_all_sql, (error, results) => {
 //     for (let i = 0; i < results.length; i++) {
 //       console.log(results[i].project_id);
 
 //       db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
 //         console.log("hello");
-//         scientistDict[results[i].project_id] = scientists;
-//         console.log(scientistDict);
-
-
+//         results[i].scientists = scientists;
+//         console.log(results[i].scientists);
+       
 //         if (error)
-//           res.status(500).send(error); //Internal Server Error            
-
+//           res.status(500).send(error); //Internal Server Error    
+          
 //       });
 //       console.log("test");
 //     }
-//     console.log("Dict:");
-//     console.log(scientistDict);
 
 //     console.log(results);
 
 //   });
-//   console.log(scientistDict);
 
 
 //   console.log("GOING TO PROJECT ASSIGN PAGE");
-//   res.render('project_assign', { scientistDict: scientistDict, results: results, scientists: scientists });
+//   res.render('project_assign', {results: results, scientists: scientists }); 
 
 // });
 
-app.get("/project-assign", requireAdmin, async function (req, res, next) {
-  // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  console.log("SCIENTIST BRUH");
-console.log(req.body.scientist_project);
-  db.execute(read_projects_all_sql, (error, results) => {
-    db.execute(getAllScientists, (error, scientistResults) => {
-      db.execute(getScientistForProject, [2], (error, scientistForProject) => {
-      res.render('project_assign', { results: results, scientist_data: scientistResults , scientistForProject:scientistForProject});
-    })
-    })
 
-  });
-  //only show projects assigned to person logged in
+
+
+
+
+app.get("/project-assign", requireAdmin, async function (req, res, next) {
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_all_sql, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+
+    for (let i = 0; i < results.length; i++) {
+      const scientists = await new Promise((resolve, reject) => {
+        db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
+          if (error) reject(error);
+          else resolve(scientists);
+        });
+      });
+      
+      results[i].scientists = scientists;
+    }
+
+    const scientist_data = await new Promise((resolve, reject) => {
+      db.execute(getAllScientists, (error, scientist_data) => {
+        if (error) reject(error);
+        else resolve(scientist_data);
+      });
+    });
+
+    console.log("LIST");
+    console.log(scientist_data);
+
+    console.log("GOING TO PROJECT ASSIGN PAGE");
+    res.render('project_assign', {results: results, scientist_data:scientist_data }); 
+
+  } catch (error) {
+    res.status(500).send(error); //Internal Server Error
+  }
 });
 
-app.post("/project_assign/scientistformsubmit", async function (req, res, next) {
-  console.log("inside app.get");
-  db.execute(addScientist, [req.body.scientistInput1, req.body.scientistInput2], (error, results) => {
-    console.log("inside addscientist");
+
+
+
+
+// app.get("/project-assign", requireAdmin, async function (req, res, next) {
+//   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
+
+
+//     db.execute(read_projects_all_sql, (error, results) => {
+           
+//           db.execute(getAllScientists, (error, scientistResults) => {
+//             res.render('project_assign', { results: results, scientist_data: scientistResults });
+
+//           });
+//       });
+ 
+// });
+
+
+// app.get("/project-assign", requireAdmin, async function (req, res, next) {
+//   console.log("hello?");
+//   try {
+//     const results = await db.execute(read_projects_all_sql);
+//     const proj_scientists = {};
+//     for (let i = 0; i < results.length; i++) {
+//       const projectScientists = await db.execute(getScientistForProject, [results[i].project_id]);
+//       proj_scientists[results[i].project_id] = projectScientists;
+//     }
+//     const scientistResults = await db.execute(getAllScientists);
+//     res.render('project_assign', { results, scientist_data: scientistResults, proj_scientists });
+//   } catch (error) {
+//     next(error);
+//   }
+//   console.log('testest')
+// });
+
+
+
+// CORRECT
+// app.get("/project-assign/addScientist/:project_id/:scientist_id", (req, res) => {
+//   console.log("adding scientist");
+//   let project_id = req.params.project_id
+//   let scientist_id = req.params.scientist_id
+
+//   db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
+//     if (error)
+//       res.status(500).send(error); //Internal Server Error
+//     else {
+//       res.redirect('/project_assign');
+//     }
+//   });
+// });
+
+
+app.get("/project-assign/addScientist/:project_id/:scientist_id", (req, res) => {
+  console.log("adding scientist");
+  let project_id = req.params.project_id
+  let scientist_id = req.params.scientist_id
+
+  db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -642,23 +734,8 @@ app.post("/project_assign/scientistformsubmit", async function (req, res, next) 
   });
 });
 
-
-app.get("/project-assign/:project_id/assignscientist", (req, res) => {
-  console.log("BRUH");
-  let project_id = req.params.project_id
-  let scientist_id = req.params.scientist_id
-
-  db.execute(assignScientistToProject, [req.params.project_id, req.body.select_assign], (error, results) => {
-    console.log("WE ARE HERE");
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.redirect('/project_assign');
-    }
-  });
-});
-
-app.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
+app.get("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
+  console.log("in removal page");
   let project_id = req.params.project_id
   let scientist_id = req.params.scientist_id
 
@@ -666,7 +743,7 @@ app.post("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
-      res.redirect('/project_assign');
+      res.redirect('/project-assign');
     }
   });
 });
@@ -943,7 +1020,6 @@ app.get("/projects/:project_id", (req, res) => {
                 trial_data: trial_data,
                 inventory_data: inventory_data
               });
-        
             }
           });
         });
@@ -1085,14 +1161,35 @@ app.get("/archive", (req, res) => {
   });
 });
 
-app.get("/projects", (req, res) => {
-  db.execute(read_projects_all_sql, (error, results) => {
+app.get("/projects", async function (req,res,next) {
+  db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
+    console.log("hELLOHELLO");
+    console.log(results[0].scientist_id);
+    res.redirect("/projects/sci/" + results[0].scientist_id);
+  });
+});
+
+app.get("/projects/sci/:scientist_id", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id;
+
+  if (isAdmin) {
+    db.execute(read_projects_all_sql, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
       res.render('projects', { results: results });
     }
   });
+  }
+  else {
+    db.execute(getProjectsAssignedToScientist, [scientist_id], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error
+      else {
+        res.render('projects', { results: results });
+      }
+    });
+  } 
 });
 
 app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
@@ -1115,7 +1212,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
             project_data: project_data,
             formula_data: formula_data,
             formula_ingredient_data: formula_ingredient_data
-          });
+          });ƒ
         }
       });
     });

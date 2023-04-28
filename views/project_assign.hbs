@@ -25,15 +25,21 @@
                     <div class="card luluble-light-pink darken-1">
                         <div class="card-content white-text">
                             {{!-- projects/{{this.project_name}} --}}
-                            <span id="project_id" class="card-title"><a style="color: black;"
-                                    href="/projects/{{project_id}}/trial1/trial1"><b>{{project_name}}</a></b></span>
-                            {{!-- <p id="project_id_scientist" style="color: black;"><b>Project_id:</b> {{project_id}}</p>  --}}
-                            {{!-- <input type="text" name="scientist_project" id="scientist_project" value={{project_id}}>        --}}
-                            <p style="color: black;"><b>Client:</b> {{client}}</p>
-                            <p style="color: black;"><b>Created:</b> {{date}}</p>
-                            
-                            <p style="color: black;"><b>Scientists Assigned to this Project:</b> {{#each ../scientistForProject}} {{name}}, {{/each}}</p>
-                            
+                            <span class="card-title"><a style="color: black;"
+                                    href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
+                            <p style="color: black;">Client: {{client}}</p>
+                           <p style="color: black;">{{date}}</p>
+                           <p style="color: black;">Scientists Assigned to this Project: </p>
+                        
+                            {{#each scientists}}
+                                 <div class="chip">
+                                    Scientist Name: {{name}}
+                                   
+                                    <a href = "/project-assign/remove/{{../project_id}}/{{scientist_id}}" <i class="close material-icons">close</i></a>
+                                </div>
+                            {{/each}}
+                         
+
                             <div class="col s12">&nbsp;</div>
                             <div class="row">
                                 <div class="col s12 m4 l4">
@@ -41,15 +47,17 @@
                                         <span class="btn-small luluble-light-grey">See More</span>
                                     </a>
                                 </div>
+
+                              
                                 <div class="col s10 m4 l7">
                                     <form method="POST">
                                         <select name="select_assign" id="select_assign" data-project-id="{{project_id}}"
                                             class="browser-default">
-                                            <option value="0" disabled selected>Assign a Scientist to This Project
-                                            </option>
+                                            <option value="0" disabled selected>Assign a Scientist to This Project</option>
 
                                             {{#each ../scientist_data}}
-                                            <option value="{{scientist_id}}">{{name}}</option>
+                                            {{!-- NEED TO GET PROJECT_ID SOMEHOW --}}
+                                            <option value="{{../project_id}}/{{scientist_id}}">{{name}}</option>
                                             {{/each}}
                                             {{!-- <option value="Scientist1">Scientist 1</option>
                                             <option value="Scientist2">Scientist 2</option>
@@ -67,9 +75,23 @@
     {{!-- </a> --}}
     {{/each}}
 
-    {{!-- {{#each scientist_data}}
-    <p>{{name}}, {{scientist_id}}</p>
-    {{/each}} --}}
+    <script>
+        const dropdowns = document.querySelectorAll('#select_assign');
+        let selectedOption;
+
+        dropdowns.forEach((select) => {
+            select.addEventListener('change', (event) => {
+            selectedOption = event.target.value;
+            console.log(selectedOption);
+
+            console.log(selectedOption);
+            console.log("HELLO");
+            window.location.href += "/addScientist/" + selectedOption;
+            });
+        });
+
+    
+    </script>
 
     {{#each results}}
     <div class="modal" id="term{{project_id}}">
