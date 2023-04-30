@@ -15,7 +15,7 @@
         {{> navbar}}
         {{> logout}}
     </div>
-    <div style="padding: 2% 2% 0% 2%">
+    <div class="col s6" style="padding: 2% 2% 0% 2%">
         <!-- https://materializecss.com/cards.html -->
         <h1>Project Assign </h1>
         {{#each results}}
@@ -55,7 +55,7 @@
                                             class="browser-default">
                                             <option value="0" disabled selected>Assign a Scientist to This Project</option>
 
-                                            {{#each ../scientist_data}}
+                                            {{#each remainingScientists}}
                                             {{!-- NEED TO GET PROJECT_ID SOMEHOW --}}
                                             <option value="{{../project_id}}/{{scientist_id}}">{{name}}</option>
                                             {{/each}}
@@ -72,8 +72,78 @@
             </div>
         </div>
     </div>
+
     {{!-- </a> --}}
     {{/each}}
+
+    <div class="col s6">
+        <table>
+        <thead>
+          <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Edit</th>
+          </tr>
+        </thead>
+
+        <tbody> 
+          {{#each scientist_data}}
+          <tr>
+            <td>{{name}}</td>
+            <td>{{email}}</td>
+            <td>{{role}}</td>
+            <td>
+                <button><a href = "#edit">Edit</a></button>
+                
+            </td>
+          </tr>
+
+          <div class="modal" id="edit">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Edit User</h1>
+
+                        <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
+
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">Name:</label></b>
+                                <input type="text" name = "name" id="name" placeholder="Enter User Name" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Email:</label></b>
+                                <input type="text" name = "email" id="email" placeholder="Enter User Email" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 3 --}}
+                                <b><label for="tuluble">Role:</label></b>
+                                <select name="role" id="role" class="browser-default">
+                                    <option value="0" disabled selected>Select a role</option>
+                                    <option value="0">Scientist</option>
+                                    <option value="1">Admin</option>
+                                </select>
+
+                                <div class="edit_user_button">
+                                <button id = "edit_user_button" 
+                                type="submit"
+                                class="btn waves-effect waves-luluble-pink luluble-pink"
+                                >Save</button>
+                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                </div>
+                                <p> </p>
+                            </form>
+                        </article>
+                    </div>
+                </div>
+                
+          {{/each}}
+        </tbody>
+      </table>
+            
+    </div>
 
     <script>
         const dropdowns = document.querySelectorAll('#select_assign');
@@ -275,7 +345,17 @@
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
-        </script>
+    </script>
+
+    <script>
+        $(document).ready(function() {
+        $("#edit_user_button").click(function() {
+            var inputValue1 = $("#name").val();
+            var inputValue2 = $("#email").val();
+            var inputValue3 = $("#role").val();
+            });
+        });
+    </script>
 
     <script src="app.js"></script>
 </body>

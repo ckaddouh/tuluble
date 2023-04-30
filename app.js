@@ -450,7 +450,7 @@ const getTotalAmountOfFormula = `
 
 const getAllScientists = `
   SELECT 
-    scientist.name, scientist.scientist_id
+    scientist.name, scientist.scientist_id, scientist.admin, scientist.email
   FROM 
     scientist
 `
@@ -541,6 +541,22 @@ const getProjectsAssignedToScientist = `
     AND project_assign.scientist_id = ?
     AND project_assign.project_id = projects.project_id
 
+`
+
+const editUser = `
+  UPDATE scientist
+  SET 
+    name = ?,
+    email = ?,
+    admin = ?
+  WHERE 
+    scientist_id = ?
+`
+
+const getRemainingScientistsForProject = `
+  SELECT * 
+  FROM scientist
+  WHERE scientist_id NOT IN (SELECT scientist_id FROM project_assign where project_id = ?)
 `
 
 
@@ -648,12 +664,34 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
       results[i].scientists = scientists;
     }
 
+    for (let i = 0; i < results.length; i++) {
+      const remainingScientists = await new Promise((resolve, reject) => {
+        db.execute(getRemainingScientistsForProject, [results[i].project_id], (error, remainingScientists) => {
+          if (error) reject(error);
+          else resolve(remainingScientists);
+        });
+      });
+
+      console.log("rEMAINING");
+      console.log(remainingScientists);
+      results[i].remainingScientists = remainingScientists;
+    }
+
     const scientist_data = await new Promise((resolve, reject) => {
       db.execute(getAllScientists, (error, scientist_data) => {
         if (error) reject(error);
         else resolve(scientist_data);
       });
     });
+
+    for (let i = 0; i < scientist_data.length; i++) {
+      if (scientist_data[i].admin == 1) {
+        scientist_data[i].role = "Admin";
+      }
+      else 
+        scientist_data[i].role = "Scientist";
+    }
+
 
     console.log("LIST");
     console.log(scientist_data);
@@ -977,6 +1015,24 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 });
 
 
+app.post("/project_assign/edituser/:scientist_id", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id;
+
+  let name = req.body.name;
+  let email = req.body.email;
+  let admin = req.body.admin;
+
+
+  db.execute(editUser, [name, email, admin, scientist_id], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/project-assign");
+    }
+  });
+});
+
+
 // app.post("/projects/:project_id/trial:trial_num/computeMax", async function(req, res, next) {
 //   let project_id = req.params.project_id
 //   let trial_num = req.params.trial_num
@@ -1001,31 +1057,59 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
-app.get("/projects/:project_id", (req, res) => {
+app.get("/projects/:project_id", async function (req,res,next) {
   let project_id = req.params.project_id
 
-  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-    db.execute(getTrials, [project_id], (error, trial_data) => {
-      db.execute(newFormulaDisplay, [project_id], (error, results) => {
-        db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
-          db.execute(read_inventory_all_alph, (error, inventory_data) => {
-            if (error)
-              res.status(500).send(error); //Internal Server Error 
-            else {
-              res.render('formulas', {
-                project_id: project_id,
-                results: results,
-                ing_data: ing_data,
-                project_data: project_data,
-                trial_data: trial_data,
-                inventory_data: inventory_data
-              });
-            }
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
+
+    console.log(real_id[0].scientist_id);
+
+    const assigned = await new Promise((resolve, reject) => {
+      db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
+        if (error) reject(error);
+        else resolve(assigned);
+      });
+    });
+
+  if (isAdmin || assigned.length !== 0) {
+    db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+      db.execute(getTrials, [project_id], (error, trial_data) => {
+        db.execute(newFormulaDisplay, [project_id], (error, results) => {
+          db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+            db.execute(read_inventory_all_alph, (error, inventory_data) => {
+              if (error)
+                res.status(500).send(error); //Internal Server Error 
+              else {
+                res.render('formulas', {
+                  project_id: project_id,
+                  results: results,
+                  ing_data: ing_data,
+                  project_data: project_data,
+                  trial_data: trial_data,
+                  inventory_data: inventory_data
+                });
+              }
+            });
           });
         });
       });
     });
-  });
+
+  }
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  } 
+  } catch (error) {
+    res.status(500).send(error); 
+  }
+
+
 });
 
 
@@ -1171,25 +1255,45 @@ app.get("/projects", async function (req,res,next) {
 
 app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
+  let results;
+
+  console.log(scientist_id);
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
+
+    console.log(real_id[0].scientist_id);
 
   if (isAdmin) {
-    db.execute(read_projects_all_sql, (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.render('projects', { results: results });
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_all_sql, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
     }
-  });
-  }
-  else {
-    db.execute(getProjectsAssignedToScientist, [scientist_id], (error, results) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error
-      else {
-        res.render('projects', { results: results });
-      }
+  else if (real_id[0].scientist_id == scientist_id) {
+    results = await new Promise((resolve, reject) => {
+      db.execute(getProjectsAssignedToScientist, [scientist_id], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
     });
   } 
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  }
+  console.log("RESULTS");
+  console.log(results);
+  res.render('projects', { results: results });
+
+  } catch (error) {
+    res.status(500).send(error); 
+  }
 });
 
 app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
