@@ -29,13 +29,14 @@
                 <div class="col s7 m6 l6">
                     {{!-- <a href="#terms" class="modal-trigger"> --}}
                         <div class="card luluble-light-pink darken-1">
+
                             <div class="card-content white-text">
                                 {{!-- projects/{{this.project_name}} --}}
-                                <span class="card-title"><a style="color: black;" onMouseOver="this.style.color='#0087ca'"
-                                onMouseOut="this.style.color='#000000'" 
-                                        href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
-                                <p style="color: black;">Client: {{client}}</p>
-                                <p style="color: black;">{{date}}</p>
+                                <a style="color: black;" onMouseOver="this.style.color='#0087ca'"
+                                onMouseOut="this.style.color='#000000'" class="card-title nav-link"
+                                        href="/projects/{{project_id}}"><b>{{project_name}}</b>
+                                <h6 style="color: black; ">Client: {{client}}</h6>
+                                <h6 style="color: black;">{{date}}</h6>
                                 <div class="col s12">&nbsp;</div>
                                 <div class="row">
                                     <div class = "col s12 m4 l4">

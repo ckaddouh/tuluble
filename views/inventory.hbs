@@ -78,20 +78,20 @@
                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                     <h1 style="font-size:40px;">Add a New Ingredient</h1>
 
-                    <form method="POST" action="/inventory/inventoryformsubmit">
+                    <form method="POST" action="/inventory/inventoryformsubmit" class="validate">
                         <article class="regular">
                             {{!-- <h2>Textbook</h2> --}}
 
                             {{!-- Field 1 --}}
                             <b><label for="tuluble">INCI Name:</label></b>
                             <input type="text" name="userInput1" id="userInput1" placeholder="Enter INCI Name"
-                                maxlength="20">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             {{!-- Field 2 --}}
                             <b><label for="tuluble">Trade Name:</label></b>
                             <input type="text" name="userInput2" id="userInput2" placeholder="Enter Trade Name"
-                                maxlength="20">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             {{!-- Field 3 --}}
@@ -102,13 +102,13 @@
 
                             <b><label for="tuluble">Unit:</label></b>
                             <input type="text" name="userInput9" id="userInput9" placeholder="Enter Unit"
-                                maxlength="45">
+                                maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             {{!-- Field 4 --}}
                             <b><label for="tuluble">Shelf:</label></b>
                             <input type="text" name="userInput4" id="userInput4" placeholder="Enter Shelf"
-                                maxlength="20">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             <b><label for="tuluble">Classifier:</label></b>
@@ -135,7 +135,7 @@
 
                             <b><label for="tuluble">Lot Number:</label></b>
                             <input type="text" name="userInput6" id="userInput6" placeholder="Enter Lot Number"
-                                maxlength="20">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             <b><label for="tuluble">Date Recieved:</label></b>
@@ -144,7 +144,7 @@
 
                             <b><label for="tuluble">Supplier:</label></b>
                             <input type="text" name="userInput8" id="userInput8" placeholder="Enter Supplier"
-                                maxlength="45">
+                                maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
                             <b><label for="tuluble">COA Documents:</label></b>
@@ -473,30 +473,30 @@
                                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                         <h1 style="font-size:40px;">Edit Ingredient</h1>
 
-                                        <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate">
+                                        <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate" class="validate">
                                             <article class="regular">
                                                 {{!-- <h2>Textbook</h2> --}}
 
                                                 <b><label for="tuluble">INCI Name:</label></b>
                                                 <input type="text" name="userInput1" id="userInput1"
-                                                    value="{{this.inci_name}}">
+                                                    value="{{this.inci_name}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200">
+                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
                                             <p> </p>
 
                                                 {{!-- Field 3 --}}
                                                 <b><label for="tuluble">Amount Available:</label></b>
                                                 <input type="number" name="userInput3" id="userInput3"
-                                                    value="{{this.amt}}">
+                                                    value="{{this.amt}} pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                                 {{!-- Field 4 --}}
                                                 <b><label for="tuluble">Shelf:</label></b>
                                                 <input type="text" name="userInput4" id="userInput4"
-                                                    value="{{this.shelf}}">
+                                                    value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Classifier:</label></b>
@@ -526,22 +526,22 @@
 
                                                 <b><label for="tuluble">Lot Number:</label></b>
                                                 <input type="text" name="userInput6" id="userInput6"
-                                                    value="{{this.lot_num}}">
+                                                    value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Date Recieved:</label></b>
                                                 <input type="date" name="userInput7" id="userInput7"
-                                                    value="{{this.date_received}}">
+                                                    value="{{this.date_received}}" >
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Supplier:</label></b>
                                                 <input type="text" name="userInput8" id="userInput8"
-                                                    value="{{this.supplier}}">
+                                                    value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Unit:</label></b>
                                                 <input type="text" name="userInput9" id="userInput9"
-                                                    value="{{this.unit}}" maxlength="5">
+                                                    value="{{this.unit}}" maxlength="5" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">COA Link:</label></b>
