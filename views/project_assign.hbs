@@ -94,8 +94,9 @@
             <td>{{email}}</td>
             <td>{{role}}</td>
             <td>
-                <button><a href = "#edit">Edit</a></button>
-                
+                 <a href="#edit" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
+                <i class="large material-icons">create</i>
+                 </a>
             </td>
           </tr>
 
@@ -163,7 +164,7 @@
     
     </script>
 
-    {{#each results}}
+    {{#each project_data}}
     <div class="modal" id="term{{project_id}}">
         <div class="row">
             <div class="col s12">&nbsp;</div>
@@ -195,7 +196,6 @@
             </a>
             <div class="modal" id="terms">
                     <div style="padding: 5% 5% 5% 5%">
-                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
                         <h1 style="font-size:40px;">Add a New Scientist</h1>
 
                         <form method="POST" action="/project_assign/scientistformsubmit">
@@ -271,14 +271,6 @@
 
 
 
-
-
-
-
-
-
-
-
     </div>
     {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
         <i class="large material-icons">create</i>
@@ -327,6 +319,7 @@
     </script>
     <script>
         $(document).ready(function () {
+            $('.modal').modal();
             $("#add_project_button").click(function () {
                 var inputValue1 = $("#userInputP1").val();
                 var inputValue2 = $("#userInputP2").val();
