@@ -242,6 +242,28 @@ const read_inactive_projects_all_sql = `
     active = 0
 `
 
+const read_inactive_ingredients_archived = `
+  SELECT
+    DISTINCT ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+  FROM
+    ingredient, project_assign
+  WHERE 
+    active = 0
+    AND project_assign.scientist_id = ?
+    AND project_assign.project_id = projects.project_id
+`
+
+const read_inactive_projects_archived = `
+  SELECT
+    DISTINCT project_name, projects.project_id, client, date
+  FROM
+    projects, project_assign
+  WHERE 
+    active = 0
+    AND project_assign.scientist_id = ?
+    AND project_assign.project_id = projects.project_id
+`
+
 const insertIntoInventory = `
   INSERT INTO 
     ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit, coa, msds)
@@ -354,7 +376,14 @@ const read_inventory_search = `
   WHERE 
     ingredient.inci_name LIKE ?
 `
-
+const read_archive_inventory_search = `
+SELECT
+  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+FROM
+  ingredient
+WHERE
+  ingredient.inci_name LIKE ? AND ingredient.active = 0
+`
 
 
 const get_procedure = `
@@ -790,57 +819,57 @@ app.get("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
 //   res.render('index');
 // });
 
-app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req, res) => {
-  let project_id = req.params.project_id
-  let trial_num1 = req.params.trial_num
-  let trial_num2 = req.params.trial_num2
+// app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req, res) => {
+//   let project_id = req.params.project_id
+//   let trial_num1 = req.params.trial_num
+//   let trial_num2 = req.params.trial_num2
 
-  console.log(trial_num1)
-  console.log(trial_num2)
+//   console.log(trial_num1)
+//   console.log(trial_num2)
 
-  db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-    db.execute(selectTrialNums, [project_id], (error, formula_data) => {
-      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
-      // perhaps retrieve based on trial_nums that user selects to view? 
-      // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [trial_num1, project_id], (error, formula_ingredient_data1) => {
-        db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
-          db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
-            db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
-              db.execute(selectBasicTrialData, [trial_num1, project_id], (error, trialData1) => {
-                db.execute(selectBasicTrialData, [trial_num2, project_id], (error, trialData2) => {
-                  db.execute(read_inventory_all_alph, (error, results) => {
-                    if (error)
-                      res.status(500).send(error); //Internal Server Error
-                    else {
-                      // res.render('project', {project_data: results[0]} );
-                      res.render('formulas', {
-                        title: 'Project Details',
-                        styles: ["tables", "event"],
-                        project_id: project_id,
-                        project_data: project_data,
-                        formula_data: formula_data,
-                        formula_ingredient_data1: formula_ingredient_data1,
-                        formula_ingredient_data2: formula_ingredient_data2,
-                        trial_data1: trial_data1,
-                        trial_data2: trial_data2,
-                        trial_num1: req.params.trial_num,
-                        trial_num2: req.params.trial_num2,
-                        trialData1: trialData1,
-                        trialData2: trialData2,
-                        inventory_data: results
-                      });
-                    }
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-});
+//   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+//     db.execute(selectTrialNums, [project_id], (error, formula_data) => {
+//       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
+//       // perhaps retrieve based on trial_nums that user selects to view? 
+//       // [project_id, trial_num]
+//       db.execute(selectFormulaIngredients, [trial_num1, project_id], (error, formula_ingredient_data1) => {
+//         db.execute(selectFormulaIngredients, [trial_num2, project_id], (error, formula_ingredient_data2) => {
+//           db.execute(selectTrialData, [trial_num1, project_id], (error, trial_data1) => {
+//             db.execute(selectTrialData, [trial_num2, project_id], (error, trial_data2) => {
+//               db.execute(selectBasicTrialData, [trial_num1, project_id], (error, trialData1) => {
+//                 db.execute(selectBasicTrialData, [trial_num2, project_id], (error, trialData2) => {
+//                   db.execute(read_inventory_all_alph, (error, results) => {
+//                     if (error)
+//                       res.status(500).send(error); //Internal Server Error
+//                     else {
+//                       // res.render('project', {project_data: results[0]} );
+//                       res.render('formulas', {
+//                         title: 'Project Details',
+//                         styles: ["tables", "event"],
+//                         project_id: project_id,
+//                         project_data: project_data,
+//                         formula_data: formula_data,
+//                         formula_ingredient_data1: formula_ingredient_data1,
+//                         formula_ingredient_data2: formula_ingredient_data2,
+//                         trial_data1: trial_data1,
+//                         trial_data2: trial_data2,
+//                         trial_num1: req.params.trial_num,
+//                         trial_num2: req.params.trial_num2,
+//                         trialData1: trialData1,
+//                         trialData2: trialData2,
+//                         inventory_data: results
+//                       });
+//                     }
+//                   });
+//                 });
+//               });
+//             });
+//           });
+//         });
+//       });
+//     });
+//   });
+// });
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -886,6 +915,22 @@ app.get("/inventory/search/:input", (req, res) => {
       res.status(500).send(error); //Internal Server Error 
     else {
       res.render('inventory', {
+        input: input,
+        results: results
+      });
+    }
+  });
+});
+
+app.get("/archiveingredient/search/:input", (req, res) => {
+  console.log("ARCHIVING INGREDIENT")
+  let input = req.params.input
+  let searchStr = `%${input}%`;
+  db.execute(read_archive_inventory_search, [searchStr], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('archive', {
         input: input,
         results: results
       });
@@ -1057,6 +1102,68 @@ app.post("/project_assign/edituser/:scientist_id", async function (req, res, nex
 //   res.redirect('/projects/' + project_id + '/trial1/trial1');
 // });
 
+
+// CORRECT PROJECT PAGE
+// app.get("/projects/:project_id", async function (req,res,next) {
+//   let project_id = req.params.project_id
+
+//   try {
+//     const real_id = await new Promise((resolve, reject) => {
+//       db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+//         if (error) reject(error);
+//         else resolve(real_id);
+//       });
+//     });
+
+//     console.log(real_id[0].scientist_id);
+
+//     const assigned = await new Promise((resolve, reject) => {
+//       db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
+//         if (error) reject(error);
+//         else resolve(assigned);
+//       });
+//     });
+
+//   if (isAdmin || assigned.length !== 0) {
+
+    
+
+//     db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+//       db.execute(getTrials, [project_id], (error, trial_data) => {
+//         db.execute(newFormulaDisplay, [project_id], (error, results) => {
+//           db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+//             db.execute(read_inventory_all_alph, (error, inventory_data) => {
+//               if (error)
+//                 res.status(500).send(error); //Internal Server Error 
+//               else {
+//                 res.render('formulas', {
+//                   project_id: project_id,
+//                   results: results,
+//                   ing_data: ing_data,
+//                   project_data: project_data,
+//                   trial_data: trial_data,
+//                   inventory_data: inventory_data
+//                 });
+//               }
+//             });
+//           });
+//         });
+//       });
+//     });
+
+//   }
+//   else {
+//     res.redirect("/projects/sci/" + real_id[0].scientist_id);
+//   } 
+//   } catch (error) {
+//     res.status(500).send(error); 
+//   }
+
+
+// });
+
+
+
 app.get("/projects/:project_id", async function (req,res,next) {
   let project_id = req.params.project_id
 
@@ -1078,30 +1185,84 @@ app.get("/projects/:project_id", async function (req,res,next) {
     });
 
   if (isAdmin || assigned.length !== 0) {
-    db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-      db.execute(getTrials, [project_id], (error, trial_data) => {
-        db.execute(newFormulaDisplay, [project_id], (error, results) => {
-          db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
-            db.execute(read_inventory_all_alph, (error, inventory_data) => {
-              if (error)
-                res.status(500).send(error); //Internal Server Error 
-              else {
-                res.render('formulas', {
-                  project_id: project_id,
-                  results: results,
-                  ing_data: ing_data,
-                  project_data: project_data,
-                  trial_data: trial_data,
-                  inventory_data: inventory_data
-                });
-              }
-            });
-          });
-        });
+    const project_data = await new Promise((resolve, reject) => {
+      db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+        if (error) reject(error);
+        else resolve(project_data);
       });
     });
 
+    const trial_data = await new Promise((resolve, reject) => {
+      db.execute(getTrials, [project_id], (error, trial_data) => {
+        if (error) reject(error);
+        else resolve(trial_data);
+      });
+    });
+
+
+    const ing_data = await new Promise((resolve, reject) => {
+      db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+        if (error) reject(error);
+        else resolve(ing_data);
+      });
+    });
+
+    // ATTEMPT
+    // for (let i = 0; i < trial_data.length; i++) {
+    //   for (let j = 0; j < ing_data.length; j++) {
+    //     console.log("HELLOOOOOOOOOOOooo");
+    //     console.log(trial_data[i]);
+    //     console.log(ing_data[j]);
+    //     trial_data[i].ing_data[j].trade_name.percent = ing_data[j].percent_of_ingredient;
+    //     trial_data[i].ing_data[j].trade_name.amount = ing_data[j].total_amount;
+
+    //     console.log("data");
+    //     console.log(trial_data[i].ing_data[j].trade_name.percent);
+    //     console.log(trial_data[i].ing_data[j].trade_name.amount);
+    //   }
+    // }
+
+    for (let i = 0; i < trial_data.length; i++) {
+      const ingData = ing_data.filter((ing) => ing.trial_id === trial_data[i].trial_id);
+      if (ingData.length === 0) {
+        trial_data[i].ing_data = [];
+      } else {
+        trial_data[i].ing_data = ingData.map((ing) => ({
+          ingredient_id: {
+            percent: ing.percent_of_ingredient,
+            amount: ing.total_amount,
+          },
+        }));
+      }
+
+      console.log("HERE");
+    }
+
+    console.log("TRIAL");
+    console.log(trial_data);
+
+    const inventory_data = await new Promise((resolve, reject) => {
+      db.execute(read_inventory_all_alph, (error, inventory_data) => {
+        if (error) reject(error);
+        else resolve(inventory_data);
+      });
+    });
+          
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('formulas', {
+        project_id: project_id,
+        ing_data: ing_data,
+        project_data: project_data,
+        trial_data: trial_data,
+        inventory_data: inventory_data
+      });
+    }
+           
+         
   }
+  // Not allowed to view this project
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   } 
@@ -1109,8 +1270,10 @@ app.get("/projects/:project_id", async function (req,res,next) {
     res.status(500).send(error); 
   }
 
-
 });
+
+
+
 
 
 // app.get("/projects/:project_id", (req, res) => {
@@ -1233,16 +1396,80 @@ app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
 
 
 // figure out how to pull inactive projects too
-app.get("/archive", (req, res) => {
-  db.execute(read_inactive_ingredients_all_sql, (error, results) => {
-    db.execute(read_inactive_projects_all_sql, (error, project_results) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error
-      else {
-        res.render('archive', { results: results, project_results: project_results });
-      }
+// app.get("/archive", (req, res) => {
+  // db.execute(read_inactive_ingredients_all_sql, (error, results) => {
+  //   db.execute(read_inactive_projects_all_sql, (error, project_results) => {
+  //     if (error)
+  //       res.status(500).send(error); //Internal Server Error
+  //     else {
+  //       res.render('archive', { results: results, project_results: project_results });
+  //     }
+  //   });
+  // });
+// });
+
+
+app.get("/archive/sci/:scientist_id", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id;
+  let ingredients;
+  let projects;
+
+  console.log(scientist_id);
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
     });
-  });
+
+    console.log(real_id[0].scientist_id);
+
+  if (isAdmin) {
+    console.log("admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_inactive_ingredients_all_sql, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    console.log(results);
+
+    project_results = await new Promise((resolve, reject) => {
+      db.execute(read_inactive_projects_all_sql, (error, project_results) => {
+        if (error) reject(error);
+        else resolve(project_results);
+      });
+    });
+
+    console.log(project_results);
+    
+  }
+  else if (real_id[0].scientist_id == scientist_id) {
+    console.log("not admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_inactive_ingredients_archived, [scientist_id], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    project_results = await new Promise((resolve, reject) => {
+      db.execute(read_inactive_projects_archived, [scientist_id], (error, project_results) => {
+        if (error) reject(error);
+        else resolve(project_results);
+      });
+    });
+  } 
+  else {
+    res.redirect("/archive/sci/" + real_id[0].scientist_id);
+  }
+  res.render('archive', { results: results, project_results: project_results });
+
+  } catch (error) {
+    res.status(500).send(error); 
+  }
 });
 
 app.get("/projects", async function (req,res,next) {
@@ -1250,6 +1477,14 @@ app.get("/projects", async function (req,res,next) {
     console.log("hELLOHELLO");
     console.log(results[0].scientist_id);
     res.redirect("/projects/sci/" + results[0].scientist_id);
+  });
+});
+
+app.get("/archive", async function (req,res,next) {
+  db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
+    console.log("hELLOHELLO");
+    console.log(results[0].scientist_id);
+    res.redirect("/archive/sci/" + results[0].scientist_id);
   });
 });
 
@@ -1343,7 +1578,7 @@ app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
   });
 });
 
-app.get("/archive-project/:project_id", (req, res) => {
+app.get("/projects/sci/archive-project/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(archiveProject, [project_id], (error, results) => {
     if (error)
