@@ -354,7 +354,14 @@ const read_inventory_search = `
   WHERE 
     ingredient.inci_name LIKE ?
 `
-
+const read_archive_inventory_search = `
+SELECT
+  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+FROM
+  ingredient
+WHERE
+  ingredient.inci_name LIKE ? AND ingredient.active = 0
+`
 
 
 const get_procedure = `
@@ -886,6 +893,22 @@ app.get("/inventory/search/:input", (req, res) => {
       res.status(500).send(error); //Internal Server Error 
     else {
       res.render('inventory', {
+        input: input,
+        results: results
+      });
+    }
+  });
+});
+
+app.get("/archiveingredient/search/:input", (req, res) => {
+  console.log("ARCHIVING INGREDIENT")
+  let input = req.params.input
+  let searchStr = `%${input}%`;
+  db.execute(read_archive_inventory_search, [searchStr], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('archive', {
         input: input,
         results: results
       });
