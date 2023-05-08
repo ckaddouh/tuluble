@@ -244,7 +244,7 @@ const read_inactive_projects_all_sql = `
 
 const read_inactive_projects_archived = `
   SELECT
-    DISTINCT project_name, projects.project_id, client, date
+    DISTINCT project_name, project_id, client, date
   FROM
     projects, project_assign
   WHERE 
