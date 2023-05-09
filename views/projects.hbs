@@ -215,7 +215,7 @@
                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                         <h1 style="font-size:40px;">Add a New Project</h1>
 
-                        <form method="POST" action="/projects/projectformsubmit">
+                        <form method="POST" action="/projects/sci/{{sci_id}}/projectformsubmit">
                             <article class="regular">
                                 {{!-- <h2>Textbook</h2> --}}
 
@@ -273,7 +273,7 @@
                 module.exports = {inputValue4};
                 module.exports = {inputValue5};
 
-                window.location = "/projects/projectformsubmit";
+                window.location += "projectformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
@@ -308,7 +308,7 @@
                 var inputValue3 = $("#userInputP3").val();
                 var inputValue4 = $("#userInputP4").val();
 
-                window.location = "projects/projectformsubmit";
+                window.location += "projectformsubmit";
                 });
             });
         </script>

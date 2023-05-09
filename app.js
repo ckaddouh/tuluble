@@ -585,6 +585,12 @@ const getRemainingScientistsForProject = `
   WHERE scientist_id NOT IN (SELECT scientist_id FROM project_assign where project_id = ?)
 `
 
+const getProjectID = `
+  SELECT project_id
+  FROM projects
+  WHERE 
+    project_name = ? AND client = ? AND date = ?
+`
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -1017,13 +1023,36 @@ app.post("/projects/:project_id/projectupdate", async function (req, res, next) 
   }
 });
 
-app.post("/projects/projectformsubmit", async function (req, res, next) {
+app.post("/projects/sci/:scientist_id/projectformsubmit", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id
   console.log("Project Form Submit Details:");
   console.log(req.body.userInputP1);
   console.log(req.body.userInputP2);
   console.log(req.body.userInputP3);
   try {
-    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3]);
+    const results = await new Promise((resolve, reject) => {
+      db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    const project_id = await new Promise((resolve, reject) => {
+      db.execute(getProjectID, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3], (error, project_id) => {
+        if (error) reject(error);
+        else resolve(project_id);
+      });
+    });
+
+
+    const assigned = await new Promise((resolve, reject) => {
+      db.execute(assignScientistToProject, [project_id[0].project_id, scientist_id], (error, assigned) => {
+        if (error) reject(error);
+        else resolve(assigned);
+      });
+    });
+
+
     res.redirect("/projects");
   }
   catch (error) {
@@ -1536,7 +1565,7 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   }
   console.log("RESULTS");
   console.log(results);
-  res.render('projects', { results: results });
+  res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
 
   } catch (error) {
     res.status(500).send(error); 
@@ -1563,7 +1592,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
             project_data: project_data,
             formula_data: formula_data,
             formula_ingredient_data: formula_ingredient_data
-          });ƒ
+          });
         }
       });
     });
