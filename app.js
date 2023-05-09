@@ -375,7 +375,18 @@ WHERE
 
 const read_projects_search = `
 SELECT
-  project_name, project_id, client, date
+  project_name, projects.project_id, client, date
+FROM
+  projects, project_assign
+WHERE
+  projects.project_name LIKE ?
+  AND project_assign.scientist_id = ?
+  AND project_assign.project_id = projects.project_id
+`
+
+const read_projects_search_all = `
+SELECT
+  project_name, projects.project_id, client, date
 FROM
   projects
 WHERE
@@ -941,20 +952,60 @@ app.get("/archiveingredient/search/:input", (req, res) => {
   });
 });
 
-app.get("/projects/search/:input", (req, res) => {
+
+app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, next) {
   let input = req.params.input
+  let scientist_id = req.params.scientist_id
+
   let searchStr = `%${input}%`;
-  db.execute(read_projects_search, [searchStr], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error 
-    else {
-      res.render('projects', {
-        input: input,
-        results: results
+
+  let results;
+
+  console.log(scientist_id);
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
       });
-    }
+    });
+
+    console.log(real_id[0].scientist_id);
+
+  if (isAdmin) {
+    console.log("admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_search_all, [input], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    console.log(results);   
+  }
+  else if (real_id[0].scientist_id == scientist_id) {
+    console.log("not admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_search, [input, scientist_id], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+  } 
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  }
+  res.render('projects', {
+    input: input,
+    results: results
   });
+  
+  } catch (error) {
+    res.status(500).send(error); 
+  }
 });
+  
+
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   console.log("HELLO");
