@@ -285,7 +285,7 @@
             <nav>
                 <div class="nav-wrapper pink">
                     <div class="input-field">
-                        <input type="search" id="gsearch" name="gsearch">
+                        <input type="search" id="gsearch" name="gsearch" pattern="^[a-zA-Z0-9\s]*$>
                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
                         {{!-- <input type="submit"> --}}
                         <i class="material-icons">close</i>
@@ -297,10 +297,12 @@
 
     <script>
         const search = document.querySelector('#gsearch');
-
+        
+        const regex = /^[a-zA-Z0-9\s]*$/;
         let searchBar = document.getElementById('gsearch');
         let searchButton = document.getElementById('search-button');
         let searchTerm;
+        
 
         search.addEventListener('change', (event) => {
             //window.location.href = "inventory/"
@@ -309,13 +311,21 @@
             searchTerm = searchBar.value.trim();
             searchBar.value = searchTerm;
 
+
+   
+        function validateSearchInput(input) {
+            return regex.test(input);
+        }
+
+
+
             const stateObj = { url: '/inventory' };
             const title = '';
             const newUrl = '/inventory';
             //window.location.replace("inventory");
             //console.log(searchTerm);
             //window.location.href += "/" + selectedOption;
-            if (searchTerm.length === 0) {
+            if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
                 window.location.assign("/inventory");
                 //location.replace('http://localhost:3000/inventory');
                 //history.pushState(stateObj, title, newUrl);
