@@ -242,17 +242,6 @@ const read_inactive_projects_all_sql = `
     active = 0
 `
 
-const read_inactive_ingredients_archived = `
-  SELECT
-    DISTINCT ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
-  FROM
-    ingredient, project_assign
-  WHERE 
-    active = 0
-    AND project_assign.scientist_id = ?
-    AND project_assign.project_id = projects.project_id
-`
-
 const read_inactive_projects_archived = `
   SELECT
     DISTINCT project_name, projects.project_id, client, date
@@ -290,8 +279,7 @@ const insertIntoProjects = `
   VALUES (?, ?, ?, 1)
 `
 
-const
-  updateIngredient = `
+const updateIngredient = `
   UPDATE 
     ingredient
   SET 
@@ -383,6 +371,15 @@ FROM
   ingredient
 WHERE
   ingredient.inci_name LIKE ? AND ingredient.active = 0
+`
+
+const read_projects_search = `
+SELECT
+  project_name, project_id, client, date
+FROM
+  projects
+WHERE
+  projects.project_name LIKE ?
 `
 
 
@@ -938,6 +935,21 @@ app.get("/archiveingredient/search/:input", (req, res) => {
   });
 });
 
+app.get("/projects/search/:input", (req, res) => {
+  let input = req.params.input
+  let searchStr = `%${input}%`;
+  db.execute(read_projects_search, [searchStr], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('projects', {
+        input: input,
+        results: results
+      });
+    }
+  });
+});
+
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   console.log("HELLO");
   console.log(req.body.userInput1);
@@ -1449,7 +1461,7 @@ app.get("/archive/sci/:scientist_id", async function (req, res, next) {
   else if (real_id[0].scientist_id == scientist_id) {
     console.log("not admin!!");
     results = await new Promise((resolve, reject) => {
-      db.execute(read_inactive_ingredients_archived, [scientist_id], (error, results) => {
+      db.execute(read_inactive_ingredients_all_sql, (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
