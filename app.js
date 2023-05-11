@@ -244,7 +244,7 @@ const read_inactive_projects_all_sql = `
 
 const read_inactive_projects_archived = `
   SELECT
-    DISTINCT project_name, project_id, client, date
+    DISTINCT projects.project_name, projects.project_id, client, date
   FROM
     projects, project_assign
   WHERE 
@@ -638,7 +638,7 @@ app.get("/", (req, res) => {
   db.execute(getLowAmounts, (error, results) => {
     db.execute(getExpired, (error, results2) => {
       if (error)
-        res.status(500).send(error); //Internal Server Error
+        res.redirect("/error"); //Internal Server Error
       else {
         res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname });
       }
@@ -1001,7 +1001,7 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
   });
   
   } catch (error) {
-    res.status(500).send(error); 
+    res.redirect("/error"); 
   }
 });
   
@@ -1560,7 +1560,7 @@ app.get("/archive/sci/:scientist_id", async function (req, res, next) {
   res.render('archive', { results: results, project_results: project_results });
 
   } catch (error) {
-    res.status(500).send(error); 
+    res.redirect("/error"); 
   }
 });
 
@@ -1619,7 +1619,7 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
 
   } catch (error) {
-    res.status(500).send(error); 
+    res.redirect("/error"); 
   }
 });
 
@@ -1633,7 +1633,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
       // [project_id, trial_num]
       db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
         if (error)
-          res.status(500).send(error); //Internal Server Error
+          res.redirect("/error"); //Internal Server Error
         else {
           // res.render('project', {project_data: results[0]} );
           res.render('formulas', {
@@ -1654,7 +1654,7 @@ app.get("/inventory/archive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(archiveIngredient, [ingredient_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/inventory');
   });
@@ -1664,7 +1664,7 @@ app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(unarchiveIngredient, [ingredient_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/archive');
   });
@@ -1674,7 +1674,7 @@ app.get("/projects/sci/archive-project/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(archiveProject, [project_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/projects');
   });
@@ -1684,7 +1684,7 @@ app.get("/unarchive-project/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(unarchiveProject, [project_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/archive#projects');
   });
@@ -1697,7 +1697,7 @@ app.get("/logout", (req, res) => {
 app.get("/page", (req, res) => {
   db.execute(read_inventory_all_sql, (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else {
       res.render('page', { results: results });
     }
