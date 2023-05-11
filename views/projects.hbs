@@ -27,10 +27,9 @@
             <div class="col s12 m6 offset-m3">
                 <p></p>
             </div>
-            <div class="col s12 m6 offset-m3" style="width: 50%;">
-                <p></p>
-                <nav>
-                    <div class="nav-wrapper pink">
+            <div style="display: flex; justify-content: flex-end;">
+                <nav style="width: 30%;">
+                    <div class="nav-wrapper pink accent-1" >
                         <div class="input-field">
                             <input type="search" id="gsearch" name="gsearch">
                             <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
@@ -40,10 +39,32 @@
                     </div>
                 </nav>
             </div>
+            <div style="text-align:right; margin-top:10px">
+                    <button id="clear-search"
+                                    name="clear-search" 
+                                    onclick="redirectToPage()"
+                                    class="btn waves-effect waves-luluble-pink luluble-pink">
+                                    Clear Search</button>
+            </div>
                         <div class="col s12 m6 offset-m3">
                 <p></p>
             </div>
 
+    <script>
+        function redirectToPage() {
+            const clearedUrl = "http://localhost:3000/projects";
+            const currentUrl = window.location.href;
+            const word = "search"
+            const clear = document.querySelector('#clear-search');
+
+            if (currentUrl.toString.contains(word)) {
+                
+                clear.addEventListener("click", function() {
+                    window.location.href = clearedUrl;
+                });
+            }
+        }
+    </script>
 
             <script>
                 const search = document.querySelector('#gsearch');
