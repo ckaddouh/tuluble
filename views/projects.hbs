@@ -72,27 +72,37 @@
                 let searchBar = document.getElementById('gsearch');
                 let searchButton = document.getElementById('search-button');
                 let searchTerm;
+                let scientist_id = req.params.scientist_id
+
+                try {
+                    const real_id = await new Promise((resolve, reject) => {
+                    db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+                        if (error) reject(error);
+                        else resolve(real_id);
+                    });
+                });}
+
 
                 search.addEventListener('change', (event) => {
-                    console.log("ok")
                     searchTerm = searchBar.value.trim();
                     searchBar.value = searchTerm;
 
                     const stateObj = { url: '/projects' };
                     const title = '';
                     const newUrl = '/projects';
+
                     if (searchTerm.length === 0) {
                         window.location.assign("/projects");
                     }
                     else {
                         if (window.location.href.indexOf("projects/") !== -1) {
                             console.log(searchTerm);
-                            window.location.assign("/projects/search/" + searchTerm);
+                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
 
                         }
                         else {
                             console.log("projects/" + searchTerm);
-                            window.location.assign("/projects/search/" + searchTerm);
+                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
 
                         }
                     }

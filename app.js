@@ -393,6 +393,14 @@ WHERE
   projects.project_name LIKE ?
 `
 
+const read_archive_projects_search = `
+SELECT
+  project_name, project_id, client, date
+FROM
+  projects
+WHERE
+  projects.project_name LIKE ? AND projects.active = 0
+`
 
 const get_procedure = `
   SELECT 
@@ -1006,6 +1014,21 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
 });
   
 
+
+app.get("/archiveprojects/search/:input", (req, res) => {
+  let input = req.params.input
+  let searchStr = `%${input}%`;
+  db.execute(read_archive_projects_search, [searchStr], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.render('archive', {
+        input: input,
+        results: results
+      });
+    }
+  });
+});
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   console.log("HELLO");

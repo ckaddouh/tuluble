@@ -49,18 +49,17 @@
                 </div>
 
                 <div id="ingredients" class="col s12">
-                    {{!-- pull all non active ingredients --}}
 
-                    <div class="col s12 m4 l4"><p></p></div>
-
-                    <div class="col s12 m4 l4">
+                    <div class="col s12 m6 offset-m3">
+                        <p></p>
+                    </div>
+                    <div class="col s12 m6 offset-m3" style="width: 50%;">
                         <p></p>
                         <nav>
                             <div class="nav-wrapper pink">
                                 <div class="input-field">
                                     <input type="search" id="gsearch" name="gsearch">
                                     <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                                    {{!-- <input type="submit"> --}}
                                     <i class="material-icons">close</i>
                                 </div>
                             </div>
@@ -75,48 +74,30 @@
                         let searchTerm;
 
                         search.addEventListener('change', (event) => {
-                            //window.location.href = "inventory/"
                             console.log("ok")
-                            //searchTerm = searchBar.value;
                             searchTerm = searchBar.value.trim();
                             searchBar.value = searchTerm;
 
                             const stateObj = { url: '/archiveingredient' };
                             const title = '';
                             const newUrl = '/archiveingredient';
-                            //window.location.replace("inventory");
-                            //console.log(searchTerm);
-                            //window.location.href += "/" + selectedOption;
                             if (searchTerm.length === 0) {
                                 window.location.assign("/archiveingredient");
-                                //location.replace('http://localhost:3000/inventory');
-                                //history.pushState(stateObj, title, newUrl);
 
                             }
                             else {
                                 if (window.location.href.indexOf("archiveingredient/") !== -1) {
-                                    //window.location.href = searchTerm;
                                     console.log(searchTerm);
                                     window.location.assign("/archiveingredient/search/" + searchTerm);
-                                    //location.replace('http://localhost:3000/inventory');
-                                    //history.pushState(stateObj, title, newUrl);
 
                                 }
                                 else {
-                                    //window.location.href = "inventory/" + searchTerm;
                                     console.log("archiveingredient/" + searchTerm);
                                     window.location.assign("/archiveingredient/search/" + searchTerm);
-                                    //location.replace('http://localhost:3000/inventory');
-                                    //history.pushState(stateObj, title, newUrl);
 
                                 }
                             }
-                            //sleep(1000);
-                            //let header = document.getElementById("inventoryTitle");
-                            //console.log(header);
-                            //history.pushState(stateObj, title, newUrl);
                         });
-                        //header.innerHTML = "Inventory - " + selectedOption;
                     </script>
 
 
@@ -207,6 +188,57 @@
 
                     </div>
                     <div id="projects" class="col s12">
+
+                        <div class="col s12 m6 offset-m3">
+                            <p></p>
+                        </div>
+                        <div class="col s12 m6 offset-m3" style="width: 50%;">
+                            <p></p>
+                            <nav>
+                                <div class="nav-wrapper pink">
+                                    <div class="input-field">
+                                        <input type="search" id="gsearch" name="gsearch">
+                                        <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+
+                        <script>
+                            const search = document.querySelector('#gsearch');
+
+                            let searchBar = document.getElementById('gsearch');
+                            let searchButton = document.getElementById('search-button');
+                            let searchTerm;
+
+                            search.addEventListener('change', (event) => {
+                                console.log("ok")
+                                searchTerm = searchBar.value.trim();
+                                searchBar.value = searchTerm;
+
+                                const stateObj = { url: '/archiveingredient' };
+                                const title = '';
+                                const newUrl = '/archiveingredient';
+                                if (searchTerm.length === 0) {
+                                    window.location.assign("/archiveingredient");
+
+                                }
+                                else {
+                                    if (window.location.href.indexOf("archiveingredient/") !== -1) {
+                                        console.log(searchTerm);
+                                        window.location.assign("/archiveingredient/search/" + searchTerm);
+
+                                    }
+                                    else {
+                                        console.log("archiveingredient/" + searchTerm);
+                                        window.location.assign("/archiveingredient/search/" + searchTerm);
+
+                                    }
+                                }
+                            });
+                        </script>
+
                         {{#each project_results}}
                             <div class="row">
                                 <div class="col s7 m6 l6">
