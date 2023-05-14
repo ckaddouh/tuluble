@@ -293,7 +293,6 @@
                             <tr>
 
                                 {{#each trial_data}}
- 
                                     <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
                                 {{/each}}
                             </tr>
@@ -310,15 +309,20 @@
                                     <td>hello1</td>
                                     <td>hello2</td>
                                 {{/each}} --}}
-                                {{#each ing_data}}
+
                                 <tr>
-    
-                                    {{#if true}}
-                                    <td>trial {{trial_num}}, {{percent_of_ingredient}}%</td>
-                                    <td>trial {{trial_num}}, {{total_amount}}g</td>
-                                    {{/if}}
+                                    {{#each trial_data}}
+                                    {{#each this.ing_data}}
+                                    {{#ifCond ../trial_num '==' this.ingredient_id.trialnum}}
+                                    <tr>
+                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Trial {{this.ingredient_id.trialnum}}, Percent: {{this.ingredient_id.percent}}</td>
+                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Trial {{this.ingredient_id.trialnum}}, Amount: {{this.ingredient_id.amount}}</td>
+                                    </tr>
+                                    {{/ifCond}}
+                                    {{/each}}
+                                    {{/each}}
                                 </tr>
-                                {{/each}}
+
                                     {{!-- {{#each results}}
                                         <tr>
                                             <td>p{{percent_of_ingredient}}</td>
