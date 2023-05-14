@@ -13,6 +13,10 @@
     </head>
 
     <body>
+
+        <script src="app.js"></script>
+
+
         <div style="display: flex; justify-content:space-between;">
             {{> navbar}}
 
@@ -46,64 +50,64 @@
                                     class="btn waves-effect waves-luluble-pink luluble-pink">
                                     Clear Search</button>
             </div>
-                        <div class="col s12 m6 offset-m3">
+            <div class="col s12 m6 offset-m3">
                 <p></p>
             </div>
 
-    <script>
-        function redirectToPage() {
-            const clearedUrl = "http://localhost:3000/projects";
-            const currentUrl = window.location.href;
-            const word = "search"
-            const clear = document.querySelector('#clear-search');
+            <script>
+                function redirectToPage() {
+                    const clearedUrl = "http://localhost:3000/projects";
+                    const currentUrl = window.location.href;
+                    const word = "search"
+                    const clear = document.querySelector('#clear-search');
 
-            if (currentUrl.toString.contains(word)) {
-                
-                clear.addEventListener("click", function() {
-                    window.location.href = clearedUrl;
-                });
-            }
-        }
-    </script>
+                    if (currentUrl.toString.contains(word)) {
+                        
+                        clear.addEventListener("click", function() {
+                            window.location.href = clearedUrl;
+                        });
+                    }
+                }
+            </script>
+
+            {{!-- search script --}}
 
             <script>
+                console.log("IM HERE SEE ME PLEASE")
+
                 const search = document.querySelector('#gsearch');
 
+                const regex = /^[a-zA-Z0-9\s]*$/;
                 let searchBar = document.getElementById('gsearch');
                 let searchButton = document.getElementById('search-button');
                 let searchTerm;
-                let scientist_id = req.params.scientist_id
-
-                try {
-                    const real_id = await new Promise((resolve, reject) => {
-                    db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
-                        if (error) reject(error);
-                        else resolve(real_id);
-                    });
-                });}
+                const currentURL = String(window.location.href);
+                const scientistIDIndex = currentURL.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
+                const scientistIDString = currentURL.slice(scientistIDIndex);
+                let scientistID = String(parseInt(scientistIDString));
 
 
                 search.addEventListener('change', (event) => {
                     searchTerm = searchBar.value.trim();
                     searchBar.value = searchTerm;
 
-                    const stateObj = { url: '/projects' };
-                    const title = '';
-                    const newUrl = '/projects';
+                    function validateSearchInput(input) {
+                        return regex.test(input);
+                    }
 
-                    if (searchTerm.length === 0) {
+                    const stateObj = { url: "/projects/sci/" + scientistID };
+                    const title = '';
+                    const newUrl = "/projects/sci/" + scientistID;
+
+                    if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
                         window.location.assign("/projects");
                     }
                     else {
-                        if (window.location.href.indexOf("projects/") !== -1) {
-                            console.log(searchTerm);
-                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
-
+                        if (window.location.href.indexOf("projects/sci/" + scientistID) !== -1) {
+                            window.location.assign("/projects/sci/" + scientistID + "/search/" + searchTerm);
                         }
                         else {
-                            console.log("projects/" + searchTerm);
-                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
-
+                            window.location.assign("/projects/sci/" + scientistID + "/search/" + searchTerm);
                         }
                     }
                 });
@@ -326,6 +330,7 @@
 
         <script>
             $(document).ready(function () {
+                $('browser-default').formSelect();
                 $('.modal').modal();
             })
         </script>
@@ -343,9 +348,7 @@
                 });
             });
         </script>
-
-        <script src="app.js"></script>
-
+=
     </body>
 
 </html>

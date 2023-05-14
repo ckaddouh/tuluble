@@ -74,7 +74,6 @@
                         let searchTerm;
 
                         search.addEventListener('change', (event) => {
-                            console.log("ok")
                             searchTerm = searchBar.value.trim();
                             searchBar.value = searchTerm;
 
@@ -197,7 +196,7 @@
                             <nav>
                                 <div class="nav-wrapper pink">
                                     <div class="input-field">
-                                        <input type="search" id="gsearch" name="gsearch">
+                                        <input type="search" id="fsearch" name="fsearch">
                                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
                                         <i class="material-icons">close</i>
                                     </div>
@@ -206,34 +205,43 @@
                         </div>
 
                         <script>
-                            const search = document.querySelector('#gsearch');
 
-                            let searchBar = document.getElementById('gsearch');
+                            console.log("HELLOOOOOO")
+
+                            const search = document.querySelector('#fsearch');
+
+                            let searchBar = document.getElementById('fsearch');
                             let searchButton = document.getElementById('search-button');
                             let searchTerm;
+                            const currentURL = String(window.location.href);
+                            const scientistIDIndex = currentURL.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
+                            const scientistIDString = currentURL.slice(scientistIDIndex);
+                            let scientistID = String(parseInt(scientistIDString));
+
 
                             search.addEventListener('change', (event) => {
                                 console.log("ok")
                                 searchTerm = searchBar.value.trim();
                                 searchBar.value = searchTerm;
 
-                                const stateObj = { url: '/archiveingredient' };
+                                function validateSearchInput(input) {
+                                    return regex.test(input);
+                                }
+
+                                const stateObj = { url: '/archiveprojects/sci/' + scientistID };
                                 const title = '';
-                                const newUrl = '/archiveingredient';
-                                if (searchTerm.length === 0) {
-                                    window.location.assign("/archiveingredient");
+                                const newUrl = '/archiveprojects/sci/' + scientistID;
+
+                                if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
+                                    window.location.assign("/archiveprojects");
 
                                 }
                                 else {
-                                    if (window.location.href.indexOf("archiveingredient/") !== -1) {
-                                        console.log(searchTerm);
-                                        window.location.assign("/archiveingredient/search/" + searchTerm);
-
+                                    if (window.location.href.indexOf("archiveprojects/sci/" + scientistID) !== -1) {
+                                        window.location.assign("/archiveprojects/sci/" + scientistID "/search/" + searchTerm);
                                     }
                                     else {
-                                        console.log("archiveingredient/" + searchTerm);
-                                        window.location.assign("/archiveingredient/search/" + searchTerm);
-
+                                        window.location.assign("/archiveprojects/sci/" + scientistID + "/search/" + searchTerm);
                                     }
                                 }
                             });
