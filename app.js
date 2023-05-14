@@ -362,7 +362,7 @@ const read_inventory_search = `
   FROM
     ingredient
   WHERE 
-    ingredient.inci_name LIKE ?
+    ingredient.inci_name LIKE ? AND ingredient.active = 0
 `
 const read_archive_inventory_search = `
 SELECT
@@ -382,6 +382,7 @@ WHERE
   projects.project_name LIKE ?
   AND project_assign.scientist_id = ?
   AND project_assign.project_id = projects.project_id
+  AND 
 `
 
 const read_projects_search_all = `
