@@ -618,6 +618,11 @@ const editUser = `
     scientist_id = ?
 `
 
+const deleteUser = `
+  DELETE FROM scientist
+  WHERE scientist_id = ?
+`
+
 const getRemainingScientistsForProject = `
   SELECT * 
   FROM scientist
@@ -1220,6 +1225,18 @@ app.post("/project_assign/edituser/:scientist_id", async function (req, res, nex
  
   try {
     db.execute(editUser, [name, email, admin, scientist_id]);
+    res.redirect("/project-assign");
+  }
+  catch (error) {
+    next(error);
+  }
+ });
+
+ app.post("/project_assign/deleteuser/:scientist_id", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id;
+ 
+  try {
+    db.execute(deleteUser, [scientist_id]);
     res.redirect("/project-assign");
   }
   catch (error) {
