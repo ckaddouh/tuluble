@@ -27,10 +27,9 @@
             <div class="col s12 m6 offset-m3">
                 <p></p>
             </div>
-            <div class="col s12 m6 offset-m3" style="width: 50%;">
-                <p></p>
-                <nav>
-                    <div class="nav-wrapper pink">
+            <div style="display: flex; justify-content: flex-end;">
+                <nav style="width: 30%;">
+                    <div class="nav-wrapper pink accent-1" >
                         <div class="input-field">
                             <input type="search" id="gsearch" name="gsearch">
                             <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
@@ -40,10 +39,32 @@
                     </div>
                 </nav>
             </div>
+            <div style="text-align:right; margin-top:10px">
+                    <button id="clear-search"
+                                    name="clear-search" 
+                                    onclick="redirectToPage()"
+                                    class="btn waves-effect waves-luluble-pink luluble-pink">
+                                    Clear Search</button>
+            </div>
                         <div class="col s12 m6 offset-m3">
                 <p></p>
             </div>
 
+    <script>
+        function redirectToPage() {
+            const clearedUrl = "http://localhost:3000/projects";
+            const currentUrl = window.location.href;
+            const word = "search"
+            const clear = document.querySelector('#clear-search');
+
+            if (currentUrl.toString.contains(word)) {
+                
+                clear.addEventListener("click", function() {
+                    window.location.href = clearedUrl;
+                });
+            }
+        }
+    </script>
 
             <script>
                 const search = document.querySelector('#gsearch');
@@ -51,27 +72,37 @@
                 let searchBar = document.getElementById('gsearch');
                 let searchButton = document.getElementById('search-button');
                 let searchTerm;
+                let scientist_id = req.params.scientist_id
+
+                try {
+                    const real_id = await new Promise((resolve, reject) => {
+                    db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+                        if (error) reject(error);
+                        else resolve(real_id);
+                    });
+                });}
+
 
                 search.addEventListener('change', (event) => {
-                    console.log("ok")
                     searchTerm = searchBar.value.trim();
                     searchBar.value = searchTerm;
 
                     const stateObj = { url: '/projects' };
                     const title = '';
                     const newUrl = '/projects';
+
                     if (searchTerm.length === 0) {
                         window.location.assign("/projects");
                     }
                     else {
                         if (window.location.href.indexOf("projects/") !== -1) {
                             console.log(searchTerm);
-                            window.location.assign("/projects/search/" + searchTerm);
+                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
 
                         }
                         else {
                             console.log("projects/" + searchTerm);
-                            window.location.assign("/projects/search/" + searchTerm);
+                            window.location.assign("/projects/sci/" + scientist_id + "/search/" + searchTerm);
 
                         }
                     }
@@ -215,7 +246,7 @@
                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                         <h1 style="font-size:40px;">Add a New Project</h1>
 
-                        <form method="POST" action="/projects/projectformsubmit">
+                        <form method="POST" action="/projects/sci/{{sci_id}}/projectformsubmit">
                             <article class="regular">
                                 {{!-- <h2>Textbook</h2> --}}
 
@@ -273,7 +304,7 @@
                 module.exports = {inputValue4};
                 module.exports = {inputValue5};
 
-                window.location = "/projects/projectformsubmit";
+                window.location += "projectformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
             });
@@ -308,7 +339,7 @@
                 var inputValue3 = $("#userInputP3").val();
                 var inputValue4 = $("#userInputP4").val();
 
-                window.location = "projects/projectformsubmit";
+                window.location += "projectformsubmit";
                 });
             });
         </script>

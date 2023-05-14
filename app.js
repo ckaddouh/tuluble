@@ -244,7 +244,7 @@ const read_inactive_projects_all_sql = `
 
 const read_inactive_projects_archived = `
   SELECT
-    DISTINCT project_name, projects.project_id, client, date
+    DISTINCT projects.project_name, projects.project_id, client, date
   FROM
     projects, project_assign
   WHERE 
@@ -375,13 +375,32 @@ WHERE
 
 const read_projects_search = `
 SELECT
-  project_name, project_id, client, date
+  project_name, projects.project_id, client, date
+FROM
+  projects, project_assign
+WHERE
+  projects.project_name LIKE ?
+  AND project_assign.scientist_id = ?
+  AND project_assign.project_id = projects.project_id
+`
+
+const read_projects_search_all = `
+SELECT
+  project_name, projects.project_id, client, date
 FROM
   projects
 WHERE
   projects.project_name LIKE ?
 `
 
+const read_archive_projects_search = `
+SELECT
+  project_name, project_id, client, date
+FROM
+  projects
+WHERE
+  projects.project_name LIKE ? AND projects.active = 0
+`
 
 const get_procedure = `
   SELECT 
@@ -538,7 +557,7 @@ const formulaDisplayAttempt3 = `
 `
 
 const getTrials = `
-  SELECT DISTINCT trial_num, formula_id
+  SELECT DISTINCT trial_num
   FROM formulas
   WHERE project_id = ?
   ORDER BY trial_num
@@ -585,6 +604,12 @@ const getRemainingScientistsForProject = `
   WHERE scientist_id NOT IN (SELECT scientist_id FROM project_assign where project_id = ?)
 `
 
+const getProjectID = `
+  SELECT project_id
+  FROM projects
+  WHERE 
+    project_name = ? AND client = ? AND date = ?
+`
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -621,18 +646,13 @@ app.get("/", (req, res) => {
   db.execute(getLowAmounts, (error, results) => {
     db.execute(getExpired, (error, results2) => {
       if (error)
-        res.status(500).send(error); //Internal Server Error
+        res.redirect("/error"); //Internal Server Error
       else {
         res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname });
       }
     });
   });
 });
-
-app.get("/test", (req, res) => {
-  res.render('testpage');
-});
-
 
 
 // app.get("/project-assign", requireAdmin, async function (req, res, next) {
@@ -698,8 +718,6 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
         });
       });
 
-      console.log("rEMAINING");
-      console.log(remainingScientists);
       results[i].remainingScientists = remainingScientists;
     }
 
@@ -935,14 +953,69 @@ app.get("/archiveingredient/search/:input", (req, res) => {
   });
 });
 
-app.get("/projects/search/:input", (req, res) => {
+
+app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, next) {
+  let input = req.params.input
+  let scientist_id = req.params.scientist_id
+
+  let searchStr = `%${input}%`;
+
+  let results;
+
+  console.log(scientist_id);
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
+
+    console.log(real_id[0].scientist_id);
+
+  if (isAdmin) {
+    console.log("admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_search_all, [input], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    console.log(results);   
+  }
+  else if (real_id[0].scientist_id == scientist_id) {
+    console.log("not admin!!");
+    results = await new Promise((resolve, reject) => {
+      db.execute(read_projects_search, [input, scientist_id], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+  } 
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  }
+  res.render('projects', {
+    input: input,
+    results: results
+  });
+  
+  } catch (error) {
+    res.redirect("/error"); 
+  }
+});
+  
+
+
+app.get("/archiveprojects/search/:input", (req, res) => {
   let input = req.params.input
   let searchStr = `%${input}%`;
-  db.execute(read_projects_search, [searchStr], (error, results) => {
+  db.execute(read_archive_projects_search, [searchStr], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
-      res.render('projects', {
+      res.render('archive', {
         input: input,
         results: results
       });
@@ -951,20 +1024,6 @@ app.get("/projects/search/:input", (req, res) => {
 });
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
-  console.log("HELLO");
-  console.log(req.body.userInput1);
-  console.log(req.body.userInput2);
-  console.log(req.body.userInput3);
-  console.log(req.body.userInput4);
-  console.log(req.body.userInput5);
-  console.log(req.body.userInput6);
-  console.log(req.body.userInput7);
-  console.log(req.body.userInput8);
-  console.log(req.body.userInput9);
-  console.log(req.body.userInput10);
-  console.log(req.body.userInput11);
-  //console.log(typeof(req.body.userInput11))
-
   db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
   req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11], (error, results) => {
     if (error) {
@@ -981,20 +1040,7 @@ app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
 
 app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id
-  console.log("HELLO");
-  console.log("UserInput1" + req.body.userInput1);
-  console.log("UserInput2" + req.body.userInput2);
-  console.log("UserInput3" + req.body.userInput3);
-  console.log("UserInput4" + req.body.userInput4);
-  console.log("UserInput5" + req.body.userInput5);
-  console.log("UserInput6" + req.body.userInput6);
-  console.log("UserInput7" + req.body.userInput7);
-  console.log("UserInput8" + req.body.userInput8);
-  console.log("UserInput9" + req.body.userInput9);
-  console.log("UserInput10" + req.body.userInput10);
-  console.log("UserInput11" + req.body.userInput11);
-  console.log("UserInput12" + ingredient_id)
-
+ 
   db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
   req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {
     if (error)
@@ -1017,13 +1063,33 @@ app.post("/projects/:project_id/projectupdate", async function (req, res, next) 
   }
 });
 
-app.post("/projects/projectformsubmit", async function (req, res, next) {
-  console.log("Project Form Submit Details:");
-  console.log(req.body.userInputP1);
-  console.log(req.body.userInputP2);
-  console.log(req.body.userInputP3);
+app.post("/projects/sci/:scientist_id/projectformsubmit", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id
+ 
   try {
-    db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3]);
+    const results = await new Promise((resolve, reject) => {
+      db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3], (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    const project_id = await new Promise((resolve, reject) => {
+      db.execute(getProjectID, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3], (error, project_id) => {
+        if (error) reject(error);
+        else resolve(project_id);
+      });
+    });
+
+
+    const assigned = await new Promise((resolve, reject) => {
+      db.execute(assignScientistToProject, [project_id[0].project_id, scientist_id], (error, assigned) => {
+        if (error) reject(error);
+        else resolve(assigned);
+      });
+    });
+
+
     res.redirect("/projects");
   }
   catch (error) {
@@ -1033,11 +1099,7 @@ app.post("/projects/projectformsubmit", async function (req, res, next) {
 
 app.post("/projects/:project_id/formulaformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
-  console.log("HELLO");
-  console.log(project_id);
-  console.log(req.body.userInput1);
-  console.log(req.body.userInput2);
-  console.log(req.body.userInput3);
+
   try {
     db.execute(insertIntoFormulas, [project_id, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
       if (error)
@@ -1055,12 +1117,6 @@ app.post("/projects/:project_id/formulaformsubmit", async function (req, res, ne
 
 app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
-
-  console.log("HELLO");
-  console.log(project_id);
-  console.log(req.body.userInput1);
-  console.log(req.body.userInput2);
-  console.log(req.body.userInput3);
 
   db.execute(insertIntoPhase, [project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
     if (error)
@@ -1178,6 +1234,7 @@ app.post("/project_assign/edituser/:scientist_id", async function (req, res, nex
 
 app.get("/projects/:project_id", async function (req,res,next) {
   let project_id = req.params.project_id
+  let error;
 
   try {
     const real_id = await new Promise((resolve, reject) => {
@@ -1190,6 +1247,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
     console.log(real_id[0].scientist_id);
 
     const assigned = await new Promise((resolve, reject) => {
+      console.log("ASSIGNED EXECUTE");
       db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
         if (error) reject(error);
         else resolve(assigned);
@@ -1198,6 +1256,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
   if (isAdmin || assigned.length !== 0) {
     const project_data = await new Promise((resolve, reject) => {
+      console.log("SINGLE PROJECT QUERY EXECUTE");
       db.execute(singleProjectQuery, [project_id], (error, project_data) => {
         if (error) reject(error);
         else resolve(project_data);
@@ -1205,6 +1264,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
     });
 
     const trial_data = await new Promise((resolve, reject) => {
+      console.log("GET TRAISL EXECUTE");
       db.execute(getTrials, [project_id], (error, trial_data) => {
         if (error) reject(error);
         else resolve(trial_data);
@@ -1213,55 +1273,57 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
 
     const ing_data = await new Promise((resolve, reject) => {
+      console.log('IN FORMULA DISPLAY EXECUTE');
       db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
         if (error) reject(error);
         else resolve(ing_data);
       });
-    });
+    })
 
-    // ATTEMPT
-    // for (let i = 0; i < trial_data.length; i++) {
-    //   for (let j = 0; j < ing_data.length; j++) {
-    //     console.log("HELLOOOOOOOOOOOooo");
-    //     console.log(trial_data[i]);
-    //     console.log(ing_data[j]);
-    //     trial_data[i].ing_data[j].trade_name.percent = ing_data[j].percent_of_ingredient;
-    //     trial_data[i].ing_data[j].trade_name.amount = ing_data[j].total_amount;
+    console.log("ING DATA");
+    console.log(ing_data);
+    console.log("TRIAL STUFF");
+    console.log(trial_data);
 
-    //     console.log("data");
-    //     console.log(trial_data[i].ing_data[j].trade_name.percent);
-    //     console.log(trial_data[i].ing_data[j].trade_name.amount);
-    //   }
-    // }
 
     for (let i = 0; i < trial_data.length; i++) {
-      const ingData = ing_data.filter((ing) => ing.trial_id === trial_data[i].trial_id);
-      if (ingData.length === 0) {
+      const trialId = trial_data[i].trial_num;
+      console.log(trialId);
+      const trialIngData = ing_data.filter((ing) => ing.trial_num === trialId);
+
+    
+      console.log("NEW ING");
+      console.log(trialIngData);
+      
+      if (trialIngData.length === 0) {
         trial_data[i].ing_data = [];
       } else {
-        trial_data[i].ing_data = ingData.map((ing) => ({
+        trial_data[i].ing_data = trialIngData.map((ing) => ({
           ingredient_id: {
             percent: ing.percent_of_ingredient,
             amount: ing.total_amount,
           },
         }));
       }
-
-      console.log("HERE");
     }
 
+    console.log("HELLO\n\n\nYOOHOO\n\n\n\n\n");
+    console.log(trial_data[0].ing_data);
+    
     console.log("TRIAL");
     console.log(trial_data);
 
     const inventory_data = await new Promise((resolve, reject) => {
+      console.log("INVENTORY EXECUTE");
       db.execute(read_inventory_all_alph, (error, inventory_data) => {
         if (error) reject(error);
         else resolve(inventory_data);
       });
-    });
+    })
           
+    console.log("END OF THING");
     if (error)
-      res.status(500).send(error); //Internal Server Error 
+      res.redirect("/error");
     else {
       res.render('formulas', {
         project_id: project_id,
@@ -1279,9 +1341,9 @@ app.get("/projects/:project_id", async function (req,res,next) {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   } 
   } catch (error) {
-    res.status(500).send(error); 
+    console.log(error);
+    res.redirect("/error");
   }
-
 });
 
 
@@ -1312,8 +1374,6 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function 
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
 
-  console.log("IN MAKE SECTION")
-
   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
     console.log(totalAmount[0].s);
     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
@@ -1334,11 +1394,9 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function 
 
 
 app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
-  console.log("HELLO");
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
 
-  console.log(project_id);
   let userInput1 = req.body.userInput1;
   let userInput2 = req.body.userInput2;
   let userInput3 = req.body.userInput3;
@@ -1364,8 +1422,6 @@ app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) 
 app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
-
-  console.log("opening procedure");
 
   db.execute(get_procedure, [project_id, trial_num], (error, results) => {
     db.execute(get_procedure_info, [project_id], (error, proc_info) => {
@@ -1426,7 +1482,6 @@ app.get("/archive/sci/:scientist_id", async function (req, res, next) {
   let ingredients;
   let projects;
 
-  console.log(scientist_id);
   try {
     const real_id = await new Promise((resolve, reject) => {
       db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
@@ -1480,22 +1535,18 @@ app.get("/archive/sci/:scientist_id", async function (req, res, next) {
   res.render('archive', { results: results, project_results: project_results });
 
   } catch (error) {
-    res.status(500).send(error); 
+    res.redirect("/error"); 
   }
 });
 
 app.get("/projects", async function (req,res,next) {
   db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
-    console.log("hELLOHELLO");
-    console.log(results[0].scientist_id);
     res.redirect("/projects/sci/" + results[0].scientist_id);
   });
 });
 
 app.get("/archive", async function (req,res,next) {
   db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
-    console.log("hELLOHELLO");
-    console.log(results[0].scientist_id);
     res.redirect("/archive/sci/" + results[0].scientist_id);
   });
 });
@@ -1504,7 +1555,6 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
   let results;
 
-  console.log(scientist_id);
   try {
     const real_id = await new Promise((resolve, reject) => {
       db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
@@ -1512,8 +1562,6 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
         else resolve(real_id);
       });
     });
-
-    console.log(real_id[0].scientist_id);
 
   if (isAdmin) {
     results = await new Promise((resolve, reject) => {
@@ -1534,12 +1582,11 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   }
-  console.log("RESULTS");
-  console.log(results);
-  res.render('projects', { results: results });
+ 
+  res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
 
   } catch (error) {
-    res.status(500).send(error); 
+    res.redirect("/error"); 
   }
 });
 
@@ -1553,7 +1600,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
       // [project_id, trial_num]
       db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
         if (error)
-          res.status(500).send(error); //Internal Server Error
+          res.redirect("/error"); //Internal Server Error
         else {
           // res.render('project', {project_data: results[0]} );
           res.render('formulas', {
@@ -1563,7 +1610,7 @@ app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
             project_data: project_data,
             formula_data: formula_data,
             formula_ingredient_data: formula_ingredient_data
-          });ƒ
+          });
         }
       });
     });
@@ -1574,7 +1621,7 @@ app.get("/inventory/archive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(archiveIngredient, [ingredient_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/inventory');
   });
@@ -1584,7 +1631,7 @@ app.get("/unarchive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
   db.execute(unarchiveIngredient, [ingredient_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/archive');
   });
@@ -1594,7 +1641,7 @@ app.get("/projects/sci/archive-project/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(archiveProject, [project_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/projects');
   });
@@ -1604,7 +1651,7 @@ app.get("/unarchive-project/:project_id", (req, res) => {
   let project_id = req.params.project_id
   db.execute(unarchiveProject, [project_id], (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else
       res.redirect('/archive#projects');
   });
@@ -1617,7 +1664,7 @@ app.get("/logout", (req, res) => {
 app.get("/page", (req, res) => {
   db.execute(read_inventory_all_sql, (error, results) => {
     if (error)
-      res.status(500).send(error); //Internal Server Error
+      res.redirect("/error"); //Internal Server Error
     else {
       res.render('page', { results: results });
     }
