@@ -275,7 +275,7 @@
                    
 
                     <div style="overflow-x: scroll;" class = "col s12 m4 l6">
-                        <table class = "scrollable">
+                        <table class = "scrollable" id = "info">
                                 {{!-- {{#each trial_data}}
                                 <th>Trial {{this.trial_num}}</th>
                                 <ul>
@@ -285,7 +285,7 @@
                                 </ul>
                                 {{/each}} --}}
 
-                            <tr>
+                            {{!-- <tr>
 
                                 {{#each trial_data}}
                                     <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
@@ -296,25 +296,7 @@
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
                                 {{/each}}
-                            
-                                
-                            
-                                {{#each trial_data}}
-                                <tr>
-                                    {{#each ../ing_data}}
-                                    {{#if (eq this.trial_num ../this.trial_num)}}
-                                        {{!-- <tr> --}}
-                                        <td>{{this.percent_of_ingredient}}%</td>
-                                        <td>{{this.total_amount}}g</td>
-                                        {{!-- </tr> --}}
-                                    {{else}}
-                                        <td></td>
-                                        <td></td>
-                                    {{/if}}
-                                    {{/each}}
-                                </tr>
-                                {{/each}}
-                            </tr> 
+                            </tr>  --}}
 
 
                            
@@ -335,6 +317,79 @@
                         </table>
                     </div>
                 </div>
+
+                <script>
+                    const ingredient1 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '1 g', Percent: '0%' },  { Amount: '', Percent: '' }, { Amount: '90 g', Percent: '120' }];
+                    const ingredient2 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '', Percent: '' },  { Amount: '90g', Percent: '120%' }, { Amount: '90 g', Percent: '120' }];
+                    const ingredients = [ingredient1, ingredient2]
+                    console.log(ingredients)
+                    $("#info").append("<tr>");
+                    for (let i = 1; i < ingredients[0].length+1; i++) {
+                        {{!-- $("#info").append("<tr>");
+                        $("#info").append("<th >Trial "+i+"</th>"); --}}
+                        for (let key in ingredients[0][0]) {
+                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" "+key+"</th>");
+                    }
+                    }
+                    $("#info").append("</tr>");
+                    
+                    
+                    {{!-- for (let i = 0; i < ingredients.length; i++) {
+                        $("#info").append("<tr>");
+                        for (let j = 0; j < ingredients[i].length; j++) {
+                            for (let key in ingredients[i][j]) {
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredients[i][j][key] + "</td>");
+                            }
+                        }
+                        $("#info").append("</tr>");
+                    } --}}
+                    for (let ingredient of ingredients){
+                        $("#info").append("<tr>");
+                        for (let i = 0; i < ingredient.length; i++) {
+                            {{!-- $("#info").append("<tr>"); --}}
+                            for (let key in ingredient[i]) {
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[i][key] + "</td>");
+                            } 
+                        }
+                        $("#info").append("</tr>");
+                    };
+                    
+                   
+                    
+                    
+
+                                        
+                    {{!-- for (let i = 0; i < 7; i++)
+                    if ((i%2) == 0){
+                        $("#info").append("<tr>");
+                        $("#info").append("<td>"+i+"hi</td>");
+                        $("#info").append("<td>"+i+"bye</td>");
+                        $("#info").append("</tr>");
+
+
+
+                    }
+                    else{
+                        $("#info").append("<tr>");
+                        $("#info").append("<td></td>");
+                        $("#info").append("<td></td>");
+                        $("#info").append("</tr>");
+                    }
+                        $("#info").append("<tr>");
+                        $("#info").append("<td>New Row</td>");
+                        $("#info").append("</tr>"); --}}
+                    
+                    for(var trial_num in trial_data)
+                        {
+                            for(var ingredient in ing_data)
+                            {
+                                $("#info").append("<tr>");
+                                if(ingredient.trialnum == ingredient.trialnum){ $("#info").append("<td>hi</td>");}
+                                else {$("#info").append("<td></td>");}
+
+                            }
+                        }
+                </script>
 
                     <!-- Add the jsPDF library script tag -->
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>

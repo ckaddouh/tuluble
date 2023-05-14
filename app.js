@@ -1407,8 +1407,8 @@ app.get("/projects/:project_id", async function (req,res,next) {
       });
     })
 
-    console.log("INVENTORY DATA");
-    console.log(inventory_data);
+    // console.log("INVENTORY DATA");
+    // console.log(inventory_data);
           
     console.log("END OF THING");
     if (error)
