@@ -425,11 +425,11 @@ WHERE
 
 const get_procedure = `
   SELECT 
-    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, trial_num
+    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id
   FROM 
     procedure_item
   WHERE 
-    project_id = ? AND trial_num = ?
+    project_id = ?
 `
 
 const get_procedure_info = `
@@ -1472,7 +1472,7 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function 
 });
 
 
-app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) => {
+app.post("/projects/:project_id/procedure/procformsubmit", (req, res) => {
   let project_id = req.params.project_id
   let trial_num = req.params.trial_num
 
@@ -1498,11 +1498,10 @@ app.post("/projects/:project_id/procedure:trial_num/procformsubmit", (req, res) 
     });
 });
 
-app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
+app.get("/projects/:project_id/procedure", (req, res) => {
   let project_id = req.params.project_id
-  let trial_num = req.params.trial_num
 
-  db.execute(get_procedure, [project_id, trial_num], (error, results) => {
+  db.execute(get_procedure, [project_id], (error, results) => {
     db.execute(get_procedure_info, [project_id], (error, proc_info) => {
       if (error)
         res.status(500).send(error); //Internal Server Error 
@@ -1510,7 +1509,6 @@ app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
         res.render('procedure', {
           results: results,
           procedure_info: proc_info,
-          trial_num: trial_num,
           project_id: project_id
         });
       }
