@@ -2,18 +2,25 @@
 <html>
 
     <head>
-        {{#each project_data}}
-        <title>{{project_name}} Formulas</title>
-        {{/each}}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <script type="text/javascript" src="/routes/projects.js"></script>
-        <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-        <link rel="stylesheet" href="/partials/color.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    {{#each project_data}}
+    <title>{{project_name}} Formulas</title>
+    {{/each}}
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script>
+        Handlebars.registerHelper('eq', function(a, b) {
+            return a === b;
+        });
+    </script>
 
-
-    </head>
+    {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="/partials/color.css">
+    
+</head>
     <style>
         .container {
         display: flex;
@@ -261,23 +268,11 @@
 
                 </div>
 
-
-                <script>
-                // Pass the trial_data to the front-end
-                for (let i = 0; i < {{trial_data}}.length; i++) {
-                    console.log("hello");
-                }
-                const td_json = {{trial_data}};
-                const trialData = JSON.parse(td_json);
-                
-                // Access the properties of trialData
-                console.log("THIS IS THE TRIAL DATA THING");
-                console.log(trialData[0].trial_id);
-                </script>
-
                     {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
                     {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
                     <p>&nbsp;</p>
+
+                   
 
                     <div style="overflow-x: scroll;" class = "col s12 m4 l6">
                         <table class = "scrollable">
@@ -300,28 +295,36 @@
                                 {{#each trial_data}}
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
-                                    {{!-- {{#each this.ing_data}}
-                                    <tr>Percent: {{this.ingredient_id.percent}}, Amount: {{this.ingredient_id.amount}}</tr>
-                                    {{/each}} --}}
                                 {{/each}}
-                            </tr>
+                            
+                                
+                            
+                                {{#each trial_data}}
+                                <tr>
+                                    {{#each ../ing_data}}
+                                    {{#if (eq this.trial_num ../this.trial_num)}}
+                                        {{!-- <tr> --}}
+                                        <td>{{this.percent_of_ingredient}}%</td>
+                                        <td>{{this.total_amount}}g</td>
+                                        {{!-- </tr> --}}
+                                    {{else}}
+                                        <td></td>
+                                        <td></td>
+                                    {{/if}}
+                                    {{/each}}
+                                </tr>
+                                {{/each}}
+                            </tr> 
+
+
+                           
+                                                        
                                 {{!-- {{#each trial_data}}
                                     <td>hello1</td>
                                     <td>hello2</td>
                                 {{/each}} --}}
 
-                                <tr>
-                                    {{#each trial_data}}
-                                    {{#each this.ing_data}}
-                                    {{#ifCond ../trial_num '==' this.ingredient_id.trialnum}}
-                                    <tr>
-                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Trial {{this.ingredient_id.trialnum}}, Percent: {{this.ingredient_id.percent}}</td>
-                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Trial {{this.ingredient_id.trialnum}}, Amount: {{this.ingredient_id.amount}}</td>
-                                    </tr>
-                                    {{/ifCond}}
-                                    {{/each}}
-                                    {{/each}}
-                                </tr>
+                            
 
                                     {{!-- {{#each results}}
                                         <tr>

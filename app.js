@@ -1,3 +1,4 @@
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -14,6 +15,11 @@ const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
 const hbs = require("hbs");
 // const style = require("css");
+
+hbs.registerHelper('eq', function(a, b) {
+  return a === b;
+});
+
 
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');
@@ -1400,6 +1406,9 @@ app.get("/projects/:project_id", async function (req,res,next) {
         else resolve(inventory_data);
       });
     })
+
+    console.log("INVENTORY DATA");
+    console.log(inventory_data);
           
     console.log("END OF THING");
     if (error)
