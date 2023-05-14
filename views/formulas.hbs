@@ -261,6 +261,7 @@
 
                 </div>
 
+
                 <script>
                 // Pass the trial_data to the front-end
                 for (let i = 0; i < {{trial_data}}.length; i++) {
@@ -280,15 +281,28 @@
 
                     <div style="overflow-x: scroll;" class = "col s12 m4 l6">
                         <table class = "scrollable">
+                                {{!-- {{#each trial_data}}
+                                <th>Trial {{this.trial_num}}</th>
+                                <ul>
+                                    {{#each this.ing_data}}
+                                    <li>Percent: {{this.ingredient_id.percent}}, Amount: {{this.ingredient_id.amount}}</li>
+                                    {{/each}}
+                                </ul>
+                                {{/each}} --}}
+
                             <tr>
                                 {{#each trial_data}}
                                     <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
+                                    
                                 {{/each}}
                             </tr>
                             <tr>
                                 {{#each trial_data}}
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
+                                    {{#each this.ing_data}}
+                                    <tr>Percent: {{this.ingredient_id.percent}}, Amount: {{this.ingredient_id.amount}}</tr>
+                                    {{/each}}
                                 {{/each}}
                             </tr>
                                 {{!-- {{#each trial_data}}

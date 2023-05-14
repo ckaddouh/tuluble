@@ -1287,8 +1287,10 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
 
     for (let i = 0; i < trial_data.length; i++) {
-      const trialId = trial_data[i].trial_id;
-      const trialIngData = ing_data.filter((ing) => ing.trial_id === trialId);
+      const trialId = trial_data[i].trial_num;
+      console.log(trialId);
+      const trialIngData = ing_data.filter((ing) => ing.trial_num === trialId);
+
     
       console.log("NEW ING");
       console.log(trialIngData);
@@ -1305,6 +1307,9 @@ app.get("/projects/:project_id", async function (req,res,next) {
       }
     }
 
+    console.log("HELLO\n\n\nYOOHOO\n\n\n\n\n");
+    console.log(trial_data[0].ing_data);
+    
     console.log("TRIAL");
     console.log(trial_data);
 
