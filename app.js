@@ -614,7 +614,32 @@ const getProjectID = `
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
-
+hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
+  switch (operator) {
+    case '==':
+      return (v1 == v2) ? options.fn(this) : options.inverse(this);
+    case '===':
+      return (v1 === v2) ? options.fn(this) : options.inverse(this);
+    case '!=':
+      return (v1 != v2) ? options.fn(this) : options.inverse(this);
+    case '!==':
+      return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+    case '<':
+      return (v1 < v2) ? options.fn(this) : options.inverse(this);
+    case '<=':
+      return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+    case '>':
+      return (v1 > v2) ? options.fn(this) : options.inverse(this);
+    case '>=':
+      return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+    case '&&':
+      return (v1 && v2) ? options.fn(this) : options.inverse(this);
+    case '||':
+      return (v1 || v2) ? options.fn(this) : options.inverse(this);
+    default:
+      return options.inverse(this);
+  }
+});
 app.use(async (req, res, next) => {
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
 
@@ -1307,6 +1332,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
       } else {
         trial_data[i].ing_data = trialIngData.map((ing) => ({
           ingredient_id: {
+            trialnum: ing.trial_num,
             percent: ing.percent_of_ingredient,
             amount: ing.total_amount,
           },
@@ -1714,5 +1740,4 @@ app.listen(port, () => {
 })
 
 // module.exports = router;
-module.exports = app
-
+module.exports = app;
