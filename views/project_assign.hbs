@@ -24,6 +24,57 @@
 
 
         <div class="row">
+            <div class="col s12">
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <nav style="width: 30%;">
+                        <div class="nav-wrapper pink accent-1" >
+                            <div class="input-field">
+                                <input type="search" id="gsearch" name="gsearch">
+                                <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                {{!-- <input type="submit"> --}}
+                                <i class="material-icons">close</i>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+
+                <p>&nbsp;</p>
+
+
+                <script>
+                    const search = document.querySelector('#gsearch');
+
+                    let searchBar = document.getElementById('gsearch');
+                    let searchButton = document.getElementById('search-button');
+                    let searchTerm;
+
+                    search.addEventListener('change', (event) => {
+                        searchTerm = searchBar.value.trim();
+                        searchBar.value = searchTerm;
+
+                        const stateObj = { url: '/project_assign' };
+                        const title = '';
+                        const newUrl = '/project_assign';
+                        if (searchTerm.length === 0) {
+                            window.location.assign("/project_assign");
+
+                        }
+                        else {
+                            if (window.location.href.indexOf("project_assign/") !== -1) {
+                                console.log(searchTerm);
+                                window.location.assign("/project_assign/search/" + searchTerm);
+
+                            }
+                            else {
+                                console.log("project_assign/" + searchTerm);
+                                window.location.assign("/project_assign/search/" + searchTerm);
+
+                            }
+                        }
+                    });
+                </script>
+            </div>
 
 
            <div class="col s6">
@@ -105,41 +156,60 @@
                                                    <h1 style="font-size:40px;">Edit User</h1>
 
 
-                                                   <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
+                                                   
                                                        <article class="regular">
                                                            {{!-- <h2>Textbook</h2> --}}
 
 
                                                            {{!-- Field 1 --}}
-                                                           <b><label for="tuluble">Name:</label></b>
-                                                           <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
-                                                           <p> </p>
+                                                           <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
+                                                                <b><label for="tuluble">Name:</label></b>
+                                                                <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
+                                                                <p> </p>
 
 
-                                                           {{!-- Field 2 --}}
-                                                           <b><label for="tuluble">Email:</label></b>
-                                                           <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100">
-                                                           <p> </p>
+                                                                {{!-- Field 2 --}}
+                                                                <b><label for="tuluble">Email:</label></b>
+                                                                <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100">
+                                                                <p> </p>
 
 
-                                                           {{!-- Field 3 --}}
-                                                           <b><label for="tuluble">Role:</label></b>
-                                                           <select name="role" id="role" class="browser-default">
-                                                               <option value="0" disabled selected>Select/Reselect a role</option>
-                                                               <option value="0">Scientist</option>
-                                                               <option value="1">Admin</option>
-                                                           </select>
+                                                                {{!-- Field 3 --}}
+                                                                <b><label for="tuluble">Role:</label></b>
+                                                                <select name="role" id="role" class="browser-default">
+                                                                    <option value="0" disabled selected>Select/Reselect a role</option>
+                                                                    <option value="0">Scientist</option>
+                                                                    <option value="1">Admin</option>
+                                                                </select>
 
+                                                                <p>&nbsp;</p>
 
-                                                           <div class="edit_user_button">
-                                                               <button id = "edit_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Save</button>
-                                                               {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                                           </div>
+                                                                <div class = "col s12 m1 l4">
+                                                                    <div class="edit_user_button">
+                                                                        <button id = "edit_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Save</button>
+                                                                        {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                            <div class = "col s12 m4 l4">
+                                                                <form method="POST" action="/project_assign/deleteuser/{{scientist_id}}">
+                                                                    <div class="delete_user_button">
+                                                                        <button id = "delete_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">DELETE USER</button>
+                                                                        {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                             <p>&nbsp;</p>
+
+                                                           
+
+                                                           
 
 
                                                            <p> </p>
                                                        </article>
-                                                   </form>
+                                                   
                                                   
                                                {{!-- </div> --}}
                                            </div>
@@ -410,6 +480,7 @@
 
 
    <script src="app.js"></script>
+
 </body>
 
 
