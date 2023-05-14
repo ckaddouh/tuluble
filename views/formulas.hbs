@@ -132,7 +132,7 @@
                         
 
 
-                        {{#each results}}
+                        {{#each ing_data}}
                             <tr>
                                 <td>{{phase}}</td>
                                 <td>{{trade_name}}</td>
@@ -258,7 +258,21 @@
                     </div>
 
                     </table>
+
                 </div>
+
+                <script>
+                // Pass the trial_data to the front-end
+                for (let i = 0; i < {{trial_data}}.length; i++) {
+                    console.log("hello");
+                }
+                const td_json = {{trial_data}};
+                const trialData = JSON.parse(td_json);
+                
+                // Access the properties of trialData
+                console.log("THIS IS THE TRIAL DATA THING");
+                console.log(trialData[0].trial_id);
+                </script>
 
                     {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
                     {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
