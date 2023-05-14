@@ -837,10 +837,6 @@ app.get("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
   });
 });
 
-// app.get("/index", (req, res) =>{
-//   res.render('index');
-// });
-
 // app.get("/projects/:project_id/trial:trial_num/trial:trial_num2", (req, res) => {
 //   let project_id = req.params.project_id
 //   let trial_num1 = req.params.trial_num
@@ -969,7 +965,7 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
 
   let results;
 
-  console.log(scientist_id);
+  console.log("Scientist IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" + scientist_id);
   try {
     const real_id = await new Promise((resolve, reject) => {
       db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
@@ -983,7 +979,7 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
   if (isAdmin) {
     console.log("admin!!");
     results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_search_all, [input], (error, results) => {
+      db.execute(read_projects_search_all, [searchStr], (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
@@ -994,7 +990,7 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
   else if (real_id[0].scientist_id == scientist_id) {
     console.log("not admin!!");
     results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_search, [input, scientist_id], (error, results) => {
+      db.execute(read_projects_search, [searchStr, scientist_id], (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
