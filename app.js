@@ -1130,20 +1130,27 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 
 app.post("/project_assign/edituser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
-
+ 
+ 
   let name = req.body.name;
   let email = req.body.email;
-  let admin = req.body.admin;
-
-
-  db.execute(editUser, [name, email, admin, scientist_id], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error 
-    else {
-      res.redirect("/project-assign");
-    }
-  });
-});
+  let admin = req.body.role;
+  console.log(name);
+  console.log(email);
+  console.log(admin);
+ 
+ 
+  try {
+    db.execute(editUser, [name, email, admin, scientist_id]);
+    res.redirect("/project-assign");
+  }
+  catch (error) {
+    next(error);
+  }
+ });
+ 
+ 
+ 
 
 
 // app.post("/projects/:project_id/trial:trial_num/computeMax", async function(req, res, next) {

@@ -1,418 +1,440 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
-    <title style="color:#e700a2">Project Assign</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/styles/projects.css">
-    <link rel="stylesheet" href="/partials/color.css">
-    <link rel="stylesheet" href="/public/styles/project_assign.css">
-    <script type="text/javascript" src="/routes/projects.js"></script>
+   <title style="color:#e700a2">Project Assign</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   <link rel="stylesheet" href="/styles/projects.css">
+   <link rel="stylesheet" href="/partials/color.css">
+   <link rel="stylesheet" href="/public/styles/project_assign.css">
+   <script type="text/javascript" src="/routes/projects.js"></script>
 </head>
 
+
 <body>
-    <div style="display: flex; justify-content:space-between;">
-        {{> navbar}}
-        {{> logout}}
-    </div>
-    <div class="col s1" style="padding: 2% 2% 0% 2%">
-        <!-- https://materializecss.com/cards.html -->
-        <h1>Project Assign </h1>
-        {{#each results}}
+   <div style="display: flex; justify-content:space-between;">
+       {{> navbar}}
+       {{> logout}}
+   </div>
+   <div class="col s1" style="padding: 2% 2% 0% 2%">
+       <!-- https://materializecss.com/cards.html -->
+       <h1>Project Assign </h1>
+
+
         <div class="row">
-            <div class="col s7 m6 l5">
-                {{!-- <a href="#terms" class="modal-trigger"> --}}
-                    <div class="card luluble-light-pink darken-1" id = "#{{project_id}}">
-                        <div class="card-content white-text">
-                            {{!-- projects/{{this.project_name}} --}}
-                            <span class="card-title"><a style="color: black;"
-                                    href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
-                            <p style="color: black;">Client: {{client}}</p>
-                            <p style="color: black;">{{date}}</p>
-                            <p style="color: black;">Scientists Assigned to this Project: </p>
-                        
-                            {{#each scientists}}
-                                <div class="chip">
-                                    Scientist Name: {{name}}
-                                   
-                                    <a href = "/project-assign/remove/{{../project_id}}/{{scientist_id}}" <i class="close material-icons">close</i></a>
-                                </div>
-                            {{/each}}
-                         
-
-                            <div class="col s12">&nbsp;</div>
-                                <div class="row">
-                                    <div class="col s12 m4 l4">
-                                        <a href="#term{{project_id}}" class="modal-trigger">
-                                            <span class="btn-small luluble-light-grey">See More</span>
-                                        </a>
-                                    </div>
-
-                                
-                                    <div class="col s10 m4 l7">
-                                        <form method="POST">
-                                            <select name="select_assign" id="select_assign" data-project-id="{{project_id}}"
-                                                class="browser-default">
-                                                <option value="0" disabled selected>Assign a Scientist to This Project</option>
-
-                                                {{#each remainingScientists}}
-                                                {{!-- NEED TO GET PROJECT_ID SOMEHOW --}}
-                                                <option value="{{../project_id}}/{{scientist_id}}">{{name}}</option>
-                                                {{/each}}
-                                                {{!-- <option value="Scientist1">Scientist 1</option>
-                                                <option value="Scientist2">Scientist 2</option>
-                                                <option value="Scientist3">Scientist 3</option>
-                                                <option value="Scientist4">Scientist 4</option> --}}
-                                            </select>
-                                        </form>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                        {{!-- ^^ card content div --}}
-                    </div>
-                    {{!-- ^^ card luluble light pink --}}
-                </div>
-                {{!-- ^^  column close  --}}
-            
-
-                {{/each}}
-                <div class="row">
-                    <div class="s6">
-                    <div style="overflow-x: scroll;" class = "col s7 m4 l6">
-                        <table class = "scrollable">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </thead>
-                            
-
-                            <tbody> 
-                            {{#each scientist_data}}
-                                <tr>
-                                    <td>{{name}}</td>
-                                    <td>{{email}}</td>
-                                    <td>{{role}}</td>
-                                    <td>
-                                        <div class="edit_button">
-                                        <a href="#edit_scientist{{scientist_id}}" class="btn waves-effect waves-light-grey luluble-light-grey modal-trigger">Edit</a>
-                                            <div class="modal" id="edit_scientist{{scientist_id}}">
-                                                <div style="padding: 5% 5% 5% 5%">
-                                                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                                    <h1 style="font-size:40px;">Edit User</h1>
-
-                                                    <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
-                                                        <article class="regular">
-                                                            {{!-- <h2>Textbook</h2> --}}
-
-                                                            {{!-- Field 1 --}}
-                                                            <b><label for="tuluble">Name:</label></b>
-                                                            <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
-                                                            <p> </p>
-
-                                                            {{!-- Field 2 --}}
-                                                            <b><label for="tuluble">Email:</label></b>
-                                                            <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100">
-                                                            <p> </p>
-
-                                                            {{!-- Field 3 --}}
-                                                            <b><label for="tuluble">Role:</label></b>
-                                                            <select name="role" id="role" class="browser-default">
-                                                                <option value="0" disabled selected>Select/Reselect a role</option>
-                                                                <option value="0">Scientist</option>
-                                                                <option value="1">Admin</option>
-                                                            </select>
-
-                                                            <div class="edit_user_button">
-                                                                <button id = "edit_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Save</button>
-                                                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                                            </div>
-
-                                                            <p> </p>
-                                                        </article>
-                                                    </form>
-                                                    
-                                                </div>
-                                            </div>
-                                            {{!-- ^^ modal close --}}
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                
-                                    
-                            {{/each}}
-                            </tbody>
-                        </table>
-                
-                    </div>
-                    {{!-- ^^ column div close --}}
-                    </div>
-                </div>
-                {{!-- ^^ smaller row close --}}
-            </div>
-            {{!-- ^^ row close --}}
-        </div>
-        {{!-- ^^whole thing close --}}
-
-    {{!-- </a> --}}
-    
-
-                                <div class="edit_user_button">
-                                <button id = "edit_user_button" 
-                                type="submit"
-                                class="btn waves-effect waves-luluble-pink luluble-pink"
-                                >Save</button>
-
-                                <button href = "deleteUser">DELETE USER</button>
-                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                </div>
-                                <p> </p>
-                            </form>
-                        </article>
-                    </div>
-                </div>
-                
-          {{/each}}
-        </tbody>
-      </table>
-            
-    </div>
-
-    <script>
-        const dropdowns = document.querySelectorAll('#select_assign');
-        let selectedOption;
-
-        dropdowns.forEach((select) => {
-            select.addEventListener('change', (event) => {
-            selectedOption = event.target.value;
-            console.log(selectedOption);
-
-            console.log(selectedOption);
-            console.log("HELLO");
-            window.location.href += "/addScientist/" + selectedOption;
-            });
-        });
-
-    
-    </script>
-
-    {{#each project_data}}
-    <div class="modal" id="term{{project_id}}">
-        <div class="row">
-            <div class="col s12">&nbsp;</div>
-            <div class="col s12"><b>
-                    <font size="+2">{{project_name}}</font>
-                </b></div>
-            <div class="col s12">&nbsp;</div>
-            <div class="col s6">
-                <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
-            </div>
-            <div class="col s6">
-                <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
-            </div>
-            <div class="col s12">&nbsp;</div>
-            {{!-- <div class="col s12 m6 l3">
-                <p></p>
-            </div>
-            <div class="col s12 m6 l3">
-                <p></p>
-            </div> --}}
-
-        </div>
-    </div>
 
 
-    <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
-                <i class="large material-icons">create</i>
-                {{!-- <span class="large material-icons">create</span> --}}
-            </a>
-            <div class="modal" id="terms">
-                    <div style="padding: 5% 5% 5% 5%">
-                        <h1 style="font-size:40px;">Add a New Scientist</h1>
+           <div class="col s6">
+               {{#each results}}
+               <div class="card luluble-light-pink darken-1">
+                   <div class="card-content white-text">
 
-                        <form method="POST" action="/project_assign/scientistformsubmit">
-                            <article class="regular">
-                                {{!-- <h2>Textbook</h2> --}}
 
-                                {{!-- Field 1 --}}
-                                <b><label for="tuluble">Scientist Name:</label></b>
-                                <input type="text" name = "scientistInput1" id="scientistInput1" placeholder="Enter Scientist Name" maxlength="100">
-                                <p> </p>
+                       <span class="card-title"><a style="color: black;" href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
+                       <p style="color: black;">Client: {{client}}</p>
+                       <p style="color: black;">{{date}}</p>
+                       <p style="color: black;">Scientists Assigned to this Project: </p>
 
-                                {{!-- Field 2 --}}
-                                <b><label for="tuluble">Email:</label></b>
-                                <input type="text" name = "scientistInput2" id="scientistInput2" placeholder="Enter Email" maxlength="100">
-                                <p> </p>
 
-                                <div class="add_scientist_button">
-                                <button id = "add_scientist_button" 
-                                type="submit"
-                                class="btn waves-effect waves-luluble-pink luluble-pink"
-                                >Add Scientist</button>
-                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                                </div>
-                                <p> </p>
-                            </form>
-                        </article>
-                    </div>
-                </div>
+                       {{#each scientists}}
+                           <div class="chip">
+                               Scientist Name: {{name}}
+                                 
+                               <a href = "/project-assign/remove/{{../project_id}}/{{scientist_id}}" <i class="close material-icons">close</i></a>
+                           </div>
+                       {{/each}}
 
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                      
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('.modal').modal();
-        })
-    </script>
-    <div class="card-action"></div>
-    {{/each}}
-    <script>
-        $(document).ready(function () {
-            $("#update_button").click(function () {
-                const inputValueU1 = $("#userInputU1").val();
-                const inputValueU2 = $("#userInputU2").val();
-                const inputValueU3 = $("#userInputU3").val();
-                window.location += "projectupdate";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var mychips = document.querySelectorAll('.chips');
-            var scientists_json = JSON.stringify(scientists);
-            var scientists = JSON.parse(scientists_json);
+                   </div>
+                   <div class="card-action">
+                      
+                       <form method="POST">
+                           <select name="select_assign" id="select_assign" data-project-id="{{project_id}}"
+                               class="browser-default">
+                               <option value="0" disabled selected>Assign a Scientist to This Project</option>
 
-            // Use the "scientists" variable in your JavaScript code
-            console.log(scientists);
-            scientists.forEach(function (scientist) {
-                console.log(scientist.name);
-            });
-            M.Chips.init(mychips, {
-                data: [{ tag: 'Scientist 4' }, { tag: "hello" }],
-                placeholder: 'Assign Scientists',
-                secondaryPlaceholder: '+Scientist',
-                autocompleteOptions: { data: { 'Scientists 1': null, 'Scientists 2': null, 'Scientists 3': null } } //get all scientist names
-            })
-        })
-    </script>
+
+                               {{#each remainingScientists}}
+                               {{!-- NEED TO GET PROJECT_ID SOMEHOW --}}
+                               <option value="{{../project_id}}/{{scientist_id}}">{{name}}</option>
+                               {{/each}}
+                               {{!-- <option value="Scientist1">Scientist 1</option>
+                               <option value="Scientist2">Scientist 2</option>
+                               <option value="Scientist3">Scientist 3</option>
+                               <option value="Scientist4">Scientist 4</option> --}}
+                           </select>
+                       </form>
+
+
+                   </div>
+               </div>
+
+
+           {{/each}}
+           </div>
+           <div class="col s6">
+                       <table class = "scrollable">
+                           <thead>
+                               <tr>
+                                   <th>User</th>
+                                   <th>Email</th>
+                                   <th>Role</th>
+                                   <th>Edit</th>
+                               </tr>
+                           </thead>
+                          
+
+
+                           <tbody>
+                           {{#each scientist_data}}
+                               <tr>
+                                   <td>{{name}}</td>
+                                   <td>{{email}}</td>
+                                   <td>{{role}}</td>
+                                   <td>
+                                       <div class="edit_button">
+                                       <a href="#edit_scientist{{scientist_id}}" class="btn waves-effect waves-light-grey luluble-light-grey modal-trigger">Edit</a>
+                                           <div class="modal" id="edit_scientist{{scientist_id}}">
+                                               <div style="padding: 5% 5% 5% 5%">
+                                                   {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                                   <h1 style="font-size:40px;">Edit User</h1>
+
+
+                                                   <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
+                                                       <article class="regular">
+                                                           {{!-- <h2>Textbook</h2> --}}
+
+
+                                                           {{!-- Field 1 --}}
+                                                           <b><label for="tuluble">Name:</label></b>
+                                                           <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
+                                                           <p> </p>
+
+
+                                                           {{!-- Field 2 --}}
+                                                           <b><label for="tuluble">Email:</label></b>
+                                                           <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100">
+                                                           <p> </p>
+
+
+                                                           {{!-- Field 3 --}}
+                                                           <b><label for="tuluble">Role:</label></b>
+                                                           <select name="role" id="role" class="browser-default">
+                                                               <option value="0" disabled selected>Select/Reselect a role</option>
+                                                               <option value="0">Scientist</option>
+                                                               <option value="1">Admin</option>
+                                                           </select>
+
+
+                                                           <div class="edit_user_button">
+                                                               <button id = "edit_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Save</button>
+                                                               {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                                           </div>
+
+
+                                                           <p> </p>
+                                                       </article>
+                                                   </form>
+                                                  
+                                               {{!-- </div> --}}
+                                           </div>
+                                           {{!-- ^^ modal close --}}
+                                       </div>
+                                   </td>
+                               </tr>
+
+
+                              
+                                  
+                           {{/each}}
+                           </tbody>
+                       </table>
+              
+           </div>
+       </div>
+
+
+       </div>
+       {{!-- ^^whole thing close --}}
+
+
+   {{!-- </a> --}}
+  
+   {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+<!-- Materialize JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> --}}
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+   var modals = document.querySelectorAll('.modal');
+   M.Modal.init(modals);
+ });
+</script>
+
+
+   <script>
+       const dropdowns = document.querySelectorAll('#select_assign');
+       let selectedOption;
+
+
+       dropdowns.forEach((select) => {
+           select.addEventListener('change', (event) => {
+           selectedOption = event.target.value;
+           console.log(selectedOption);
+
+
+           console.log(selectedOption);
+           console.log("HELLO");
+           window.location.href += "/addScientist/" + selectedOption;
+           });
+       });
+
+
+  
+   </script>
+
+
+   {{#each project_data}}
+   <div class="modal" id="term{{project_id}}">
+       <div class="row">
+           <div class="col s12">&nbsp;</div>
+           <div class="col s12"><b>
+                   <font size="+2">{{project_name}}</font>
+               </b></div>
+           <div class="col s12">&nbsp;</div>
+           <div class="col s6">
+               <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
+           </div>
+           <div class="col s6">
+               <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
+           </div>
+           <div class="col s12">&nbsp;</div>
+           {{!-- <div class="col s12 m6 l3">
+               <p></p>
+           </div>
+           <div class="col s12 m6 l3">
+               <p></p>
+           </div> --}}
+
+
+       </div>
+   </div>
 
 
 
-    </div>
-    {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
-        <i class="large material-icons">create</i>
-    </a> --}}
 
-    <script>
-        $(document).ready(function () {
-            $("#add_project_button").click(function () {
+   <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
+               <i class="large material-icons">create</i>
+               {{!-- <span class="large material-icons">create</span> --}}
+           </a>
+           <div class="modal" id="terms">
+                   <div style="padding: 5% 5% 5% 5%">
+                       <h1 style="font-size:40px;">Add a New Scientist</h1>
 
-                //const selects = document.querySelector('#userInput5');
-                //let theSelectedOption;
-                //select.addEventListener('change', (event) => {
-                //window.location.href = "inventory/"
-                //theSelectedOption = event.target.value;
-                //});
-                const inputValue1 = $("#userInput1").val();
-                const inputValue2 = $("#userInput2").val();
-                const inputValue3 = $("#userInput3").val();
-                const inputValue4 = $("#userInput4").val();
-                const inputValue5 = $("#userInput5").val();
-                module.exports = { inputValue1 };
-                module.exports = { inputValue2 };
-                module.exports = { inputValue3 };
-                module.exports = { inputValue4 };
-                module.exports = { inputValue5 };
-                window.location = "/projects/projectformsubmit";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-            });
-        });
-    </script>
-    <script>
-        function myfunc() {
-            console.log("hello");
-        }
-        $(document).ready(function () {
-            $('browser-default').formSelect();
-            $('.modal').modal();
-        });
-        $('browser-default').formSelect('myfunc');
-                // $('select').formSelect('methodName', paramName);
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('.modal').modal();
-        })
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('.modal').modal();
-            $("#add_project_button").click(function () {
-                var inputValue1 = $("#userInputP1").val();
-                var inputValue2 = $("#userInputP2").val();
-                var inputValue3 = $("#userInputP3").val();
-                var inputValue4 = $("#userInputP4").val();
-                window.location = "projects/projectformsubmit";
-            });
-        });
-    </script>
 
-    <script>
-            $(document).ready(function() {
-                $("#add_scientist_button").click(function() {
+                       <form method="POST" action="/project_assign/scientistformsubmit">
+                           <article class="regular">
+                               {{!-- <h2>Textbook</h2> --}}
 
-                window.location = "/project_assign/scientistformsubmit";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-                });
-            });
-    </script>
 
-    <script>
-        $(document).ready(function() {
-        $("#edit_user_button").click(function() {
-            var inputValue1 = $("#name").val();
-            var inputValue2 = $("#email").val();
-            var inputValue3 = $("#role").val();
-            });
-        });
-    </script>
+                               {{!-- Field 1 --}}
+                               <b><label for="tuluble">Scientist Name:</label></b>
+                               <input type="text" name = "scientistInput1" id="scientistInput1" placeholder="Enter Scientist Name" maxlength="100">
+                               <p> </p>
 
-    <script src="app.js"></script>
+
+                               {{!-- Field 2 --}}
+                               <b><label for="tuluble">Email:</label></b>
+                               <input type="text" name = "scientistInput2" id="scientistInput2" placeholder="Enter Email" maxlength="100">
+                               <p> </p>
+
+
+                               <div class="add_scientist_button">
+                               <button id = "add_scientist_button"
+                               type="submit"
+                               class="btn waves-effect waves-luluble-pink luluble-pink"
+                               >Add Scientist</button>
+                               {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                               </div>
+                               <p> </p>
+                           </form>
+                       </article>
+                   </div>
+               </div>
+
+
+   </div>
+
+
+   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+
+   <script>
+       $(document).ready(function () {
+           $('.modal').modal();
+       })
+   </script>
+   <div class="card-action"></div>
+   {{/each}}
+   <script>
+       $(document).ready(function () {
+           $("#update_button").click(function () {
+               const inputValueU1 = $("#userInputU1").val();
+               const inputValueU2 = $("#userInputU2").val();
+               const inputValueU3 = $("#userInputU3").val();
+               window.location += "projectupdate";
+               //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+           });
+       });
+   </script>
+   <script>
+       document.addEventListener('DOMContentLoaded', function () {
+           var mychips = document.querySelectorAll('.chips');
+           var scientists_json = JSON.stringify(scientists);
+           var scientists = JSON.parse(scientists_json);
+
+
+           // Use the "scientists" variable in your JavaScript code
+           console.log(scientists);
+           scientists.forEach(function (scientist) {
+               console.log(scientist.name);
+           });
+           M.Chips.init(mychips, {
+               data: [{ tag: 'Scientist 4' }, { tag: "hello" }],
+               placeholder: 'Assign Scientists',
+               secondaryPlaceholder: '+Scientist',
+               autocompleteOptions: { data: { 'Scientists 1': null, 'Scientists 2': null, 'Scientists 3': null } } //get all scientist names
+           })
+       })
+   </script>
+
+
+
+
+
+
+   </div>
+   {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
+       <i class="large material-icons">create</i>
+   </a> --}}
+
+
+   <script>
+       $(document).ready(function () {
+           $("#add_project_button").click(function () {
+
+
+               //const selects = document.querySelector('#userInput5');
+               //let theSelectedOption;
+               //select.addEventListener('change', (event) => {
+               //window.location.href = "inventory/"
+               //theSelectedOption = event.target.value;
+               //});
+               const inputValue1 = $("#userInput1").val();
+               const inputValue2 = $("#userInput2").val();
+               const inputValue3 = $("#userInput3").val();
+               const inputValue4 = $("#userInput4").val();
+               const inputValue5 = $("#userInput5").val();
+               module.exports = { inputValue1 };
+               module.exports = { inputValue2 };
+               module.exports = { inputValue3 };
+               module.exports = { inputValue4 };
+               module.exports = { inputValue5 };
+               window.location = "/projects/projectformsubmit";
+               //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+           });
+       });
+   </script>
+   <script>
+       function myfunc() {
+           console.log("hello");
+       }
+       $(document).ready(function () {
+           $('browser-default').formSelect();
+           $('.modal').modal();
+       });
+       $('browser-default').formSelect('myfunc');
+               // $('select').formSelect('methodName', paramName);
+   </script>
+   <script>
+       $(document).ready(function () {
+           $('.modal').modal();
+       })
+   </script>
+   <script>
+       $(document).ready(function () {
+           $('.modal').modal();
+           $("#add_project_button").click(function () {
+               var inputValue1 = $("#userInputP1").val();
+               var inputValue2 = $("#userInputP2").val();
+               var inputValue3 = $("#userInputP3").val();
+               var inputValue4 = $("#userInputP4").val();
+               window.location = "projects/projectformsubmit";
+           });
+       });
+   </script>
+
+
+   <script>
+           $(document).ready(function() {
+               $("#add_scientist_button").click(function() {
+
+
+               window.location = "/project_assign/scientistformsubmit";
+               //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+               });
+           });
+   </script>
+
+
+   <script>
+       $(document).ready(function() {
+       $("#edit_user_button").click(function() {
+           var inputValue1 = $("#name").val();
+           var inputValue2 = $("#email").val();
+           var inputValue3 = $("#role").val();
+           });
+       });
+   </script>
+
+
+   <script src="app.js"></script>
 </body>
+
 
 </html>
 {{!-- <div style="padding:20px">
-    <table>
-        <thead>
-            <tr>
-                <th>ID
-                    <span class="large material-icons">import_export</span>
-                </th>
-                <th>Name
-                    <span class="large material-icons">import_export</span>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each results}}
-            <tr>
-                <td>{{this.formula_id}}
-                </td>
-                <td>{{this.test_name}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+   <table>
+       <thead>
+           <tr>
+               <th>ID
+                   <span class="large material-icons">import_export</span>
+               </th>
+               <th>Name
+                   <span class="large material-icons">import_export</span>
+               </th>
+               <th></th>
+           </tr>
+       </thead>
+       <tbody>
+           {{#each results}}
+           <tr>
+               <td>{{this.formula_id}}
+               </td>
+               <td>{{this.test_name}}</td>
+           </tr>
+           {{/each}}
+       </tbody>
+   </table>
 </div> --}}
