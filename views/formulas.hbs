@@ -291,18 +291,19 @@
                                 {{/each}} --}}
 
                             <tr>
+
                                 {{#each trial_data}}
+ 
                                     <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
-                                    
                                 {{/each}}
                             </tr>
                             <tr>
                                 {{#each trial_data}}
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
                                     <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
-                                    {{#each this.ing_data}}
+                                    {{!-- {{#each this.ing_data}}
                                     <tr>Percent: {{this.ingredient_id.percent}}, Amount: {{this.ingredient_id.amount}}</tr>
-                                    {{/each}}
+                                    {{/each}} --}}
                                 {{/each}}
                             </tr>
                                 {{!-- {{#each trial_data}}
@@ -311,8 +312,11 @@
                                 {{/each}} --}}
                                 {{#each ing_data}}
                                 <tr>
+    
+                                    {{#if true}}
                                     <td>trial {{trial_num}}, {{percent_of_ingredient}}%</td>
                                     <td>trial {{trial_num}}, {{total_amount}}g</td>
+                                    {{/if}}
                                 </tr>
                                 {{/each}}
                                     {{!-- {{#each results}}
