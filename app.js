@@ -362,7 +362,7 @@ const read_inventory_search = `
   FROM
     ingredient
   WHERE 
-    ingredient.inci_name LIKE ? AND ingredient.active = 0
+    ingredient.inci_name LIKE ? AND ingredient.active = 1
 `
 const read_archive_inventory_search = `
 SELECT
@@ -382,7 +382,7 @@ WHERE
   projects.project_name LIKE ?
   AND project_assign.scientist_id = ?
   AND project_assign.project_id = projects.project_id
-  AND 
+  AND projects.active = 1
 `
 
 const read_projects_search_all = `
@@ -392,6 +392,7 @@ FROM
   projects
 WHERE
   projects.project_name LIKE ?
+  AND projects.active = 0
 `
 
 const read_archive_projects_search = `
@@ -400,7 +401,19 @@ SELECT
 FROM
   projects
 WHERE
-  projects.project_name LIKE ? AND projects.active = 0
+  projects.project_name LIKE ? 
+  AND project_assign.scientist_id = ?
+  AND projects.active = 0
+`
+
+const read_archive_projects_search_all = `
+SELECT
+  project_name, project_id, client, date
+FROM
+  projects
+WHERE
+  projects.project_name LIKE ? 
+  AND projects.active = 0
 `
 
 const get_procedure = `
@@ -959,7 +972,6 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
 
   let results;
 
-  console.log("Scientist IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" + scientist_id);
   try {
     const real_id = await new Promise((resolve, reject) => {
       db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
@@ -971,15 +983,12 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
     console.log(real_id[0].scientist_id);
 
   if (isAdmin) {
-    console.log("admin!!");
     results = await new Promise((resolve, reject) => {
       db.execute(read_projects_search_all, [searchStr], (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
     });
-
-    console.log(results);   
   }
   else if (real_id[0].scientist_id == scientist_id) {
     console.log("not admin!!");
@@ -1005,20 +1014,61 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
   
 
 
-app.get("/archiveprojects/search/:input", (req, res) => {
+app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req, res, next) {
   let input = req.params.input
+  let scientist_id = req.params.scientist_id
+
   let searchStr = `%${input}%`;
-  db.execute(read_archive_projects_search, [searchStr], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error 
-    else {
-      res.render('archive', {
-        input: input,
-        results: results
+
+  let results;
+
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
       });
+    });
+
+    if (isAdmin) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_archive_projects_search_all, [searchStr], (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
+      });  
+    }
+    else if (real_id[0].scientist_id == scientist_id) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_archive_projects_search, [searchStr, scientist_id], (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
+      });
+    } 
+    else {
+      res.redirect("/archiveprojects/sci/" + real_id[0].scientist_id);
+    }
+    res.render("archive", {
+      input: input,
+      results: results
+    });
+    } catch (error) {
+      res.redirect("/error"); 
     }
   });
-});
+
+  // db.execute(read_archive_projects_search, [searchStr], (error, results) => {
+  //   if (error)
+  //     res.status(500).send(error); //Internal Server Error 
+  //   else {
+  //     res.render('archive', {
+  //       input: input,
+  //       results: results
+  //     });
+  //   }
+  // });
+
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,

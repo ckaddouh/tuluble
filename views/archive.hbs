@@ -7,7 +7,6 @@
     <title>navbar</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/styles/archive.css">
     <link rel="stylesheet" href="/partials/color.css">
@@ -50,21 +49,19 @@
 
                 <div id="ingredients" class="col s12">
 
-                    <div class="col s12 m6 offset-m3">
-                        <p></p>
-                    </div>
-                    <div class="col s12 m6 offset-m3" style="width: 50%;">
-                        <p></p>
-                        <nav>
-                            <div class="nav-wrapper pink">
-                                <div class="input-field">
-                                    <input type="search" id="gsearch" name="gsearch">
-                                    <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                                    <i class="material-icons">close</i>
-                                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <nav style="width: 30%;">
+                        <div class="nav-wrapper pink accent-1" >
+                            <div class="input-field">
+                                <input type="search" id="gsearch" name="gsearch">
+                                <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                {{!-- <input type="submit"> --}}
+                                <i class="material-icons">close</i>
                             </div>
-                        </nav>
-                    </div>
+                        </div>
+                    </nav>
+                </div>
+
 
                     <script>
                         const search = document.querySelector('#gsearch');
@@ -188,16 +185,13 @@
                     </div>
                     <div id="projects" class="col s12">
 
-                        <div class="col s12 m6 offset-m3">
-                            <p></p>
-                        </div>
-                        <div class="col s12 m6 offset-m3" style="width: 50%;">
-                            <p></p>
-                            <nav>
-                                <div class="nav-wrapper pink">
+                        <div style="display: flex; justify-content: flex-end;">
+                            <nav style="width: 30%;">
+                                <div class="nav-wrapper pink accent-1" >
                                     <div class="input-field">
                                         <input type="search" id="fsearch" name="fsearch">
                                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                        {{!-- <input type="submit"> --}}
                                         <i class="material-icons">close</i>
                                     </div>
                                 </div>
@@ -206,45 +200,47 @@
 
                         <script>
 
-                            console.log("HELLOOOOOO")
+                            console.log("HELLOOOOOO");
 
-                            const search = document.querySelector('#fsearch');
+                            const search2 = document.querySelector('#fsearch');
 
-                            let searchBar = document.getElementById('fsearch');
-                            let searchButton = document.getElementById('search-button');
-                            let searchTerm;
-                            const currentURL = String(window.location.href);
-                            const scientistIDIndex = currentURL.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
-                            const scientistIDString = currentURL.slice(scientistIDIndex);
-                            let scientistID = String(parseInt(scientistIDString));
+                            const regex = /^[a-zA-Z0-9\s]*$/;
+                            let searchBar2 = document.getElementById('fsearch');
+                            let searchButton2 = document.getElementById('search-button');
+                            let searchTerm2;
+                            const currentURL2 = String(window.location.href);
+                            const scientistIDIndex2 = currentURL2.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
+                            const scientistIDString2 = currentURL2.slice(scientistIDIndex2);
+                            let scientistID2 = String(parseInt(scientistIDString2));
 
 
-                            search.addEventListener('change', (event) => {
+                            search2.addEventListener('change', (event) => {
                                 console.log("ok")
-                                searchTerm = searchBar.value.trim();
-                                searchBar.value = searchTerm;
+                                searchTerm2 = searchBar2.value.trim();
+                                searchBar2.value = searchTerm2;
 
-                                function validateSearchInput(input) {
+                                function validateSearchInput2(input) {
                                     return regex.test(input);
                                 }
 
-                                const stateObj = { url: '/archiveprojects/sci/' + scientistID };
-                                const title = '';
-                                const newUrl = '/archiveprojects/sci/' + scientistID;
+                                const stateObj2 = { url: '/archiveprojects/sci/' + scientistID2 };
+                                const title2 = '';
+                                const newUrl2 = '/archiveprojects/sci/' + scientistID2;
 
-                                if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
+                                if (searchTerm2.length === 0 || !validateSearchInput2(searchTerm2)) {
                                     window.location.assign("/archiveprojects");
 
                                 }
                                 else {
-                                    if (window.location.href.indexOf("archiveprojects/sci/" + scientistID) !== -1) {
-                                        window.location.assign("/archiveprojects/sci/" + scientistID "/search/" + searchTerm);
+                                    if (window.location.href.indexOf("archiveprojects/sci/" + scientistID2) !== -1) {
+                                        window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
                                     }
                                     else {
-                                        window.location.assign("/archiveprojects/sci/" + scientistID + "/search/" + searchTerm);
+                                        window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
                                     }
                                 }
                             });
+                            console.log(String(window.location.href));
                         </script>
 
                         {{#each project_results}}
