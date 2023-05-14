@@ -295,28 +295,30 @@
                 </div>
                 <div style="text-align:right">
                     <button id="clear-search"
-                                    name="clear-search" 
-                                    onclick="redirectToPage()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                    Clear Search</button>
+                        name="clear-search" 
+                        onclick="redirectToPage()"
+                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                        Clear Search</button>
                 </div>
             </nav>
         </div>
     </div>
+    
     <script>
         function redirectToPage() {
             const clearedUrl = "http://localhost:3000/inventory";
             const currentUrl = window.location.href;
-            const clear = document.querySelector('#clear-search');
-
+            
             if (currentUrl !== clearedUrl) {
-                
-                clear.addEventListener("click", function() {
-                    window.location.href = clearedUrl;
-                });
+                window.location.href = clearedUrl;
             }
         }
+
+        // Add the event listener outside the redirectToPage function
+        const clear = document.querySelector('#clear-search');
+        clear.addEventListener("click", redirectToPage);
     </script>
+
 
     {{!-- search script --}}
 
