@@ -801,42 +801,6 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
 
 
 
-
-
-// app.get("/project-assign", requireAdmin, async function (req, res, next) {
-//   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-
-
-//     db.execute(read_projects_all_sql, (error, results) => {
-           
-//           db.execute(getAllScientists, (error, scientistResults) => {
-//             res.render('project_assign', { results: results, scientist_data: scientistResults });
-
-//           });
-//       });
- 
-// });
-
-
-// app.get("/project-assign", requireAdmin, async function (req, res, next) {
-//   console.log("hello?");
-//   try {
-//     const results = await db.execute(read_projects_all_sql);
-//     const proj_scientists = {};
-//     for (let i = 0; i < results.length; i++) {
-//       const projectScientists = await db.execute(getScientistForProject, [results[i].project_id]);
-//       proj_scientists[results[i].project_id] = projectScientists;
-//     }
-//     const scientistResults = await db.execute(getAllScientists);
-//     res.render('project_assign', { results, scientist_data: scientistResults, proj_scientists });
-//   } catch (error) {
-//     next(error);
-//   }
-//   console.log('testest')
-// });
-
-
-
 // CORRECT
 // app.get("/project-assign/addScientist/:project_id/:scientist_id", (req, res) => {
 //   console.log("adding scientist");
