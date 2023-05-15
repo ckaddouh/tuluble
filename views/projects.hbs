@@ -42,10 +42,10 @@
             </div>
             <div style="text-align:right; margin-top:10px">
                     <button id="clear-search"
-                                    name="clear-search" 
-                                    onclick="redirectToPage()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                    Clear Search</button>
+                        name="clear-search" 
+                        onclick="redirectToPage()"
+                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                        Clear Search</button>
             </div>
             <div class="col s12 m6 offset-m3">
                 <p></p>
@@ -65,6 +65,10 @@
                         });
                     }
                 }
+
+                // Add the event listener outside the redirectToPage function
+                const clear = document.querySelector('#clear-search');
+                clear.addEventListener("click", redirectToPage);
             </script>
 
             {{!-- search script --}}
@@ -229,7 +233,6 @@
                     });
                 });
             </script>
-
 
             </div>
             {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
