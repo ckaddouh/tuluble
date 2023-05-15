@@ -1175,7 +1175,7 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 });
 
 
-app.post("/project_assign/edituser/:scientist_id", async function (req, res, next) {
+app.post("/project-assign/edituser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
  
  
