@@ -58,7 +58,7 @@
                     const word = "search"
                     const clear = document.querySelector('#clear-search');
 
-                    if (currentUrl.toString.contains(word)) {
+                    if (currentUrl.toString().includes(word)) {
                         
                         clear.addEventListener("click", function() {
                             window.location.href = clearedUrl;
@@ -70,8 +70,6 @@
             {{!-- search script --}}
 
             <script>
-                console.log("IM HERE SEE ME PLEASE")
-
                 const search = document.querySelector('#gsearch');
 
                 const regex = /^[a-zA-Z0-9\s]*$/;

@@ -398,17 +398,18 @@ FROM
   projects
 WHERE
   projects.project_name LIKE ?
-  AND projects.active = 0
+  AND projects.active = 1
 `
 
 const read_archive_projects_search = `
 SELECT
-  project_name, project_id, client, date
+  project_name, projects.project_id, client, date
 FROM
-  projects
+  projects, project_assign
 WHERE
   projects.project_name LIKE ? 
   AND project_assign.scientist_id = ?
+  AND project_assign.project_id = projects.project_id
   AND projects.active = 0
 `
 
@@ -1027,7 +1028,6 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
     });
   }
   else if (real_id[0].scientist_id == scientist_id) {
-    console.log("not admin!!");
     results = await new Promise((resolve, reject) => {
       db.execute(read_projects_search, [searchStr, scientist_id], (error, results) => {
         if (error) reject(error);
@@ -1243,7 +1243,16 @@ app.post("/project_assign/edituser/:scientist_id", async function (req, res, nex
     next(error);
   }
  });
- 
+
+ app.get("/project-assign/search/:input", (req, res) => {
+  let input = req.params.input;
+  let searchStr = `%${input}%`;
+
+  db.execute(read_projects_search_all, [searchStr], (error, results) => {
+    if (error) reject(error);
+    else resolve(results);
+    });
+  }); 
  
  
 

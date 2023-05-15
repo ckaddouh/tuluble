@@ -311,6 +311,7 @@
             
             if (currentUrl !== clearedUrl) {
                 window.location.href = clearedUrl;
+                    window.location.reload();
             }
         }
 
@@ -349,30 +350,19 @@
             const stateObj = { url: '/inventory' };
             const title = '';
             const newUrl = '/inventory';
-            //window.location.replace("inventory");
-            //console.log(searchTerm);
-            //window.location.href += "/" + selectedOption;
+
             if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
                 window.location.assign("/inventory");
-                //location.replace('http://localhost:3000/inventory');
-                //history.pushState(stateObj, title, newUrl);
-
             }
             else {
                 if (window.location.href.indexOf("inventory/") !== -1) {
-                    //window.location.href = searchTerm;
                     console.log(searchTerm);
                     window.location.assign("/inventory/search/" + searchTerm);
-                    //location.replace('http://localhost:3000/inventory');
-                    //history.pushState(stateObj, title, newUrl);
 
                 }
                 else {
-                    //window.location.href = "inventory/" + searchTerm;
                     console.log("inventory/" + searchTerm);
                     window.location.assign("/inventory/search/" + searchTerm);
-                    //location.replace('http://localhost:3000/inventory');
-                    //history.pushState(stateObj, title, newUrl);
 
                 }
             }

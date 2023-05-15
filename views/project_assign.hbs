@@ -8,7 +8,7 @@
    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
    <link rel="stylesheet" href="/styles/projects.css">
    <link rel="stylesheet" href="/partials/color.css">
-   <link rel="stylesheet" href="/public/styles/project_assign.css">
+   <link rel="stylesheet" href="/public/styles/project-assign.css">
    <script type="text/javascript" src="/routes/projects.js"></script>
 </head>
 
@@ -53,22 +53,21 @@
                         searchTerm = searchBar.value.trim();
                         searchBar.value = searchTerm;
 
-                        const stateObj = { url: '/project_assign' };
+                        const stateObj = { url: '/project-assign' };
                         const title = '';
-                        const newUrl = '/project_assign';
+                        const newUrl = '/project-assign';
                         if (searchTerm.length === 0) {
-                            window.location.assign("/project_assign");
+                            window.location.assign("/project-assign");
 
                         }
                         else {
-                            if (window.location.href.indexOf("project_assign/") !== -1) {
-                                console.log(searchTerm);
-                                window.location.assign("/project_assign/search/" + searchTerm);
-
+                            if (window.location.href.indexOf("project-assign/") !== -1) {
+                                window.location.assign("/project-assign/search/" + searchTerm);
+                                console.log("HERE");
                             }
                             else {
-                                console.log("project_assign/" + searchTerm);
-                                window.location.assign("/project_assign/search/" + searchTerm);
+                                window.location.assign("/project-assign/search/" + searchTerm);
+                                console.log("no im here");
 
                             }
                         }
@@ -162,7 +161,7 @@
 
 
                                                            {{!-- Field 1 --}}
-                                                           <form method="POST" action="/project_assign/edituser/{{scientist_id}}">
+                                                           <form method="POST" action="/project-assign/edituser/{{scientist_id}}">
                                                                 <b><label for="tuluble">Name:</label></b>
                                                                 <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
                                                                 <p> </p>
@@ -193,7 +192,7 @@
                                                             </form>
 
                                                             <div class = "col s12 m4 l4">
-                                                                <form method="POST" action="/project_assign/deleteuser/{{scientist_id}}">
+                                                                <form method="POST" action="/project-assign/deleteuser/{{scientist_id}}">
                                                                     <div class="delete_user_button">
                                                                         <button id = "delete_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">DELETE USER</button>
                                                                         {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
@@ -310,7 +309,7 @@
                        <h1 style="font-size:40px;">Add a New Scientist</h1>
 
 
-                       <form method="POST" action="/project_assign/scientistformsubmit">
+                       <form method="POST" action="/project-assign/scientistformsubmit">
                            <article class="regular">
                                {{!-- <h2>Textbook</h2> --}}
 
@@ -461,7 +460,7 @@
                $("#add_scientist_button").click(function() {
 
 
-               window.location = "/project_assign/scientistformsubmit";
+               window.location = "/project-assign/scientistformsubmit";
                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                });
            });
