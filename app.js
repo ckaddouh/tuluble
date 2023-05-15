@@ -1347,6 +1347,8 @@ app.get("/projects/:project_id", async function (req,res,next) {
     });
 
 
+    const ingredient1 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '1 g', Percent: '0%' },  { Amount: '', Percent: '' }, { Amount: '90 g', Percent: '120' }];
+
     const ing_data = await new Promise((resolve, reject) => {
       console.log('IN FORMULA DISPLAY EXECUTE');
       db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
@@ -1354,6 +1356,17 @@ app.get("/projects/:project_id", async function (req,res,next) {
         else resolve(ing_data);
       });
     })
+
+    // const ingredient_dict = [];
+
+    // for (let i = 0; i < ing_data.length; i++) {
+    //   ingredient_dict[i] = [];
+    //   for (let j = 0; j < trial_data.length; j++) {
+        
+    //   }
+    //   ingredient_dict[i][trial_num-1].percent_of_ingredient = ing_data[i].percent_of_ingredient;
+    //   ingredient_dict[i][trial_num-1].total_amount = ing_data[i].total_amount;
+    // }
 
     console.log("ING DATA");
     console.log(ing_data);
@@ -1382,12 +1395,34 @@ app.get("/projects/:project_id", async function (req,res,next) {
         }));
       }
     }
+    
 
-    console.log("HELLO\n\n\nYOOHOO\n\n\n\n\n");
-    console.log(trial_data[0].ing_data);
+    // for (let i = 0; i < ing_data.length; i++) {
+    //   const ingID = ing_data[i].ingredient_id;
+    //   console.log(ingID);
+
+    //   const data_by_ing = ing_data.filter((ing) => ing.ingredient_id === ingID);
+
+    //   if (data_by_ing.length === 0) {
+    //     ing_data[i].trial_data = [];
+    //   } else {
+    //     ing_data[i].trial_data = data_by_ing.map((ing) => ({
+    //       ingredient_id: {
+    //         trialnum: ing.trial_num,
+    //         percent: ing.percent_of_ingredient,
+    //         amount: ing.total_amount,
+    //       },
+    //     }));
+    //   }
+    // }
+
+
+
+    // console.log("HELLO\n\n\nYOOHOO\n\n\n\n\n");
+    // console.log(trial_data[0].ing_data);
     
     console.log("TRIAL");
-    console.log(trial_data);
+    console.log(ing_data);
 
     const inventory_data = await new Promise((resolve, reject) => {
       console.log("INVENTORY EXECUTE");
