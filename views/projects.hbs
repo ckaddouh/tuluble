@@ -42,10 +42,10 @@
             </div>
             <div style="text-align:right; margin-top:10px">
                     <button id="clear-search"
-                                    name="clear-search" 
-                                    onclick="redirectToPage()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                    Clear Search</button>
+                        name="clear-search" 
+                        onclick="redirectToPage()"
+                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                        Clear Search</button>
             </div>
             <div class="col s12 m6 offset-m3">
                 <p></p>
@@ -55,16 +55,15 @@
                 function redirectToPage() {
                     const clearedUrl = "http://localhost:3000/projects";
                     const currentUrl = window.location.href;
-                    const word = "search"
-                    const clear = document.querySelector('#clear-search');
-
-                    if (currentUrl.toString.contains(word)) {
-                        
-                        clear.addEventListener("click", function() {
-                            window.location.href = clearedUrl;
-                        });
+                    
+                    if (currentUrl !== clearedUrl) {
+                        window.location.href = clearedUrl;
                     }
                 }
+
+                // Add the event listener outside the redirectToPage function
+                const clear = document.querySelector('#clear-search');
+                clear.addEventListener("click", redirectToPage);
             </script>
 
             {{!-- search script --}}
@@ -231,7 +230,6 @@
                     });
                 });
             </script>
-
 
             </div>
             {{!-- <a href="/created" class="btn-floating btn-large orange fixed-action-btn">
