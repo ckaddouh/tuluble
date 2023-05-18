@@ -637,6 +637,15 @@ const getProjectID = `
     project_name = ? AND client = ? AND date = ?
 `
 
+const getIngredientTrialInfo = `
+  SELECT 
+    trial_num, total_amount, percent_of_ingredient
+  FROM 
+    formula_ingredient
+  WHERE 
+    project_id = ? AND trial_num = ? AND ingredient_id = ?
+`
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
@@ -1357,16 +1366,31 @@ app.get("/projects/:project_id", async function (req,res,next) {
       });
     })
 
-    // const ingredient_dict = [];
+    const ingredient_dict = [];
 
-    // for (let i = 0; i < ing_data.length; i++) {
-    //   ingredient_dict[i] = [];
-    //   for (let j = 0; j < trial_data.length; j++) {
+    for (let i = 0; i < ing_data.length; i++) {
+      ingredient_dict[i] = [];
+      for (let j = 0; j < trial_data.length; j++) {
         
-    //   }
-    //   ingredient_dict[i][trial_num-1].percent_of_ingredient = ing_data[i].percent_of_ingredient;
-    //   ingredient_dict[i][trial_num-1].total_amount = ing_data[i].total_amount;
-    // }
+        const trialIngData = await new Promise((resolve, reject) => {
+          console.log('IN FORMULA DISPLAY EXECUTE');
+          console.log(project_id);
+          console.log(trial_data[j].trial_num);
+          console.log(ing_data[i].ingredient_id);
+
+          db.execute(getIngredientTrialInfo, [project_id, trial_data[j].trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+            if (error) reject(error);
+            else resolve(trialIngData);
+          });
+        });
+
+        ingredient_dict[i][j] = trialIngData;
+        console.log(trialIngData);
+        // ADD AMOUNT AND PERCENT FOR THAT TRIAL
+      }
+    }
+    console.log("\n\n\nINGREDIENT DICT\n\n\n\n");
+    console.log(ingredient_dict);
 
     console.log("ING DATA");
     console.log(ing_data);
@@ -1391,6 +1415,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
             trialnum: ing.trial_num,
             percent: ing.percent_of_ingredient,
             amount: ing.total_amount,
+            ingredient_dict: ingredient_dict
           },
         }));
       }
