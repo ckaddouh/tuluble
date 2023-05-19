@@ -319,16 +319,18 @@
                 </div>
 
                 <script>
-                    const ingredient1 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '1 g', Percent: '0%' },  { Amount: '', Percent: '' }, { Amount: '90 g', Percent: '120' }];
-                    const ingredient2 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '', Percent: '' },  { Amount: '90g', Percent: '120%' }, { Amount: '90 g', Percent: '120' }];
-                    const ingredients = [ingredient1, ingredient2]
+                    const ingredient1 = [  [1, 9, 10] ,  [2, 1, 0] , [], [4, 90, 120]];
+                    const ingredient2 = [  [1, 9, 10] ,  [] , [], [4, 90, 120]];
+                    const ingredients = {{ingredient_dictç}};
                     console.log(ingredients)
                     $("#info").append("<tr>");
                     for (let i = 1; i < ingredients[0].length+1; i++) {
                         {{!-- $("#info").append("<tr>");
                         $("#info").append("<th >Trial "+i+"</th>"); --}}
                         for (let key in ingredients[0][0]) {
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" "+key+"</th>");
+                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" Amount </th>");
+                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" Percentage</th>");
+
                     }
                     }
                     $("#info").append("</tr>");
@@ -345,11 +347,25 @@
                     } --}}
                     for (let ingredient of ingredients){
                         $("#info").append("<tr>");
-                        for (let i = 0; i < ingredient.length; i++) {
-                            {{!-- $("#info").append("<tr>"); --}}
+                        for (let trial = 0; trial < ingredient.length; trial++) {
+                            if (ingredient[trial].length === 0) {
+                                console.log("empty");
+                                $("#info").append("<td style=\"padding:20px; text-align:center\"></td>");
+                                $("#info").append("<td style=\"padding:20px; text-align:center\"></td>");
+                            }
+                            else {
+                                console.log(ingredient[trial][1]);
+                                console.log(ingredient[trial][2]);
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[trial][1] + "</td>");
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[trial][2] + "</td>");
+                            }
+
+                            {{!-- $("#info").append("<tr>");
                             for (let key in ingredient[i]) {
-                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[i][key] + "</td>");
-                            } 
+                                if (ingredient)
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[i][1] + "</td>");
+                                $("#info").append("<td style=\"padding:20px; text-align:center\">" + ingredient[i][2] + "</td>");
+                            }  --}}
                         }
                         $("#info").append("</tr>");
                     };
