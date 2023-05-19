@@ -315,23 +315,23 @@
                                         </tr>
                                     {{/each}} --}}
                         </table>
+                        
                     </div>
                 </div>
 
                 <script>
                     const ingredient1 = [  [1, 9, 10] ,  [2, 1, 0] , [], [4, 90, 120]];
                     const ingredient2 = [  [1, 9, 10] ,  [] , [], [4, 90, 120]];
-                    const ingredients = {{ingredient_dictç}};
-                    console.log(ingredients)
+                    {{!-- const ingredients = {{ingredient_dict}}; --}}
+                    {{!-- const ingredients = [ingredient1, ingredient2]; --}}
+                    {{!-- console.log(ingredients); --}}
+                    const trial_data = {{trial_data}};
                     $("#info").append("<tr>");
-                    for (let i = 1; i < ingredients[0].length+1; i++) {
+                    for (let i = 1; i < trial_data.length+1; i++) {
                         {{!-- $("#info").append("<tr>");
                         $("#info").append("<th >Trial "+i+"</th>"); --}}
-                        for (let key in ingredients[0][0]) {
                         $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" Amount </th>");
                         $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+i+" Percentage</th>");
-
-                    }
                     }
                     $("#info").append("</tr>");
                     
@@ -345,7 +345,7 @@
                         }
                         $("#info").append("</tr>");
                     } --}}
-                    for (let ingredient of ingredients){
+                    {{!-- for (let ingredient of ingredients){
                         $("#info").append("<tr>");
                         for (let trial = 0; trial < ingredient.length; trial++) {
                             if (ingredient[trial].length === 0) {
@@ -368,7 +368,7 @@
                             }  --}}
                         }
                         $("#info").append("</tr>");
-                    };
+                    }; --}}
                     
                    
                     

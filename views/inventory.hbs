@@ -140,6 +140,10 @@
                                 maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
+                            <b><label for="tuluble">Expiration Date:</label></b>
+                            <input type="date" name="userInput12" id="userInput12" placeholder="Enter Expiration Date">
+                            <p> </p>
+
                             <b><label for="tuluble">Date Recieved:</label></b>
                             <input type="date" name="userInput7" id="userInput7" placeholder="Enter Date Received">
                             <p> </p>
@@ -225,6 +229,7 @@
                 const inputValue9 = $("#userInput9").val();
                 const inputValue10 = $("#userInput10").val();
                 const inputValue11 = $("#userInput11").val();
+                const inputValue12 = $("#userInput12").val();
 
                 module.exports = {inputValue1};
                 module.exports = {inputValue2};
@@ -237,6 +242,7 @@
                 module.exports = {inputValue9};
                 module.exports = {inputValue10};
                 module.exports = {inputValue11};
+                module.exports = {inputValue12};
 
                     window.location = "inventory/inventoryformsubmit";
                     //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
@@ -556,13 +562,18 @@
                                                     value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
+                                                <b><label for="tuluble">Expiration Date:</label></b>
+                                                <input type="date" class="datepicker" name="userInput12" id="userInput12"
+                                                    value="{{this.expiration}}" >
+                                                <p> </p>
+
                                                 <b><label for="tuluble">Date Recieved:</label></b>
-                                                <input type="date" name="userInput7" id="userInput7"
+                                                <input type="date" class="datepicker" name="userInput7" id="userInput7"
                                                     value="{{this.date_received}}" >
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Supplier:</label></b>
-                                                <input type="text" name="userInput8" id="userInput8"
+                                                <input type="text" class="datepicker" name="userInput8" id="userInput8"
                                                     value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
@@ -573,12 +584,12 @@
 
                                                 <b><label for="tuluble">COA Link:</label></b>
                                                 <input type="text" name="userInput10" id="userInput10"
-                                                    value={{this.coa}} maxlength="100">
+                                                    value="{{this.coa}}" maxlength="100">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">MSDS Link:</label></b>
                                                 <input type="text" name="userInput11" id="userInput11"
-                                                    value={{this.msds}} maxlength="100">
+                                                    value="{{this.msds}}" maxlength="100">
                                                 <p> </p>
 
                                                 <div class="update_button">
@@ -606,6 +617,17 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var date = new Date("Fri May 19 2023 00:00:00 GMT-0400 (Eastern Daylight Time)");
+            var options = {
+                defaultDate: date
+            };
+            var elems = document.querySelectorAll('.datepicker');
+            M.Datepicker.init(elems, options);
+  });
+    </script>
+
+    <script>
         $(document).ready(function () {
             $("#update_button").click(function () {
 
@@ -628,6 +650,7 @@
                 const inputValue9 = $("#userInput9").val();
                 const inputValue10 = $("#userInput10").val();
                 const inputValue11 = $("#userInput11").val();
+                const inputValue12 = $("#userInput12").val();
 
                 console.log(newSelectedOption);
 

@@ -261,8 +261,8 @@ const read_inactive_projects_archived = `
 
 const insertIntoInventory = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit, coa, msds)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit, coa, msds, expiration)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 const insertIntoInventory1 = `
   INSERT INTO 
@@ -289,7 +289,7 @@ const updateIngredient = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?, expiration = ?
   WHERE 
     ingredient_id = ?
 `
@@ -1081,7 +1081,7 @@ app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req,
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11], (error, results) => {
+  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, req.body.userInput12], (error, results) => {
     if (error) {
       console.error("Error executing SQL query:", err);
       res.status(500).send(error); //Internal Server Error 
@@ -1098,7 +1098,7 @@ app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (
   let ingredient_id = req.params.ingredient_id
  
   db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, ingredient_id], (error, results) => {
+  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, req.body.userInput12, ingredient_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
@@ -1414,8 +1414,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
           ingredient_id: {
             trialnum: ing.trial_num,
             percent: ing.percent_of_ingredient,
-            amount: ing.total_amount,
-            ingredient_dict: ingredient_dict
+            amount: ing.total_amount
           },
         }));
       }
@@ -1459,6 +1458,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
     // console.log("INVENTORY DATA");
     // console.log(inventory_data);
+
           
     console.log("END OF THING");
     if (error)
@@ -1469,7 +1469,8 @@ app.get("/projects/:project_id", async function (req,res,next) {
         ing_data: ing_data,
         project_data: project_data,
         trial_data: trial_data,
-        inventory_data: inventory_data
+        inventory_data: inventory_data,
+        ingredient_dict: ingredient_dict
       });
     }
            
@@ -1719,7 +1720,8 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   }
- 
+  // console.log("\n\n im gonna die \n\n");
+  // console.log(results);
   res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
 
   } catch (error) {
