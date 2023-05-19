@@ -1217,7 +1217,7 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
   }
  });
 
- app.get("/project-assign/search/:input", (req, res) => {
+ app.get("/project_assign/search/:input", (req, res) => {
   let input = req.params.input;
   let searchStr = `%${input}%`;
 
