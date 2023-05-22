@@ -1366,6 +1366,9 @@ app.get("/projects/:project_id", async function (req,res,next) {
       });
     })
 
+    console.log("THIS IS ING DATA");
+    console.log(ing_data);
+
     const ingredient_dict = [];
 
     for (let i = 0; i < ing_data.length; i++) {
@@ -1459,8 +1462,12 @@ app.get("/projects/:project_id", async function (req,res,next) {
     // console.log("INVENTORY DATA");
     // console.log(inventory_data);
 
-          
+    console.log("TRIAL DATA FJAKLFJDLS");
+    console.log(ingredient_dict);
     console.log("END OF THING");
+
+    const ingredientDictJSON = JSON.stringify(ingredient_dict);
+    console.log(ingredientDictJSON);
     if (error)
       res.redirect("/error");
     else {
@@ -1468,9 +1475,9 @@ app.get("/projects/:project_id", async function (req,res,next) {
         project_id: project_id,
         ing_data: ing_data,
         project_data: project_data,
-        trial_data: trial_data,
+        trial_data: trial_data.length,
         inventory_data: inventory_data,
-        ingredient_dict: ingredient_dict
+        ingredient_dict: ingredientDictJSON
       });
     }
            
