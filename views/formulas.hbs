@@ -359,12 +359,12 @@
                                 // console.log(ingredients[ing][trial][0].trial_num);
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log(ingredients[ing][trial]);
-                                    $("#info").append("<td>"+ingredients[ing][trial][0]['total_amount']+"</td>");
-                                    $("#info").append("<td>"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                 }
                                 else {
-                                    $("#info").append("<td></td>");
-                                    $("#info").append("<td></td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
+                                    $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
                                 }
                             
                             }
