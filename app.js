@@ -646,6 +646,18 @@ const getIngredientTrialInfo = `
     project_id = ? AND trial_num = ? AND ingredient_id = ?
 `
 
+const getFormulaIngredients = `
+  SELECT DISTINCT 
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.unit, ingredient.lot_num
+  FROM 
+	  formula_ingredient, ingredient
+  WHERE 
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formula_ingredient.project_id = ?
+	  GROUP BY ingredient.ingredient_id
+    ORDER BY formula_ingredient.phase
+`
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
@@ -1356,15 +1368,20 @@ app.get("/projects/:project_id", async function (req,res,next) {
     });
 
 
-    const ingredient1 = [  { Amount: '9 g', Percent: '10%' },  { Amount: '1 g', Percent: '0%' },  { Amount: '', Percent: '' }, { Amount: '90 g', Percent: '120' }];
-
     const ing_data = await new Promise((resolve, reject) => {
-      console.log('IN FORMULA DISPLAY EXECUTE');
-      db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+      db.execute(getFormulaIngredients, [project_id], (error, ing_data) => {
         if (error) reject(error);
         else resolve(ing_data);
       });
     })
+
+    // const ing_data = await new Promise((resolve, reject) => {
+    //   console.log('IN FORMULA DISPLAY EXECUTE');
+    //   db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+    //     if (error) reject(error);
+    //     else resolve(ing_data);
+    //   });
+    // })
 
     console.log("THIS IS ING DATA");
     console.log(ing_data);

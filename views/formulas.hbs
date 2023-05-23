@@ -121,9 +121,10 @@
                 <div style="overflow-x: scroll;" class = "col s12 m4 l6">
                     <table class="scrollable">
                         <tr>
-                            <th>Phase</th>
-                            <th>Ingredient</th>
+                            <th width = "10px">Phase</th>
+                            <th>Trade Name</th>
                             <th>INCI</th>
+                            <th>Supplier</th>
                             <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Lot Number</th>
                             
                             </tr>
@@ -141,9 +142,10 @@
 
                         {{#each ing_data}}
                             <tr>
-                                <td>{{phase}}</td>
+                                <td width = "10px" style = "padding:20px">{{phase}}</td>
                                 <td>{{trade_name}}</td>
                                 <td>{{inci_name}}</td>
+                                <td>{{supplier}}</td>
                                 <td>{{lot_num}}</td>
                                 {{#each trials}}
                                     {{!-- get these values for each trial number (if ingredient id does not exist in that trial
