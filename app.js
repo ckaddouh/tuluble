@@ -1517,9 +1517,10 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
 // });
 
-app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function (req, res, next) {
+app.post("/projects/:project_id/trial/makeformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id
-  let trial_num = req.params.trial_num
+  let trial_num = req.body.userInput1
+  
 
   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
     console.log(totalAmount[0].s);
@@ -1528,7 +1529,7 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function 
         console.log(ings[i].ingredient_id);
         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
           console.log(amount[0].total_amount);
-          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput1, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
             if (error)
               res.status(500).send(error);
           });
@@ -1536,7 +1537,7 @@ app.post("/projects/:project_id/trial:trial_num/makeformsubmit", async function 
       }
     });
   });
-  res.redirect('/projects/' + project_id + '/trial1/trial1');
+  res.redirect('/projects/' + project_id);
 });
 
 
