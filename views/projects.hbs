@@ -164,6 +164,16 @@
                                                             <input type="date" name = "userInput3" id="userInput3" value="{{this.date}}">
                                                             <p> </p>
 
+                                                            {{!-- Field 4 --}}
+                                                            <b><label for="tuluble">Contact Name:</label></b>
+                                                            <input type="text" name = "contactName1" id="contactName1" value="{{this.client_name}}">
+                                                            <p> </p>
+
+                                                            {{!-- Field 5 --}}
+                                                            <b><label for="tuluble">Contact Email:</label></b>
+                                                            <input type="text" name = "contactEmail1" id="contactEmail1" value="{{this.client_email}}">
+                                                            <p> </p>
+
                                                             <div class="update_button">
                                                                 <button id = "update_button" name = "update_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Finish Editing</button>
                                                                 {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
@@ -191,7 +201,7 @@
                             <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
                         </div>
                         <div class="col s6">
-                            <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
+                            <span><b>Contact name: </b>{{client_name}}<br></br><b>Contact email: </b>{{client_email}}</span>
                         </div>
                         <div class="col s12">&nbsp;</div>
                         {{!-- <div class="col s12 m6 l3">
@@ -227,6 +237,8 @@
                     const inputValueU1 = $("#userInputU1").val();
                     const inputValueU2 = $("#userInputU2").val();
                     const inputValueU3 = $("#userInputU3").val();
+                    const clientName1 = $("#clientName1").val();
+                    const clientEmail1 = $("#clientEmail1").val();
 
                     window.location += "projectupdate";
                     //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
@@ -266,6 +278,18 @@
                                 <b><label for="tuluble">Date Started:</label></b>
                                 <input type="date" name = "userInputP3" id="userInputP3" placeholder="Enter Date Started">
                                 <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Contact Name:</label></b>
+                                <input type="text" name = "contactName" id="contactName" placeholder="Enter Contact Name" maxlength="100">
+                                <p> </p>
+
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Contact Email:</label></b>
+                                <input type="text" name = "contactEmail" id="contactEmail" placeholder="Enter Contact Email" maxlength="80">
+                                <p> </p>
+
+                               
 
                                 <div class="add_project_button">
                                 <button id = "add_project_button" 
@@ -340,7 +364,8 @@
                 var inputValue1 = $("#userInputP1").val();
                 var inputValue2 = $("#userInputP2").val();
                 var inputValue3 = $("#userInputP3").val();
-                var inputValue4 = $("#userInputP4").val();
+                var contactName = $("#contactName").val();
+                var contactEmail = $("#contactEmail").val();
 
                 window.location += "projectformsubmit";
                 });

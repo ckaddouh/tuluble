@@ -47,7 +47,6 @@
 
             {{!-- <button id="create-pdf-button">Create PDF</button> --}}
             {{!-- <a id="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Create PDF</a> --}}
-            <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
 
             {{!-- <button onclick="window.print()">Print Screen</button> --}}
             <p>&nbsp;</p>
@@ -402,6 +401,12 @@
                                 <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                             </a>
                         </th>
+                        <th id="trade">Supplier
+                            {{!-- <span class="large material-icons">import_export</span> --}}
+                            <a id="sort-supplier-button" class="waves-effect">
+                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                            </a>
+                        </th>
                         <th>Amount Available
                             {{!-- <span class="large material-icons">import_export</span> --}}
                             <a id="sort-amount-button" class="waves-effect">
@@ -471,6 +476,7 @@
                         </td>
 
                         <td>{{this.trade_name}}</td>
+                        <td>{{this.supplier}}</td>
                         <td>{{this.amt}} {{this.unit}}</td>
                         <td>{{this.shelf}}</td>
                         <td>{{this.lot_num}}</td>

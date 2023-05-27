@@ -136,8 +136,12 @@
                             <p>Total Amt of Formula: {{s}}</p>
                             <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
                         {{/each}} --}}
-                            <a href = "/projects/{{project_id}}/procedure">Procedure</a>
-                        
+                            
+                        <div class="col s6 m8 12">
+                        <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
+                        </div>
+
+                        <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
 
 
                         {{#each ing_data}}

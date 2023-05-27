@@ -122,7 +122,7 @@ const read_inventory_all_alph = `
 
 const read_projects_all_sql = `
     SELECT
-        project_name, project_id, client, date
+        project_name, project_id, client, date, client_name, client_email
     FROM
         projects
     WHERE 
@@ -281,8 +281,8 @@ const read_inventory_classifier_sql = `
 
 const insertIntoProjects = `
   INSERT INTO 
-    projects (project_name, client, date, active)
-  VALUES (?, ?, ?, 1)
+    projects (project_name, client, date, client_name, client_email, active)
+  VALUES (?, ?, ?, ?, ?, 1)
 `
 
 const updateIngredient = `
@@ -298,7 +298,7 @@ const updateProject = `
   UPDATE 
     projects
   SET 
-    project_name = ?, client = ?, date = ?
+    project_name = ?, client = ?, date = ?, client_name = ?, client_email = ?
   WHERE 
     project_id = ?
 `
@@ -1123,7 +1123,7 @@ app.post("/projects/:project_id/projectupdate", async function (req, res, next) 
   let project_id = req.params.project_id
 
   try {
-    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, project_id]);
+    db.execute(updateProject, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.contactName1, req.body.contactEmail1, project_id]);
     res.redirect("/projects");
   }
   catch (error) {
@@ -1136,7 +1136,7 @@ app.post("/projects/sci/:scientist_id/projectformsubmit", async function (req, r
  
   try {
     const results = await new Promise((resolve, reject) => {
-      db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3], (error, results) => {
+      db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.contactName, req.body.contactEmail], (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
@@ -1199,30 +1199,38 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 app.post("/project-assign/edituser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
  
- 
   let name = req.body.name;
   let email = req.body.email;
   let admin = req.body.role;
-  console.log(name);
-  console.log(email);
-  console.log(admin);
- 
- 
+
+  
+
   try {
-    db.execute(editUser, [name, email, admin, scientist_id]);
-    res.redirect("/project-assign");
+    if (isAdmin) {
+      db.execute(editUser, [name, email, admin, scientist_id]);
+      res.redirect("/project-assign");
+    }
+    else {
+      res.redirect("/")
+    }
   }
   catch (error) {
     next(error);
   }
  });
 
+
  app.post("/project_assign/deleteuser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
  
   try {
+    if (isAdmin) {
     db.execute(deleteUser, [scientist_id]);
     res.redirect("/project-assign");
+    }
+    else {
+      res.redirect("/");
+    }
   }
   catch (error) {
     next(error);
