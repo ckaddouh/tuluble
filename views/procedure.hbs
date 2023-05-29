@@ -53,14 +53,14 @@
                 <tr>
                     <td contenteditable="true">{{phase_num}}</td>
                     <td contenteditable="true">{{proc}}</td>
-                    <td>{{comments}}</td>
-                    <td>{{temp_init}}</td>
-                    <td>{{temp_final}}</td>
-                    <td>{{timing}}</td>
-                    <td>{{mixing_init}}</td>
-                    <td>{{mixing_final}}</td>
-                    <td>{{mixer_type}}</td>
-                    <td>{{blade}}</td>
+                    <td contenteditable="true">{{comments}}</td>
+                    <td contenteditable="true">{{temp_init}}</td>
+                    <td contenteditable="true">{{temp_final}}</td>
+                    <td contenteditable="true">{{timing}}</td>
+                    <td contenteditable="true">{{mixing_init}}</td>
+                    <td contenteditable="true">{{mixing_final}}</td>
+                    <td contenteditable="true">{{mixer_type}}</td>
+                    <td contenteditable="true">{{blade}}</td>
                 </tr>
                 {{/each}}
                 <tr>
@@ -161,6 +161,19 @@
                 window.location.href += "/procformsubmit";
                 //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                 });
+            });
+        </script>
+
+         <script>
+            const editableCells = document.querySelectorAll('[contenteditable="true"]');
+
+            editableCells.forEach(cell => {
+            cell.addEventListener('keydown', function (e) {
+                if (e.keyCode === 13) { // Capture Enter key
+                e.preventDefault(); // Prevent line break
+                cell.blur(); // Exit the cell
+                }
+            });
             });
         </script>
 
