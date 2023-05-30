@@ -423,6 +423,16 @@ WHERE
   AND projects.active = 0
 `
 
+const read_projects_search_project_assign = `
+SELECT
+  project_name, projects.project_id, client, date
+FROM
+  projects
+WHERE
+  projects.project_name LIKE ?
+  AND projects.active = 1
+`
+
 const get_procedure = `
   SELECT 
     phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id
@@ -1238,10 +1248,12 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
  });
 
  app.get("/project_assign/search/:input", (req, res) => {
+  console.log("HERE CHECK HERE IM HERE FOR PROJECT ASSIGN SEARCH");
   let input = req.params.input;
   let searchStr = `%${input}%`;
 
-  db.execute(read_projects_search_all, [searchStr], (error, results) => {
+  // db.execute(read_project_data_for_assign, [searchStr], (error, results) => {
+  db.execute(read_projects_search_project_assign, [searchStr], (error, results) => {
     if (error) reject(error);
     else resolve(results);
     });
@@ -1625,7 +1637,7 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
 
   const colNum = colList[column];
 
-  const edit_procedure = "UPDATE procedure_item SET `" + colNum + "` = ? WHERE  phase_num = ? AND project_id = ?"
+  const edit_procedure = "UPDATE procedure_item SET " + colNum + "= ? WHERE phase_num = ? AND project_id = ?"
 
   console.log("PROCEDURE EDIT");
   console.log(colNum);
@@ -1633,7 +1645,7 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
   console.log(phase);
   console.log(project_id);
 
-  db.execute(edit_procedure, [colNum, cellContent, phase, project_id], (error, proc_info) => {
+  db.execute(edit_procedure, [cellContent, phase, project_id], (error, proc_info) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
