@@ -152,12 +152,7 @@
                                 <td>{{inci_name}}</td>
                                 <td>{{supplier}}</td>
                                 <td>{{lot_num}}</td>
-                                {{#each trials}}
-                                    {{!-- get these values for each trial number (if ingredient id does not exist in that trial
-                                    then put 0). Write a function for this --}}
-                                    {{!-- <td>{{percent_of_ingredient}}</td>
-                                    <td>{{total_amount}}</td> --}}
-                                {{/each}}
+                               
                             </tr>
                         {{/each}}
 
@@ -231,6 +226,19 @@
                             });
                         });
                     </script>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#make_trial_button").click(function() {
+                                console.log("TEST");
+                            var trial_num = $("#userInput1T").val();
+                            var quantity = $("#userInput2T").val();
+                           
+                            window.location.href += "/makeformsubmit";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                            });
+                        });
+                    </script>
                     
                     <td>
                         <div class="col s12 m4 l2">
@@ -241,7 +249,9 @@
                                 <h1 style="font-size:40px;">Make Trial</h1>
 
                                 {{!-- somehow get the formula of the tab clicked on --}}
-                                <form method="POST" action="/projects/{{project_id}}/trial/makeformsubmit">
+                    
+
+                                <form method="POST" action="/projects/{{project_id}}/makeformsubmit">
                                     <article class="regular">
                                         {{!-- <h2>Textbook</h2> --}}
 
@@ -251,11 +261,11 @@
                                         <p> </p> --}}
                                         {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
                                         <b><label for="tuluble">Trial:</label></b>
-                                        <input type="number" name = "userInput1" id="userInput1">
+                                        <input type="number" name = "userInput1T" id="userInput1T">
                                         <p> </p>
 
-                                        <b><label for="tuluble">Quantity {{unit}}:</label></b>
-                                        <input type="number" name = "userInput2" id="userInput2">
+                                        <b><label for="tuluble">Quantity:</label></b>
+                                        <input type="number" name = "userInput2T" id="userInput2T">
                                         <p> </p>
 
                                        
@@ -264,13 +274,15 @@
                                             {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                         </div>
                                         <p> </p>
-                                    </form>
-                                </article>
+                                    </article>
+                                  </form>
                             </div>
+                        </div>
                         </div>
                     </td>
                     </div>
 
+                 
                     </table>
 
                 </div>
@@ -321,14 +333,16 @@
                                             <td>t{{total_amount}}</td>
                                         </tr>
                                     {{/each}} --}}
+
+
+                           
                         </table>
                         
                     </div>
                 </div>
 
                 <script>
-                    const ingredient1 = [  [1, 9, 10] ,  [2, 1, 0] , [], [4, 90, 120]];
-                    const ingredient2 = [  [1, 9, 10] ,  [] , [], [4, 90, 120]];
+                  
                     
                     // var ingredientsJSON = JSON.stringify({{ingredient_dict}});
                     const ingredients = JSON.parse('{{{ingredient_dict}}}');
@@ -357,8 +371,7 @@
                    
                    console.log(ingredients);
                     
-                    for(let ing = 0; ing < ingredients.length; ing++)
-                        {
+                    for(let ing = 0; ing < ingredients.length; ing++) {
                             $("#info").append("<tr>");
                             for(let trial = 0; trial < ingredients[ing].length; trial++)
                             {
@@ -376,7 +389,8 @@
                             
                             }
                             $("#info").append("</tr>");
-                        }
+                    }
+
                 </script>
 
                   

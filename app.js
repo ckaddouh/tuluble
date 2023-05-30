@@ -1502,7 +1502,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
         project_data: project_data,
         trial_data: trial_data.length,
         inventory_data: inventory_data,
-        ingredient_dict: ingredientDictJSON
+        ingredient_dict: ingredientDictJSON,
       });
     }
            
@@ -1542,9 +1542,12 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
 // });
 
-app.post("/projects/:project_id/trial/makeformsubmit", async function (req, res, next) {
+app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
+  console.log("hello?");
   let project_id = req.params.project_id
-  let trial_num = req.body.userInput1
+  let trial_num = req.body.trial_num
+
+  console.log(trial_num);
   
 
   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
@@ -1554,7 +1557,7 @@ app.post("/projects/:project_id/trial/makeformsubmit", async function (req, res,
         console.log(ings[i].ingredient_id);
         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
           console.log(amount[0].total_amount);
-          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+          db.execute(subtractAmounts, [amount[0].total_amount, req.body.quantity, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
             if (error)
               res.status(500).send(error);
           });
