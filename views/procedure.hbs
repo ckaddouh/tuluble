@@ -136,6 +136,10 @@
         </table>
 
         <script>
+
+        </script>
+
+        <script>
             $(document).ready(function() {
                 $('.modal').modal();
             });
@@ -166,15 +170,34 @@
 
          <script>
             const editableCells = document.querySelectorAll('[contenteditable="true"]');
-
+            
             editableCells.forEach(cell => {
+            const originalContent = cell.innerText;
+
             cell.addEventListener('keydown', function (e) {
                 if (e.keyCode === 13) { // Capture Enter key
+                console.log("yoohoo");
                 e.preventDefault(); // Prevent line break
                 cell.blur(); // Exit the cell
                 }
             });
+
+             cell.addEventListener('blur', function () {
+            const editedContent = cell.innerText;
+            if (originalContent !== editedContent) {
+                const phase = cell.parentNode.rowIndex; // Get the phase number
+                const column = cell.cellIndex; // Get the column index
+
+                console.log("Edited content:", editedContent);
+                console.log("Phase:", phase);
+                console.log("Column:", column);
+
+                window.location.href += "/cellEdited/" + phase + "/" + column + "/" + editedContent;
+                // Perform further actions with the edited content, phase, and column
+            }
+        });
             });
+
         </script>
 
 

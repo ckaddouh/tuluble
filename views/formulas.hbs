@@ -5,6 +5,9 @@
     {{#each project_data}}
     <title>{{project_name}} Formulas</title>
     {{/each}}
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -270,7 +273,7 @@
 
                                        
                                         <div class="make_trial_button">
-                                            <button id = "make_trial_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">Make Trial</button>
+                                            <button id = "make_trial_button" onclick="postMessage()" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">Make Trial</button>
                                             {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                         </div>
                                         <p> </p>
@@ -282,6 +285,17 @@
                     </td>
                     </div>
 
+                    <script>
+                        function postMessage () {
+                            console.log("heloooooooo");
+                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclic = "">UNDO MAKE</button>';
+                        }
+                        M.toast({html: toastHTML});
+                    </script>
+
+                    <script>
+                    
+                    </script>
                  
                     </table>
 
@@ -386,10 +400,22 @@
                                     $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
                                     $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
                                 }
-                            
+
+                               
                             }
                             $("#info").append("</tr>");
+                          
                     }
+                      
+                    $("#info").append("<tr>");
+
+                    for (let trial = 0; trial < trial_data; trial++) {
+                        console.log(trial);
+                        $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/' + (trial+1)><i class='material-icons'>delete</i></a></td>");
+                    }
+                    
+
+                    $("#info").append("</tr>");
 
                 </script>
 

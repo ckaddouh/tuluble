@@ -1613,6 +1613,36 @@ app.get("/projects/:project_id/procedure", (req, res) => {
   });
 });
 
+
+app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent", (req, res) => {
+  let cellContent = req.params.cellContent;
+  let phase = req.params.phase;
+  let column = req.params.column;
+  let project_id = req.params.project_id;
+
+
+  const colList = ["phase_num", "proc", "comments", "temp_init", "temp_final", "timing", "mixing_init", "mixing_final", "mixer_type", "blade"];
+
+  const colNum = colList[column];
+
+  const edit_procedure = "UPDATE procedure_item SET `" + colNum + "` = ? WHERE  phase_num = ? AND project_id = ?"
+
+  console.log("PROCEDURE EDIT");
+  console.log(colNum);
+  console.log(cellContent);
+  console.log(phase);
+  console.log(project_id);
+
+  db.execute(edit_procedure, [colNum, cellContent, phase, project_id], (error, proc_info) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/projects/" + project_id + "/procedure");
+    }
+  });
+
+});
+
 // app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
 //   let project_id = req.params.project_id
 //   let trial_num = req.params.trial_num
