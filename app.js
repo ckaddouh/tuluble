@@ -672,6 +672,13 @@ const getFormulaIngredients = `
     ORDER BY formula_ingredient.phase
 `
 
+const delete_trial = `
+  DELETE FROM
+    formulas
+  WHERE
+    trial_num = ?
+`
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
@@ -1659,6 +1666,19 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
 
 });
 
+
+app.get("/projects/{{project_id}}/deleteTrial/:trial_num", (req, res) => {
+  let trialNum = req.params.trial_num;
+  
+  db.execute(delete_trial, [trial_num], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/projects/" + project_id);
+    }
+  });
+
+});
 // app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
 //   let project_id = req.params.project_id
 //   let trial_num = req.params.trial_num
@@ -1810,6 +1830,7 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
     res.redirect("/error"); 
   }
 });
+
 
 app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
   let project_id = req.params.project_id
