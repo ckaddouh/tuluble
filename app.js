@@ -1482,6 +1482,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
         });
 
         ingredient_dict[i][j] = trialIngData;
+        console.log("TRIAL ING DATA");
         console.log(trialIngData);
         // ADD AMOUNT AND PERCENT FOR THAT TRIAL
       }
@@ -1497,42 +1498,25 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
     for (let i = 0; i < trial_data.length; i++) {
       const trialId = trial_data[i].trial_num;
-      console.log(trialId);
       const trialIngData = ing_data.filter((ing) => ing.trial_num === trialId);
-    
-      console.log("NEW ING");
-      console.log(trialIngData);
-    
-      trial_data[i].ing_data = trialIngData.map((ing) => ({
-        ingredient_id: {
-          trialnum: ing.trial_num,
-          percent: ing.percent_of_ingredient,
-          amount: ing.total_amount,
-        },
-      }));
-    
-      if (trial_data[i].ing_data.length === 0) {
-        trial_data[i].ing_data.push({
-          ingredient_id: {
-            trialnum: trialId,
-            percent: 0,
-            amount: 0,
-          },
-        });
-      }
+      
+      trial_data[i].ing_data = trialIngData.length > 0
+        ? trialIngData.map((ing) => ({
+            ingredient_id: {
+              trialnum: ing.trial_num,
+              percent: ing.percent_of_ingredient,
+              amount: ing.total_amount,
+            },
+          }))
+        : [{
+            ingredient_id: {
+              trialnum: trialId,
+              percent: 0,
+              amount: 0,
+            },
+          }];
     }
     
-    trial_data.forEach((trial) => {
-      if (trial.ing_data.length === 0) {
-        trial.ing_data.push({
-          ingredient_id: {
-            trialnum: trial.trial_num,
-            percent: 0,
-            amount: 0,
-          },
-        });
-      }
-    });
     
 
     // for (let i = 0; i < ing_data.length; i++) {
