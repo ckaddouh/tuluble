@@ -177,6 +177,18 @@ const selectTrialData = `
     AND formulas.project_id = ?
 `
 
+
+
+const selectTrialSums = `
+  SELECT  
+    SUM(formula_ingredient.total_amount) as amountSum, SUM(formula_ingredient.percent_of_ingredient) as percentSum
+  FROM 
+    formula_ingredient
+  WHERE 
+    formula_ingredient.project_id = ?
+    AND formula_ingredient.trial_num = ?
+`
+
 const selectBasicTrialData = `
   SELECT 
     formulas.batch_date, formulas.formulator, formulas.formula_id
@@ -1336,15 +1348,40 @@ app.get("/projects/:project_id", async function (req,res,next) {
     });
 
 
+    console.log("TRIAL DATA");
+    console.log(trial_data);
+
+
     const ing_data = await new Promise((resolve, reject) => {
       db.execute(getFormulaIngredients, [project_id], (error, ing_data) => {
         if (error) reject(error);
         else resolve(ing_data);
       });
-    })
+    });
 
-    console.log("THIS IS ING DATA");
-    console.log(ing_data);
+    let sum_data = [];
+    for (let i = 0; i < trial_data.length; i++) {
+      const sum = await new Promise((resolve, reject) => {
+        db.execute(selectTrialSums, [project_id, trial_data[i].trial_num], (error, sum_data) => {
+          if (error) reject(error);
+          else resolve(sum_data);
+        });
+      });
+
+      console.log("SUMSUMSUSMSUMS");
+      console.log(sum[0]);
+      sum_data.push(sum[0].amountSum);
+      sum_data.push(sum[0].percentSum);
+    }
+
+    console.log(sum_data);
+    // const ing_data = await new Promise((resolve, reject) => {
+    //   console.log('IN FORMULA DISPLAY EXECUTE');
+    //   db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
+    //     if (error) reject(error);
+    //     else resolve(ing_data);
+    //   });
+    // }
 
     const ingredient_dict = [];
 
@@ -1365,18 +1402,10 @@ app.get("/projects/:project_id", async function (req,res,next) {
         });
 
         ingredient_dict[i][j] = trialIngData;
-        console.log("TRIAL ING DATA");
-        console.log(trialIngData);
-        // ADD AMOUNT AND PERCENT FOR THAT TRIAL
+       
       }
     }
-    console.log("\n\n\nINGREDIENT DICT\n\n\n\n");
-    console.log(ingredient_dict);
 
-    console.log("ING DATA");
-    console.log(ing_data);
-    console.log("TRIAL STUFF");
-    console.log(trial_data);
 
 
     for (let i = 0; i < trial_data.length; i++) {
@@ -1400,34 +1429,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
           }];
     }
     
-    
 
-    // for (let i = 0; i < ing_data.length; i++) {
-    //   const ingID = ing_data[i].ingredient_id;
-    //   console.log(ingID);
-
-    //   const data_by_ing = ing_data.filter((ing) => ing.ingredient_id === ingID);
-
-    //   if (data_by_ing.length === 0) {
-    //     ing_data[i].trial_data = [];
-    //   } else {
-    //     ing_data[i].trial_data = data_by_ing.map((ing) => ({
-    //       ingredient_id: {
-    //         trialnum: ing.trial_num,
-    //         percent: ing.percent_of_ingredient,
-    //         amount: ing.total_amount,
-    //       },
-    //     }));
-    //   }
-    // }
-
-
-
-    // console.log("HELLO\n\n\nYOOHOO\n\n\n\n\n");
-    // console.log(trial_data[0].ing_data);
-    
-    console.log("TRIAL");
-    console.log(ing_data);
 
     const inventory_data = await new Promise((resolve, reject) => {
       console.log("INVENTORY EXECUTE");
@@ -1436,13 +1438,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
         else resolve(inventory_data);
       });
     })
-
-    // console.log("INVENTORY DATA");
-    // console.log(inventory_data);
-
-    console.log("TRIAL DATA FJAKLFJDLS");
-    console.log(ingredient_dict);
-    console.log("END OF THING");
 
     const ingredientDictJSON = JSON.stringify(ingredient_dict);
     console.log(ingredientDictJSON);
@@ -1456,6 +1451,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
         trial_data: trial_data.length,
         inventory_data: inventory_data,
         ingredient_dict: ingredientDictJSON,
+        sum_data_json: JSON.stringify(sum_data)
       });
     }
            

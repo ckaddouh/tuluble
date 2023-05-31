@@ -388,12 +388,26 @@
                       
                     $("#info").append("<tr>");
 
+                    let sumDict = JSON.parse('{{sum_data_json}}');
+
+                    for (let i = 0; i < sumDict.length; i+=2) {
+                        $("#info").append("<td>" + sumDict[i] + "</td>");
+                        $("#info").append("<td>" + sumDict[i+1] + "%</td>");
+                    }
+
+                    $("#info").append("</tr>");
+
+
+                    $("#info").append("<tr>");
                     for (let trial = 0; trial < trial_data; trial++) {
                         console.log(trial);
                         {{!-- $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/" + (trial+1) + "'><i class='material-icons'>delete</i></a></td>"); --}}
                         $("#info").append("<td colspan=2><a href= '#deleteTrial'><i class='material-icons'>delete</i></a></td>");
                     }
                     
+                    {{!-- for (let i = 0; i < sum_data.length; i++) {
+                        $("#info").append("<td colspan=2><a href= '#deleteTrial'><i class='material-icons'>delete</i></a></td>");       
+                    } --}}
 
                     $("#info").append("</tr>");
 
