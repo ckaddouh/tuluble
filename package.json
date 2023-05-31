@@ -9,6 +9,7 @@
     "hbs": "^4.2.0",
     "html2canvas": "^1.4.1",
     "materialize-css": "^1.0.0",
+    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
@@ -16,7 +17,8 @@
     "puppeteer": "^19.7.2",
     "railway": "^2.0.17",
     "sequelize": "^6.26.0",
-    "sqlite3": "^5.1.2"
+    "sqlite3": "^5.1.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0"

@@ -14,12 +14,16 @@ var projectsRouter = require('./routes/projects');
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
 const hbs = require("hbs");
+const moment = require('moment');
+
 // const style = require("css");
 
 hbs.registerHelper('eq', function(a, b) {
   return a === b;
 });
-
+hbs.registerHelper('formatDate', function(date) {
+  return moment(date).format('LL');
+})
 
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');

@@ -178,7 +178,7 @@
                                             </div>
                                             <div class="col s6">
                                                 {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount Available:</span> --}}
-                                                <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Date Receieved:</b> {{this.date_received}}<br></br><b>Expiration Date:</b> {{this.expiration}}<br></br><b>COA: </b>Link<br></br><b>MSDS: </b>Link</span>
+                                                <span><b>Lot Number:</b> {{this.lot_num}}<br></br><b>Date Receieved:</b> {{formatDate this.date_received}}<br></br><b>Expiration Date:</b> {{formatDate this.expiration}}<br></br><b>COA: </b>Link<br></br><b>MSDS: </b>Link</span>
                                             </div>
 
                                                 <div class="col s12">&nbsp;</div>
@@ -335,7 +335,7 @@
                                     <div class="col s12"><b><font size="+2">{{this.project_name}}</font></b></div>
                                     <div class="col s12">&nbsp;</div>
                                     <div class="col s6">
-                                        <span><b>Client:</b> {{this.client}}<br></br><b>Date:</b> {{this.date}}</span>
+                                        <span><b>Client:</b> {{this.client}}<br></br><b>Date:</b> {{formatDate this.date}}</span>
                                     </div>
                                     <div class="col s6">
                                         <span><b>Number of Formulas:</b> 3<br></br><b>Other: </b>Information</span>

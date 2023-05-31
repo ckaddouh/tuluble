@@ -460,8 +460,8 @@
                                         {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount
                                             Available:</span> --}}
                                         <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
-                                            <b>Date Receieved:</b>{{this.date_received}}<br></br>
-                                            <b>Expiration Date:</b>{{this.expiration}}<br></br>
+                                            <b>Date Receieved:</b>{{formatDate this.date_received}}<br></br>
+                                            <b>Expiration Date:</b>{{formatDate this.expiration}}<br></br>
                                             <b>COA:</b> <a href="{{this.coa}}">Link</a><br></br>
                                             <b>MSDS:</b> <a href="{{this.msds}}">Link</a><br></br>
                                     </div>
@@ -570,12 +570,12 @@
 
                                                 <b><label for="tuluble">Expiration Date:</label></b>
                                                 <input type="date" class="datepicker" name="userInput12" id="userInput12"
-                                                    value="{{this.expiration}}" >
+                                                    value="{{formatDate this.expiration}}" >
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Date Recieved:</label></b>
                                                 <input type="date" class="datepicker" name="userInput7" id="userInput7"
-                                                    value="{{this.date_received}}" >
+                                                    value="{{formatDate this.date_received}}" >
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Supplier:</label></b>
@@ -622,16 +622,6 @@
     </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var date = new Date("Fri May 19 2023 00:00:00 GMT-0400 (Eastern Daylight Time)");
-            var options = {
-                defaultDate: date
-            };
-            var elems = document.querySelectorAll('.datepicker');
-            M.Datepicker.init(elems, options);
-  });
-    </script>
 
     <script>
         $(document).ready(function () {

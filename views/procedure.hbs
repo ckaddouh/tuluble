@@ -20,6 +20,7 @@
 </style>
 
     <body style="display: flex; flex-direction: column;">
+        
         <div style="padding: 2% 2% 0% 2%">
         {{> navbar}}
 
@@ -29,8 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
 
-       
-        <header> {{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure</header>
+        <h1 style="padding: 25px">{{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure </h1>
        
         <table id="my-table" class="sortable">
             <thead>
@@ -65,7 +65,7 @@
                 {{/each}}
                 <tr>
                     <div class="col s12 m4 l2">
-                        <a href="#openProc" class="btn waves-effect waves-light luluble-pink modal-trigger">Add</a>
+                        <a href="#openProc" class="btn waves-effect waves-light luluble-pink modal-trigger" style = "margin-left: 25px; margin-bottom: 10px">Add</a>
 
                         <div class="modal" id="openProc">
                             <div style="padding: 5% 5% 5% 5%">

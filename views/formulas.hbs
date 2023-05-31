@@ -28,6 +28,7 @@
         .container {
         display: flex;
         }
+
 </style>
 
     <body style="display: flex; flex-direction: column;">
@@ -46,7 +47,7 @@
                 <div>
                     <h1>{{project_name}} Formulas </h1>
                     <p><b>Client:</b> {{this.client}}</p>
-                    <p><b>Date:</b> {{this.date}}</p>
+                    <p><b>Date:</b> {{formatDate this.date}}</p>
                 </div>
         {{/each}}
 
@@ -129,14 +130,14 @@
 
 
             <div class="row">
-                <div style="overflow-x: scroll;" class = "col s12 m4 l6">
-                    <table class="scrollable">
+                <div style="overflow-x: scroll; display: flex;" >
+                    <table class="table1 scrollable" style="table-layout: fixed">
                         <tr>
-                            <th width = "10px">Phase</th>
+                            <th style = "width:85px">Phase</th>
                             <th>Trade Name</th>
-                            <th>INCI</th>
+                            <th style="width: 200px">INCI</th>
                             <th>Supplier</th>
-                            <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Lot Number</th>
+                            <th>Lot Number</th>
                             
                             </tr>
                         {{!-- {{#each trialData1}}
@@ -149,8 +150,8 @@
                         {{/each}} --}}
                         
                         {{#each ing_data}}
-                            <tr>
-                                <td width = "10px" style = "padding:20px">{{phase}}</td>
+                            <tr style="overflow: scroll; height: 100px">
+                                <td>{{phase}}</td>
                                 <td>{{trade_name}}</td>
                                 <td>{{inci_name}}</td>
                                 <td>{{supplier}}</td>
@@ -298,6 +299,13 @@
                     </script>
                  
                     </table>
+                    <div style="overflow-x: scroll; display: flex; float: right">
+                        <table class = "table2 scrollable" id = "info" style = "width: 50%">
+                                
+                           
+                        </table> 
+                    </div>
+                    
 
                 </div>
 
@@ -307,53 +315,8 @@
 
                    
 
-                    <div style="overflow-x: scroll;" class = "col s12 m4 l6">
-                        <table class = "scrollable" id = "info">
-                                {{!-- {{#each trial_data}}
-                                <th>Trial {{this.trial_num}}</th>
-                                <ul>
-                                    {{#each this.ing_data}}
-                                    <li>Percent: {{this.ingredient_id.percent}}, Amount: {{this.ingredient_id.amount}}</li>
-                                    {{/each}}
-                                </ul>
-                                {{/each}} --}}
-
-                            {{!-- <tr>
-
-                                {{#each trial_data}}
-                                    <th colspan = "2" style = "text-align: center">TRIAL {{trial_num}}</th>
-                                {{/each}}
-                            </tr>
-                            <tr>
-                                {{#each trial_data}}
-                                    <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">% of Ingredient</th>
-                                    <th style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Amt of Ing</th>
-                                {{/each}}
-                            </tr>  --}}
-
-
-                           
-                                                        
-                                {{!-- {{#each trial_data}}
-                                    <td>hello1</td>
-                                    <td>hello2</td>
-                                {{/each}} --}}
-
-                            
-
-                                    {{!-- {{#each results}}
-                                        <tr>
-                                            <td>p{{percent_of_ingredient}}</td>
-                                            <td>t{{total_amount}}</td>
-                                        </tr>
-                                    {{/each}} --}}
-
-
-                           
-                        </table>
-                        
-                    </div>
-                </div>
+                    
+            </div>
 
                 <script>
                   
@@ -376,8 +339,8 @@
                         // $("#info").append("<tr>");
                         console.log(i);
                         // $("#info").append("<th >Trial "+i+"</th>"); 
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+(i+1)+" Amount </th>");
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Trial "+(i+1)+" Percentage</th>");
+                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Amount </th>");
+                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Percentage</th>");
                     }
                     $("#info").append("</tr>");
                     
@@ -393,12 +356,12 @@
                                 // console.log(ingredients[ing][trial][0].trial_num);
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log(ingredients[ing][trial]);
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                 }
                                 else {
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
-                                    $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
+                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
+                                    $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
                                 }
 
                                
@@ -411,7 +374,7 @@
 
                     for (let trial = 0; trial < trial_data; trial++) {
                         console.log(trial);
-                        $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/' + (trial+1)><i class='material-icons'>delete</i></a></td>");
+                        $("#info").append("<td colspan=2 style=\"height: 60px\"><a href= '/projects/{{project_id}}/deleteTrial/' + (trial+1)><i class='material-icons'>delete</i></a></td>");
                     }
                     
 

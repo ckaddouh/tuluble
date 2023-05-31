@@ -84,7 +84,7 @@
 
                        <span class="card-title"><a style="color: black;" href="/projects/{{project_id}}"><b>{{project_name}}</a></b></span>
                        <p style="color: black;">Client: {{client}}</p>
-                       <p style="color: black;">{{date}}</p>
+                       <p style="color: black;">{{formatDate date}}</p>
                        <p style="color: black;">Scientists Assigned to this Project: </p>
 
 
@@ -280,7 +280,7 @@
                </b></div>
            <div class="col s12">&nbsp;</div>
            <div class="col s6">
-               <span><b>Client:</b> {{client}}<br></br><b>Date: </b>10/12/2021</span>
+               <span><b>Client:</b> {{client}}<br></br><b>Date: </b>{{formatDate date}}</span>
            </div>
            <div class="col s6">
                <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
