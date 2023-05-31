@@ -28,6 +28,7 @@ hbs.registerHelper('formatDate', function(date) {
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');
 const { literal, INTEGER } = require('sequelize');
+const { Console } = require('console');
 
 const port = 3000;
 var app = express();
@@ -480,12 +481,11 @@ const getIngredientIDs = `
   SELECT
     ingredient.ingredient_id
   FROM 
-    formulas, formula_ingredient, ingredient
+    formula_ingredient, ingredient
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
+    AND formula_ingredient.trial_num = ?
+    AND formula_ingredient.project_id = ?
 `
 
 const getAmount = `
@@ -521,11 +521,10 @@ const getTotalAmountOfFormula = `
   SELECT
     SUM(total_amount) as s
   FROM 
-    formulas, formula_ingredient
+    formula_ingredient
   WHERE
-    formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
+    formula_ingredient.trial_num = ?
+    AND formula_ingredient.project_id = ?
 `
 
 const getAllScientists = `
@@ -1615,19 +1614,22 @@ app.get("/projects/:project_id", async function (req,res,next) {
 app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
   console.log("hello?");
   let project_id = req.params.project_id
-  let trial_num = req.body.trial_num
+  let trial_num = req.body.userInput1T
 
   console.log(trial_num);
+  console.log(project_id);
   
 
   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
+    console.log(totalAmount);
     console.log(totalAmount[0].s);
     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
       for (let i = 0; i < ings.length; i++) {
         console.log(ings[i].ingredient_id);
         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
+          console.log(amount);
           console.log(amount[0].total_amount);
-          db.execute(subtractAmounts, [amount[0].total_amount, req.body.quantity, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2T, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
             if (error)
               res.status(500).send(error);
           });
