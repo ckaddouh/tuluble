@@ -28,6 +28,7 @@ hbs.registerHelper('formatDate', function(date) {
 const { realpathSync } = require('fs');
 const { hasSubscribers } = require('diagnostics_channel');
 const { literal, INTEGER } = require('sequelize');
+const { Console } = require('console');
 
 const port = 3000;
 var app = express();
@@ -433,12 +434,11 @@ const getIngredientIDs = `
   SELECT
     ingredient.ingredient_id
   FROM 
-    formulas, formula_ingredient, ingredient
+    formula_ingredient, ingredient
   WHERE
     formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
+    AND formula_ingredient.trial_num = ?
+    AND formula_ingredient.project_id = ?
 `
 
 const getAmount = `
@@ -474,11 +474,10 @@ const getTotalAmountOfFormula = `
   SELECT
     SUM(total_amount) as s
   FROM 
-    formulas, formula_ingredient
+    formula_ingredient
   WHERE
-    formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
+    formula_ingredient.trial_num = ?
+    AND formula_ingredient.project_id = ?
 `
 
 const getAllScientists = `
@@ -606,7 +605,7 @@ const getProjectID = `
 
 const getIngredientTrialInfo = `
   SELECT 
-    trial_num, total_amount, percent_of_ingredient
+    trial_num, total_amount, percent_of_ingredient, ingredient_id
   FROM 
     formula_ingredient
   WHERE 
@@ -623,6 +622,13 @@ const getFormulaIngredients = `
     AND formula_ingredient.project_id = ?
 	  GROUP BY ingredient.ingredient_id
     ORDER BY formula_ingredient.phase
+`
+
+const delete_trial = `
+  DELETE FROM
+    formulas
+  WHERE
+    trial_num = ?
 `
 
 const partialsPath = path.join(__dirname, "public/partials");
@@ -1052,6 +1058,51 @@ app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (
   });
 });
 
+app.get("/projects/:project_id/cellEdited/:type/trial:trial_num/:cellContent", (req,res) => { 
+  let project_id = req.params.project_id;
+  let type = req.params.type;
+  let trial_num = req.params.trial_num;
+  let ingredient_id = req.params.ingredient_id;
+  let cellContent = req.params.cellContent;
+
+
+
+});
+
+
+
+app.get("/projects/:project_id/cellEdited/:type/trial:trial_num/ingredient:ingredient_id/:cellContent", (req, res) => {
+  let project_id = req.params.project_id;
+  let type = req.params.type;
+  let trial_num = req.params.trial_num;
+  let ingredient_id = req.params.ingredient_id;
+  let cellContent = req.params.cellContent;
+
+  if (type == "percent")
+    type = "percent_of_ingredient";
+  else  
+    type = "total_amount";
+
+  console.log("POJSEA;FLKJ ASDF");
+  console.log(project_id);
+  console.log(type);
+  console.log(trial_num);
+  console.log(ingredient_id);
+  console.log(cellContent);
+
+
+  const editFormulaIngredient = "UPDATE formula_ingredient SET " + type + "= ? WHERE project_id = ? AND trial_num = ? AND ingredient_id = ?";
+
+  db.execute(editFormulaIngredient, [cellContent, project_id, trial_num, ingredient_id], (error, results) => {
+    if (error)
+    res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/projects/" + project_id);
+    }
+  });
+});
+
+
 app.post("/projects/:project_id/projectupdate", async function (req, res, next) {
   let project_id = req.params.project_id
 
@@ -1063,6 +1114,7 @@ app.post("/projects/:project_id/projectupdate", async function (req, res, next) 
     next(error);
   }
 });
+
 
 app.post("/projects/sci/:scientist_id/projectformsubmit", async function (req, res, next) {
   let scientist_id = req.params.scientist_id
@@ -1313,6 +1365,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
         });
 
         ingredient_dict[i][j] = trialIngData;
+        console.log("TRIAL ING DATA");
         console.log(trialIngData);
         // ADD AMOUNT AND PERCENT FOR THAT TRIAL
       }
@@ -1328,25 +1381,25 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
     for (let i = 0; i < trial_data.length; i++) {
       const trialId = trial_data[i].trial_num;
-      console.log(trialId);
       const trialIngData = ing_data.filter((ing) => ing.trial_num === trialId);
-
-    
-      console.log("NEW ING");
-      console.log(trialIngData);
       
-      if (trialIngData.length === 0) {
-        trial_data[i].ing_data = [];
-      } else {
-        trial_data[i].ing_data = trialIngData.map((ing) => ({
-          ingredient_id: {
-            trialnum: ing.trial_num,
-            percent: ing.percent_of_ingredient,
-            amount: ing.total_amount
-          },
-        }));
-      }
+      trial_data[i].ing_data = trialIngData.length > 0
+        ? trialIngData.map((ing) => ({
+            ingredient_id: {
+              trialnum: ing.trial_num,
+              percent: ing.percent_of_ingredient,
+              amount: ing.total_amount,
+            },
+          }))
+        : [{
+            ingredient_id: {
+              trialnum: trialId,
+              percent: 0,
+              amount: 0,
+            },
+          }];
     }
+    
     
 
     // for (let i = 0; i < ing_data.length; i++) {
@@ -1422,19 +1475,22 @@ app.get("/projects/:project_id", async function (req,res,next) {
 app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
   console.log("hello?");
   let project_id = req.params.project_id
-  let trial_num = req.body.trial_num
+  let trial_num = req.body.userInput1T
 
   console.log(trial_num);
+  console.log(project_id);
   
 
   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
+    console.log(totalAmount);
     console.log(totalAmount[0].s);
     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
       for (let i = 0; i < ings.length; i++) {
         console.log(ings[i].ingredient_id);
         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
+          console.log(amount);
           console.log(amount[0].total_amount);
-          db.execute(subtractAmounts, [amount[0].total_amount, req.body.quantity, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2T, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
             if (error)
               res.status(500).send(error);
           });
@@ -1520,6 +1576,19 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
 
 });
 
+
+app.get("/projects/{{project_id}}/deleteTrial/:trial_num", (req, res) => {
+  let trialNum = req.params.trial_num;
+  
+  db.execute(delete_trial, [trial_num], (error, results) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/projects/" + project_id);
+    }
+  });
+
+});
 // app.get("/projects/:project_id/procedure:trial_num", (req, res) => {
 //   let project_id = req.params.project_id
 //   let trial_num = req.params.trial_num
@@ -1672,32 +1741,33 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
   }
 });
 
-app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
-  let project_id = req.params.project_id
-  let trial_num = req.params.trial_num
-  db.execute(singleProjectQuery, [project_id, trial_num], (error, project_data) => {
-    db.execute(selectTrialNums, [project_id, trial_num], (error, formula_data) => {
-      // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
-      // perhaps retrieve based on trial_nums that user selects to view? 
-      // [project_id, trial_num]
-      db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
-        if (error)
-          res.redirect("/error"); //Internal Server Error
-        else {
-          // res.render('project', {project_data: results[0]} );
-          res.render('formulas', {
-            title: 'Project Details',
-            styles: ["tables", "event"],
-            project_id: project_id,
-            project_data: project_data,
-            formula_data: formula_data,
-            formula_ingredient_data: formula_ingredient_data
-          });
-        }
-      });
-    });
-  });
-});
+
+// app.post("/projects/:project_id/formulas/trial/:trial_num", (req, res) => {
+//   let project_id = req.params.project_id
+//   let trial_num = req.params.trial_num
+//   db.execute(singleProjectQuery, [project_id, trial_num], (error, project_data) => {
+//     db.execute(selectTrialNums, [project_id, trial_num], (error, formula_data) => {
+//       // need to select formula_ingredients for specific trial_nums for each of the trial_nums in above query
+//       // perhaps retrieve based on trial_nums that user selects to view? 
+//       // [project_id, trial_num]
+//       db.execute(selectFormulaIngredients, [project_id, trial_num], (error, formula_ingredient_data) => {
+//         if (error)
+//           res.redirect("/error"); //Internal Server Error
+//         else {
+//           // res.render('project', {project_data: results[0]} );
+//           res.render('formulas', {
+//             title: 'Project Details',
+//             styles: ["tables", "event"],
+//             project_id: project_id,
+//             project_data: project_data,
+//             formula_data: formula_data,
+//             formula_ingredient_data: formula_ingredient_data
+//           });
+//         }
+//       });
+//     });
+//   });
+// });
 
 app.get("/inventory/archive-ingredient/:ingredient_id", (req, res) => {
   let ingredient_id = req.params.ingredient_id
