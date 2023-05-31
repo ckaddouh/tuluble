@@ -75,42 +75,6 @@ function requireAdmin(req, res, next) {
     res.redirect("/");
   // next("AGHHH NOT ALLOWED");
 }
-// app.use( async (req, res, next) => {
-//   res.locals.isAuthenticated = req.oidc.isAuthenticated();
-//   if (res.locals.isAuthenticated){
-//     //check if admin
-//     let results = await db.queryPromise("SELECT admin FROM user WHERE email = ?", [req.oidc.user.email])
-//     if (results.length > 0) {
-//       res.locals.isAdmin = (results[0].admin == 1)
-//     } else {
-//       //if no account yet, set up user row in database (account information)
-//       //For now, we'll just make a quick "account" with just the email info
-//       await db.queryPromise("INSERT INTO user (email) VALUES (?)", [req.oidc.user.email]);
-//       res.locals.isAdmin = false;
-//     }
-//   }
-//   next();
-// })
-
-// req.isAuthenticated is provided from the auth router
-// app.get('/', (req, res) => {
-//   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-// });
-
-// app.get('/profile', requiresAuth(), (req, res) => {
-//   res.send(JSON.stringify(req.oidc.user));
-// });
-
-
-//this one only shows oils...
-const read_inventory_all_sql = `
-    SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
-    FROM
-        ingredient
-    WHERE 
-      classifier_id = "Oils" AND active = 1
-`
 
 const read_inventory_all_alph = `
     SELECT
@@ -131,17 +95,6 @@ const read_projects_all_sql = `
         projects
     WHERE 
       active = 1
-`
-
-const read_project_data_for_assign = `
-  SELECT
-    project_name, projects.project_id, client, date, scientist.name, scientist.scientist_id
-  FROM
-    projects, scientist, project_assign
-  WHERE 
-    active = 1
-    AND project_assign.project_id = projects.project_id
-    AND project_assign.scientist_id = scientist.scientist_id
 `
 
 const singleProjectQuery = `
@@ -741,40 +694,6 @@ app.get("/", (req, res) => {
 });
 
 
-// app.get("/project-assign", requireAdmin, async function (req, res, next) {
-//   // res.locals.isAuthenticated = req.oidc.isAuthenticated();
-  
-//   db.execute(read_projects_all_sql, (error, results) => {
-//     for (let i = 0; i < results.length; i++) {
-//       console.log(results[i].project_id);
-
-//       db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
-//         console.log("hello");
-//         results[i].scientists = scientists;
-//         console.log(results[i].scientists);
-       
-//         if (error)
-//           res.status(500).send(error); //Internal Server Error    
-          
-//       });
-//       console.log("test");
-//     }
-
-//     console.log(results);
-
-//   });
-
-
-//   console.log("GOING TO PROJECT ASSIGN PAGE");
-//   res.render('project_assign', {results: results, scientists: scientists }); 
-
-// });
-
-
-
-
-
-
 app.get("/project-assign", requireAdmin, async function (req, res, next) {
   try {
     const results = await new Promise((resolve, reject) => {
@@ -1262,33 +1181,6 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
     else resolve(results);
     });
   }); 
- 
- 
-
-
-// app.post("/projects/:project_id/trial:trial_num/computeMax", async function(req, res, next) {
-//   let project_id = req.params.project_id
-//   let trial_num = req.params.trial_num
-
-//   console.log("IN COMPUTE SECTION")
-
-//   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
-//     console.log(totalAmount[0].s);
-//     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
-//       for (let i = 0; i < ings.length; i++) {
-//         console.log(ings[i].ingredient_id);
-//         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
-//           console.log(amount[0].total_amount);
-//           db.execute(computeMax, [amount[0].total_amount, req.body.userInput1, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
-//             if (error)
-//               res.status(500).send(error); 
-//           });
-//         });
-//       }
-//     });
-//   });
-//   res.redirect('/projects/' + project_id + '/trial1/trial1');
-// });
 
 
 // CORRECT PROJECT PAGE
@@ -1398,14 +1290,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
         else resolve(ing_data);
       });
     })
-
-    // const ing_data = await new Promise((resolve, reject) => {
-    //   console.log('IN FORMULA DISPLAY EXECUTE');
-    //   db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
-    //     if (error) reject(error);
-    //     else resolve(ing_data);
-    //   });
-    // })
 
     console.log("THIS IS ING DATA");
     console.log(ing_data);
@@ -1534,29 +1418,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
   }
 });
 
-
-
-
-
-// app.get("/projects/:project_id", (req, res) => {
-//   let project_id = req.params.project_id
-
-//   var trialDict = {};
-
-//   db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-//     db.execute(getTrials, [project_id], (error, trial_data) => {
-//       for (let i = 0; i < trial_data.length; i++) {
-//         console.log(trial_data[i].trial_num);
-//         db.execute(getTrialInfo, [project_id, trial_data[i].trial_num], (error, trial_info) => {
-//             console.log(trial_info);
-//         });
-        
-//       }
-//     });
-//   });
-  
-
-// });
 
 app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
   console.log("hello?");

@@ -2,28 +2,29 @@
 <html>
 
     <head>
-    {{#each project_data}}
-    <title>{{project_name}} Formulas</title>
-    {{/each}}
+        {{#each project_data}}
+        <title>{{project_name}} Formulas</title>
+        {{/each}}
 
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
-    <script>
-        Handlebars.registerHelper('eq', function(a, b) {
-            return a === b;
-        });
-    </script>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        
+        {{!-- handlebars import (hbs) --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+        <script>
+            Handlebars.registerHelper('eq', function(a, b) {
+                return a === b;
+            });
+        </script>
 
-    {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
-    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <link rel="stylesheet" href="/partials/color.css">
-    
-</head>
+        {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
+        <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+        <link rel="stylesheet" href="/partials/color.css">
+        
+    </head>
     <style>
         .container {
         display: flex;
@@ -53,86 +54,85 @@
 
 
             <p> &nbsp;</p>
-                <a href="#open" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Trial</a>
-                
-                <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
-                
-                <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
-                <p> &nbsp;</p>
+            <a href="#open" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Trial</a>
+            
+            <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
+            
+            <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
+            <p> &nbsp;</p>
 
             <div class="col s12 m4 l2">
 
-                
+                <div class="modal" id="open">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Add a New Trial</h1>
 
-            <div class="modal" id="open">
-                <div style="padding: 5% 5% 5% 5%">
-                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                    <h1 style="font-size:40px;">Add a New Trial</h1>
+                        <form method="POST" action="/projects/{{project_id}}/formulaformsubmit">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
 
-                    <form method="POST" action="/projects/{{project_id}}/formulaformsubmit">
-                        <article class="regular">
-                            {{!-- <h2>Textbook</h2> --}}
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">Trial Number:</label></b>
+                                <input type="number" name = "userInput1" id="userInput1" placeholder="Enter Trial Number" maxlength="20">
+                                <p> </p>
 
-                            {{!-- Field 1 --}}
-                            <b><label for="tuluble">Trial Number:</label></b>
-                            <input type="number" name = "userInput1" id="userInput1" placeholder="Enter Trial Number" maxlength="20">
-                            <p> </p>
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Formulator Name:</label></b>
+                                <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Formulator Name" maxlength="20">
+                                <p> </p>
 
-                            {{!-- Field 2 --}}
-                            <b><label for="tuluble">Formulator Name:</label></b>
-                            <input type="text" name = "userInput2" id="userInput2" placeholder="Enter Formulator Name" maxlength="20">
-                            <p> </p>
+                                {{!-- Field 3 --}}
+                                <b><label for="tuluble">Batch Date:</label></b>
+                                <input type="date" name = "userInput3" id="userInput3" placeholder="Enter Batch Date" maxlength="20">
+                                <p> </p>
 
-                            {{!-- Field 3 --}}
-                            <b><label for="tuluble">Batch Date:</label></b>
-                            <input type="date" name = "userInput3" id="userInput3" placeholder="Enter Batch Date" maxlength="20">
-                            <p> </p>
-
-                            <div class="add_button">
-                                <button id = "add_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">Add Trial</button>
-                                {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                            </div>
-                            <p> </p>
-                        </form>
+                                <div class="add_button">
+                                    <button id = "add_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">Add Trial</button>
+                                    {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
+                                </div>
+                                <p> </p>
+                            </form>
+                        
                     
-                
-                    </article>
+                        </article>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
-        <script src="/routes/formulas.js"></script>
+            <script src="/routes/formulas.js"></script>
 
 
-        {{!-- clicking new ingredient button --}}
-        <script>
-            $(document).ready(function() {
-                $("#add_button").click(function() {
-                var inputValue1 = $("#userInput1").val();
-                var inputValue2 = $("#userInput2").val();
-                var inputValue3 = $("#userInput3").val();
+            {{!-- clicking new ingredient button --}}
+            <script>
+                $(document).ready(function() {
+                    $("#add_button").click(function() {
+                    var inputValue1 = $("#userInput1").val();
+                    var inputValue2 = $("#userInput2").val();
+                    var inputValue3 = $("#userInput3").val();
 
-                window.location += "/formulaformsubmit";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    window.location += "/formulaformsubmit";
+                    //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    });
                 });
-            });
-        </script>
+            </script>
 
-        <script>
-            $(document).ready(function () {
-                $('.modal').modal();
-            })
-        </script>
+            <script>
+                $(document).ready(function () {
+                    $('.modal').modal();
+                })
+            </script>
 
 
             <div class="row">
                 <div style="overflow-x: scroll; display: flex;" >
                     <table class="table1 scrollable" style="table-layout: fixed">
                         <tr>
+                            <th>Delete</th>
                             <th style = "width:85px">Phase</th>
                             <th>Trade Name</th>
                             <th style="width: 200px">INCI</th>
@@ -151,6 +151,21 @@
                         
                         {{#each ing_data}}
                             <tr style="overflow: scroll; height: 100px">
+                                <td id = "confirmDelete">
+                                    <a href="/projects/{{project_id}}/deleteFormulaIngredient/"
+                                        class='material-icons modal-trigger'>delete</a>
+                                    <div id='confirmDeleteFormulaIngredient' class='modal'>
+                                        <div class='modal-content'>
+                                            <p>Testing</p>
+
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <p>testing 2</p>
+                                        </div>
+
+                                    </div>
+
+                                </td>
                                 <td>{{phase}}</td>
                                 <td>{{trade_name}}</td>
                                 <td>{{inci_name}}</td>
@@ -318,69 +333,80 @@
                     
             </div>
 
-                <script>
-                  
-                    
-                    // var ingredientsJSON = JSON.stringify({{ingredient_dict}});
-                    const ingredients = JSON.parse('{{{ingredient_dict}}}');
-                    console.log(ingredients);
-                    // const ingredients = [ingredient1, ingredient2];
-                    // const decodedString = he.decode('{{ingredient_dict}}');
-                    // const ingredients = JSON.parse(decodedString);
-                    const trial_data = {{trial_data}};
-                    $("#info").append("<tr>");
-                    
-                    console.log("TRIAL TRIAL DATA DATA ");
-                    if (trial_data == 0){
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Add a Trial!</th>");
+            <script>
+                
+                
+                // var ingredientsJSON = JSON.stringify({{ingredient_dict}});
+                const ingredients = JSON.parse('{{{ingredient_dict}}}');
+                console.log(ingredients);
+                // const ingredients = [ingredient1, ingredient2];
+                // const decodedString = he.decode('{{ingredient_dict}}');
+                // const ingredients = JSON.parse(decodedString);
+                const trial_data = {{trial_data}};
+                $("#info").append("<tr>");
+                
+                console.log("TRIAL TRIAL DATA DATA ");
+                if (trial_data == 0){
+                    $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis;\">Add a Trial!</th>");
 
-                    }
-                    for (let i = 0; i < trial_data; i++) {
-                        // $("#info").append("<tr>");
-                        console.log(i);
-                        // $("#info").append("<th >Trial "+i+"</th>"); 
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Amount </th>");
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Percentage</th>");
-                    }
-                    $("#info").append("</tr>");
-                    
-                    
-                   
-                   console.log(ingredients);
-                    
-                    for(let ing = 0; ing < ingredients.length; ing++) {
-                            $("#info").append("<tr>");
-                            for(let trial = 0; trial < ingredients[ing].length; trial++)
-                            {
-                                console.log("hi");
-                                // console.log(ingredients[ing][trial][0].trial_num);
-                                if (ingredients[ing][trial].length !== 0){
-                                    console.log(ingredients[ing][trial]);
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
-                                }
-                                else {
-                                    $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
-                                    $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
-                                }
-
-                               
+                }
+                for (let i = 0; i < trial_data; i++) {
+                    // $("#info").append("<tr>");
+                    console.log(i);
+                    // $("#info").append("<th >Trial "+i+"</th>"); 
+                    $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Amount </th>");
+                    $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Percentage</th>");
+                }
+                $("#info").append("</tr>");
+                
+                
+                
+                console.log(ingredients);
+                
+                for(let ing = 0; ing < ingredients.length; ing++) {
+                        $("#info").append("<tr>");
+                        for(let trial = 0; trial < ingredients[ing].length; trial++)
+                        {
+                            console.log("hi");
+                            // console.log(ingredients[ing][trial][0].trial_num);
+                            if (ingredients[ing][trial].length !== 0){
+                                console.log(ingredients[ing][trial]);
+                                $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
+                                $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                             }
-                            $("#info").append("</tr>");
-                          
-                    }
-                      
-                    $("#info").append("<tr>");
+                            else {
+                                $("#info").append("<td style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
+                                $("#info").append("<td style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 15px;\"></td>");
+                            }
 
-                    for (let trial = 0; trial < trial_data; trial++) {
-                        console.log(trial);
-                        $("#info").append("<td colspan=2 style=\"height: 60px\"><a href= '/projects/{{project_id}}/deleteTrial/' + (trial+1)><i class='material-icons'>delete</i></a></td>");
-                    }
+                            
+                        }
+                        $("#info").append("</tr>");
+                        
+                }
                     
+                $("#info").append("<tr>");
 
-                    $("#info").append("</tr>");
+                for (let trial = 0; trial < trial_data; trial++) {
+                    // $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/' + (trial+1)><i class='material-icons modal-trigger'>delete</i></a></td>");
+                    $("#info").append("<td colspan=2><a href= '#confirmDelete'><i class='material-icons modal-trigger'>delete</i></a></td> <div id='confirmDelete' class='modal'><div class='modal-content'><p>Testing</p></div><div class='modal-footer'><p>testing 2</p></div></div>");
+                }
+                
 
-                </script>
+                $("#info").append("</tr>");
+
+            </script>
+
+            <div id='confirmDelete' class='modal'>
+                <div class='modal-content'>
+                    <p>Testing</p>
+
+                </div>
+                <div class='modal-footer'>
+                    <p>testing 2</p>
+                </div>
+
+            </div>
 
                   
 

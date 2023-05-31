@@ -112,6 +112,42 @@
                 });
             </script>
 
+            {{!-- moment import --}}
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+            <script>
+                console.log("AM I HERE?");
+                console.log("ahem");
+
+                const originalDate = 'Mon May 15 2023 00:00:00 GMT-0400 (Eastern Daylight Time)';
+                console.log(originalDate);
+                const formattedDate = moment(originalDate).format('YYYY-MM-DD');
+                console.log(formattedDate); // Output: 2023-05-15
+
+                hbs.registerHelper("formatDate", function(date) {
+                    return moment(date).format("MMMM DD, YYYY");
+                });
+            console.log("how abt here");
+
+            </script>
+            
+            <script>
+                function formatDate(date) {
+                    return moment(date).format("MMMM DD, YYYY");
+                }
+            </script>
+
+            <script>
+                console.log("CHECK");
+                Handlebars.registerHelper("formatDate", function(date) {
+                    return moment(date).format("MMMM DD, YYYY");
+                });
+
+                //function formatDate(date) {
+                    //  return moment(date).format("MMMM DD, YYYY");
+                //}
+            </script>
+
 
             {{#each results}}
             <div class="row">
@@ -198,7 +234,7 @@
                         <div class="col s12"><b><font size="+2">{{project_name}}</font></b></div>
                         <div class="col s12">&nbsp;</div>
                         <div class="col s6">
-                            <span><b>Client:</b> {{client}}<br></br><b>Date: </b>{{formatDate date}}</span>
+                            <span><b>Client:</b> {{client}}<br></br><b>Date: </b>{{date}}</span>
                         </div>
                         <div class="col s6">
                             <span><b>Contact name: </b>{{client_name}}<br></br><b>Contact email: </b>{{client_email}}</span>
