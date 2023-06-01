@@ -161,7 +161,7 @@
                         
                         {{#each ing_data}}
                             <tr style="overflow: scroll; height: 100px">
-                                <td>
+                                <td class="right-align">
                                     <a href="#deleteFormulaIngredient" class="material-icons modal-trigger">delete</a>
 
                                     <div id="deleteFormulaIngredient" class="modal">
@@ -311,11 +311,14 @@
                     </div>
 
                     <script>
-                        function postMessage () {
-                            console.log("heloooooooo");
-                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclic = "">UNDO MAKE</button>';
-                        }
-                        M.toast({html: toastHTML});
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclick="">UNDO MAKE</button>';
+                            var button = document.querySelector('#make_trial_button');
+
+                            button.addEventListener('click', function() {
+                                M.toast({html: toastHTML, displayLength: 10000});
+                            });
+                        });
                     </script>
 
                     <script>
