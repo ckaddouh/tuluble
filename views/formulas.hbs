@@ -161,16 +161,15 @@
                         
                         {{#each ing_data}}
                             <tr style="overflow: scroll; height: 85px">
-                                <td>
+                                <td class="right-align">
                                     <a href="#deleteFormulaIngredient" class="material-icons modal-trigger">delete</a>
 
                                     <div id="deleteFormulaIngredient" class="modal">
                                         <div class="modal-content">
-                                        <h4>Modal Header</h4>
-                                        <p>A bunch of text</p>
+                                        <h6>Are you sure you would like to delete this ingredient?</h6>
                                         </div>
                                         <div class="modal-footer">
-                                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/deleteFormulaIngredient/{{ingredient_id}}">YES</a>
                                         </div>
                                     </div>
 
@@ -311,11 +310,14 @@
                     </div>
 
                     <script>
-                        function postMessage () {
-                            console.log("heloooooooo");
-                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclic = "">UNDO MAKE</button>';
-                        }
-                        M.toast({html: toastHTML});
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclick="">UNDO MAKE</button>';
+                            var button = document.querySelector('#make_trial_button');
+
+                            button.addEventListener('click', function() {
+                                M.toast({html: toastHTML, displayLength: 10000});
+                            });
+                        });
                     </script>
 
                     <script>
@@ -413,13 +415,10 @@
                     $("#info").append("<tr>");
                     for (let trial = 0; trial < trial_data; trial++) {
                         console.log(trial);
-                        $("#info").append("<td colspan=2><a href= '#deleteTrial' class='material-icons modal-trigger'>delete</a></td>");
+                        $("#info").append(`<td colspan=2><a href= '#deleteTrial${trial+1}' class='material-icons modal-trigger'>delete</a></td>`);
                     }
                     
-                    {{!-- for (let i = 0; i < sum_data.length; i++) {
-                        $("#info").append("<td colspan=2><a href= '#deleteTrial'><i class='material-icons'>delete</i></a></td>");       
-                    } --}}
-
+                
                     $("#info").append("</tr>");
 
 
@@ -429,15 +428,17 @@
 
                 </script>
 
-                <div class="modal" id="deleteTrial">
+                {{#each trialData}}
+                <div class="modal" id="deleteTrial{{trial_num}}">
                     <div style="padding: 5% 5% 5% 5%">
-                    <p>Are you sure you want to delete this trial?</p>
-                    <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/deleteTrial/(trial+1)">YES</a>
-                    <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}">NO</a>
-
-
+                        <h6>Are you sure you would like to delete this trial?</h6>
+                        </div>
+                        <div class="modal-footer">
+                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/deleteTrial/{{trial_num}}">YES</a>
+                        </div>
                     </div>
                 </div>
+                {{/each}}
 
                   <script>
                     $(document).ready(function () {
