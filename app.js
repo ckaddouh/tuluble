@@ -118,6 +118,15 @@ const selectTrialNums = `
     trial_num
 `
 
+const read_inventory_all_sql = `
+    SELECT
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+    FROM
+        ingredient
+    WHERE 
+      classifier_id = "Oils" AND active = 1
+`
+
 const archiveIngredient = `
   UPDATE ingredient
   SET active = 0
@@ -643,6 +652,22 @@ const delete_trial = `
     trial_num = ?
 `
 
+const delete_formula_ingredient = `
+  DELETE FROM 
+    formula_ingredient
+  WHERE
+    project_id = ?
+    AND ingredient_id = ?
+`
+
+const delete_trial2 = `
+  DELETE FROM
+    formula_ingredient
+  WHERE
+    project_id = ?
+    AND trial_num = ?
+`
+
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
 // style.registerPartials(partialsPath);
@@ -883,7 +908,7 @@ app.use(function (err, req, res, next) {
 
 // TO DO
 app.get("/inventory", (req, res) => {
-  db.execute(read_inventory_all_alph, (error, results) => {
+  db.execute(read_inventory_all_sql, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error
     else {
@@ -1396,8 +1421,15 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
       console.log("SUMSUMSUSMSUMS");
       console.log(sum[0]);
-      sum_data.push(sum[0].amountSum);
-      sum_data.push(sum[0].percentSum);
+
+      if (sum[0].amountSum)
+        sum_data.push(sum[0].amountSum);
+      else  
+        sum_data.push(0);
+      if (sum[0].percentSum)
+        sum_data.push(sum[0].percentSum);
+      else  
+        sum_data.push(0);
     }
 
     console.log(sum_data);
@@ -1459,6 +1491,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
         ing_data: ing_data,
         project_data: project_data,
         trial_data: trial_data.length,
+        trialData: trial_data,
         inventory_data: inventory_data,
         ingredient_dict: ingredientDictJSON,
         sum_data_json: JSON.stringify(sum_data)
@@ -1583,17 +1616,33 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
 });
 
 
-app.get("/projects/{{project_id}}/deleteTrial/:trial_num", (req, res) => {
-  let trialNum = req.params.trial_num;
+app.get("/projects/:project_id/deleteTrial/:trial_num", (req, res) => {
+  let trial_num = req.params.trial_num;
+  let project_id = req.params.project_id;
   
   db.execute(delete_trial, [trial_num], (error, results) => {
+    db.execute(delete_trial2, [project_id, trial_num], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects/" + project_id);
+      }
+    });
+  });
+});
+
+
+app.get("/projects/:project_id/deleteFormulaIngredient/:ingredient_id", (req, res) => {
+  let project_id = req.params.project_id;
+  let ingredient_id = req.params.ingredient_id;
+  
+  db.execute(delete_formula_ingredient, [project_id, ingredient_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
       res.redirect("/projects/" + project_id);
     }
   });
-
 });
 
 
