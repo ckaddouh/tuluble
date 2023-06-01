@@ -82,10 +82,7 @@
                         const clear = document.querySelector('#clear-search');
 
                         if (currentUrl.toString().includes(word)) {
-                            
-                            clear.addEventListener("click", function() {
                                 window.location.href = clearedUrl;
-                            });
                         }
                     }
                 </script>
@@ -243,12 +240,9 @@
                                 const clear = document.querySelector('#clear-search');
 
                                 if (currentUrl.toString().includes(word)) {
-                                    
-                                    clear.addEventListener("click", function() {
                                         const newTabURL = clearedUrl + "#projects";
                                         console.log(newTabURL);
                                         window.location.href = newTabURL;
-                                    });
                                 }
                             }
                         </script>

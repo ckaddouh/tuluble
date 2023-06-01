@@ -316,7 +316,6 @@
             
             if (currentUrl !== clearedUrl) {
                 window.location.href = clearedUrl;
-                window.location.reload();
             }
         }
 
@@ -338,19 +337,12 @@
         
 
         search.addEventListener('change', (event) => {
-            //window.location.href = "inventory/"
-            console.log("ok")
-            //searchTerm = searchBar.value;
             searchTerm = searchBar.value.trim();
             searchBar.value = searchTerm;
 
-
-   
-        function validateSearchInput(input) {
-            return regex.test(input);
-        }
-
-
+            function validateSearchInput(input) {
+                return regex.test(input);
+            }
 
             const stateObj = { url: '/inventory' };
             const title = '';

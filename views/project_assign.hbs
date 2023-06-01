@@ -36,11 +36,35 @@
                                 <i class="material-icons">close</i>
                             </div>
                         </div>
+
                     </nav>
                 </div>
 
-                <p>&nbsp;</p>
+                <div style="text-align:right; margin-top:10px">
+                    <button id="clear-search"
+                        name="clear-search" 
+                        onclick="redirectToPage()"
+                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                        Clear Search</button>
+                </div>
+                <div class="col s12 m6 offset-m3">
+                    <p></p>
+                </div>
 
+                <script>
+                    function redirectToPage() {
+                        const clearedUrl = "http://localhost:3000/archive";
+                        const currentUrl = window.location.href;
+                        const word = "search"
+                        const clear = document.querySelector('#clear-search');
+
+                        if (currentUrl.toString().includes(word)) {
+                                window.location.href = clearedUrl;
+                        }
+                    }
+                </script>
+
+                <p>&nbsp;</p>
 
                 <script>
                     const search = document.querySelector('#gsearch');
