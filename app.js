@@ -100,7 +100,7 @@ const read_projects_all_sql = `
 
 const singleProjectQuery = `
     SELECT
-        projects.project_name, projects.project_id, projects.client, projects.date
+        projects.project_name, projects.project_id, projects.client, projects.date, projects.client_name, projects.client_email
     FROM
         projects
     WHERE
