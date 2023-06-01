@@ -372,12 +372,13 @@
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log("YOOHOO");
                                     console.log(ingredients[ing][trial]);
-                                    $("#info").append("<td id = 'amount/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
-                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    $("#info").append("<td id = 'amount/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
+                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                 }
+                                // ELSE SHOULD NEVER BE REACHED
                                 else {
-                                    $("#info").append("<td id = 'amount/trial" + (trial+1) + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
-                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "' contenteditable='true' style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
+                                    $("#info").append("<td id = 'amount/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
+                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
                                 }
 
                                
@@ -387,6 +388,8 @@
                     }
                       
                     $("#info").append("<tr>");
+
+                
 
                     let sumDict = JSON.parse('{{sum_data_json}}');
 
@@ -430,68 +433,44 @@
                 </script>
 
 
-        {{!-- <script>
-            const editableCells = document.querySelectorAll('[contenteditable="true"]');
-            
-            editableCells.forEach(cell => {
-            const originalContent = cell.innerText;
-
-            cell.addEventListener('keydown', function (e) {
-                if (e.keyCode === 13) { // Capture Enter key
-                // console.log("yoohoo");
-                e.preventDefault(); // Prevent line break
-                cell.blur(); // Exit the cell
-                }
-            });
-
-             cell.addEventListener('blur', function () {
-            const editedContent = cell.innerText;
-            if (originalContent !== editedContent) {
-                const phase = cell.parentNode.rowIndex; // Get the phase number
-                const column = cell.cellIndex; // Get the column index
-
-                console.log("Edited content:", editedContent);
-                console.log("Phase:", phase);
-                console.log("Column:", column);
-
-                window.location.href += "/cellEdited/" + phase + "/" + column + "/" + editedContent;
-                // Perform further actions with the edited content, phase, and column
-            }
-        });
-        });
-
-        </script> --}}
                   
         <script>
-    $(document).ready(function() {
-        const editableCells = $('[contenteditable="true"]');
+        $(document).ready(function() {
+            const editableCells = $("[contenteditable='true']");
 
-        editableCells.keydown(function(e) {
-            if (e.keyCode === 13) { // Capture Enter key
-                e.preventDefault(); // Prevent line break
-                $(this).blur(); // Exit the cell
-            }
+            editableCells.focus(function() {
+                const initialContent = $(this).text().trim();
+                $(this).data("initialContent", initialContent);
+            });
+
+            editableCells.keydown(function(e) {
+                if (e.keyCode === 13) { // Capture Enter key
+                    e.preventDefault(); // Prevent line break
+                  
+
+                const editedContent = $(this).text();
+                    
+                const id = $(this).attr('id');  
+
+                const initialContent = $(this).data("initialContent");
+
+
+                let newURL = '';
+                console.log("hello");
+                console.log(initialContent);
+
+                if (initialContent !== '') {
+                    newURL = '/cellEdited/' + id + "/" + editedContent;
+                }
+                else {
+                    newURL = '/addedIngredient/' + id + "/" + editedContent;
+                }
+                window.location.href += newURL;
+
+                }
+            });
         });
-
-
-        $('#info').on('blur', 'td[contenteditable="true"]', function() {
-             const editedContent = $(this).text();
-             
-            const id = $(this).attr('id');  
-
-            const newURL = '/cellEdited/' + id + "/" + editedContent;
-            window.location.href += newURL;
-            // Perform further actions with the edited content, row, and column
-        });
-
-
-    });
-</script>
-
-
-
-
-
+    </script>
     
 
                 </div>
