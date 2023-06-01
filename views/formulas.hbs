@@ -153,8 +153,8 @@
                         {{#each ing_data}}
                             <tr style="overflow: scroll; height: 100px">
                                 <td>
-                                    <a href= '#deleteFormulaIngredient'>
-                                    <i class="material-icons modal-trigger">delete</i></a>
+                                    <a href="#deleteFormulaIngredient" class="material-icons modal-trigger">delete</a>
+
                                     <div id="deleteFormulaIngredient" class="modal">
                                         <div class="modal-content">
                                         <h4>Modal Header</h4>
@@ -388,14 +388,26 @@
                       
                     $("#info").append("<tr>");
 
+                    //for (let trial = 0; trial < trial_data; trial++) {
+                        //console.log(trial);
+                        //{{!-- $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/" + (trial+1) + "'><i class='material-icons'>delete</i></a></td>"); --}}
+                        //$("#info").append("<td colspan=2><a href= '#deleteTrial'><i class='material-icons'>delete</i></a></td>");
+                    //}
+
+
+
                     for (let trial = 0; trial < trial_data; trial++) {
                         console.log(trial);
-                        {{!-- $("#info").append("<td colspan=2><a href= '/projects/{{project_id}}/deleteTrial/" + (trial+1) + "'><i class='material-icons'>delete</i></a></td>"); --}}
-                        $("#info").append("<td colspan=2><a href= '#deleteTrial'><i class='material-icons'>delete</i></a></td>");
+                        $("#info").append("<td colspan=2><a href= '#deleteTrial' class='material-icons modal-trigger'>delete</a></td>");
                     }
                     
 
                     $("#info").append("</tr>");
+
+
+                    $(document).ready(function(){
+                        $('.modal').modal();
+                    });
 
                 </script>
 
@@ -473,6 +485,28 @@
 
     });
 </script>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+   var modals = document.querySelectorAll('.modal');
+   M.Modal.init(modals);
+ });
+</script>
+
+   <script>
+       document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems);
+});
+   </script>
+
+   <script>
+  $(document).ready(function() {
+    $('.modal').modal();
+  });
+</script>
+
+   
 
 
 
