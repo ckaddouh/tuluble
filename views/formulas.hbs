@@ -179,7 +179,7 @@
                             </tr>
                         {{/each}}
 
-                    <td>
+                    <td colspan = 2>
                         <div class="col s12 m4 l2">
                         <a href="#openIng" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Phase</a>
 
@@ -233,38 +233,8 @@
                             </div>
                         </div>
                     </td>
-                    </div>
-
-                    <script>
-                        $(document).ready(function() {
-                            $("#add_trial_button").click(function() {
-                            var inputValue0 = $("#userInput0").val();
-                            var inputValue1 = $("#userInput1").val();
-                            var inputValue2 = $("#userInput2").val();
-                            var inputValue3 = $("#userInput3").val();
-                            var inputValue4 = $("#userInput4").val();
-
-                            window.location.href += "/phaseformsubmit";
-                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-                            });
-                        });
-                    </script>
-
-                    <script>
-                        $(document).ready(function() {
-                            $("#make_trial_button").click(function() {
-                                console.log("TEST");
-                            var trial_num = $("#userInput1T").val();
-                            var quantity = $("#userInput2T").val();
-                           
-                            window.location.href += "/makeformsubmit";
-                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-                            });
-                        });
-                    </script>
-                    
-                    <td>
-                        <div class="col s12 m4 l2">
+                    <td colspan = 2>
+                    <div class="col s12 m4 l2">
                         <a href="#makeTrial" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE TRIAL</a>
                         <div class="modal" id="makeTrial">
                             <div style="padding: 5% 5% 5% 5%">
@@ -306,6 +276,38 @@
                     </div>
 
                     <script>
+                        $(document).ready(function() {
+                            $("#add_trial_button").click(function() {
+                            var inputValue0 = $("#userInput0").val();
+                            var inputValue1 = $("#userInput1").val();
+                            var inputValue2 = $("#userInput2").val();
+                            var inputValue3 = $("#userInput3").val();
+                            var inputValue4 = $("#userInput4").val();
+
+                            window.location.href += "/phaseformsubmit";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                            });
+                        });
+                    </script>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#make_trial_button").click(function() {
+                                console.log("TEST");
+                            var trial_num = $("#userInput1T").val();
+                            var quantity = $("#userInput2T").val();
+                           
+                            window.location.href += "/makeformsubmit";
+                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                            });
+                        });
+                    </script>
+                    
+                    
+                        
+                    </div>
+
+                    {{!-- <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclick="">UNDO MAKE</button>';
                             var button = document.querySelector('#make_trial_button');
@@ -314,7 +316,7 @@
                                 M.toast({html: toastHTML, displayLength: 10000});
                             });
                         });
-                    </script>
+                    </script> --}}
 
                     <script>
                     
