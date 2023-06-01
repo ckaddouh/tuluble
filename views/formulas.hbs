@@ -53,12 +53,21 @@
 
 
             <p> &nbsp;</p>
-                <a href="#open" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Trial</a>
-                
-                <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
-                
-                <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print Page</button>
+            <div class="row"> 
+                <div class="col s1">
+                    <a href="#open" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add Trial</a>
+                </div>
+
+                <div class="col s2">
+                    <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
+                </div>
+
+                <div class="col s1 offset-s8">
+                    <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print</button>
+                </div>
+
                 <p> &nbsp;</p>
+            </div>
 
             <div class="col s12 m4 l2">
 
