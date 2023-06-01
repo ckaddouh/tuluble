@@ -140,14 +140,14 @@
 
             <div class="row">
                 <div style="overflow-x: scroll; display: flex;" >
-                    <table class="table1 scrollable" style="table-layout: fixed">
+                    <table class="table1 scrollable" style="table-layout: fixed; width: 50%">
                         <tr>
-                            <th>Delete</th>
+                            <th style="width: 85px; height: 30px;">Delete</th>
                             <th style = "width:85px">Phase</th>
-                            <th>Trade Name</th>
+                            <th style = "width: 200px">Trade Name</th>
                             <th style="width: 200px">INCI</th>
-                            <th>Supplier</th>
-                            <th>Lot Number</th>
+                            <th style="width: 200px">Supplier</th>
+                            <th style="width: 150px">Lot Number</th>
                             
                             </tr>
                         {{!-- {{#each trialData1}}
@@ -160,7 +160,7 @@
                         {{/each}} --}}
                         
                         {{#each ing_data}}
-                            <tr style="overflow: scroll; height: 100px">
+                            <tr style="overflow: scroll; height: 85px">
                                 <td>
                                     <a href="#deleteFormulaIngredient" class="material-icons modal-trigger">delete</a>
 
@@ -324,7 +324,7 @@
                  
                     </table>
                     <div style="overflow-x: scroll; display: flex; float: right">
-                        <table class = "table2 scrollable" id = "info" style = "width: 50%">
+                        <table class = "scrollable" id = "info" style = "width: 100%">
                                 
                            
                         </table> 
@@ -373,7 +373,7 @@
                    console.log(ingredients);
                     
                     for(let ing = 0; ing < ingredients.length; ing++) {
-                            $("#info").append("<tr>");
+                            $("#info").append("<tr >");
                             for(let trial = 0; trial < ingredients[ing].length; trial++)
                             {
                                 console.log("hi");
@@ -381,8 +381,8 @@
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log("YOOHOO");
                                     console.log(ingredients[ing][trial]);
-                                    $("#info").append("<td id = 'amount/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
-                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    $("#info").append("<td style=\"height: 85px\"id = 'amount/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['total_amount']+"</td>");
+                                    $("#info").append("<td style=\"height: 85px\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='true' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                 }
                                 // ELSE SHOULD NEVER BE REACHED
                                 else {
@@ -403,8 +403,8 @@
                     let sumDict = JSON.parse('{{sum_data_json}}');
 
                     for (let i = 0; i < sumDict.length; i+=2) {
-                        $("#info").append("<td>" + sumDict[i] + "</td>");
-                        $("#info").append("<td>" + sumDict[i+1] + "%</td>");
+                        $("#info").append("<td style=\"height: 40px\">" + sumDict[i] + "</td>");
+                        $("#info").append("<td style=\"height: 40px\">" + sumDict[i+1] + "%</td>");
                     }
 
                     $("#info").append("</tr>");
