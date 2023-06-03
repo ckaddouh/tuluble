@@ -8,5 +8,6 @@ Technologies demonstrated:
 - OAuth --> to handle login and authorization
 - MySQL --> for the database
 - NodeJS --> to access database information
-- HTML, CSS, JS --> front-end and back-end; display database
+- HTML, Materialize CSS, JS --> front-end and back-end; display database
 - AWS Cloud Server --> to host website
+- Railway --> site deployed
