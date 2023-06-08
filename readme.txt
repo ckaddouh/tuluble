@@ -11,3 +11,7 @@ Technologies demonstrated:
 - HTML, Materialize CSS, JS --> front-end and back-end; display database
 - AWS Cloud Server --> to host website
 - Railway --> site deployed
+
+Installation and Setup:
+- use of the website requires no additional installation for users
+- website url: https://tuluble-production.up.railway.app/
