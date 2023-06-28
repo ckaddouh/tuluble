@@ -139,16 +139,20 @@
                            
                         </table> 
                     </div>
+
+                    <a href="#makeFormulaIngredient" class="material-icons modal-trigger">MAKE</a>
+
+                    <div id="makeFormulaIngredient" class="modal">
+                        <div class="modal-content">
+                        <h6>Are you sure you would like to make {{amount}} grams of {{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}? </h6>
+                        </div>
+                        <div class="modal-footer">
+                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/makeformsubmit">YES</a>
+                        </div>
+                    </div>
                     
 
                 </div>
-
-                    {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
-                    {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
-                    <p>&nbsp;</p>
-
-                   
-
                     
             </div>
 

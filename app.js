@@ -1561,7 +1561,7 @@ app.post("/projects/:project_id/batchformsubmit", async function (req, res, next
   let project_id = req.params.project_id
   let trial_num = req.body.userInput1T
 
-  res.redirect("/projects/" + project_id + "/" + trial_num + "/batchsheet/" + req.body.userInput1T);
+  res.redirect("/projects/" + project_id + "/" + trial_num + "/batchsheet/" + req.body.userInput2T);
 
 
 });
@@ -1659,10 +1659,12 @@ app.get("/projects/:project_id/:trial_num/batchsheet/:amount", async function (r
 else {
   res.render('batchsheet', {
     project_id: project_id,
+    trial_num: trial_num,
     ing_data: ing_data,
     project_data: project_data,
     sum: sum[0].percentSum,
-    ingredient_dict: ingredient_dict
+    ingredient_dict: ingredient_dict,
+    amount: amount
   });
 }
 
