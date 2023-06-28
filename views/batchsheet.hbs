@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+    {{#each project_data}}
+    <title>{{project_name}} Batch Sheet </title>
+    {{/each}}
+
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script>
+        Handlebars.registerHelper('eq', function(a, b) {
+            return a === b;
+        });
+    </script>
+
+    {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="/partials/color.css">
+    
+</head>
+    <style>
+        .container {
+        display: flex;
+        }
+
+</style>
+
+    <body style="display: flex; flex-direction: column;">
+        
+    <!-- NAVIGATION SIDEBAR -->
+        <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
+
+           {{> logout}}
+        </div>
+
+        <div style="padding: 2% 2% 0% 2%">
+
+        {{#each project_data}}
+            <!-- https://materializecss.com/cards.html -->
+                <div>
+                    <h1>{{project_name}} Formulas </h1>
+                    <p><b>Client:</b> {{this.client}}</p>
+                    <p><b>Date:</b> {{formatDate this.date}}</p>
+                    <p><b>Contact name: </b>{{client_name}}</p>
+                    <p><b>Contact email: </b>{{client_email}}</p>
+                </div>
+        {{/each}}          
+          
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+        <script src="/routes/formulas.js"></script>
+
+
+        {{!-- clicking new ingredient button --}}
+        <script>
+            $(document).ready(function() {
+                $("#add_button").click(function() {
+                var inputValue1 = $("#userInput1").val();
+                var inputValue2 = $("#userInput2").val();
+                var inputValue3 = $("#userInput3").val();
+
+                window.location += "/formulaformsubmit";
+                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                });
+            });
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('.modal').modal();
+            })
+        </script>
+
+
+            <div class="row">
+                <div style="overflow-x: scroll; display: flex;" >
+                    <table class="table1 scrollable" style="table-layout: fixed; width: 50%">
+                        <tr>
+                            <th style = "width:85px">Phase</th>
+                            <th style = "width: 200px">Trade Name</th>
+                            <th style="width: 200px">INCI</th>
+                            <th style="width: 200px">Supplier</th>
+                            <th style="width: 150px">Lot Number</th>
+                            
+                        </tr>
+                    
+
+                        {{#each ing_data}}
+                            <tr style="overflow: scroll; height: 85px">
+                            
+
+                                <td>{{phase}}</td>
+                                <td>{{trade_name}}</td>
+                                <td>{{inci_name}}</td>
+                                <td>{{supplier}}</td>
+                                <td>{{lot_num}}</td>
+                               
+                            </tr>
+                        {{/each}}
+
+                 
+                    
+                    </div>
+                    
+                        
+                    </div>
+
+                 
+                 
+                    </table>
+
+                    {{!-- <div class="make_trial_button">
+                        <button id = "make_trial_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">MAKE</button>
+                    </div> --}}
+
+                    <div style="overflow-x: scroll; display: flex; float: right">
+                        <table class = "scrollable" id = "info" style = "width: 100%">
+                            <tr>
+                                <th>Percentage</th>
+                                <th>Amount</th>
+                            </tr>
+                            {{#each ingredient_dict}}
+                            <tr>
+                                <td>{{percent_of_ingredient}}</td>
+                                <td>{{amount}}</td>
+                            </tr>
+                            {{/each}}
+                           
+                        </table> 
+                    </div>
+                    
+
+                </div>
+
+                    {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
+                    {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
+                    <p>&nbsp;</p>
+
+                   
+
+                    
+            </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
+        });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+        });
+        </script>
+
+        <script>
+        $(document).ready(function() {
+            $('.modal').modal();
+        });
+    </script>
+
+    
+    
+
+                </div>
+            </div>
+
+    </body>
+
+
+</html>

@@ -1,0 +1,90 @@
+APPS SCRIPT
+
+var server = 
+var port = 
+var dbName = 
+var username = 
+var password = 
+var url = 
+
+function readDataClassifier(classifier) {
+ var conn = Jdbc.getConnection(url, username, password);
+ var stmt = conn.createStatement();
+ var results = stmt.executeQuery(`SELECT * FROM ingredient WHERE classifier_id = "${classifier}"`);
+ ;
+
+return results;
+}
+
+function loopThroughClassifiers() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  
+  var classifierArr = [];
+  classifierArr.push("Thickener");
+  classifierArr.push("Oils");
+  classifierArr.push("Butters");
+  classifierArr.push("Surfactants");
+  classifierArr.push("Functional/Active");
+  classifierArr.push("Preservatives");
+  classifierArr.push("Extracts/Fragrances/Flavor");
+  classifierArr.push("Experimental");
+  classifierArr.push("Colorants");
+  classifierArr.push("Absorbents");
+  classifierArr.push("pH Adjusters (Acids)");
+  classifierArr.push("pH Adjusters (Bases)");
+  classifierArr.push("Distilled Water/Ethyl Alcohol");
+
+classifierArr.forEach(function(classifier) {
+    
+ var sheet = spreadsheet.getSheetByName(classifier);
+  if (!sheet)
+    sheet = spreadsheet.insertSheet(classifier);
+  else
+    sheet.clearContents();
+
+//  for (var col = 0; col < numCols; col++) {
+//    arr.push(metaData.getColumnName(col + 1));
+//  }
+
+  var arr = [];
+
+  arr.push("Trade");
+  arr.push("Lot #");
+  arr.push("Shelf");
+  arr.push("INCI");
+  arr.push("Amount");
+  arr.push("Expiration");
+  arr.push("Date Received");
+  arr.push("TSCA Approved");
+  arr.push("Supplier");
+  arr.push("Unit");
+  arr.push("Active");
+  arr.push("COA");
+  arr.push("MSDS");
+
+  sheet.appendRow(arr);
+
+  var results = readDataClassifier(classifier);
+  var metaData=results.getMetaData();
+  var numCols = metaData.getColumnCount()
+
+  // 7 and 8 are dates
+  while (results.next()) {
+  arr=[];
+  for (var col = 1; col < numCols; col++) {
+    if (col != 13 && col != 2 && col != 7 && col != 8)
+      arr.push(results.getString(col + 1));
+  }
+  sheet.appendRow(arr);
+  }
+
+  });
+  results.close();
+  stmt.close();
+  sheet.autoResizeColumns(1, numCols+1);
+} 
+
+// ScriptApp.newTrigger('readDataIngredients')
+// .timeBased()
+// .everyDays(1)
+// .create();

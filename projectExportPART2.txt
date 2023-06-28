@@ -1,0 +1,63 @@
+var server = 
+var port = 
+var dbName = 
+var username = 
+var password = 
+var url = 
+
+function readDataProjectIngredients(project_id) {
+  var conn = Jdbc.getConnection(url, username, password);
+  var stmt = conn.createStatement();
+
+ var results = stmt.executeQuery(` SELECT DISTINCT ingredient.ingredient_id, ingredient.supplier, formula_ingredient.trial_num, formula_ingredient.project_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.unit, ingredient.lot_num FROM formula_ingredient, ingredient WHERE formula_ingredient.ingredient_id = ingredient.ingredient_id AND formula_ingredient.project_id = ${project_id} GROUP BY ingredient.ingredient_id ORDER BY formula_ingredient.phase`);
+  return results;
+}
+
+function insertIntoSheet() {
+
+var conn = Jdbc.getConnection(url, username, password);
+var stmt = conn.createStatement();
+
+  var projects = stmt.executeQuery('SELECT * FROM projects');
+   var projectMetaData=projects.getMetaData();
+
+ var spreadsheet = SpreadsheetApp.getActive();
+
+while (projects.next()) {
+  console.log("hello");
+  console.log(projects.getString(1));
+  var newProjectSheet = spreadsheet.getSheetByName(projects.getString(1));
+  if (!newProjectSheet)
+    newProjectSheet = spreadsheet.insertSheet(projects.getString(1));
+  else
+    newProjectSheet.clearContents();
+
+  var results = readDataProjectIngredients(projects.getString(2));
+  var metaData=results.getMetaData();
+  var numCols = metaData.getColumnCount();
+
+  var arr=[];
+  for (var col = 0; col < numCols; col++) {
+    arr.push(metaData.getColumnName(col + 1));
+  }
+  newProjectSheet.appendRow(arr);
+
+  while (results.next()) {
+    arr=[];
+    for (var col = 0; col < numCols; col++) {
+      arr.push(results.getString(col + 1));
+    }
+    newProjectSheet.appendRow(arr);
+  }
+
+  newProjectSheet.autoResizeColumns(1, numCols+1);
+}
+
+
+} 
+
+
+// ScriptApp.newTrigger('readDataIngredients')
+// .timeBased()
+// .everyDays(1)
+// .create();

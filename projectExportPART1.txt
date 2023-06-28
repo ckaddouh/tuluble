@@ -1,0 +1,46 @@
+var server = 
+var port = 
+var dbName = 
+var username = 
+var password = 
+var url =
+
+function readDataProjects() {
+ var conn = Jdbc.getConnection(url, username, password);
+ var stmt = conn.createStatement();
+ var results = stmt.executeQuery('SELECT * FROM projects');
+ var metaData=results.getMetaData();
+ var numCols = metaData.getColumnCount();
+ var spreadsheet = SpreadsheetApp.getActive();
+ var sheet = spreadsheet.getSheetByName('Projects');
+ sheet.clearContents();
+ var arr=[];
+
+//  for (var col = 0; col < numCols; col++) {
+//    arr.push(metaData.getColumnName(col + 1));
+//  }
+
+arr.push("Name");
+arr.push("Client");
+arr.push("Date");
+arr.push("Active");
+ sheet.appendRow(arr);
+
+while (results.next()) {
+ arr=[];
+ for (var col = 0; col < numCols; col++) {
+   if (col != 1)
+    arr.push(results.getString(col + 1));
+ }
+ sheet.appendRow(arr);
+}
+
+results.close();
+stmt.close();
+sheet.autoResizeColumns(1, numCols+1);
+} 
+
+// ScriptApp.newTrigger('readDataProjects')
+// .timeBased()
+// .everyDays(1)
+// .create();

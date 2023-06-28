@@ -188,9 +188,19 @@ const selectTrialData = `
 
 
 
+// const selectTrialSums = `
+//   SELECT  
+//     SUM(formula_ingredient.total_amount) as amountSum, SUM(formula_ingredient.percent_of_ingredient) as percentSum
+//   FROM 
+//     formula_ingredient
+//   WHERE 
+//     formula_ingredient.project_id = ?
+//     AND formula_ingredient.trial_num = ?
+// `
+
 const selectTrialSums = `
   SELECT  
-    SUM(formula_ingredient.total_amount) as amountSum, SUM(formula_ingredient.percent_of_ingredient) as percentSum
+    SUM(formula_ingredient.percent_of_ingredient) as percentSum
   FROM 
     formula_ingredient
   WHERE 
@@ -327,8 +337,8 @@ const insertIntoPhaseOLD = `
 `
 
 const insertIntoPhase = `
-  INSERT INTO formula_ingredient (project_id, trial_num, phase, percent_of_ingredient, total_amount, ingredient_id)
-  VALUES (?, ?, ?, ?, ?, ?)
+  INSERT INTO formula_ingredient (project_id, trial_num, phase, percent_of_ingredient, ingredient_id)
+  VALUES (?, ?, ?, ?, ?)
 `
 
 const selectSearchedIngredients = `
@@ -626,7 +636,7 @@ const getProjectID = `
 
 const getIngredientTrialInfo = `
   SELECT 
-    trial_num, total_amount, percent_of_ingredient, ingredient_id, phase
+    trial_num, percent_of_ingredient, ingredient_id, phase
   FROM 
     formula_ingredient
   WHERE 
@@ -641,6 +651,19 @@ const getFormulaIngredients = `
   WHERE 
     formula_ingredient.ingredient_id = ingredient.ingredient_id
     AND formula_ingredient.project_id = ?
+	  GROUP BY ingredient.ingredient_id
+    ORDER BY formula_ingredient.phase
+`
+
+const getFormulaIngredientsForTrial = `
+  SELECT DISTINCT 
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.unit, ingredient.lot_num
+  FROM 
+	  formula_ingredient, ingredient
+  WHERE 
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formula_ingredient.project_id = ?
+    AND formula_ingredient.trial_num = ?
 	  GROUP BY ingredient.ingredient_id
     ORDER BY formula_ingredient.phase
 `
@@ -1234,7 +1257,7 @@ app.post("/projects/:project_id/formulaformsubmit", async function (req, res, ne
 app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
 
-  db.execute(insertIntoPhase, [project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput4, req.body.userInput2], (error, results) => {
+  db.execute(insertIntoPhase, [project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput2], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
@@ -1422,10 +1445,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
       console.log("SUMSUMSUSMSUMS");
       console.log(sum[0]);
 
-      if (sum[0].amountSum)
-        sum_data.push(sum[0].amountSum);
-      else  
-        sum_data.push(0);
       if (sum[0].percentSum)
         sum_data.push(sum[0].percentSum);
       else  
@@ -1466,7 +1485,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
             trial_num: trial_data[j].trial_num,
             ingredient_id: ing_data[i].ingredient_id,
             phase: ing_data[i].phase,
-            total_amount: '',
             percent_of_ingredient: ''
           }];        
         }
@@ -1510,7 +1528,6 @@ app.get("/projects/:project_id", async function (req,res,next) {
   }
 });
 
-
 app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
   console.log("hello?");
   let project_id = req.params.project_id
@@ -1539,6 +1556,127 @@ app.post("/projects/:project_id/makeformsubmit", async function (req, res, next)
   });
   res.redirect('/projects/' + project_id);
 });
+
+app.post("/projects/:project_id/batchformsubmit", async function (req, res, next) {
+  let project_id = req.params.project_id
+  let trial_num = req.body.userInput1T
+
+  res.redirect("/projects/" + project_id + "/" + trial_num + "/batchsheet/" + req.body.userInput1T);
+
+
+});
+
+app.get("/projects/:project_id/:trial_num/batchsheet/:amount", async function (req, res, next) {
+  let project_id = req.params.project_id
+  let trial_num = req.params.trial_num
+  let amount = req.params.amount
+  let error
+
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
+
+    console.log(real_id[0].scientist_id);
+
+  const assigned = await new Promise((resolve, reject) => {
+    console.log("ASSIGNED EXECUTE");
+    db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
+      if (error) reject(error);
+      else resolve(assigned);
+    });
+  });
+
+  if (isAdmin || assigned.length !== 0) {
+    const project_data = await new Promise((resolve, reject) => {
+      console.log("SINGLE PROJECT QUERY EXECUTE");
+      db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+        if (error) reject(error);
+        else resolve(project_data);
+      });
+    });
+
+
+  const ing_data = await new Promise((resolve, reject) => {
+    db.execute(getFormulaIngredientsForTrial, [project_id, trial_num], (error, ing_data) => {
+      if (error) reject(error);
+      else resolve(ing_data);
+    });
+  }); 
+
+  console.log("\n\ning_data");
+  console.log(ing_data);
+
+  const sum = await new Promise((resolve, reject) => {
+    db.execute(selectTrialSums, [project_id, trial_num], (error, sum) => {
+      if (error) reject(error);
+      else resolve(sum);
+    });
+  });
+
+  console.log(sum);
+
+  if (sum[0].percentSum != 100) {
+    console.log("SUM NOT 100%");
+  }
+
+  const inventory_data = await new Promise((resolve, reject) => {
+    console.log("INVENTORY EXECUTE");
+    db.execute(read_inventory_all_alph, (error, inventory_data) => {
+      if (error) reject(error);
+      else resolve(inventory_data);
+    });
+  })
+
+
+  const ingredient_dict = [];
+  for (let i = 0; i < ing_data.length; i++) {
+    const trialIngData = await new Promise((resolve, reject) => {
+     
+      console.log(ing_data[i].ingredient_id);
+
+      db.execute(getIngredientTrialInfo, [project_id, trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+        if (error) reject(error);
+        else resolve(trialIngData);
+      });
+    });
+
+    trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient/100)*amount;
+    ingredient_dict[i] = trialIngData[0];
+   
+  }
+
+  console.log("\n\n ING DATA");
+  console.log(ingredient_dict);
+
+  const ingredientDictJSON = JSON.stringify(ingredient_dict);
+
+  if (error)
+  res.redirect("/error");
+else {
+  res.render('batchsheet', {
+    project_id: project_id,
+    ing_data: ing_data,
+    project_data: project_data,
+    sum: sum[0].percentSum,
+    ingredient_dict: ingredient_dict
+  });
+}
+
+}
+else {
+  res.redirect("/projects/sci/" + real_id[0].scientist_id);
+} 
+} catch (error) {
+  console.log(error);
+  res.redirect("/error");
+}
+
+});
+
 
 
 app.post("/projects/:project_id/procedure/procformsubmit", (req, res) => {
