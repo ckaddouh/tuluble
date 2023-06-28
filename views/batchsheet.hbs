@@ -50,10 +50,11 @@
                     <p><b>Date:</b> {{formatDate this.date}}</p>
                     <p><b>Contact name: </b>{{client_name}}</p>
                     <p><b>Contact email: </b>{{client_email}}</p>
+                    <p>&nbsp;</p>
                 </div>
         {{/each}}          
           
-        </div>
+        
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -110,22 +111,22 @@
                         {{/each}}
 
                  
-                    
+
+
                     </div>
+                    
                     
                         
                     </div>
-
-                 
-                 
-                    </table>
+                    
+                    
 
                     {{!-- <div class="make_trial_button">
                         <button id = "make_trial_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">MAKE</button>
                     </div> --}}
 
                     <div style="overflow-x: scroll; display: flex; float: right">
-                        <table class = "scrollable" id = "info" style = "width: 100%">
+                        <table class = "scrollable" id = "info" style = "width: 50%">
                             <tr>
                                 <th>Percentage</th>
                                 <th>Amount</th>
@@ -136,11 +137,14 @@
                                 <td>{{amount}}</td>
                             </tr>
                             {{/each}}
-                           
-                        </table> 
+                        </table>
                     </div>
 
-                    <a href="#makeFormulaIngredient" class="material-icons modal-trigger">MAKE</a>
+                <div class="row">
+                    <p>&nbsp;</p>
+                    <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
+
+                    
 
                     <div id="makeFormulaIngredient" class="modal">
                         <div class="modal-content">
@@ -150,6 +154,7 @@
                         <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/makeformsubmit">YES</a>
                         </div>
                     </div>
+                </div>
                     
 
                 </div>
@@ -182,6 +187,7 @@
 
                 </div>
             </div>
+        </div>
 
     </body>
 
