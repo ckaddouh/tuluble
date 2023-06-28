@@ -79,7 +79,7 @@ function requireAdmin(req, res, next) {
 
 const read_inventory_all_alph = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds
     FROM
         ingredient
     WHERE 
@@ -120,7 +120,7 @@ const selectTrialNums = `
 
 const read_inventory_all_sql = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost
     FROM
         ingredient
     WHERE 
@@ -165,7 +165,7 @@ const unarchiveProject = `
 
 const selectFormulaIngredients = `
   SELECT
-    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
+    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE
@@ -221,7 +221,7 @@ const selectBasicTrialData = `
 
 const read_inactive_ingredients_all_sql = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, cost
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost
   FROM
     ingredient
   WHERE 
@@ -250,18 +250,18 @@ const read_inactive_projects_archived = `
 
 const insertIntoInventory = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit, coa, msds, expiration)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 const insertIntoInventory1 = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, unit)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier)
   VALUES (?, "Trade Name", "23", "3A", "thickener", "AM09348", "0000-00-00", "Alban Muller", "g")
 `
 
 const read_inventory_classifier_sql = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, cost
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost
   FROM
     ingredient
   WHERE 
@@ -278,7 +278,7 @@ const updateIngredient = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?, expiration = ?, cost = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?
   WHERE 
     ingredient_id = ?
 `
@@ -295,7 +295,7 @@ const updateProject = `
 const getLowAmounts = `
 
   SELECT
-    ingredient_id, inci_name, trade_name, amt, expiration, unit
+    ingredient_id, inci_name, trade_name, amt, expiration
   FROM 
     ingredient
   WHERE
@@ -305,7 +305,7 @@ const getLowAmounts = `
 
 const getExpired = `
   SELECT
-    ingredient_id, inci_name, trade_name, amt, expiration, unit
+    ingredient_id, inci_name, trade_name, amt, expiration
   FROM 
     ingredient
   WHERE
@@ -343,7 +343,7 @@ const insertIntoPhase = `
 
 const selectSearchedIngredients = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier
   FROM
     ingredient
   WHERE 
@@ -353,7 +353,7 @@ const selectSearchedIngredients = `
 
 const read_inventory_search = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost
   FROM
     ingredient
   WHERE 
@@ -361,7 +361,7 @@ const read_inventory_search = `
 `
 const read_archive_inventory_search = `
 SELECT
-  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
+  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost
 FROM
   ingredient
 WHERE
@@ -487,7 +487,7 @@ const subtractAmounts = `
   UPDATE
     ingredient
   SET 
-    amt = amt - (? * (?/?))
+    amt = amt - ?
   WHERE 
     ingredient_id = ?
 `
@@ -550,7 +550,7 @@ const addScientist = `
 
 const newFormulaDisplay = `
   SELECT
-    formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num, ingredient.unit
+    formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE
@@ -563,7 +563,7 @@ const newFormulaDisplay = `
 
 const formulaDisplayAttempt3 = `
   SELECT DISTINCT 
-    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.unit, ingredient.lot_num
+    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.lot_num
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE 
@@ -583,7 +583,7 @@ const getTrials = `
 
 const getTrialInfo = `
   SELECT DISTINCT 
-    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.unit, ingredient.lot_num
+    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.lot_num
   FROM 
     formulas, formula_ingredient, ingredient
   WHERE 
@@ -645,7 +645,7 @@ const getIngredientTrialInfo = `
 
 const getFormulaIngredients = `
   SELECT DISTINCT 
-    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.unit, ingredient.lot_num
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.lot_num
   FROM 
 	  formula_ingredient, ingredient
   WHERE 
@@ -657,7 +657,7 @@ const getFormulaIngredients = `
 
 const getFormulaIngredientsForTrial = `
   SELECT DISTINCT 
-    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.unit, ingredient.lot_num
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.lot_num
   FROM 
 	  formula_ingredient, ingredient
   WHERE 
@@ -1528,34 +1528,75 @@ app.get("/projects/:project_id", async function (req,res,next) {
   }
 });
 
-app.post("/projects/:project_id/makeformsubmit", async function (req, res, next) {
+// app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async function (req, res, next) {
+//   console.log("hello?");
+//   let project_id = req.params.project_id
+//   let trial_num = req.params.trial_num
+//   let totalAmount = req.params.amount
+
+
+//   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
+//     console.log(totalAmount);
+//     console.log(totalAmount[0].s);
+//     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
+//       for (let i = 0; i < ings.length; i++) {
+//         console.log(ings[i].ingredient_id);
+//         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
+//           console.log(amount);
+//           console.log(amount[0].total_amount);
+//           db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2T, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
+//             if (error)
+//               res.status(500).send(error);
+//           });
+//         });
+//       }
+//     });
+//   });
+//   res.redirect('/projects/' + project_id);
+// });
+
+
+app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async function (req, res, next) {
   console.log("hello?");
   let project_id = req.params.project_id
-  let trial_num = req.body.userInput1T
+  let trial_num = req.params.trial_num
+  let totalAmount = req.params.amount
 
-  console.log(trial_num);
-  console.log(project_id);
+  const ing_data = await new Promise((resolve, reject) => {
+    db.execute(getFormulaIngredientsForTrial, [project_id, trial_num], (error, ing_data) => {
+      if (error) reject(error);
+      else resolve(ing_data);
+    });
+  }); 
+
+  const ingredient_dict = [];
+  for (let i = 0; i < ing_data.length; i++) {
+    const trialIngData = await new Promise((resolve, reject) => {
+     
+      console.log(ing_data[i].ingredient_id);
+
+      db.execute(getIngredientTrialInfo, [project_id, trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+        if (error) reject(error);
+        else resolve(trialIngData);
+      });
+    });
+
+   
+    trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient/100)*totalAmount;
+    ingredient_dict[i] = trialIngData[0];
+
+
+    db.execute(subtractAmounts, [trialIngData[0]['amount'], ing_data[i].ingredient_id], (error, results) => {
+      if (error)
+        res.status(500).send(error);
+    });
+  }
+
   
 
-  db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
-    console.log(totalAmount);
-    console.log(totalAmount[0].s);
-    db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
-      for (let i = 0; i < ings.length; i++) {
-        console.log(ings[i].ingredient_id);
-        db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
-          console.log(amount);
-          console.log(amount[0].total_amount);
-          db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2T, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
-            if (error)
-              res.status(500).send(error);
-          });
-        });
-      }
-    });
-  });
-  res.redirect('/projects/' + project_id);
+  res.redirect('/projects/' + project_id + "/" + trial_num + "/batchformsubmit/" + totalAmount);
 });
+
 
 app.post("/projects/:project_id/batchformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id
