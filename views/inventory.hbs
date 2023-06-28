@@ -86,13 +86,13 @@
                             {{!-- Field 1 --}}
                             <b><label for="tuluble">INCI Name:</label></b>
                             <input type="text" name="userInput1" id="userInput1" placeholder="Enter INCI Name"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s/-%\()]*$">
                             <p> </p>
 
                             {{!-- Field 2 --}}
                             <b><label for="tuluble">Trade Name:</label></b>
                             <input type="text" name="userInput2" id="userInput2" placeholder="Enter Trade Name"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                maxlength="20" pattern="^[a-zA-Z0-9\s()-]*$">
                             <p> </p>
 
                             {{!-- Field 3 --}}
@@ -136,6 +136,11 @@
 
                             <b><label for="tuluble">Lot Number:</label></b>
                             <input type="text" name="userInput6" id="userInput6" placeholder="Enter Lot Number"
+                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                            <p> </p>
+
+                            <b><label for="tuluble">Cost Per Kilo:</label></b>
+                            <input type="text" name="userInput13" id="userInput13" placeholder="Enter Cost Per Kilo"
                                 maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                             <p> </p>
 
@@ -311,10 +316,13 @@
 
     <script>
         function redirectToPage() {
-            const clearedUrl = "https://tuluble-production.up.railway.app/inventory/";
+            console.log("CLEARING??????");
+            const clearedUrl = "http://localhost:3000/inventory";
             const currentUrl = window.location.href;
             
             if (currentUrl !== clearedUrl) {
+                console.log("INSIDE THE CLEAR");
+                console.log(clearedUrl);
                 window.location.href = clearedUrl;
             }
         }
@@ -417,6 +425,9 @@
                                 <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                             </a> --}}
                         </th>
+                        <th id="cost">Cost
+
+                        </th>
                         <th id="archive">Archive
                         </th>
                         <th id="edit">Edit
@@ -445,6 +456,7 @@
                                             <b>Supplier:</b> {{this.supplier}}<br></br>
                                             <b>Lot Number:</b> {{this.lot_num}}<br></br>
                                             <b>Shelf:</b> {{this.shelf}}<br></br>
+                                            <b>Cost:</b> {{this.cost}}<br></br>
                                         {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI
                                             Name:</span> --}}
                                     </div>
@@ -472,6 +484,7 @@
                         <td>{{this.amt}} {{this.unit}}</td>
                         <td>{{this.shelf}}</td>
                         <td>{{this.lot_num}}</td>
+                        <td>{{this.cost}}</td>
 
                         {{!--
                         {{#if this.amt = 0}}
@@ -530,7 +543,7 @@
                                                     value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
-                                                <b><label for="tuluble">Classifier:</label></b>
+                                                <b><label for="tuluble">Reselect Classifier:</label></b>
                                                 {{!-- <input type="text" name="userInput5" id="userInput5"
                                                     placeholder="Enter Classifier" maxlength="20"> --}}
                                                 <select name="userInput5" id="userInput5" class="browser-default">
@@ -558,6 +571,11 @@
                                                 <b><label for="tuluble">Lot Number:</label></b>
                                                 <input type="text" name="userInput6" id="userInput6"
                                                     value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                <p> </p>
+
+                                                <b><label for="tuluble">Cost Per Kilo:</label></b>
+                                                <input type="text" name="userInput13" id="userInput13"
+                                                    value="{{this.cost}}" pattern="^[a-zA-Z0-9\s$]*$">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Expiration Date:</label></b>

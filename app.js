@@ -120,7 +120,7 @@ const selectTrialNums = `
 
 const read_inventory_all_sql = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
     FROM
         ingredient
     WHERE 
@@ -211,7 +211,7 @@ const selectBasicTrialData = `
 
 const read_inactive_ingredients_all_sql = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, cost
   FROM
     ingredient
   WHERE 
@@ -251,7 +251,7 @@ const insertIntoInventory1 = `
 
 const read_inventory_classifier_sql = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, cost
   FROM
     ingredient
   WHERE 
@@ -268,7 +268,7 @@ const updateIngredient = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?, expiration = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, unit = ?, coa = ?, msds = ?, expiration = ?, cost = ?
   WHERE 
     ingredient_id = ?
 `
@@ -343,7 +343,7 @@ const selectSearchedIngredients = `
 
 const read_inventory_search = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
   FROM
     ingredient
   WHERE 
@@ -351,7 +351,7 @@ const read_inventory_search = `
 `
 const read_archive_inventory_search = `
 SELECT
-  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds
+  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, unit, coa, msds, cost
 FROM
   ingredient
 WHERE
@@ -1087,7 +1087,7 @@ app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (
   let ingredient_id = req.params.ingredient_id
  
   db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, req.body.userInput12, ingredient_id], (error, results) => {
+  req.body.userInput7, req.body.userInput8, req.body.userInput9, req.body.userInput10, req.body.userInput11, req.body.userInput12, req.body.userInput13, ingredient_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
