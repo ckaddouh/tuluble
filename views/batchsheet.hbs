@@ -137,7 +137,7 @@
                                 <td>{{amount}}</td>
                             </tr>
                             {{/each}}
-                        </table>
+                        </table> 
                     </div>
 
                 <div class="row">
@@ -152,6 +152,21 @@
                         <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
                     </div>
                     
+                    {{#unless sufficient}}
+                    <div>
+                    <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
+                    </div>
+                    {{/unless}}
+
+                    {{#unless formulaComplete}}
+                    <div>
+                        <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
+                    </div>
+                    {{/unless}}
+
+                    {{#ifBothTrue sufficient formulaComplete}}
+                    <a href="#makeFormulaIngredient" class="material-icons modal-trigger">MAKE</a>
+                    {{/ifBothTrue }}
 
                     <div id="makeFormulaIngredient" class="modal">
                         <div class="modal-content">
