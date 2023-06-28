@@ -49,48 +49,49 @@
 
                 <div id="ingredients" class="col s12">
 
-                <div style="display: flex; justify-content: flex-end;">
-                    <nav style="width: 30%;">
-                        <div class="nav-wrapper pink accent-1" >
-                            <div class="input-field">
-                                <input type="search" id="gsearch" name="gsearch">
-                                <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                                {{!-- <input type="submit"> --}}
-                                <i class="material-icons">close</i>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <nav style="width: 30%;">
+                            <div class="nav-wrapper pink accent-1" >
+                                <div class="input-field">
+                                    <input type="search" id="ingsearch" name="ingsearch">
+                                    <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                    {{!-- <input type="submit"> --}}
+                                    <i class="material-icons">close</i>
+                                </div>
                             </div>
-                        </div>
-                    </nav>
-                </div>
+                        </nav>
+                    </div>
 
-                <div style="text-align:right; margin-top:10px">
-                    <button id="clear-search"
-                                    name="clear-search" 
-                                    onclick="redirectToPage()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                    Clear Search</button>
-                </div>
-                <div class="col s12 m6 offset-m3">
-                    <p></p>
-                </div>
+                    <div style="text-align:right; margin-top:10px">
+                        <button id="clear-search"
+                                        name="clear-search" 
+                                        onclick="redirectToPage()"
+                                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                                        Clear Search</button>
+                    </div>
+
+                    <div class="col s12 m6 offset-m3">
+                        <p></p>
+                    </div>
                 {{!-- please make a space between clear search and the table --}}
 
-                <script>
-                    function redirectToPage() {
-                        const clearedUrl = "https://tuluble-production.up.railway.app/archive";
-                        const currentUrl = window.location.href;
-                        const word = "search"
-                        const clear = document.querySelector('#clear-search');
+                    <script>
+                        function redirectToPage() {
+                            const clearedUrl = "http://localhost:3000/archive";
+                            const currentUrl = window.location.href;
+                            const word = "search"
+                            const clear = document.querySelector('#clear-search');
 
-                        if (currentUrl.toString().includes(word)) {
-                                window.location.href = clearedUrl;
+                            if (currentUrl.toString().includes(word)) {
+                                    window.location.href = clearedUrl;
+                            }
                         }
-                    }
-                </script>
+                    </script>
 
                     <script>
-                        const search = document.querySelector('#gsearch');
+                        const search = document.querySelector('#ingsearch');
 
-                        let searchBar = document.getElementById('gsearch');
+                        let searchBar = document.getElementById('ingsearch');
                         let searchButton = document.getElementById('search-button');
                         let searchTerm;
 
@@ -209,14 +210,15 @@
                         </tbody>
                     </table>
 
-                    </div>
+                </div>
+                
                     <div id="projects" class="col s12">
 
                         <div style="display: flex; justify-content: flex-end;">
                             <nav style="width: 30%;">
                                 <div class="nav-wrapper pink accent-1" >
                                     <div class="input-field">
-                                        <input type="search" id="fsearch" name="fsearch">
+                                        <input type="search" id="projsearch" name="projsearch">
                                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
                                         {{!-- <input type="submit"> --}}
                                         <i class="material-icons">close</i>
@@ -254,10 +256,10 @@
 
                             console.log("HELLOOOOOO");
 
-                            const search2 = document.querySelector('#fsearch');
+                            const search2 = document.querySelector('#projsearch');
 
                             const regex = /^[a-zA-Z0-9\s]*$/;
-                            let searchBar2 = document.getElementById('fsearch');
+                            let searchBar2 = document.getElementById('projsearch');
                             let searchButton2 = document.getElementById('search-button');
                             let searchTerm2;
                             const currentURL2 = String(window.location.href);

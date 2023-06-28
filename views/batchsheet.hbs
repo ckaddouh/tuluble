@@ -125,8 +125,8 @@
                         <button id = "make_trial_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">MAKE</button>
                     </div> --}}
 
-                    <div style="overflow-x: scroll; display: flex; float: right">
-                        <table class = "scrollable" id = "info" style = "width: 50%">
+                    <div style="overflow-x: scroll; display: flex;">
+                        <table class = "table2 scrollable" id = "info" style = "table-layout: fixed; width: 50%">
                             <tr>
                                 <th>Percentage</th>
                                 <th>Amount</th>
@@ -142,13 +142,22 @@
 
                 <div class="row">
                     <p>&nbsp;</p>
-                    <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
 
+                    {{#each ing_data}}
+                        {{inci_name}}
+                        <br>
+                    {{/each}}
+
+                    <div class="row">
+                        <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
+                    </div>
                     
 
                     <div id="makeFormulaIngredient" class="modal">
                         <div class="modal-content">
-                        <h6>Are you sure you would like to make {{amount}} grams of {{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}? </h6>
+                        <h6>Are you sure you would like to make <b>{{amount}}</b> grams of <b>{{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}</b>? </h6>
+                        <p>&nbsp;</p>
+                        <h8 style="color: red;">Note that these changes CANNOT BE REVERSED.</h8>
                         </div>
                         <div class="modal-footer">
                         <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
