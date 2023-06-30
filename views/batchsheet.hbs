@@ -124,10 +124,6 @@
                     
                     
 
-                    {{!-- <div class="make_trial_button">
-                        <button id = "make_trial_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" type="submit">MAKE</button>
-                    </div> --}}
-
                     <div style="overflow-x: scroll; display: flex;">
                         <table class = "table2 scrollable" id = "info" style = "table-layout: fixed; width: 50%">
                             <tr>
@@ -145,11 +141,7 @@
 
                 <div class="row">
                     <p>&nbsp;</p>
-
-                    {{#each ing_data}}
-                        {{inci_name}}
-                        <br>
-                    {{/each}}
+                   
                     
                     {{#unless sufficient}}
                     <div>
@@ -163,11 +155,11 @@
                     </div>
                     {{/unless}}
 
+                    {{#ifBothTrue sufficient formulaComplete}}
                     <div class="row">
-                        {{#ifBothTrue sufficient formulaComplete}}
                         <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
-                        {{/ifBothTrue }}
-                    </div>
+                    </div>                    
+                    {{/ifBothTrue }}
 
                     <div id="makeFormulaIngredient" class="modal">
                         <div class="modal-content">
