@@ -69,6 +69,27 @@
 
             <div class="col s12 m4 l2">
 
+            {{#if messages}}
+            <div style = "position: fixed;top: 60px;right: 20px;">
+                {{#each messages}}
+                <div class = "flash-message" style="background-color: #c8e6c9;padding: 10px;margin-bottom: 10px; border-radius: 5px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+                    <p>{{this}}</p>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+            <script>
+                var flashMessages = document.querySelectorAll('.flash-message');
+                flashMessages.forEach(function(flashMessage, index) {
+                    setTimeout(function() {
+                    flashMessage.style.display = 'none';
+                    }, (index + 1) * 5000);
+                });
+            </script>
+
+           
+
             <div class="modal" id="open">
                 <div style="padding: 5% 5% 5% 5%">
                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
