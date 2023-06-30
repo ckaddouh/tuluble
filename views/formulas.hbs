@@ -350,6 +350,12 @@
                     
             </div>
 
+            <style>
+                .table-icon {
+                    vertical-align: middle;
+                }
+                </style>
+
                 <script>
                   
                     
@@ -366,6 +372,8 @@
                     // const ingredients = JSON.parse(decodedString);
                     const trial_data = {{trial_data}};
                     $("#info").append("<tr>");
+
+                        
                     
                     console.log("TRIAL TRIAL DATA DATA ");
                     if (trial_data == 0){
@@ -377,10 +385,10 @@
                         console.log(i);
                         // $("#info").append("<th >Trial "+i+"</th>"); 
                         if (approved[i] == '1') {
-                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/projects/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons modal-trigger'>close</a> </th>");
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/projects/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons table-icon modal-trigger'>close</a> </th>");
                         }
                         else {
-                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial "+(i+1)+" Percentage <a href= '#approveTrial" + (i+1) + "' class='material-icons modal-trigger'>check</a> </th>");
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial "+(i+1)+" Percentage <a href= '#approveTrial" + (i+1) + "' class='material-icons table-icon modal-trigger'>check</a> </th>");
                         }
                     }
                     $("#info").append("</tr>");
