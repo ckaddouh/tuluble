@@ -39,6 +39,23 @@
                 <h1>Archive </h1>
             </div>
 
+            {{!-- trying out something new  --}}
+            {{!-- <div class="row">
+                <div class="col s12">
+                    <nav>
+                        <div class="nav-wrapper">
+                        <a href="#" class="brand-logo right">Logo</a>
+                        <ul id="nav-mobile" class="left hide-on-med-and-down">
+                            <li><a href="/archiveingredientpage">Ingredients</a></li>
+                            <li><a href="/archiveprojectspage">Projects</a></li>
+                        </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div> --}}
+            {{!-- new is ended here --}}
+
+
              <div class="row">
                 <div class="col s12">
                     <ul class="tabs">
@@ -75,6 +92,20 @@
                     </div>
                 {{!-- please make a space between clear search and the table --}}
 
+
+                    <script> 
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var elems = document.querySelectorAll('.sidenav');
+                            var instances = M.Sidenav.init(elems, options);
+                        });
+
+                        // Or with jQuery
+
+                        $(document).ready(function(){
+                            $('.sidenav').sidenav();
+                        });
+                    </script>
+
                     <script>
                         function redirectToPage() {
                             const clearedUrl = "http://localhost:3000/archive";
@@ -86,6 +117,40 @@
                                     window.location.href = clearedUrl;
                             }
                         }
+                    </script>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                        var tabs = document.querySelectorAll('.tabs');
+                        M.Tabs.init(tabs);
+
+                        // Update URL when switching tabs
+                        var tabLinks = document.querySelectorAll('.tabs a');
+                        tabLinks.forEach(function(tabLink) {
+                            tabLink.addEventListener('click', function(event) {
+                            event.preventDefault();
+
+                            // Get the target tab ID from the href attribute
+                            var targetTabId = this.getAttribute('href').substring(1);
+
+                            // Update the URL
+                            history.pushState(null, null, '#' + targetTabId);
+                            });
+                        });
+
+                        // Handle back/forward navigation
+                        window.addEventListener('popstate', function() {
+                            // Get the current hash fragment from the URL
+                            var currentHash = window.location.hash;
+
+                            // Activate the corresponding tab based on the hash fragment
+                            var targetTab = document.querySelector('a[href="' + currentHash + '"]');
+                            if (targetTab) {
+                            var tabInstance = M.Tabs.getInstance(tabs);
+                            tabInstance.select(targetTab.parentNode);
+                            }
+                        });
+                        });
                     </script>
 
                     <script>
@@ -218,7 +283,7 @@
                             <nav style="width: 30%;">
                                 <div class="nav-wrapper pink accent-1" >
                                     <div class="input-field">
-                                        <input type="search" id="projsearch" name="projsearch">
+                                        <input type="search" id="searchproj" name="searchproj">
                                         <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
                                         {{!-- <input type="submit"> --}}
                                         <i class="material-icons">close</i>
@@ -228,15 +293,66 @@
                         </div>
                         <div style="text-align:right; margin-top:10px">
                                 <button id="clear-search"
-                                                name="clear-search" 
-                                                onclick="redirectToPage2()"
-                                                class="btn waves-effect waves-luluble-pink luluble-pink">
-                                                Clear Search</button>
+                                    name="clear-search" 
+                                    onclick="redirectToPage2()"
+                                    class="btn waves-effect waves-luluble-pink luluble-pink">
+                                    Clear Search</button>
                         </div>
 
-                        <script>
+
+                        {{!-- search script for archive projects --}}
+
+            <script>
+                //console.log("are you in sthis funciton");
+                const search2 = document.querySelector('#searchproj');
+
+                const regex = /^[a-zA-Z0-9\s]*$/;
+                let searchBar2 = document.getElementById('searchproj');
+                let searchButton2 = document.getElementById('search-button');
+                let searchTerm2;
+                const currentURL2 = String(window.location.href);
+                console.log(currentURL2);
+                const scientistIDIndex2 = currentURL2.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
+                const scientistIDString2 = currentURL2.slice(scientistIDIndex2);
+                console.log(scientistIDString2);
+                let scientistID2 = String(parseInt(scientistIDString2));
+
+
+                search2.addEventListener('change', (event) => {
+                    console.log("are you in sthis funciton");
+                    event.preventDefault();
+                    searchTerm2 = searchBar2.value.trim();
+                    searchBar2.value = searchTerm2;
+                    console.log(searchTerm2);
+
+                    function validateSearchInput(input) {
+                        return regex.test(input);
+                    }
+
+                    const stateObj = { url: "/archiveprojects/sci/" + scientistID2 };
+                    const title = '';
+                    const newUrl = "/archiveprojects/sci/" + scientistID2;
+
+                    if (searchTerm2.length === 0 || !validateSearchInput(searchTerm2)) {
+                        window.location.assign("/archiveprojects");
+                    }
+                    else {
+                        if (window.location.href.indexOf("archiveprojects/sci/" + scientistID2) !== -1) {
+                            window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
+                        }
+                        else {
+                            window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
+                        }
+                    }
+                });
+            </script>
+
+
+                    <script>
+                            console.log("are you in sthis funciton");
+
                             function redirectToPage2() {
-                                const clearedUrl = "http://localhost:3000/archive";
+                                const clearedUrl = "http://localhost:3000/archive/sci/" + scientistID2;
                                 const currentUrl = window.location.href;
                                 const word = "search"
                                 const clear = document.querySelector('#clear-search');
@@ -249,55 +365,6 @@
                             }
                         </script>
 
-
-                        {{!-- search script for archive projects --}}
-
-                        <script>
-
-                            console.log("HELLOOOOOO");
-
-                            const search2 = document.querySelector('#projsearch');
-
-                            const regex = /^[a-zA-Z0-9\s]*$/;
-                            let searchBar2 = document.getElementById('projsearch');
-                            let searchButton2 = document.getElementById('search-button');
-                            let searchTerm2;
-                            const currentURL2 = String(window.location.href);
-                            const scientistIDIndex2 = currentURL2.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
-                            const scientistIDString2 = currentURL2.slice(scientistIDIndex2);
-                            let scientistID2 = String(parseInt(scientistIDString2));
-
-
-                            search2.addEventListener('change', (event) => {
-                                console.log("ok")
-                                searchTerm2 = searchBar2.value.trim();
-                                searchBar2.value = searchTerm2;
-
-                                function validateSearchInput2(input) {
-                                    return regex.test(input);
-                                }
-
-                                const stateObj2 = { url: '/archiveprojects/sci/' + scientistID2 };
-                                const title2 = '';
-                                const newUrl2 = '/archiveprojects/sci/' + scientistID2;
-                                console.log(window.location.href);
-
-                                // if search invalid
-                                if (searchTerm2.length === 0 || !validateSearchInput2(searchTerm2)) {
-                                    window.location.assign("/archiveprojects");
-                                }
-                                else {
-                                    if (window.location.href.indexOf("archive/sci/" + scientistID2) !== -1) { // if the URL contains the right URL, search the correct search
-                                        window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
-                                        console.log("no im here.");
-                                    }
-                                    else {
-                                        window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
-                                        console.log("here!!");
-                                    }
-                                }
-                            });
-                        </script>
 
                         <div class="col s2 m6 l6">
                                     
