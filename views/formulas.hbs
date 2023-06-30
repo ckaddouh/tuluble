@@ -272,6 +272,18 @@
                     </td>
                     </div>
 
+                    {{#each trialData}}
+                    <div class="modal" id="approveTrial{{trial_num}}">
+                        <div style="padding: 5% 5% 5% 5%">
+                            <h6>Are you sure you would like to approve Trial {{trial_num}} as the final formulation for {{#each ../project_data}}{{project_name}}{{/each}}?</h6>
+                            </div>
+                            <div class="modal-footer">
+                            <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/approveTrial/{{trial_num}}">YES</a>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+
                     <script>
                         $(document).ready(function() {
                             $("#add_trial_button").click(function() {
@@ -344,6 +356,7 @@
                     // var ingredientsJSON = JSON.stringify({{ingredient_dict}});
                     const ingredients = JSON.parse('{{{ingredient_dict}}}');
                     const editable = JSON.parse('{{{editable_dict}}}');
+                    const approved = JSON.parse('{{{approved_dict}}}');
 
                     console.log(ingredients);
                     console.log("EDITABLE");
@@ -363,10 +376,14 @@
                         // $("#info").append("<tr>");
                         console.log(i);
                         // $("#info").append("<th >Trial "+i+"</th>"); 
-                        $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 30px\">Trial "+(i+1)+" Percentage</th>");
+                        if (approved[i] == '1') {
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/projects/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons modal-trigger'>close</a> </th>");
+                        }
+                        else {
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial "+(i+1)+" Percentage <a href= '#approveTrial" + (i+1) + "' class='material-icons modal-trigger'>check</a> </th>");
+                        }
                     }
                     $("#info").append("</tr>");
-                    
                     
                    
                    console.log(ingredients);
@@ -380,7 +397,12 @@
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log("YOOHOO");
                                     console.log(editable[ing][trial]);
-                                    $("#info").append("<td style=\"height: 85px\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    if (approved[trial] == '1') {
+                                        $("#info").append("<td class = \"green lighten-4\" style=\"height: 85px; border: 1px solid black;\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                    }
+                                    else {
+                                        $("#info").append("<td style=\"height: 85px\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");    
+                                    }
                                 }
                                 // ELSE SHOULD NEVER BE REACHED
                                 else {
@@ -400,7 +422,11 @@
                     let sumDict = JSON.parse('{{sum_data_json}}');
 
                     for (let i = 0; i < sumDict.length; i++) {
-                        $("#info").append("<td style=\"height: 40px\">" + sumDict[i] + "%</td>");
+                        if (approved[i] == '1')
+                            $("#info").append("<td class = \"green lighten-4\" style=\"height: 40px; border: 1px solid black;\">" + sumDict[i] + "%</td>");
+                        else
+                            $("#info").append("<td style=\"height: 40px\">" + sumDict[i] + "%</td>");
+
                     }
 
                     $("#info").append("</tr>");

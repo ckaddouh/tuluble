@@ -108,7 +108,7 @@ const read_projects_all_sql = `
 
 const singleProjectQuery = `
     SELECT
-        projects.project_name, projects.project_id, projects.client, projects.date, projects.client_name, projects.client_email
+        project_name, project_id, client, date, client_name, client_email
     FROM
         projects
     WHERE
@@ -681,6 +681,7 @@ const delete_trial = `
     formulas
   WHERE
     trial_num = ?
+    AND project_id = ?
 `
 
 const delete_formula_ingredient = `
@@ -694,6 +695,36 @@ const delete_formula_ingredient = `
 const delete_trial2 = `
   DELETE FROM
     formula_ingredient
+  WHERE
+    project_id = ?
+    AND trial_num = ?
+`
+
+const approve_trial = `
+  UPDATE
+    formulas
+  SET
+    approved = 1
+  WHERE
+    project_id = ?
+    AND trial_num = ?
+`
+
+const removeTrialApproval = `
+  UPDATE
+    formulas
+  SET
+    approved = 0
+  WHERE
+    project_id = ?
+    AND trial_num = ?
+`
+
+const getApproved = `
+  SELECT 
+    approved
+  FROM 
+    formulas
   WHERE
     project_id = ?
     AND trial_num = ?
@@ -1485,25 +1516,29 @@ app.get("/projects/:project_id", async function (req,res,next) {
         sum_data.push(0);
     }
 
-    console.log(sum_data);
-    // const ing_data = await new Promise((resolve, reject) => {
-    //   console.log('IN FORMULA DISPLAY EXECUTE');
-    //   db.execute(formulaDisplayAttempt3, [project_id], (error, ing_data) => {
-    //     if (error) reject(error);
-    //     else resolve(ing_data);
-    //   });
-    // }
-
     const ingredient_dict = [];
 
     var editable_dict = [];
+    var approved_dict = [];
+
+    for (let j = 0; j < trial_data.length; j++) {
+      const approved = await new Promise((resolve, reject) => {
+        db.execute(getApproved, [project_id, trial_data[j].trial_num], (error, approved) => {
+          if (error) reject(error);
+          else resolve(approved);
+        });
+      });
+      
+      approved_dict[j] = approved[0].approved;
+    }
 
     for (let i = 0; i < ing_data.length; i++) {
       ingredient_dict[i] = [];
       editable_dict[i] = [];
 
+    
       for (let j = 0; j < trial_data.length; j++) {
-        
+
         const trialIngData = await new Promise((resolve, reject) => {
           db.execute(getIngredientTrialInfo, [project_id, trial_data[j].trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
             if (error) reject(error);
@@ -1563,6 +1598,7 @@ app.get("/projects/:project_id", async function (req,res,next) {
 
     const ingredientDictJSON = JSON.stringify(ingredient_dict);
     const editableDictJSON = JSON.stringify(editable_dict);
+    const approvedDictJSON = JSON.stringify(approved_dict);
 
     console.log(ingredientDictJSON);
     if (error)
@@ -1577,7 +1613,8 @@ app.get("/projects/:project_id", async function (req,res,next) {
         inventory_data: inventory_data,
         ingredient_dict: ingredientDictJSON,
         sum_data_json: JSON.stringify(sum_data), 
-        editable_dict: editableDictJSON
+        editable_dict: editableDictJSON,
+        approved_dict: approvedDictJSON
       });
     }
            
@@ -1593,32 +1630,27 @@ app.get("/projects/:project_id", async function (req,res,next) {
   }
 });
 
-// app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async function (req, res, next) {
-//   console.log("hello?");
-//   let project_id = req.params.project_id
-//   let trial_num = req.params.trial_num
-//   let totalAmount = req.params.amount
+app.get("/projects/:project_id/removeTrialApproval/:trial_num", async function (req,res,next) {
+  let project_id = req.params.project_id;
+  let trial_num = req.params.trial_num;
+  let error;
+
+  try {
+
+    const removed = await new Promise((resolve, reject) => {
+      db.execute(removeTrialApproval, [project_id, trial_num], (error, removed) => {
+        if (error) reject(error);
+        else resolve(removed);
+      });
+    });
 
 
-//   db.execute(getTotalAmountOfFormula, [trial_num, project_id], (error, totalAmount) => {
-//     console.log(totalAmount);
-//     console.log(totalAmount[0].s);
-//     db.execute(getIngredientIDs, [trial_num, project_id], (error, ings) => {
-//       for (let i = 0; i < ings.length; i++) {
-//         console.log(ings[i].ingredient_id);
-//         db.execute(getAmount, [project_id, trial_num, ings[i].ingredient_id], (error, amount) => {
-//           console.log(amount);
-//           console.log(amount[0].total_amount);
-//           db.execute(subtractAmounts, [amount[0].total_amount, req.body.userInput2T, totalAmount[0].s, ings[i].ingredient_id], (error, results) => {
-//             if (error)
-//               res.status(500).send(error);
-//           });
-//         });
-//       }
-//     });
-//   });
-//   res.redirect('/projects/' + project_id);
-// });
+    res.redirect("/projects/" + project_id);
+  } catch (error) {
+    console.log(error);
+    res.redirect("/error");
+  }
+});
 
 
 app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async function (req, res, next) {
@@ -1906,7 +1938,7 @@ app.get("/projects/:project_id/deleteTrial/:trial_num", (req, res) => {
   let trial_num = req.params.trial_num;
   let project_id = req.params.project_id;
   
-  db.execute(delete_trial, [trial_num], (error, results) => {
+  db.execute(delete_trial, [trial_num, project_id], (error, results) => {
     db.execute(delete_trial2, [project_id, trial_num], (error, results) => {
       if (error)
         res.status(500).send(error); //Internal Server Error 
@@ -1916,6 +1948,23 @@ app.get("/projects/:project_id/deleteTrial/:trial_num", (req, res) => {
     });
   });
 });
+
+
+app.get("/projects/:project_id/approveTrial/:trial_num", (req, res) => {
+  let trial_num = req.params.trial_num;
+  let project_id = req.params.project_id;
+  
+  db.execute(approve_trial, [project_id, trial_num], (error, results) => {
+    db.execute(markUneditable, [project_id, trial_num], (error, results) => {
+      if (error)
+        res.status(500).send(error); //Internal Server Error 
+      else {
+        res.redirect("/projects/" + project_id);
+      }
+    });
+  });
+});
+
 
 
 app.get("/projects/:project_id/deleteFormulaIngredient/:ingredient_id", (req, res) => {
