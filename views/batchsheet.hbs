@@ -46,6 +46,9 @@
             <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
+                    <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+                    {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
+                    <p>&nbsp;</p>
                     <p><b>Client:</b> {{this.client}}</p>
                     <p><b>Date:</b> {{formatDate this.date}}</p>
                     <p><b>Contact name: </b>{{client_name}}</p>
@@ -147,10 +150,6 @@
                         {{inci_name}}
                         <br>
                     {{/each}}
-
-                    <div class="row">
-                        <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
-                    </div>
                     
                     {{#unless sufficient}}
                     <div>
@@ -164,9 +163,11 @@
                     </div>
                     {{/unless}}
 
-                    {{#ifBothTrue sufficient formulaComplete}}
-                    <a href="#makeFormulaIngredient" class="material-icons modal-trigger">MAKE</a>
-                    {{/ifBothTrue }}
+                    <div class="row">
+                        {{#ifBothTrue sufficient formulaComplete}}
+                        <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
+                        {{/ifBothTrue }}
+                    </div>
 
                     <div id="makeFormulaIngredient" class="modal">
                         <div class="modal-content">
@@ -184,7 +185,7 @@
                 </div>
                     
             </div>
-            <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger"><a href = "/projects/" + {{project_id}}>BACK</a></button>
+            
 
 
 
