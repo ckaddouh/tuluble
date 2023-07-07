@@ -1,863 +1,696 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>page</title>
+        <title>materialbox</title>
+        <title>navbar</title>
 
-<head>
-    <title>page</title>
-    <title>materialbox</title>
-    <title>navbar</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="/styles/inventory.css">
+        <link rel="stylesheet" href="/partials/color.css">
+    </head>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="/styles/inventory.css">
-    <link rel="stylesheet" href="/partials/color.css">
+    <body>
+        <div style="display: flex; justify-content:space-between;">
+            {{> navbar}}
 
-
-</head>
-
-<body>
-    <div style="display: flex; justify-content:space-between;">
-        {{> navbar}}
-
-        {{> logout}}
-    </div>
-
-
-    <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
-    {{!-- <div class="col s6">
-        <img src="/luluble_hlogo.jpg" class="responsive-img">
-    </div> --}}
-    {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
-
-
-
-    <!-- BLANK TEAL DIVIDER -->
-    {{!-- <div class="row">
-        <div class="col s12"><span class="flow-text"></span>
-            <div class="card-panel teal lighten-2"></div>
+            {{> logout}}
         </div>
-    </div> --}}
 
-    <!-- ROW OF BUTTONS AND SEARCH BAR -->
-    <div style="padding: 2% 2% 2% 1%" class="row">
-        <div class="col s12">
-            <p></p>
-            <h1 id="inventoryTitle">Inventory </h1>
+        <div style="padding: 2% 2% 2% 1%" class="row">
+            <div class="col s12">
+                <p></p>
+                <h1 id="inventoryTitle">Inventory </h1>
 
-            {{!-- <button id="create-pdf-button">Create PDF</button> --}}
-            {{!-- <a id="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Create PDF</a> --}}
+                {{!-- <button id="create-pdf-button">Create PDF</button> --}}
+                {{!-- <a id="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Create PDF</a> --}}
 
-            {{!-- <button onclick="window.print()">Print Screen</button> --}}
+                {{!-- <button onclick="window.print()">Print Screen</button> --}}
+                <p>&nbsp;</p>
+                <label>Classifier select</label>
+                <select id="myDropdown" class="browser-default">
+                    <option value="0" disabled selected>Filter by classifier</option>
+                    <option value="Thickener">Thickeners</option>
+                    <option value="Oils">Oils</option>
+                    <option value="Butters">Butters</option>
+                    <option value="Surfactants">Surfactants</option>
+                    <option value="Functional-Active">Functional/Active</option>
+                    <option value="Preservatives">Preservatives</option>
+                    <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
+                    <option value="Experimental">Experimental</option>
+                    <option value="Colorants">Colorants</option>
+                    <option value="Absorbents">Absorbents</option>
+                    <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
+                    <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
+                    <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                </select>
+            </div>
+
             <p>&nbsp;</p>
-            <label>Classifier select</label>
-            <select id="myDropdown" class="browser-default">
-                <option value="0" disabled selected>Filter by classifier</option>
-                <option value="Thickener">Thickeners</option>
-                <option value="Oils">Oils</option>
-                <option value="Butters">Butters</option>
-                <option value="Surfactants">Surfactants</option>
-                <option value="Functional-Active">Functional/Active</option>
-                <option value="Preservatives">Preservatives</option>
-                <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
-                <option value="Experimental">Experimental</option>
-                <option value="Colorants">Colorants</option>
-                <option value="Absorbents">Absorbents</option>
-                <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
-                <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
-                <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
-            </select>
-        </div>
-
-        <p>&nbsp;</p>
 
 
-        <div class="col s12 m4 l2">
-            <a href="#terms" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add an Ingredient</a>
-            <div class="modal" id="terms">
-                <div style="padding: 5% 5% 5% 5%">
-                    {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                    <h1 style="font-size:40px;">Add a New Ingredient</h1>
+            <div class="col s12 m4 l2">
+                <a href="#terms" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add an Ingredient</a>
+                <div class="modal" id="terms">
+                    <div style="padding: 5% 5% 5% 5%">
+                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                        <h1 style="font-size:40px;">Add a New Ingredient</h1>
 
-                    <form method="POST" action="/inventory/inventoryformsubmit" class="validate">
-                        <article class="regular">
-                            {{!-- <h2>Textbook</h2> --}}
+                        <form method="POST" action="/inventory/inventoryformsubmit" class="validate">
+                            <article class="regular">
+                                {{!-- <h2>Textbook</h2> --}}
 
-                            {{!-- Field 1 --}}
-                            <b><label for="tuluble">INCI Name:</label></b>
-                            <input type="text" name="userInput1" id="userInput1" placeholder="Enter INCI Name"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s/-%\()]*$">
-                            <p> </p>
+                                {{!-- Field 1 --}}
+                                <b><label for="tuluble">INCI Name:</label></b>
+                                <input type="text" name="userInput1" id="userInput1" placeholder="Enter INCI Name"
+                                    maxlength="20" pattern="^[a-zA-Z0-9\s/-%\()]*$">
+                                <p> </p>
 
-                            {{!-- Field 2 --}}
-                            <b><label for="tuluble">Trade Name:</label></b>
-                            <input type="text" name="userInput2" id="userInput2" placeholder="Enter Trade Name"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s()-]*$">
-                            <p> </p>
+                                {{!-- Field 2 --}}
+                                <b><label for="tuluble">Trade Name:</label></b>
+                                <input type="text" name="userInput2" id="userInput2" placeholder="Enter Trade Name"
+                                    maxlength="20" pattern="^[a-zA-Z0-9\s()-]*$">
+                                <p> </p>
 
-                            {{!-- Field 3 --}}
-                            <b><label for="tuluble">Amount Available:</label></b>
-                            <input type="number" name="userInput3" id="userInput3" placeholder="Enter Amount"
-                                maxlength="20">
-                            <p> </p>
+                                {{!-- Field 3 --}}
+                                <b><label for="tuluble">Amount Available:</label></b>
+                                <input type="number" name="userInput3" id="userInput3" placeholder="Enter Amount"
+                                    maxlength="20">
+                                <p> </p>
 
-                            {{!-- Field 4 --}}
-                            <b><label for="tuluble">Shelf:</label></b>
-                            <input type="text" name="userInput4" id="userInput4" placeholder="Enter Shelf"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
-                            <p> </p>
+                                {{!-- Field 4 --}}
+                                <b><label for="tuluble">Shelf:</label></b>
+                                <input type="text" name="userInput4" id="userInput4" placeholder="Enter Shelf"
+                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                <p> </p>
 
-                            <b><label for="tuluble">Classifier:</label></b>
-                            {{!-- <input type="text" name="userInput5" id="userInput5" placeholder="Enter Classifier"
-                                maxlength="20"> --}}
-                            <select name="userInput5" id="userInput5" class="browser-default">
-                                <option value="0" disabled selected>Choose your classifier</option>
-                                <option value="Thickener">Thickeners</option>
-                                <option value="Oils">Oils</option>
-                                <option value="Butters">Butters</option>
-                                <option value="Surfactants">Surfactants</option>
-                                <option value="Functional-Active">Functional/Active</option>
-                                <option value="Preservatives">Preservatives</option>
-                                <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
-                                <option value="Experimental">Experimental</option>
-                                <option value="Colorants">Colorants</option>
-                                <option value="Absorbents">Absorbents</option>
-                                <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
-                                <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
-                                <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
-                            </select>
-                            <p> </p>
-                            <p> &nbsp;</p>
+                                <b><label for="tuluble">Classifier:</label></b>
+                                {{!-- <input type="text" name="userInput5" id="userInput5" placeholder="Enter Classifier"
+                                    maxlength="20"> --}}
+                                <select name="userInput5" id="userInput5" class="browser-default">
+                                    <option value="0" disabled selected>Choose your classifier</option>
+                                    <option value="Thickener">Thickeners</option>
+                                    <option value="Oils">Oils</option>
+                                    <option value="Butters">Butters</option>
+                                    <option value="Surfactants">Surfactants</option>
+                                    <option value="Functional-Active">Functional/Active</option>
+                                    <option value="Preservatives">Preservatives</option>
+                                    <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
+                                    <option value="Experimental">Experimental</option>
+                                    <option value="Colorants">Colorants</option>
+                                    <option value="Absorbents">Absorbents</option>
+                                    <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
+                                    <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
+                                    <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                                </select>
+                                <p> </p>
+                                <p> &nbsp;</p>
 
-                            <b><label for="tuluble">Lot Number:</label></b>
-                            <input type="text" name="userInput6" id="userInput6" placeholder="Enter Lot Number"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
-                            <p> </p>
+                                <b><label for="tuluble">Lot Number:</label></b>
+                                <input type="text" name="userInput6" id="userInput6" placeholder="Enter Lot Number"
+                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                <p> </p>
 
-                            <b><label for="tuluble">Cost Per Kilo:</label></b>
-                            <input type="text" name="userInput13" id="userInput13" placeholder="Enter Cost Per Kilo"
-                                maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
-                            <p> </p>
+                                <b><label for="tuluble">Cost Per Kilo:</label></b>
+                                <input type="text" name="userInput13" id="userInput13" placeholder="Enter Cost Per Kilo"
+                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                <p> </p>
 
-                            <b><label for="tuluble">Expiration Date:</label></b>
-                            <input type="date" name="userInput12" id="userInput12" placeholder="Enter Expiration Date">
-                            <p> </p>
+                                <b><label for="tuluble">Expiration Date:</label></b>
+                                <input type="date" name="userInput12" id="userInput12" placeholder="Enter Expiration Date">
+                                <p> </p>
 
-                            <b><label for="tuluble">Date Recieved:</label></b>
-                            <input type="date" name="userInput7" id="userInput7" placeholder="Enter Date Received">
-                            <p> </p>
+                                <b><label for="tuluble">Date Recieved:</label></b>
+                                <input type="date" name="userInput7" id="userInput7" placeholder="Enter Date Received">
+                                <p> </p>
 
-                            <b><label for="tuluble">Supplier:</label></b>
-                            <input type="text" name="userInput8" id="userInput8" placeholder="Enter Supplier"
-                                maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
-                            <p> </p>
+                                <b><label for="tuluble">Supplier:</label></b>
+                                <input type="text" name="userInput8" id="userInput8" placeholder="Enter Supplier"
+                                    maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
+                                <p> </p>
 
-                            <b><label for="tuluble">COA Documents:</label></b>
-                            <input type="url" name="userInput10" id="userInput10" placeholder="Enter Link"
-                                maxlength="200">
-                            <p> </p>
+                                <b><label for="tuluble">COA Documents:</label></b>
+                                <input type="url" name="userInput10" id="userInput10" placeholder="Enter Link"
+                                    maxlength="200">
+                                <p> </p>
 
-                            <b><label for="tuluble">MSDS Documents:</label></b>
-                            <input type="url" name="userInput11" id="userInput11" placeholder="Enter Link"
-                                maxlength="200">
-                            <p> </p>
+                                <b><label for="tuluble">MSDS Documents:</label></b>
+                                <input type="url" name="userInput11" id="userInput11" placeholder="Enter Link"
+                                    maxlength="200">
+                                <p> </p>
 
-                            <div class="add_button">
-                                <button id="add_button" 
-                                name="add_button" 
-                                type="submit" 
-                                class="btn waves-effect waves-luluble-pink luluble-pink">
-                                Add Ingredient</button>
-                            </div>
-                            <p> </p>
-                    </form>
+                                <div class="add_button">
+                                    <button id="add_button" 
+                                    name="add_button" 
+                                    type="submit" 
+                                    class="btn waves-effect waves-luluble-pink luluble-pink">
+                                    Add Ingredient</button>
+                                </div>
+                                <p> </p>
+                        </form>
 
 
-                    </article>
+                        </article>
+                    </div>
                 </div>
+            </div>
+
+
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+            <script src="/libs/jspdf.min.js"></script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+
+            
+            <script>
+                $(document).ready(function () {
+                    $("#add_button").click(function () {
+
+                        const selects = document.querySelector('#userInput5');
+                        let theSelectedOption;
+
+                        selects.addEventListener('change', (event) => {
+                            //window.location.href = "inventory/"
+                            theSelectedOption = event.target.value;
+                        });
+
+                    const inputValue1 = $("#userInput1").val();
+                    const inputValue2 = $("#userInput2").val();
+                    const inputValue3 = $("#userInput3").val();
+                    const inputValue4 = $("#userInput4").val();
+                    const inputValue5 = theSelectedOption;
+                    const inputValue6 = $("#userInput6").val();
+                    const inputValue7 = $("#userInput7").val();
+                    const inputValue8 = $("#userInput8").val();
+                    const inputValue9 = $("#userInput9").val();
+                    const inputValue10 = $("#userInput10").val();
+                    const inputValue11 = $("#userInput11").val();
+                    const inputValue12 = $("#userInput12").val();
+
+                    module.exports = {inputValue1};
+                    module.exports = {inputValue2};
+                    module.exports = {inputValue3};
+                    module.exports = {inputValue4};
+                    module.exports = {inputValue5};
+                    module.exports = {inputValue6};
+                    module.exports = {inputValue7};
+                    module.exports = {inputValue8};
+                    module.exports = {inputValue9};
+                    module.exports = {inputValue10};
+                    module.exports = {inputValue11};
+                    module.exports = {inputValue12};
+
+                        window.location = "inventory/inventoryformsubmit";
+                        //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    });
+                });
+            </script>
+
+            {{!-- <script src="app.js"></script> --}}
+
+            {{!-- dropdown script --}}
+            <script>
+                const select = document.querySelector('#myDropdown');
+                let selectedOption;
+
+                select.addEventListener('change', (event) => {
+                    selectedOption = event.target.value;
+
+                    if (window.location.href.indexOf("inventory/") !== -1) {
+                        window.location.href = "/inventory/" + selectedOption;
+                    }
+                    else {
+                        window.location.href = "/inventory/" + selectedOption;
+                    }
+                    sleep(1000);
+                    let header = document.getElementById("inventoryTitle");
+                    console.log(header);
+                });
+                header.innerHTML = "Inventory - " + selectedOption;
+            </script>
+
+            <script>
+                $(document).ready(function () {
+                    $('browser-default').formSelect();
+                    $('.modal').modal();
+                })
+            </script>
+
+            <div class="col s12 m4 l4">
+                <p></p>
+            </div>
+
+            <div class="col s12 m4 l6">
+                <p></p>
+                <nav>
+                    <div class="nav-wrapper pink accent-1" style="margin-top:20px">
+                        <div class="input-field">
+                            <input type="search" id="gsearch" name="gsearch">
+                            <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                            {{!-- <input type="submit"> --}}
+                            <i class="material-icons">close</i>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+                        <button id="clear-search"
+                            name="clear-search" 
+                            onclick="redirectToPage()"
+                            class="btn waves-effect waves-luluble-pink luluble-pink">
+                            Clear Search</button>
+                    </div>
+                </nav>
             </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-        <script src="/libs/jspdf.min.js"></script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-
-        {{!--
         <script>
-            //function saveValue() {
-                //var value1 = document.getElementById("userInput1").value;
-                //var value2 = document.getElementById("userInput2").value;
-                //var value3 = document.getElementById("userInput3").value;
-                //var value4 = document.getElementById("userInput4").value;
-
-                //console.log(value1);
+            function redirectToPage() {
+                const clearedUrl = "http://localhost:3000/inventory";
+                const currentUrl = window.location.href;
+                
+                if (currentUrl !== clearedUrl) {
+                    console.log(clearedUrl);
+                    window.location.href = clearedUrl;
+                }
             }
 
-            //var value1 = document.getElementById("userInput1").value;
-            //var value2 = document.getElementById("userInput2").value;
-            //var value3 = document.getElementById("userInput3").value;
-        </script> --}}
+            const clear = document.querySelector('#clear-search');
+            clear.addEventListener("click", redirectToPage);
+        </script>
 
-        {{!-- clicking new ingredient button --}}
+
+        {{!-- search script --}}
+
+        <script>
+            const search = document.querySelector('#gsearch');
+            
+            const regex = /^[a-zA-Z0-9\s]*$/;
+            let searchBar = document.getElementById('gsearch');
+            let searchButton = document.getElementById('search-button');
+            let searchTerm;
+            
+
+            search.addEventListener('change', (event) => {
+                searchTerm = searchBar.value.trim();
+                searchBar.value = searchTerm;
+
+                function validateSearchInput(input) {
+                    return regex.test(input);
+                }
+
+                const stateObj = { url: '/inventory' };
+                const title = '';
+                const newUrl = '/inventory';
+
+                if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
+                    window.location.assign("/inventory");
+                }
+                else {
+                    if (window.location.href.indexOf("inventory/") !== -1) {
+                        console.log(searchTerm);
+                        window.location.assign("/inventory/search/" + searchTerm);
+
+                    }
+                    else {
+                        console.log("inventory/" + searchTerm);
+                        window.location.assign("/inventory/search/" + searchTerm);
+
+                    }
+                }
+               
+            });
+        </script>
+
+      
+        <div style="padding:20px">
+            <div class="table-container">
+                <table id="my-table" class="scrollable">
+                    <thead>
+                        <tr id="ing">
+                            <th id="inci">INCI Name
+                                <a id="sort-inci-button" class="waves-effect">
+                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                                </a>
+
+                            </th>
+                            <th id="trade">Trade Name
+                                <a id="sort-trade-button" class="waves-effect">
+                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                                </a>
+                            </th>
+                            <th id="trade">Supplier
+                                <a id="sort-supplier-button" class="waves-effect">
+                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                                </a>
+                            </th>
+                            <th>Amount Available
+                                <a id="sort-amount-button" class="waves-effect">
+                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                                </a>
+                            </th>
+                            <th id="shelf">Shelf
+                            </th>
+                            <th id="lot_number">Lot Number
+                            </th>
+                            <th id="cost">Cost
+                            </th>
+                            <th id="archive">Archive
+                            </th>
+                            <th id="edit">Edit
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each results}}
+                        <tr>
+                            <td>{{this.inci_name}}
+                                <a href="#terms{{ingredient_id}}" class="modal-trigger">
+                                    <span class="large material-icons">info_outline</span>
+                                </a>
+                                <div class="modal" id="terms{{ingredient_id}}">
+                                    <div class="row">
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s12"><b>
+                                                <font size="+2">Ingredient Information</font>
+                                            </b></div>
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s6">
+                                            <span><b>Trade Name:</b> {{this.trade_name}}<br></br>
+                                                <b>INCI Name:</b> {{this.inci_name}}<br></br>
+                                                <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
+                                                <b>Supplier:</b> {{this.supplier}}<br></br>
+                                                <b>Lot Number:</b> {{this.lot_num}}<br></br>
+                                                <b>Shelf:</b> {{this.shelf}}<br></br>
+                                                <b>Cost:</b> {{this.cost}}<br></br>
+                                        </div>
+                                        <div class="col s6">
+                                            <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
+                                                <b>Date Receieved:</b>{{formatDate this.date_received}}<br></br>
+                                                <b>Expiration Date:</b>{{formatDate this.expiration}}<br></br>
+                                                <b>COA:</b> <a href="{{this.coa}}">Link</a><br></br>
+                                                <b>MSDS:</b> <a href="{{this.msds}}">Link</a><br></br>
+                                        </div>
+
+                                        <div class="col s12">&nbsp;</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{this.trade_name}}</td>
+                            <td>{{this.supplier}}</td>
+                            <td>{{this.amt}} {{this.unit}}</td>
+                            <td>{{this.shelf}}</td>
+                            <td>{{this.lot_num}}</td>
+                            <td>{{this.cost}}</td>
+                            <td>
+                                <div class="archive_button">
+                                    <a href="/inventory/archive-ingredient/{{this.ingredient_id}}"
+                                        class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a>
+                                </div>
+                                {{!-- <script>
+                                    function archive() {
+                                        window.location = "/inventory/archive-ingredient/" + {{this.ingredient_id}};
+                                    }
+                                </script> --}}
+                            </td>
+                            <td>
+                                <div class="edit_button">
+                                    <a href="#termss{{ingredient_id}}"
+                                        class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Edit</a>
+                                    <div class="modal" id="termss{{ingredient_id}}">
+                                        <div style="padding: 5% 5% 5% 5%">
+                                            {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                                            <h1 style="font-size:40px;">Edit Ingredient</h1>
+
+                                            <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate" class="validate">
+                                                <article class="regular">
+                                                    {{!-- <h2>Textbook</h2> --}}
+
+                                                    <b><label for="tuluble">INCI Name:</label></b>
+                                                    <input type="text" name="userInput1" id="userInput1"
+                                                        value="{{this.inci_name}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                    <p> </p>
+
+                                                {{!-- Field 2 --}}
+                                                <b><label for="tuluble">Trade Name:</label></b>
+                                                <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
+                                                <p> </p>
+
+                                                    {{!-- Field 3 --}}
+                                                    <b><label for="tuluble">Amount Available:</label></b>
+                                                    <input type="number" name="userInput3" id="userInput3"
+                                                        value="{{this.amt}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                    <p> </p>
+
+                                                    {{!-- Field 4 --}}
+                                                    <b><label for="tuluble">Shelf:</label></b>
+                                                    <input type="text" name="userInput4" id="userInput4"
+                                                        value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">Reselect Classifier:</label></b>
+                                                    {{!-- <input type="text" name="userInput5" id="userInput5"
+                                                        placeholder="Enter Classifier" maxlength="20"> --}}
+                                                    <select name="userInput5" id="userInput5" class="browser-default">
+                                                        {{!-- <option value="{{this.classifier_id}}" disabled selected>
+                                                            {{this.classifier_id}}</option> --}}
+                                                        
+                                                        <option value="Thickener" {{isSelected "Thickener" classifier_id}}>Thickeners</option>
+                                                        <option value="Oils" {{isSelected "Oils" classifier_id}}>Oils</option>
+                                                        <option value="Butters" {{isSelected "Butters" classifier_id}}>Butters</option>
+                                                        <option value="Surfactants" {{isSelected "Surfactants" classifier_id}}>Surfactants</option>
+                                                        <option value="Functional-Active" {{isSelected "Functional-Active" classifier_id}}>Functional/Active</option>
+                                                        <option value="Preservatives" {{isSelected "Preservatives" classifier_id}}>Preservatives</option>
+                                                        <option value="Extracts-Fragrances-Flavor" {{isSelected "Extracts-Fragrances-Flavor" classifier_id}}>
+                                                            Extracts/Fragrances/Flavor</option>
+                                                        <option value="Experimental" {{isSelected "Experimental" classifier_id}}>Experimental</option>
+                                                        <option value="Colorants" {{isSelected "Colorants" classifier_id}}>Colorants</option>
+                                                        <option value="Absorbents" {{isSelected "Absorbents" classifier_id}}>Absorbents</option>
+                                                        <option value="pH Adjusters (Acids)" {{isSelected "pH Adjusters (Acids)" classifier_id}}>pH Adjusters (Acids)</option>
+                                                        <option value="pH Adjusters (Bases)" {{isSelected "pH Adjusters (Bases)" classifier_id}}>pH Adjusters (Bases)</option>
+                                                        <option value="Distilled_Water-Ethyl_Alcohol" {{isSelected "Distilled_Water-Ethyl_Alcohol" classifier_id}}>Distilled Water/Ethyl
+                                                            Alcohol</option>
+                                                    </select>
+                                                    <p> </p>
+                                                    <p> &nbsp;</p>
+
+                                                    <b><label for="tuluble">Lot Number:</label></b>
+                                                    <input type="text" name="userInput6" id="userInput6"
+                                                        value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">Cost Per Kilo:</label></b>
+                                                    <input type="text" name="userInput13" id="userInput13"
+                                                        value="{{this.cost}}" pattern="^[a-zA-Z0-9\s$]*$">
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">Expiration Date:</label></b>
+                                                    <input type="date" class="datepicker" name="userInput12" id="userInput12"
+                                                        value="{{formatDate this.expiration}}" >
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">Date Recieved:</label></b>
+                                                    <input type="date" class="datepicker" name="userInput7" id="userInput7"
+                                                        value="{{formatDate this.date_received}}" >
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">Supplier:</label></b>
+                                                    <input type="text" class="datepicker" name="userInput8" id="userInput8"
+                                                        value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">COA Link:</label></b>
+                                                    <input type="text" name="userInput10" id="userInput10"
+                                                        value="{{this.coa}}" maxlength="100">
+                                                    <p> </p>
+
+                                                    <b><label for="tuluble">MSDS Link:</label></b>
+                                                    <input type="text" name="userInput11" id="userInput11"
+                                                        value="{{this.msds}}" maxlength="100">
+                                                    <p> </p>
+
+                                                    <div class="update_button">
+                                                        <button id="update_button" 
+                                                        name="update_button" 
+                                                        type="submit"
+                                                        class="btn waves-effect waves-luluble-pink luluble-pink">
+                                                        Finish Editing</button>
+                                                    </div>
+                                                    <p> </p>
+                                            </form>
+                                            </article>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
         <script>
             $(document).ready(function () {
-                $("#add_button").click(function () {
+                $("#update_button").click(function () {
 
-                    const selects = document.querySelector('#userInput5');
-                    let theSelectedOption;
+                    const selected = document.querySelector('#userInput5');
+                    let newSelectedOption;
 
-                    selects.addEventListener('change', (event) => {
-                        //window.location.href = "inventory/"
-                        theSelectedOption = event.target.value;
+                    selected.addEventListener('change', (event) => {
+                        newSelectedOption = event.target.value;
                     });
 
-                const inputValue1 = $("#userInput1").val();
-                const inputValue2 = $("#userInput2").val();
-                const inputValue3 = $("#userInput3").val();
-                const inputValue4 = $("#userInput4").val();
-                const inputValue5 = theSelectedOption;
-                const inputValue6 = $("#userInput6").val();
-                const inputValue7 = $("#userInput7").val();
-                const inputValue8 = $("#userInput8").val();
-                const inputValue9 = $("#userInput9").val();
-                const inputValue10 = $("#userInput10").val();
-                const inputValue11 = $("#userInput11").val();
-                const inputValue12 = $("#userInput12").val();
-
-                module.exports = {inputValue1};
-                module.exports = {inputValue2};
-                module.exports = {inputValue3};
-                module.exports = {inputValue4};
-                module.exports = {inputValue5};
-                module.exports = {inputValue6};
-                module.exports = {inputValue7};
-                module.exports = {inputValue8};
-                module.exports = {inputValue9};
-                module.exports = {inputValue10};
-                module.exports = {inputValue11};
-                module.exports = {inputValue12};
-
-                    window.location = "inventory/inventoryformsubmit";
-                    //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+                    const inputValue1 = $("#userInput1").val();
+                    const inputValue2 = $("#userInput2").val();
+                    const inputValue3 = $("#userInput3").val();
+                    const inputValue4 = $("#userInput4").val();
+                    const inputValue5 = newSelectedOption;
+                    const inputValue6 = $("#userInput6").val();
+                    const inputValue7 = $("#userInput7").val();
+                    const inputValue8 = $("#userInput8").val();
+                    const inputValue9 = $("#userInput9").val();
+                    const inputValue10 = $("#userInput10").val();
+                    const inputValue11 = $("#userInput11").val();
+                    const inputValue12 = $("#userInput12").val();
                 });
             });
         </script>
 
-        <script src="app.js"></script>
-
-        {{!-- dropdown script --}}
-        <script>
-            const select = document.querySelector('#myDropdown');
-            let selectedOption;
-
-            select.addEventListener('change', (event) => {
-                //window.location.href = "inventory/"
-                selectedOption = event.target.value;
-                console.log(selectedOption);
-                //window.location.assign("/inventory");
-                //window.location.href += "/" + selectedOption;
-                if (window.location.href.indexOf("inventory/") !== -1) {
-                    window.location.href = "/inventory/" + selectedOption;
-                    //window.location.href = selectedOption;
-                }
-                else {
-                    window.location.href = "/inventory/" + selectedOption;
-                }
-                sleep(1000);
-                let header = document.getElementById("inventoryTitle");
-                console.log(header);
-                //history.replaceState(null, null, 'http://localhost:3000/inventory');
-            });
-            header.innerHTML = "Inventory - " + selectedOption;
-        </script>
-
         <script>
             $(document).ready(function () {
-                $('browser-default').formSelect();
                 $('.modal').modal();
             })
         </script>
 
-        <div class="col s12 m4 l4">
-            <p></p>
-        </div>
-        <div class="col s12 m4 l6">
-            <p></p>
-            <nav>
-                <div class="nav-wrapper pink accent-1" style="margin-top:20px">
-                    <div class="input-field">
-                        <input type="search" id="gsearch" name="gsearch">
-                        <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                        {{!-- <input type="submit"> --}}
-                        <i class="material-icons">close</i>
-                    </div>
-                </div>
-                <div style="text-align:right">
-                    <button id="clear-search"
-                        name="clear-search" 
-                        onclick="redirectToPage()"
-                        class="btn waves-effect waves-luluble-pink luluble-pink">
-                        Clear Search</button>
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    <script>
-        function redirectToPage() {
-            console.log("CLEARING??????");
-            const clearedUrl = "http://localhost:3000/inventory";
-            const currentUrl = window.location.href;
-            
-            if (currentUrl !== clearedUrl) {
-                console.log("INSIDE THE CLEAR");
-                console.log(clearedUrl);
-                window.location.href = clearedUrl;
-            }
-        }
-
-        // Add the event listener outside the redirectToPage function
-        const clear = document.querySelector('#clear-search');
-        clear.addEventListener("click", redirectToPage);
-    </script>
-
-
-    {{!-- search script --}}
-
-    <script>
-        const search = document.querySelector('#gsearch');
-        
-        const regex = /^[a-zA-Z0-9\s]*$/;
-        let searchBar = document.getElementById('gsearch');
-        let searchButton = document.getElementById('search-button');
-        let searchTerm;
-        
-
-        search.addEventListener('change', (event) => {
-            searchTerm = searchBar.value.trim();
-            searchBar.value = searchTerm;
-
-            function validateSearchInput(input) {
-                return regex.test(input);
-            }
-
-            const stateObj = { url: '/inventory' };
-            const title = '';
-            const newUrl = '/inventory';
-
-            if (searchTerm.length === 0 || !validateSearchInput(searchTerm)) {
-                window.location.assign("/inventory");
-            }
-            else {
-                if (window.location.href.indexOf("inventory/") !== -1) {
-                    console.log(searchTerm);
-                    window.location.assign("/inventory/search/" + searchTerm);
-
-                }
-                else {
-                    console.log("inventory/" + searchTerm);
-                    window.location.assign("/inventory/search/" + searchTerm);
-
-                }
-            }
-            //sleep(1000);
-            //let header = document.getElementById("inventoryTitle");
-            //console.log(header);
-            //history.pushState(stateObj, title, newUrl);
-        });
-        //header.innerHTML = "Inventory - " + selectedOption;
-    </script>
-
-    {{!-- https://www.youtube.com/watch?v=TlP5WIxVirU --}}
-
-    <!-- INVENTORY TABLE -->
-    <div style="padding:20px">
-        <div class="table-container">
-            <table id="my-table" class="scrollable">
-                <thead>
-                    <tr id="ing">
-                        <th id="inci">INCI Name
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            {{!-- <button id="sort-button">Sort Alphabetically</button> --}}
-                            <a id="sort-inci-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a>
-
-                        </th>
-                        <th id="trade">Trade Name
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            <a id="sort-trade-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a>
-                        </th>
-                        <th id="trade">Supplier
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            <a id="sort-supplier-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a>
-                        </th>
-                        <th>Amount Available
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            <a id="sort-amount-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a>
-                        </th>
-                        <th id="shelf">Shelf
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            {{!-- <a id="sort-shelf-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a> --}}
-                        </th>
-                        <th id="lot_number">Lot Number
-                            {{!-- <span class="large material-icons">import_export</span> --}}
-                            {{!-- <a id="sort-lot-button" class="waves-effect">
-                                <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                            </a> --}}
-                        </th>
-                        <th id="cost">Cost
-
-                        </th>
-                        <th id="archive">Archive
-                        </th>
-                        <th id="edit">Edit
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {{#each results}}
-                    <tr>
-                        <td>{{this.inci_name}}
-                            <a href="#terms{{ingredient_id}}" class="modal-trigger">
-                                <span class="large material-icons">info_outline</span>
-                            </a>
-                            <div class="modal" id="terms{{ingredient_id}}">
-                                <div class="row">
-                                    <div class="col s12">&nbsp;</div>
-                                    <div class="col s12"><b>
-                                            <font size="+2">Ingredient Information</font>
-                                        </b></div>
-                                    <div class="col s12">&nbsp;</div>
-                                    <div class="col s6">
-                                        <span><b>Trade Name:</b> {{this.trade_name}}<br></br>
-                                            <b>INCI Name:</b> {{this.inci_name}}<br></br>
-                                            <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
-                                            <b>Supplier:</b> {{this.supplier}}<br></br>
-                                            <b>Lot Number:</b> {{this.lot_num}}<br></br>
-                                            <b>Shelf:</b> {{this.shelf}}<br></br>
-                                            <b>Cost:</b> {{this.cost}}<br></br>
-                                        {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI
-                                            Name:</span> --}}
-                                    </div>
-                                    <div class="col s6">
-                                        {{!-- <span>Lot #:<br></br>Shelf #:<br></br>Amount Received:<br></br>Amount
-                                            Available:</span> --}}
-                                        <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
-                                            <b>Date Receieved:</b>{{formatDate this.date_received}}<br></br>
-                                            <b>Expiration Date:</b>{{formatDate this.expiration}}<br></br>
-                                            <b>COA:</b> <a href="{{this.coa}}">Link</a><br></br>
-                                            <b>MSDS:</b> <a href="{{this.msds}}">Link</a><br></br>
-                                    </div>
-
-                                    <div class="col s12">&nbsp;</div>
-                                </div>
-                            </div>
-
-
-
-
-                        </td>
-
-                        <td>{{this.trade_name}}</td>
-                        <td>{{this.supplier}}</td>
-                        <td>{{this.amt}} {{this.unit}}</td>
-                        <td>{{this.shelf}}</td>
-                        <td>{{this.lot_num}}</td>
-                        <td>{{this.cost}}</td>
-
-                        {{!--
-                        {{#if this.amt = 0}}
-                        <td>EMPTY</td>
-                        {{/if}} --}}
-
-                        <td>
-                            <div class="archive_button">
-                                <a href="/inventory/archive-ingredient/{{this.ingredient_id}}"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a>
-                                {{!-- <a onclick="archive()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a> --}}
-
-                               
-                            </div>
-                            <script>
-                                function archive() {
-                                    window.location = "/inventory/archive-ingredient/" + {{this.ingredient_id}};
-                                }
-                            </script>
-                        </td>
-
-
-                        <td>
-                            <div class="edit_button">
-                                <a href="#termss{{ingredient_id}}"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Edit</a>
-                                <div class="modal" id="termss{{ingredient_id}}">
-                                    <div style="padding: 5% 5% 5% 5%">
-                                        {{!-- <b><span>Add a New Ingredient</span></b> --}}
-                                        <h1 style="font-size:40px;">Edit Ingredient</h1>
-
-                                        <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate" class="validate">
-                                            <article class="regular">
-                                                {{!-- <h2>Textbook</h2> --}}
-
-                                                <b><label for="tuluble">INCI Name:</label></b>
-                                                <input type="text" name="userInput1" id="userInput1"
-                                                    value="{{this.inci_name}}" pattern="^[a-zA-Z0-9\s]*$">
-                                                <p> </p>
-
-                                            {{!-- Field 2 --}}
-                                            <b><label for="tuluble">Trade Name:</label></b>
-                                            <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
-                                            <p> </p>
-
-                                                {{!-- Field 3 --}}
-                                                <b><label for="tuluble">Amount Available:</label></b>
-                                                <input type="number" name="userInput3" id="userInput3"
-                                                    value="{{this.amt}}" pattern="^[a-zA-Z0-9\s]*$">
-                                                <p> </p>
-
-                                                {{!-- Field 4 --}}
-                                                <b><label for="tuluble">Shelf:</label></b>
-                                                <input type="text" name="userInput4" id="userInput4"
-                                                    value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
-                                                <p> </p>
-
-                                                <b><label for="tuluble">Reselect Classifier:</label></b>
-                                                {{!-- <input type="text" name="userInput5" id="userInput5"
-                                                    placeholder="Enter Classifier" maxlength="20"> --}}
-                                                <select name="userInput5" id="userInput5" class="browser-default">
-                                                    <option value="{{this.classifier_id}}" disabled selected>
-                                                        {{this.classifier_id}}</option>
-                                                    <option value="Thickener">Thickeners</option>
-                                                    <option value="Oils">Oils</option>
-                                                    <option value="Butters">Butters</option>
-                                                    <option value="Surfactants">Surfactants</option>
-                                                    <option value="Functional-Active">Functional/Active</option>
-                                                    <option value="Preservatives">Preservatives</option>
-                                                    <option value="Extracts-Fragrances-Flavor">
-                                                        Extracts/Fragrances/Flavor</option>
-                                                    <option value="Experimental">Experimental</option>
-                                                    <option value="Colorants">Colorants</option>
-                                                    <option value="Absorbents">Absorbents</option>
-                                                    <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
-                                                    <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
-                                                    <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl
-                                                        Alcohol</option>
-                                                </select>
-                                                <p> </p>
-                                                <p> &nbsp;</p>
-
-                                                <b><label for="tuluble">Lot Number:</label></b>
-                                                <input type="text" name="userInput6" id="userInput6"
-                                                    value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
-                                                <p> </p>
-
-                                                <b><label for="tuluble">Cost Per Kilo:</label></b>
-                                                <input type="text" name="userInput13" id="userInput13"
-                                                    value="{{this.cost}}" pattern="^[a-zA-Z0-9\s$]*$">
-                                                <p> </p>
-
-                                                <b><label for="tuluble">Expiration Date:</label></b>
-                                                <input type="date" class="datepicker" name="userInput12" id="userInput12"
-                                                    value="{{formatDate this.expiration}}" >
-                                                <p> </p>
-
-                                                <b><label for="tuluble">Date Recieved:</label></b>
-                                                <input type="date" class="datepicker" name="userInput7" id="userInput7"
-                                                    value="{{formatDate this.date_received}}" >
-                                                <p> </p>
-
-                                                <b><label for="tuluble">Supplier:</label></b>
-                                                <input type="text" class="datepicker" name="userInput8" id="userInput8"
-                                                    value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
-                                                <p> </p>
-
-                                                <b><label for="tuluble">COA Link:</label></b>
-                                                <input type="text" name="userInput10" id="userInput10"
-                                                    value="{{this.coa}}" maxlength="100">
-                                                <p> </p>
-
-                                                <b><label for="tuluble">MSDS Link:</label></b>
-                                                <input type="text" name="userInput11" id="userInput11"
-                                                    value="{{this.msds}}" maxlength="100">
-                                                <p> </p>
-
-                                                <div class="update_button">
-                                                    <button id="update_button" 
-                                                    name="update_button" 
-                                                    type="submit"
-                                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                                    Finish Editing</button>
-                                                </div>
-                                                <p> </p>
-                                        </form>
-                                        </article>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </td>
-
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    </div>
-
-
-    <script>
-        $(document).ready(function () {
-            $("#update_button").click(function () {
-
-                const selected = document.querySelector('#userInput5');
-                let newSelectedOption;
-
-                selected.addEventListener('change', (event) => {
-                    //window.location.href = "inventory/"
-                    newSelectedOption = event.target.value;
-                });
-
-                const inputValue1 = $("#userInput1").val();
-                const inputValue2 = $("#userInput2").val();
-                const inputValue3 = $("#userInput3").val();
-                const inputValue4 = $("#userInput4").val();
-                const inputValue5 = newSelectedOption;
-                const inputValue6 = $("#userInput6").val();
-                const inputValue7 = $("#userInput7").val();
-                const inputValue8 = $("#userInput8").val();
-                const inputValue9 = $("#userInput9").val();
-                const inputValue10 = $("#userInput10").val();
-                const inputValue11 = $("#userInput11").val();
-                const inputValue12 = $("#userInput12").val();
-
-                console.log(newSelectedOption);
-
-
-                window.location = "/inventory/{{ingredient_id}}/inventoryingredientupdate";
-                //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
+        <script>
+            document.getElementById('sort-inci-button').addEventListener('click', function () {
+                sortTableByInci(0); // Sort by the first column
             });
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $('.modal').modal();
-        })
-    </script>
-
-    <script>
-        document.getElementById('sort-inci-button').addEventListener('click', function () {
-            sortTableByInci(0); // Sort by the first column
-        });
-
-        function sortTableByInci(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('my-table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('TD')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
+            function sortTableByInci(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('my-table');
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('TD')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
                     }
                 }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
             }
-        }
-    </script>
-
-    <script>
-        document.getElementById('sort-trade-button').addEventListener('click', function () {
-            sortTableByTrade(1); // Sort by the first column
-        });
-
-        function sortTableByTrade(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('my-table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('TD')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
-            }
-        }
-    </script>
+        </script>
 
         <script>
-        document.getElementById('sort-supplier-button').addEventListener('click', function () {
-            sortTableByTrade(2); // Sort by the first column
-        });
+            document.getElementById('sort-trade-button').addEventListener('click', function () {
+                sortTableByTrade(1); // Sort by the first column
+            });
 
-        function sortTableByTrade(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('my-table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('TD')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
+            function sortTableByTrade(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('my-table');
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('TD')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
                     }
                 }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
             }
-        }
-    </script>
+        </script>
 
-    <script>
-        document.getElementById('sort-amount-button').addEventListener('click', function () {
-            sortTableByAmount(2); // Sort by the first column
-        });
+            <script>
+            document.getElementById('sort-supplier-button').addEventListener('click', function () {
+                sortTableByTrade(2); // Sort by the first column
+            });
 
-        function sortTableByAmount(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('my-table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('TD')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                    // Compare the cell values as numbers instead of strings
-                    if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
-                        shouldSwitch = true;
-                        break;
+            function sortTableByTrade(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('my-table');
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('TD')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
                     }
                 }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
             }
-        }
-    </script>
+        </script>
 
-    {{!-- <script>
-        document.getElementById('sort-shelf-button').addEventListener('click', function () {
-            sortTableByShelf(3); // Sort by the first column
-        });
+        <script>
+            document.getElementById('sort-amount-button').addEventListener('click', function () {
+                sortTableByAmount(2); // Sort by the first column
+            });
 
-        function sortTableByShelf(columnIndex) {
-            var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('my-table');
-            switching = true;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName('TD')[columnIndex];
-                    y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                    // Separate the integer and letter parts of the cell values
-                    var xInt = parseInt(x.innerHTML);
-                    var xLetter = x.innerHTML.charAt(1);
-                    var yInt = parseInt(y.innerHTML);
-                    var yLetter = y.innerHTML.charAt(1);
-                    // Compare the integer parts first, and then the letter parts
-                    if (xInt > yInt || (xInt === yInt && xLetter > yLetter)) {
-                        shouldSwitch = true;
-                        break;
+            function sortTableByAmount(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('my-table');
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName('TD')[columnIndex];
+                        y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                        // Compare the cell values as numbers instead of strings
+                        if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
                     }
                 }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
             }
-        }
-    </script> --}}
+        </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
-    <script>
-
-        import jsPDF from 'jspdf';
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var createPdfButton = document.getElementById('create-pdf-button');
-            createPdfButton.addEventListener('click', createPdf);
-
-            function createPdf() {
-                console.log("PRINTING");
-                // Create a new jsPDF instance
-                //var doc = new jsPDF();
-                //console.log("pdf...");
-                if (typeof jsPDF !== 'undefined') {
-                    // jsPDF library is available
-                    var doc = new jsPDF();
-                    } else {
-                    // jsPDF library is not available
-                    console.error('jsPDF library is not loaded');
-                }
-
-                // Get the HTML content of the current screen
-                var html = document.querySelector('html');
-
-                // Use the html2canvas library to convert the HTML content to a canvas element
-                html2canvas(html).then(function(canvas) {
-                    // Convert the canvas element to a PNG image
-                    var imgData = canvas.toDataURL('image/png');
-
-                    // Add the PNG image to the PDF document
-                    doc.addImage(imgData, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight());
-
-                    // Save the PDF document
-                    doc.save('screen.pdf');
-                });
-            }
-        });
-
-    </script>
-
-
-</body>
+    </body>
 
 </html>

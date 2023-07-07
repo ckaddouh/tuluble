@@ -1,69 +1,52 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>index</title>
+<html>
+    <head>
+        <title>index</title>
 
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="/styles/index.css">
-            <script type="text/javascript" src="/routes/index.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="/styles/index.css">
+        <script type="text/javascript" src="/routes/index.js"></script>
 
-        </head>
-                
-
-        <body>
-        <!-- NAVIGATION SIDEBAR -->
+    </head>
+            
+    <body>
         <div style="display: flex; justify-content:space-between;">
             {{> navbar}}
 
-           {{> logout}}
+        {{> logout}}
         </div>
 
+        <div id="main" style="padding: 0% 2% 0% 2%">
+            <center>            
 
-
-
-
-
-            <div id="main" style="padding: 0% 2% 0% 2%">
-            <!-- https://materializecss.com/cards.html -->
-                <center>            
-
-                    <h1 id="title" style="color:#e700a2">Welcome {{profileInfo}}!
-                    {{!-- <p style="color:#fa82be" > </p> --}}
-                        <span style= "col
-                        or:#000000" class="large material-icons">local_florist
-                            {{!-- <a font-size="20"> --}}
-                        </span>
-                    </h1>
-
-                    {{!-- <h3><button background-color="color: black" style="color: black;" onclick="lastAccessedProject();">&nbsp;Most Recent Project&nbsp;</button></h3> --}}
-
-                    <center>
-                        <p>&nbsp;</p>
-                        <p>Welcome to the tuluble database!</p>
-                        <p>You have access to luluble's inventory, projects, and formulas all within one place.</p>
-                        <p>Take a moment and explore.  </p>
-                        {{!-- <p>This includes Auth0, NodeJS, MySQL, HTML, CSS, JS, and the AWS Cloud Server. </p>
-                        <p>By logging in, you have verified your credentials and may access tuluble data.</p> --}}
-                    </center>
-
-                </center>
-
-                <h3 style="color:#e700a2">Notifications</h3>
+                <h1 id="title" style="color:#e700a2">Welcome {{profileInfo}}!
+                    <span style= "col
+                    or:#000000" class="large material-icons">local_florist
+                    </span>
+                </h1>
 
                 <center>
+                    <p>&nbsp;</p>
+                    <p>Welcome to the tuluble database!</p>
+                    <p>You have access to luluble's inventory, projects, and formulas all within one place.</p>
+                    <p>Take a moment and explore.  </p>
+                </center>
 
+            </center>
 
+            <h3 style="color:#e700a2">Notifications</h3>
 
-                    <table class="tableFixHead">
-                        <thead>
-                            <tr>
-                                <th>Ingredient</th>
-                                <th>Alert</th>
-                            </tr>
-                        </thead>
+            <center>
+                <table class="tableFixHead">
+                    <thead>
+                        <tr>
+                            <th>Ingredient</th>
+                            <th>Alert</th>
+                        </tr>
+                    </thead>
 
-                        <tbody>
+                    <tbody>
                         {{#each runningLow}}
                             <tr>
                                 <td>{{inci_name}} {{trade_name}}</td>
@@ -77,37 +60,16 @@
                                 <td>Expiration date: {{formatDate expiration}}</td>
                             </tr>
                         {{/each}}
-                        </tbody>
-                    </table>
-                </center>
+                    </tbody>
+                </table>
+            </center>
 
-                {{!-- <a class="logout" href="/logout">Log Out</a> --}}
-                <!-- should this appear in sidebar or top right corner -->
-
-                {{!-- <h1 class="large material-icons">filter_vintage</h1> --}}
-                {{!-- <span> tuluble </span> --}}
-                
-
-                <div class = ".pink_button">
-                    <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
-                </div>
-
-                {{!-- <div class = "buttons">
-                    <a class = "waves-effect waves-light btn-large" href="/inventory">Start </a>
-                    <a style = ".pink_button"></a>
-                </div> --}}
-
-
-                {{!-- <div class = "image">
-                    <a style="z-index: 15;" >
-                    <img src="views/luluble_logo.jpg">
-                </div> --}}
-                    
-
+            <div class = ".pink_button">
+                <a style="background-color: rgba(121, 85, 72, 0.65);"></a>
             </div>
+        </div>
 
-            <a>&nbsp;</a>
-        
-        </body>
-
-    </html>
+        <a>&nbsp;</a>
+    
+    </body>
+</html>

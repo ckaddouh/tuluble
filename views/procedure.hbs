@@ -4,7 +4,7 @@
     <head>
         
         
-            <title>{{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure</title>
+            <title>{{#each procedure_info}}{{project_name}}{{/each}} Procedure</title>
         
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -30,7 +30,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
 
-        <h1 style="padding: 25px">{{#each procedure_info}}{{project_name}}{{/each}} Trial {{trial_num}} Procedure </h1>
+        <h1 style="padding: 25px">{{#each procedure_info}}{{project_name}}{{/each}} Procedure </h1>
        
         <table id="my-table" class="sortable">
             <thead>
@@ -74,7 +74,7 @@
                                     <h1 style="font-size:40px;">Add a New Step</h1>
 
                                     {{!-- somehow get the formula of the tab clicked on --}}
-                                    <form method="POST" action="/projects/{{project_id}}/procedure{{trial_num}}/procformsubmit">
+                                    <form method="POST" action="/procedure/{{project_id}}/procformsubmit">
                                         <article class="regular">
                                             {{!-- <h2>Textbook</h2> --}}
 

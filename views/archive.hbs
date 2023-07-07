@@ -15,7 +15,6 @@
 
 <body>
 
-        <!-- NAVIGATION SIDEBAR -->
     <div style="display: flex; justify-content:space-between;">
         {{> navbar}}
 
@@ -25,35 +24,11 @@
     <div style="padding: 2% 2% 0% 2%">
        <div style="padding: 2% 2% 0% 2%">
 
-        <!-- BLANK TEAL DIVIDER -->
-        {{!-- <div class="row">
-            <div class="col s12"><span class="flow-text"></span>
-                <div class="card-panel teal lighten-2"></div>
-            </div>
-        </div> --}}
-
-        <!-- ROW OF BUTTONS AND SEARCH BAR -->
         <div class="row">
             <div class="col s12">
                 <p></p>
                 <h1>Archive </h1>
             </div>
-
-            {{!-- trying out something new  --}}
-            {{!-- <div class="row">
-                <div class="col s12">
-                    <nav>
-                        <div class="nav-wrapper">
-                        <a href="#" class="brand-logo right">Logo</a>
-                        <ul id="nav-mobile" class="left hide-on-med-and-down">
-                            <li><a href="/archiveingredientpage">Ingredients</a></li>
-                            <li><a href="/archiveprojectspage">Projects</a></li>
-                        </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div> --}}
-            {{!-- new is ended here --}}
 
 
              <div class="row">
@@ -90,16 +65,12 @@
                     <div class="col s12 m6 offset-m3">
                         <p></p>
                     </div>
-                {{!-- please make a space between clear search and the table --}}
-
 
                     <script> 
                         document.addEventListener('DOMContentLoaded', function() {
                             var elems = document.querySelectorAll('.sidenav');
                             var instances = M.Sidenav.init(elems, options);
                         });
-
-                        // Or with jQuery
 
                         $(document).ready(function(){
                             $('.sidenav').sidenav();
@@ -164,22 +135,22 @@
                             searchTerm = searchBar.value.trim();
                             searchBar.value = searchTerm;
 
-                            const stateObj = { url: '/archiveingredient' };
+                            const stateObj = { url: '/archive/ingredient' };
                             const title = '';
-                            const newUrl = '/archiveingredient';
+                            const newUrl = '/archive/ingredient';
                             if (searchTerm.length === 0) {
-                                window.location.assign("/archiveingredient");
+                                window.location.assign("/archive/ingredient");
 
                             }
                             else {
-                                if (window.location.href.indexOf("archiveingredient/") !== -1) {
+                                if (window.location.href.indexOf("archive/ingredient/") !== -1) {
                                     console.log(searchTerm);
-                                    window.location.assign("/archiveingredient/search/" + searchTerm);
+                                    window.location.assign("/archive/ingredient/search/" + searchTerm);
 
                                 }
                                 else {
-                                    console.log("archiveingredient/" + searchTerm);
-                                    window.location.assign("/archiveingredient/search/" + searchTerm);
+                                    console.log("archive/ingredient/" + searchTerm);
+                                    window.location.assign("/archive/ingredient/search/" + searchTerm);
 
                                 }
                             }
@@ -194,30 +165,23 @@
                         <thead>
                             <tr id="ing">
                                 <th id="inci">INCI Name
-                                    {{!-- <span class="large material-icons">import_export</span> --}}
-                                    {{!-- <button id="sort-button">Sort Alphabetically</button> --}}
                                     <a id="sort-inci-button" class="waves-effect">
                                         <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                     </a>
 
                                 </th>
                                 <th id="trade">Trade Name
-                                    {{!-- <span class="large material-icons">import_export</span> --}}
                                     <a id="sort-trade-button" class="waves-effect">
                                         <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                     </a>
                                 </th>
                                 <th>Amount Available
-                                    {{!-- <span class="large material-icons">import_export</span> --}}
                                     <a id="sort-amount-button" class="waves-effect">
                                         <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                     </a>
                                 </th>
                                 <th id="shelf">Shelf
-                                    {{!-- <span class="large material-icons">import_export</span> --}}
-                                    {{!-- <a id="sort-shelf-button" class="waves-effect">
-                                        <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                                    </a> --}}
+                                 
                                 </th>
                                 <th id="unarchive">Unarchive</th>
                             </tr>
@@ -267,7 +231,7 @@
                                 <td>{{this.shelf}}</td>
                                 <td>
                                     <div class="delete_button">
-                                        <a href="/unarchive-ingredient/{{this.ingredient_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">Unarchive</a>
+                                        <a href="/archive/unarchive-ingredient/{{this.ingredient_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">Unarchive</a>
                                     </div>
                             </td>
                             </tr>
@@ -329,19 +293,19 @@
                         return regex.test(input);
                     }
 
-                    const stateObj = { url: "/archiveprojects/sci/" + scientistID2 };
+                    const stateObj = { url: "/archive/projects/sci/" + scientistID2 };
                     const title = '';
-                    const newUrl = "/archiveprojects/sci/" + scientistID2;
+                    const newUrl = "/archive/projects/sci/" + scientistID2;
 
                     if (searchTerm2.length === 0 || !validateSearchInput(searchTerm2)) {
-                        window.location.assign("/archiveprojects");
+                        window.location.assign("/archive/projects");
                     }
                     else {
-                        if (window.location.href.indexOf("archiveprojects/sci/" + scientistID2) !== -1) {
-                            window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
+                        if (window.location.href.indexOf("archive/projects/sci/" + scientistID2) !== -1) {
+                            window.location.assign("/archive/projects/sci/" + scientistID2 + "/search/" + searchTerm2);
                         }
                         else {
-                            window.location.assign("/archiveprojects/sci/" + scientistID2 + "/search/" + searchTerm2);
+                            window.location.assign("/archive/projects/sci/" + scientistID2 + "/search/" + searchTerm2);
                         }
                     }
                 });
@@ -386,7 +350,7 @@
                                                 </div>
                                                 <div class = "col s12 m4 l2"></div>
                                                     <div class="delete_button">
-                                                        <a href="/unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Unarchive</a>
+                                                        <a href="/archive/unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Unarchive</a>
                                                     </div>
                                     </div>
                             </div>
