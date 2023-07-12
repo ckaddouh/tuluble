@@ -28,28 +28,42 @@
 
             <h1>Projects </h1>
 
-            <div style="display: flex; justify-content: flex-end;">
-                <nav style="width: 30%;">
-                    <div class="nav-wrapper pink accent-1" >
-                        <div class="input-field">
-                            <input type="search" id="gsearch" name="gsearch">
-                            <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                            {{!-- <input type="submit"> --}}
-                            <i class="material-icons">close</i>
+            <div class="row">
+                
+                <div class="col s4 m4 l12">
+                    <div style="display: flex; justify-content: flex-end;">
+                        <nav style="width: 30%;">
+                            <div class="nav-wrapper pink accent-1" >
+                                <div class="input-field">
+                                    <input type="search" id="gsearch" name="gsearch">
+                                    <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
+                                    {{!-- <input type="submit"> --}}
+                                    <i class="material-icons">close</i>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="row">
+                    <div class="col s2 m4 l2">
+                        <a href="#terms" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add a Project</a>
+                    </div>
+                    <div class="col s4 offset-s6">
+                        <div style="text-align:right; margin-top:10px">
+                            <button id="clear-search"
+                                name="clear-search" 
+                                onclick="redirectToPage()"
+                                class="btn waves-effect waves-luluble-pink luluble-pink">
+                                Clear Search</button>
                         </div>
                     </div>
-                </nav>
+                    
+                </div>
+                
             </div>
-            <div style="text-align:right; margin-top:10px">
-                    <button id="clear-search"
-                        name="clear-search" 
-                        onclick="redirectToPage()"
-                        class="btn waves-effect waves-luluble-pink luluble-pink">
-                        Clear Search</button>
-            </div>
-            <div class="col s12 m6 offset-m3">
-                <p></p>
-            </div>
+            
+            
 
             <script>
                 function redirectToPage() {
@@ -284,8 +298,8 @@
                 <i class="large material-icons">create</i>
             </a> --}}
 
-            <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
-                <i class="large material-icons">create</i>
+            
+                {{!-- <i class="large material-icons">create</i> --}}
                 {{!-- <span class="large material-icons">create</span> --}}
             </a>
             <div class="modal" id="terms">
