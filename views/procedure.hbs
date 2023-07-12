@@ -35,6 +35,7 @@
         <table id="my-table" class="sortable">
             <thead>
                 <tr id = "ing">
+                    <th>Delete</th>
                     <th>Phase</th>
                     <th>Procedure</th>
                     <th>Comments/Ingredients</th>
@@ -51,6 +52,19 @@
 
                 {{#each results}}
                 <tr>
+                    <td class="right-align">
+                        <a href="#deleteProcedureStep{{procedure_item_id}}" class="material-icons modal-trigger">delete</a>
+
+                        <div id="deleteProcedureStep{{procedure_item_id}}" class="modal">
+                            <div class="modal-content">
+                            <h6>Are you sure you would like to delete this step?</h6>
+                            </div>
+                            <div class="modal-footer">
+                            <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/procedure/{{../project_id}}/deleteProcedureStep/{{procedure_item_id}}">YES</a>
+                            </div>
+                        </div>
+
+                    </td>
                     <td contenteditable="true">{{phase_num}}</td>
                     <td contenteditable="true">{{proc}}</td>
                     <td contenteditable="true">{{comments}}</td>
@@ -131,10 +145,6 @@
                                     </article>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col s6 right-align">
-                            <button onclick="window.print()" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Print</button>
                         </div>
 
                     </div>

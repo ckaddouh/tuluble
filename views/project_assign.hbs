@@ -200,9 +200,9 @@
                                                                 {{!-- Field 3 --}}
                                                                 <b><label for="tuluble">Role:</label></b>
                                                                 <select name="role" id="role" class="browser-default">
-                                                                    <option value="0" disabled selected>Select/Reselect a role</option>
-                                                                    <option value="0">Scientist</option>
-                                                                    <option value="1">Admin</option>
+                                                                    <option value="2" {{isSelected "Inventory Admin" role}}>Inventory Admin</option>
+                                                                    <option value="0" {{isSelected "Scientist" role}}>Scientist</option>
+                                                                    <option value="1" {{isSelected "Admin" role}}>Admin</option>
                                                                 </select>
 
                                                                 <p>&nbsp;</p>
@@ -210,7 +210,6 @@
                                                                 <div class = "col s12 m1 l4">
                                                                     <div class="edit_user_button">
                                                                         <button id = "edit_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">Save</button>
-                                                                        {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -219,7 +218,6 @@
                                                                 <form method="POST" action="/project-assign/deleteuser/{{scientist_id}}">
                                                                     <div class="delete_user_button">
                                                                         <button id = "delete_user_button" type="submit" class="btn waves-effect waves-luluble-pink luluble-pink">DELETE USER</button>
-                                                                        {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
                                                                     </div>
                                                                 </form>
                                                             </div>

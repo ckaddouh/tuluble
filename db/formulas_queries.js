@@ -49,6 +49,18 @@ const getFormulaIngredientsQuery= `
     ORDER BY formula_ingredient.phase
 `
 
+const getFormulaIngredientsENCODEDQuery= `
+  SELECT DISTINCT 
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.encoding, formula_ingredient.phase, ingredient.lot_num
+  FROM 
+	  formula_ingredient, ingredient
+  WHERE 
+    formula_ingredient.ingredient_id = ingredient.ingredient_id
+    AND formula_ingredient.project_id = ?
+	  GROUP BY ingredient.ingredient_id
+    ORDER BY formula_ingredient.phase
+`
+
 const selectTrialSumsQuery = `
   SELECT  
     SUM(formula_ingredient.percent_of_ingredient) as percentSum
@@ -222,6 +234,10 @@ function getFormulaIngredients(project_id, callback) {
   db.execute(getFormulaIngredientsQuery, [project_id], callback);
 }
 
+function getFormulaIngredientsEncoded(project_id, callback) {
+  db.execute(getFormulaIngredientsENCODEDQuery, [project_id], callback);
+}
+
 function selectTrialSums(project_id, trial_num, callback) {
   db.execute(selectTrialSumsQuery, [project_id, trial_num], callback);
 }
@@ -293,6 +309,7 @@ module.exports = {
   singleProject, 
   getTrials, 
   getFormulaIngredients, 
+  getFormulaIngredientsEncoded,
   selectTrialSums, 
   getApproved, 
   getIngredientTrialInfo, 

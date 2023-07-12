@@ -13,17 +13,22 @@ router.get("/ingredient/search/:input", async function (req, res, next) {
       });
     });
 
-    db.read_archive_inventory_search(searchStr, (error, results) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error 
-      else {
-        res.render('archive', {
-          input: input,
-          results: results,
-          isAdmin: admin[0].admin
-        });
-      }
-    });
+    if (admin[0].admin === 0 || admin[0].admin === 1) {
+      db.read_archive_inventory_search(searchStr, (error, results) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error 
+        else {
+          res.render('archive', {
+            input: input,
+            results: results,
+            isAdmin: admin[0].admin
+          });
+        }
+      });
+    }
+    else {
+      res.redirect("/inventory");
+    }
 });
     
   
@@ -51,7 +56,7 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
         });
       });
   
-      if (admin[0].admin) {
+      if (admin[0].admin === 1) {
         results = await new Promise((resolve, reject) => {
           db.read_archive_projects_search_all(searchStr, (error, results) => {
             if (error) reject(error);
@@ -59,7 +64,7 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
           });
         });  
       }
-      else if (real_id[0].scientist_id == scientist_id) {
+      else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
         results = await new Promise((resolve, reject) => {
           db.read_archive_projects_search(searchStr, scientist_id, (error, results) => {
             if (error) reject(error);
@@ -67,6 +72,9 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
           });
         });
       } 
+      else if (admin[0].admin === 2) {
+        res.redirect("/inventory");
+      }
       else {
         res.redirect("/archive/projects/sci/" + real_id[0].scientist_id);
       }
@@ -107,7 +115,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
   
   
-    if (admin[0].admin) {
+    if (admin[0].admin === 1) {
       results = await new Promise((resolve, reject) => {
         db.read_inactive_ingredients_all_sql((error, results) => {
           if (error) reject(error);
@@ -126,7 +134,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       console.log("error with projecsts");
       
     }
-    else if (real_id[0].scientist_id == scientist_id) {
+    else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
         console.log("not admin");
 
       results = await new Promise((resolve, reject) => {
@@ -144,10 +152,17 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
 
     } 
+    else if (admin[0].admin === 2) {
+      res.redirect("/inventory");
+      return;
+    }
     else {
+      console.log(admin[0].admin);
       res.redirect("/archive/sci/" + real_id[0].scientist_id);
+      return;
     }
     res.render('archive', { results: results, project_results: project_results, isAdmin: admin[0].admin });
+    return;
   
     } catch (error) {
       res.redirect("/error"); 

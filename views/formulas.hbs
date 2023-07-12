@@ -161,8 +161,12 @@
                         <tr>
                             <th style="width: 85px; height: 30px;">Delete</th>
                             <th style = "width:85px">Phase</th>
+                            {{#if isAdmin}}
                             <th style = "width: 200px">Trade Name</th>
                             <th style="width: 200px">INCI</th>
+                            {{else}}
+                            <th style="width: 200px">Ingredient ID</th>
+                            {{/if}}
                             <th style="width: 200px">Supplier</th>
                             <th style="width: 150px">Lot Number</th>
                             
@@ -184,8 +188,12 @@
 
                                 </td>
                                 <td>{{phase}}</td>
+                                {{#if ../isAdmin}}
                                 <td>{{trade_name}}</td>
                                 <td>{{inci_name}}</td>
+                                {{else}}
+                                <td>{{encoding}}</td>
+                                {{/if}}
                                 <td>{{supplier}}</td>
                                 <td>{{lot_num}}</td>
                                
@@ -318,17 +326,6 @@
                         
                     </div>
 
-                    {{!-- <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            var toastHTML = '<span>TEST</span><button class="btn-flat toast-action" onclick="">UNDO MAKE</button>';
-                            var button = document.querySelector('#make_trial_button');
-
-                            button.addEventListener('click', function() {
-                                M.toast({html: toastHTML, displayLength: 10000});
-                            });
-                        });
-                    </script> --}}
-
                     <script>
                     
                     </script>
@@ -367,9 +364,7 @@
                     console.log(ingredients);
                     console.log("EDITABLE");
                     console.log(editable);
-                    // const ingredients = [ingredient1, ingredient2];
-                    // const decodedString = he.decode('{{ingredient_dict}}');
-                    // const ingredients = JSON.parse(decodedString);
+                  
                     const trial_data = {{trial_data}};
                     $("#info").append("<tr>");
 
@@ -381,9 +376,7 @@
 
                     }
                     for (let i = 0; i < trial_data; i++) {
-                        // $("#info").append("<tr>");
                         console.log(i);
-                        // $("#info").append("<th >Trial "+i+"</th>"); 
                         if (approved[i] == '1') {
                             $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/formulas/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons modal-trigger'>close</a> </th>");
                         }

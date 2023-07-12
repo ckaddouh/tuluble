@@ -24,19 +24,24 @@ router.get('/', async function (req, res, next) {
     });
   });
 
-  db.getLowAmounts((error, results) => {
-    if (error) {
-      res.redirect('/error'); // Internal Server Error
-    } else {
-      db.getExpired((error, results2) => {
-        if (error) {
-          res.redirect('/error'); // Internal Server Error
-        } else {
-          res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname, isAdmin: admin[0].admin});
-        }
-      });
-    }
-  });
+  if (admin[0].admin === 0 || admin[0].admin === 1) {
+    db.getLowAmounts((error, results) => {
+      if (error) {
+        res.redirect('/error'); // Internal Server Error
+      } else {
+        db.getExpired((error, results2) => {
+          if (error) {
+            res.redirect('/error'); // Internal Server Error
+          } else {
+            res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname, isAdmin: admin[0].admin});
+          }
+        });
+      }
+    });
+  }
+  else {
+    res.redirect("/inventory");
+  }
 });
 
 module.exports = router;

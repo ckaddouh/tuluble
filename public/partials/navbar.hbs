@@ -23,14 +23,18 @@
                 {{!-- <a href="#email"><span class="email white-text">web@gmail.com</span></a> --}}
             </div>
         </li>
+        {{#ifEitherTrue (eq isAdmin 0) (eq isAdmin 1)}}
         <li><a href="/"><i class="material-icons">home</i>Home</a></li>
         <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
         <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
         <li><a href="/archive"><i class="material-icons">archive</i>Archive</a></li>
-        {{#if isAdmin}}
+        {{/ifEitherTrue}}
+        {{#if (eq isAdmin 1)}}
             <li><a href="/project-assign"><i class="material-icons">assignment_ind</i>Assign</a></li>
         {{/if}}
-        {{!-- <li><a href="#"><i class="material-icons">create</i>Other</a></li> --}}
+        {{#if (eq isAdmin 2)}}
+            <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
+        {{/if}}
     </ul>
 
     {{!-- <a href="#" data-target="mysidenav" class="btn sidenav-trigger">Sidenav</a> --}}
@@ -39,28 +43,6 @@
         <i class="material-icons">menu</i>
         <span class="blue-text text-darken-2"></span>
     </a>
-
-    <!-- NAVIGATION SIDEBAR (location to put icon NEXT to the sidebar lines) -->
-    {{!-- <div class="col s6">
-        <img src="/luluble_hlogo.jpg" class="responsive-img">
-    </div> --}}
-    {{!-- <span style="color:#000000" class="large material-icons">local_florist</span> --}}
-{{!-- 
-                if(isAuthenticated()) {
-                console.log("auth!!");
-                const element = document.getElementByID("mysidenav");
-                const x = document.create("li");
-                const a = document.create('a');
-                var link = document.createTextNode("Assign");
-                a.appendChild(link);
-                a.title = "Assign";
-                a.href = "/project-assign";
-                x.appendChild(a);
-                element.appendChild(x);
-            }
-            else {
-                console.log("NO");
-            } --}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 

@@ -44,19 +44,39 @@ router.get("/:project_id", async function (req, res) {
     });
   });
 
-  db.get_procedure(project_id, (error, results) => {
-    db.get_procedure_info(project_id, (error, proc_info) => {
-      if (error)
-        res.status(500).send(error); //Internal Server Error 
-      else {
-        res.render('procedure', {
-          results: results,
-          procedure_info: proc_info,
-          project_id: project_id,
-          isAdmin: admin[0].admin
-        });
-      }
+  if (admin[0].admin === 0 || admin[0].admin === 1) {
+    db.get_procedure(project_id, (error, results) => {
+      db.get_procedure_info(project_id, (error, proc_info) => {
+        if (error)
+          res.status(500).send(error); //Internal Server Error 
+        else {
+          res.render('procedure', {
+            results: results,
+            procedure_info: proc_info,
+            project_id: project_id,
+            isAdmin: admin[0].admin
+          });
+        }
+      });
     });
+  }
+  else {
+    res.redirect("/inventory");
+  }
+});
+
+
+router.get("/:project_id/deleteProcedureStep/:proc_id", (req, res) => {
+  let proc_id = req.params.proc_id
+  let project_id = req.params.project_id
+
+  db.delete_procedure_item(proc_id, (error, results) => {
+    if (error) {
+      res.status(500).send(error); 
+    }
+    else {
+      res.redirect("/procedure/" + project_id);
+    }
   });
 });
 

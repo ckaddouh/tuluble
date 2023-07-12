@@ -3,7 +3,7 @@ const db = require("./db_connection");
 
 const get_procedure_query = `
   SELECT 
-    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id
+    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, procedure_item_id
   FROM 
     procedure_item
   WHERE 
@@ -34,6 +34,13 @@ const checkAdminQuery = `
   WHERE email = ?
 `
 
+const delete_procedure_item_query = `
+  DELETE FROM
+    procedure_item
+  WHERE
+    procedure_item_id = ?
+`
+
 
 function get_procedure(project_id, callback) {
   db.execute(get_procedure_query, [project_id], callback);
@@ -51,10 +58,15 @@ function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
 
+function delete_procedure_item(procedure_item_id, callback) {
+  db.execute(delete_procedure_item_query, [procedure_item_id], callback);
+}
+
 
 module.exports = { 
   get_procedure,
   insert_procedure,
   get_procedure_info,
-  requireAdmin
+  requireAdmin,
+  delete_procedure_item
 };

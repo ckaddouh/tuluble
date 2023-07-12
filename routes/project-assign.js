@@ -14,7 +14,7 @@ router.get("/", async function (req, res, next) {
     });
 
 
-  if (admin[0].admin) {
+  if (admin[0].admin === 1) {
     try {
       const results = await new Promise((resolve, reject) => {
         db.read_projects_all_sql((error, results) => {
@@ -65,6 +65,9 @@ router.get("/", async function (req, res, next) {
     } catch (error) {
       res.status(500).send(error); //Internal Server Error
     }
+    }
+    else if (admin[0].admin === 2) {
+      res.redirect("/inventory");
     }
     else {
       res.redirect("/");

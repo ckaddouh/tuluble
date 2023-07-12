@@ -21,14 +21,16 @@ const db = require("./db/db_connection");
 const hbs = require("hbs");
 const moment = require('moment');
 
-// const style = require("css");
-
 hbs.registerHelper('eq', function(a, b) {
+  console.log(a);
+  console.log(b);
+  console.log(a===b);
   return a === b;
 });
 hbs.registerHelper('formatDate', function(date) {
   return moment(date).format('LL');
 });
+
 hbs.registerHelper('ifBothTrue', function(a, b, options) {
   if (a && b) {
     return options.fn(this);
@@ -37,8 +39,16 @@ hbs.registerHelper('ifBothTrue', function(a, b, options) {
   }
 });
 
-hbs.registerHelper('isSelected', function (value, userInput5, options) {
-  return value === userInput5 ? 'selected' : '';
+hbs.registerHelper('ifEitherTrue', function(a, b, options) {
+  if (a || b) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+hbs.registerHelper('isSelected', function (value, userInput, options) {
+  return value === userInput ? 'selected' : '';
 });
 
 const { realpathSync } = require('fs');
@@ -178,46 +188,24 @@ app.get("/logout", (req, res) => {
   logout();
 })
 
-app.get("/page", (req, res) => {
-  db.execute(read_inventory_all_sql, (error, results) => {
-    if (error)
-      res.redirect("/error"); //Internal Server Error
-    else {
-      res.render('page', { results: results });
-    }
-  });
-});
-
-app.get("/created", (req, res) => {
-  res.render('created');
-});
-
-
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
 
-
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   console.log(err.message);
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
-// app.get('/', (req, res) => {
-//     res.send('Hello World!');
-// })
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
 
-// module.exports = router;
 module.exports = app;

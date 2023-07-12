@@ -27,7 +27,7 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
       });
     });
 
-  if (admin[0].admin) {
+  if (admin[0].admin === 1) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_search_all(searchStr, (error, results) => {
         if (error) reject(error);
@@ -36,7 +36,7 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
     });
   }
 
-  else if (real_id[0].scientist_id == scientist_id) {
+  else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_search(searchStr, scientist_id, (error, results) => {
         if (error) reject(error);
@@ -44,6 +44,9 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
       });
     });
   } 
+  else if (admin[0].admin === 1) {
+    res.redirect("/inventory");
+  }
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   }
@@ -123,8 +126,6 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
   let results;
 
-  
-
   try {
     const admin = await new Promise((resolve, reject) => {
       db.requireAdmin(req.oidc.user.email, (error, admin) => {
@@ -140,7 +141,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
     });
 
-  if (admin[0].admin) {
+  if (admin[0].admin === 1) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_all_sql((error, results) => {
         if (error) reject(error);
@@ -148,7 +149,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
     });
   }
-  else if (real_id[0].scientist_id == scientist_id) {
+  else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
     results = await new Promise((resolve, reject) => {
       db.getProjectsAssignedToScientist(scientist_id, (error, results) => {
         if (error) reject(error);
@@ -156,6 +157,11 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
     });
   } 
+  else if (admin[0].admin === 2) {
+    console.log("HELLO HELLOW");
+    res.redirect("/inventory");
+    return;
+  }
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   }

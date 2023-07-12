@@ -97,7 +97,7 @@ router.get("/:project_id", async function (req,res,next) {
       });
     });
 
-  if (admin[0].admin || assigned.length !== 0) {
+  if (admin[0].admin === 1 || assigned.length !== 0) {
     const project_data = await new Promise((resolve, reject) => {
       db.singleProject(project_id, (error, project_data) => {
         if (error) reject(error);
@@ -113,12 +113,32 @@ router.get("/:project_id", async function (req,res,next) {
     });
 
 
-    const ing_data = await new Promise((resolve, reject) => {
-      db.getFormulaIngredients(project_id, (error, ing_data) => {
-        if (error) reject(error);
-        else resolve(ing_data);
-      });
-    });
+    let ing_data = [];
+
+    if (admin[0].admin === 1) {
+      try {
+        ing_data = await new Promise((resolve, reject) => {
+          db.getFormulaIngredients(project_id, (error, ingData) => {
+            if (error) reject(error);
+            else resolve(ingData);
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } 
+    else if (admin[0].admin === 0) {
+      try {
+        ing_data = await new Promise((resolve, reject) => {
+          db.getFormulaIngredientsEncoded(project_id, (error, ingData) => {
+            if (error) reject(error);
+            else resolve(ingData);
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     let sum_data = [];
     for (let i = 0; i < trial_data.length; i++) {
@@ -224,15 +244,19 @@ router.get("/:project_id", async function (req,res,next) {
         isAdmin: admin[0].admin
       });
     }
-           
-         
   }
-
+  else if (admin[0].admin === 2) {
+    console.log("NOT ADMIN!!");
+    res.redirect("/inventory");
+    return;
+  }
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
+    return;
   } 
   } catch (error) {
     res.redirect("/error");
+    return;
   }
 });
 

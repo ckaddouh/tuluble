@@ -84,7 +84,7 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
         });
     });
     
-    if (admin[0].admin || assigned.length !== 0) {
+    if (admin[0].admin === 1 || assigned.length !== 0) {
       const project_data = await new Promise((resolve, reject) => {
         db.singleProject(project_id, (error, project_data) => {
           if (error) reject(error);
@@ -183,7 +183,9 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
       isAdmin: admin[0].admin
     });
   }
-  
+  }
+  else if (admin[0].admin === 2) {
+    res.redirect("/inventory");
   }
   else {
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
