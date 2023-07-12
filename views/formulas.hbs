@@ -61,7 +61,7 @@
                 </div>
 
                 <div class="col s2">
-                    <button onclick="location.href = '/projects/{{project_id}}/procedure';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
+                    <button onclick="location.href = '/procedure/{{project_id}}';" id="create-pdf-button" name="create-pdf-button" class="btn waves-effect waves-luluble-pink luluble-pink">Procedure</button>
                 </div>
 
                 <p> &nbsp;</p>
@@ -95,7 +95,7 @@
                     {{!-- <b><span>Add a New Ingredient</span></b> --}}
                     <h1 style="font-size:40px;">Add a New Trial</h1>
 
-                    <form method="POST" action="/projects/{{project_id}}/formulaformsubmit">
+                    <form method="POST" action="/formulas/{{project_id}}/formulaformsubmit">
                         <article class="regular">
                             {{!-- <h2>Textbook</h2> --}}
 
@@ -167,26 +167,18 @@
                             <th style="width: 150px">Lot Number</th>
                             
                             </tr>
-                        {{!-- {{#each trialData1}}
-                            <p>Batch date: {{batch_date}}</p>
-                            <p>Formulator: {{formulator}}</p>
-                        {{/each}}
-                        {{#each trial_data1}}
-                            <p>Total Amt of Formula: {{s}}</p>
-                            <p class = "totalPercent">WARNING: Total Percentage = {{percent}}</p>
-                        {{/each}} --}}
                         
                         {{#each ing_data}}
                             <tr style="overflow: scroll; height: 85px">
                                 <td class="right-align">
-                                    <a href="#deleteFormulaIngredient" class="material-icons modal-trigger">delete</a>
+                                    <a href="#deleteFormulaIngredient{{ingredient_id}}" class="material-icons modal-trigger">delete</a>
 
-                                    <div id="deleteFormulaIngredient" class="modal">
+                                    <div id="deleteFormulaIngredient{{ingredient_id}}" class="modal">
                                         <div class="modal-content">
                                         <h6>Are you sure you would like to delete this ingredient?</h6>
                                         </div>
                                         <div class="modal-footer">
-                                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/deleteFormulaIngredient/{{ingredient_id}}">YES</a>
+                                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/formulas/{{../project_id}}/deleteFormulaIngredient/{{ingredient_id}}">YES</a>
                                         </div>
                                     </div>
 
@@ -212,7 +204,7 @@
                                 {{!-- somehow get the formula of the tab clicked on --}}
                                 
                                 {{!-- {{#each trialData1}}{{formula_id}}{{/each}} --}}
-                                <form method="POST" action="/projects/{{project_id}}/phaseformsubmit">
+                                <form method="POST" action="/formulas/{{project_id}}/phaseformsubmit">
                                 
                                     <article class="regular">
                                         <b><label for="tuluble">Trial:</label></b>
@@ -262,15 +254,8 @@
                                 {{!-- somehow get the formula of the tab clicked on --}}
                     
 
-                                <form method="POST" action="/projects/{{project_id}}/batchformsubmit">
+                                <form method="POST" action="/formulas/{{project_id}}/batchformsubmit">
                                     <article class="regular">
-                                        {{!-- <h2>Textbook</h2> --}}
-
-                                        {{!-- Field 1 --}}
-                                        {{!-- <b><label for="tuluble">Quantity ({{unit}}):</label></b>
-                                        <input type="range" min = "0" max = "100" name = "userInput1" id="userInput1">
-                                        <p> </p> --}}
-                                        {{!-- USE MATH IN SQL TO FIND MAX VAL --}}
                                         <b><label for="tuluble">Trial:</label></b>
                                         <input type="number" name = "userInput1T" id="userInput1T">
                                         <p> </p>
@@ -299,7 +284,7 @@
                             <h6>Are you sure you would like to approve Trial {{trial_num}} as the final formulation for {{#each ../project_data}}{{project_name}}{{/each}}?</h6>
                             </div>
                             <div class="modal-footer">
-                            <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/approveTrial/{{trial_num}}">YES</a>
+                            <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/formulas/{{../project_id}}/approveTrial/{{trial_num}}">YES</a>
                             </div>
                         </div>
                     </div>
@@ -314,7 +299,6 @@
                             var inputValue3 = $("#userInput3").val();
 
                             window.location.href += "/phaseformsubmit";
-                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                             });
                         });
                     </script>
@@ -326,8 +310,6 @@
                             var trial_num = $("#userInput1T").val();
                             var quantity = $("#userInput2T").val();
                            
-                            window.location.href += "/batchformsubmit";
-                            //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                             });
                         });
                     </script>
@@ -361,9 +343,6 @@
                     
 
                 </div>
-
-                    {{!-- PRINTING DOESN'T WORK RIGHT NOW, BUTTON GIVES ERROR --}}
-                    {{!-- <a href = "/projects/{{project_id}}/procedure"> _</a> --}}
                     <p>&nbsp;</p>
 
                    
@@ -406,7 +385,7 @@
                         console.log(i);
                         // $("#info").append("<th >Trial "+i+"</th>"); 
                         if (approved[i] == '1') {
-                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/projects/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons table-icon modal-trigger'>close</a> </th>");
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/formulas/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons modal-trigger'>close</a> </th>");
                         }
                         else {
                             $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial "+(i+1)+" Percentage <a href= '#approveTrial" + (i+1) + "' class='material-icons table-icon modal-trigger'>check</a> </th>");
@@ -480,10 +459,10 @@
                 {{#each trialData}}
                 <div class="modal" id="deleteTrial{{trial_num}}">
                     <div style="padding: 5% 5% 5% 5%">
-                        <h6>Are you sure you would like to delete this trial?</h6>
+                        <h6>Are you sure you would like to delete this trial? {{trial_num}}</h6>
                         </div>
                         <div class="modal-footer">
-                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{../project_id}}/deleteTrial/{{trial_num}}">YES</a>
+                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/formulas/{{../project_id}}/deleteTrial/{{trial_num}}">YES</a>
                         </div>
                     </div>
                 </div>

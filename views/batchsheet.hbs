@@ -19,7 +19,6 @@
         });
     </script>
 
-    {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="/partials/color.css">
     <link rel="stylesheet" href="/styles/formula.css">
@@ -44,15 +43,9 @@
         <div id="contentContainer" style="padding: 2% 2% 0% 2%">
 
         {{#each project_data}}
-            <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
-
-                    <div  class="exclude-pdf">
-                        <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
-                    </div>
-
-                    {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
+                    <a href = "/formulas/{{project_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
                     <p>&nbsp;</p>
                     <p><b>Client:</b> {{this.client}}</p>
                     <p><b>Date:</b> {{formatDate this.date}}</p>
@@ -243,17 +236,26 @@
                         {{/each}} --}}
                 <div class="exclude-pdf">
                     
-                    {{#unless sufficient}}
-                    <div>
-                    <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
+                    {{#if messages}}
+                    <div style = "position: fixed;top: 60px;right: 20px;">
+                        {{#each messages}}
+                        <div class = "flash-message" style="background-color: #ffcdd2;padding: 10px;margin-bottom: 10px; border-radius: 5px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);word-wrap: break-word;max-width:300px;">
+                            <p>{{this}}</p>
+                        </div>
+                        {{/each}}
                     </div>
-                    {{/unless}}
+                    {{/if}}
 
-                    {{#unless formulaComplete}}
-                    <div>
-                        <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
-                    </div>
-                    {{/unless}}
+                    <script>
+                        var flashMessages = document.querySelectorAll('.flash-message');
+                        flashMessages.forEach(function(flashMessage, index) {
+                            setTimeout(function() {
+                            flashMessage.style.display = 'none';
+                            }, (index + 1) * 5000);
+                        });
+                    </script>
+
+
 
                     {{#ifBothTrue sufficient formulaComplete}}
                     <div class="row exclude-pdf">
@@ -269,7 +271,7 @@
                         <h8 style="color: red;">Note that these changes CANNOT BE REVERSED.</h8>
                         </div>
                         <div class="modal-footer">
-                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
+                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/batchsheet/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
                         </div>
                     </div>
 

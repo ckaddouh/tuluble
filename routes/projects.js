@@ -1,144 +1,167 @@
-var express = require('express');
+const express = require('express');
 var router = express.Router();
-var db = require('../db/db_connection');
+const db = require("../db/projects_queries.js");
 
-const fs = require('fs');
-const path = require('path');
-const { redirect } = require('express/lib/response');
-
-// function requireAdmin(req, res, next){
-//   if(res.locals.isAdmin)
-//     next();
-//   else
-//     res.redirect("/");
-//     // next("AGHHH NOT ALLOWED");
-// }
+var isAdmin = true;
 
 
-/* GET events "home" page - a list of all events. */
-router.get('/', async function(req, res, next) {
-  // let promise = db.queryPromise(eventsQuery)
-  // promise.then((results) => {
-  //   res.render('events', { title: 'Events', style: "tables", events: results});
-  // }).catch((err) => {
-  //   next(err);
-  // });
+router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
+  let input = req.params.input
+  let scientist_id = req.params.scientist_id
+
+  let searchStr = `%${input}%`;
+
+  let results;
 
   try {
-    let results = await db.queryPromise(db.get_all_projects())
-    console.log(results);
-    res.render('projects', { title: 'Projects', style: "tables", events: results});
-  } catch (err) {
-    next(err);
-  }
- 
+    const real_id = await new Promise((resolve, reject) => {
+      db.getScientistID(req.oidc.user.email, (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
 
+  if (isAdmin) {
+    results = await new Promise((resolve, reject) => {
+      db.read_projects_search_all(searchStr, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+  }
+
+  else if (real_id[0].scientist_id == scientist_id) {
+    results = await new Promise((resolve, reject) => {
+      db.read_projects_search(searchStr, scientist_id, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+  } 
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  }
+  res.render('projects', {
+    input: input,
+    results: results
+  });
+  
+  } catch (error) {
+    res.redirect("/error"); 
+  }
 });
 
-// router.get('/create', requireAdmin ,async function(req, res, next) {
-router.get('/create',async function(req, res, next) {
-  try {
 
-    let event_locations = await db.queryPromise(event_locations_query);
-    let event_types = await db.queryPromise(event_types_query);
-  
-    res.render('projectform', {title: "Create Project", style: "newproject"})
-  } catch(err) {
-    next(err);
-  }
-})
 
-router.get('/:project_id', function(req, res, next) {
+
+router.post("/:project_id/projectupdate", async function (req, res, next) {
   let project_id = req.params.project_id
-  // GET FROM DATABASE: Select query where event_id = event_id from URL
-  //For now, lets pretend
-  // let event_data = {event_id: event_id,
-  //                 event_name: "Opening Ceremony", 
-  //                 event_location: "Auditorium",
-  //                 event_date: "May 1 (Sat)",
-  //                 event_time: "10:30 AM",
-  //                 event_duration: "30m",
-  //                 event_type: "Main",
-  //                 event_interest: "100",
-  //                 event_description: "Be there!"}
-  db.query(db.get_single_project(), [project_id], (err, results) => {
-    if (err)
-      next(err);
-    console.log(results);
-    let project_data = results[0];
-    res.render('project', { title: 'Project Details', 
-                      styles: ["tables", "project"], 
-                      project_id : project_id,
-                      project_data: project_data});
+
+  try {
+    db.updateProject(req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.contactName1, req.body.contactEmail1, project_id, (error, results) => {
+      if (error) reject(error);
+      else resolve(results);
+    });
+    res.redirect("/projects");
+  }
+  catch (error) {
+    next(error);
+  }
+});
+
+
+router.post("/sci/:scientist_id/projectformsubmit", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id
+ 
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.insertIntoProjects(req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.contactName, req.body.contactEmail, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+
+    const project_id = await new Promise((resolve, reject) => {
+      db.getProjectID(req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, (error, project_id) => {
+        if (error) reject(error);
+        else resolve(project_id);
+      });
+    });
+
+
+    const assigned = await new Promise((resolve, reject) => {
+      db.assignScientistToProject(project_id[0].project_id, scientist_id, (error, assigned) => {
+        if (error) reject(error);
+        else resolve(assigned);
+      });
+    });
+
+
+    res.redirect("/projects");
+  }
+  catch (error) {
+    next(error);
+  }
+});
+
+
+router.get("/", async function (req,res,next) {
+  db.getScientistID(req.oidc.user.email, (error, results) => {
+    res.redirect("/projects/sci/" + results[0].scientist_id);
   });
 });
 
 
-// let singleProjectForFormQuery = fs.readFileSync(path.join(__dirname, "../db/select_project_single_form.sql"), "utf-8");
+router.get("/sci/:scientist_id", async function (req, res, next) {
+  let scientist_id = req.params.scientist_id;
+  let results;
 
-// router.get('/:project_id/modify', requireAdmin , async function(req, res, next) {
-//   try {
+  try {
+    const real_id = await new Promise((resolve, reject) => {
+      db.getScientistID(req.oidc.user.email, (error, real_id) => {
+        if (error) reject(error);
+        else resolve(real_id);
+      });
+    });
 
-//     // let event_locations = await db.queryPromise(event_locations_query);
-//     // let event_types = await db.queryPromise(event_types_query);
-//     //Very much like the get('/:event_id') route... 
-//     let project_id = req.params.project_id
-//     let results = await db.queryPromise( singleProjectForFormQuery, [project_id]);
-//     let project_data = results[0];
+  if (isAdmin) {
+    results = await new Promise((resolve, reject) => {
+      db.read_projects_all_sql((error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+    }
+  else if (real_id[0].scientist_id == scientist_id) {
+    results = await new Promise((resolve, reject) => {
+      db.getProjectsAssignedToScientist(scientist_id, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+  } 
+  else {
+    res.redirect("/projects/sci/" + real_id[0].scientist_id);
+  }
 
-//     res.render('projectform', {title: "Modify Project", style: "newevent", 
-//                         project: project_data}); // provide current event data
-//   } catch(err) {
-//     next(err);
-//   }
+  
+  res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
 
-// });
+  } catch (error) {
+    res.redirect("/error"); 
+  }
+});
 
-// let insertProjectQuery = fs.readFileSync(path.join(__dirname, "../db/insert_Project.sql"), "utf-8");
-// // (`event_name`, `event_location_id`, `event_type_id`, `event_dt`, `event_duration`, `event_description`) 
-// router.post('/', requireAdmin ,async function(req, res, next) {
-//   try {
-//     let results = await db.queryPromise(insertProjectQuery, [req.body.project_name, 
-//       req.body.project_location_id, 
-//       req.body.project_type_id, 
-//       `${req.body.project_date} ${req.body.project_time}`,
-//       req.body.project_duration,
-//       req.body.project_description
-//     ]);
 
-//   let project_id_inserted = results.insertId;
-//   res.redirect(`/projects/${project_id_inserted}`);
-//   } catch(err) {
-//     next(err);
-//   }
-// })
+router.get("/sci/archive-project/:project_id", (req, res) => {
+  let project_id = req.params.project_id
+  db.archiveProject(project_id, (error, results) => {
+    if (error)
+      res.redirect("/error"); //Internal Server Error
+    else
+      res.redirect('/projects');
+  });
+});
 
-// let updateProjectQuery = fs.readFileSync(path.join(__dirname, "../db/update_project.sql"), "utf-8"); 
-// router.post('/:project_id', requireAdmin ,async function(req, res, next) {
-//   try {
-//     let results = await db.queryPromise(updateProjectQuery, [req.body.project_name, 
-//       req.body.project_location_id, 
-//       req.body.project_type_id, 
-//       `${req.body.project_date} ${req.body.project_time}`,
-//       req.body.project_duration,
-//       req.body.project_description,
-//       req.params.project_id // or req.body.event_id, since its a hidden input in the form
-//     ]);
-
-//   res.redirect(`/projects/${req.params.project_id}`);
-//   } catch(err) {
-//     next(err);
-//   }
-// })
-
-// let deleteProjectQuery = "DELETE FROM project WHERE project_id = ?";
-// router.get('/:project_id/delete', requireAdmin, async (req, res, next) => {
-//   try {
-//     await db.queryPromise(deleteProjectQuery, req.params.project_id);
-//     res.redirect('/projects')
-//   } catch (err) {
-//     next(err);
-//   }
-// })
 
 module.exports = router;
