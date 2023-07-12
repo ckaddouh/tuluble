@@ -417,6 +417,7 @@
                     <tbody>
                         {{#each results}}
                         <tr>
+                            {{#if ../isAdmin}}
                             <td>{{this.inci_name}}
                                 <a href="#terms{{ingredient_id}}" class="modal-trigger">
                                     <span class="large material-icons">info_outline</span>
@@ -429,12 +430,9 @@
                                             </b></div>
                                         <div class="col s12">&nbsp;</div>
                                         <div class="col s6">
-                                            {{#if ../isAdmin}}
+                                            
                                                 <b>Trade Name:</b> {{this.trade_name}}<br></br>
                                                 <b>INCI Name:</b> {{this.inci_name}}<br></br>
-                                            {{else}}
-                                                <b>Ingredient ID:</b> {{this.encoding}}<br></br>
-                                            {{/if}}
                                                 <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
                                                 <b>Supplier:</b> {{this.supplier}}<br></br>
                                                 <b>Lot Number:</b> {{this.lot_num}}<br></br>
@@ -453,12 +451,11 @@
                                     </div>
                                 </div>
                             </td>
-                            {{#if ../isAdmin}}
-                            <td>{{this.trade_name}}</td>
-                            <td>{{this.supplier}}</td>
+                            <td>{{this.trade_name}}</td>                       
                             {{else}}
-                            <td>{{this.encoding}}</td>
+                                <td>{{this.encoding}} {{#if this.hazardous}}<i class="material-icons">warning</i>{{/if}}</td>
                             {{/if}}
+                            <td>{{this.supplier}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>
                             <td>{{this.lot_num}}</td>
@@ -492,7 +489,7 @@
                                                 <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
-                                                {{#if (eq isAdmin 2)}}
+                                                {{#if (eq ../isAdmin 2)}}
                                                 <b><label for="tuluble">Encoding:</label></b>
                                                 <input type="text" name="userInput6" id="userInput6" value="{{this.encoding}}"
                                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
@@ -604,6 +601,26 @@
                                 </div>
                             </td>
                         </tr>
+                        <script>
+                            const hazardousSwitch = document.getElementById('hazardousSwitchEdit');
+                            const textBoxContainer = document.getElementById('textBoxContainerEdit');
+
+                            hazardousSwitch.addEventListener('change', function() {
+                            if (hazardousSwitch.checked) {
+                                textBoxContainer.style.display = 'block';
+                            } else {
+                                textBoxContainer.style.display = 'none';
+                            }
+                            });
+                        </script>
+
+                        <script>
+                            const hazardousValue = {{hazardous}}; // Assuming {{this.hazardous}} contains a boolean value
+
+                            hazardousSwitchEdit.checked = hazardousValue;
+
+                        </script>
+
                         {{/each}}
                     </tbody>
                 </table>
@@ -611,18 +628,6 @@
         </div>
         </div>
 
-         <script>
-            const hazardousSwitch = document.getElementById('hazardousSwitchEdit');
-            const textBoxContainer = document.getElementById('textBoxContainerEdit');
-
-            hazardousSwitch.addEventListener('change', function() {
-            if (hazardousSwitch.checked) {
-                textBoxContainer.style.display = 'block';
-            } else {
-                textBoxContainer.style.display = 'none';
-            }
-            });
-        </script>
 
         <script>
             $(document).ready(function () {
