@@ -77,7 +77,7 @@
 
                                 {{#if (eq isAdmin 2)}}
                                 <b><label for="tuluble">Encoding:</label></b>
-                                <input type="text" name="userInput6" id="userInput6" placeholder="Enter Ingredient Encoding"
+                                <input type="text" name="userInput14" required id="userInput14" placeholder="Enter Ingredient Encoding"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
                                 <br>
@@ -666,6 +666,8 @@
                     const inputValue10 = $("#userInput10").val();
                     const inputValue11 = $("#userInput11").val();
                     const inputValue12 = $("#userInput12").val();
+                    const inputValue14 = $("#userInput14").val();
+                    const hazardous = $("#hazardousSwitch").val();
                 });
             });
         </script>
