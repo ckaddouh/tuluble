@@ -392,6 +392,13 @@
                                 </a>
                             </th>
                             {{/if}}
+                            {{#if (eq isAdmin 2)}}
+                             <th id="trade">Ingredient ID
+                                <a id="sort-trade-button" class="waves-effect">
+                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
+                                </a>
+                            </th>
+                            {{/if}}
                             <th id="trade">Supplier
                                 <a id="sort-supplier-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
@@ -408,8 +415,10 @@
                             </th>
                             <th id="cost">Cost
                             </th>
+                            {{#ifEitherTrue (eq isAdmin 0) (eq isAdmin 1)}}
                             <th id="archive">Archive
                             </th>
+                            {{/ifEitherTrue}}
                             <th id="edit">Edit
                             </th>
                         </tr>
@@ -455,17 +464,22 @@
                             {{else}}
                                 <td>{{this.encoding}} {{#if this.hazardous}}<i class="material-icons">warning</i>{{/if}}</td>
                             {{/if}}
+                            {{#if (eq ../isAdmin 2)}}
+                                <td>{{this.encoding}} {{#if this.hazardous}}<i class="material-icons">warning</i>{{/if}}</td>
+                            {{/if}}
                             <td>{{this.supplier}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>
                             <td>{{this.lot_num}}</td>
                             <td>{{this.cost}}</td>
+                            {{#ifEitherTrue (eq ../isAdmin 0) (eq ../isAdmin 1)}}
                             <td>
                                 <div class="archive_button">
                                     <a href="/inventory/archive-ingredient/{{this.ingredient_id}}"
                                         class="btn waves-effect waves-luluble-pink luluble-pink">Archive</a>
                                 </div>
                             </td>
+                            {{/ifEitherTrue}}
                             <td>
                                 <div class="edit_button">
                                     <a href="#termss{{ingredient_id}}"
