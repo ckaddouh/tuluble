@@ -1,4 +1,3 @@
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -260,7 +259,7 @@ const read_inactive_projects_archived = `
 
 const insertIntoInventory = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, cost)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 const insertIntoInventory1 = `
@@ -854,7 +853,7 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
           else resolve(scientists);
         });
       });
-      
+
       results[i].scientists = scientists;
     }
 
@@ -880,7 +879,7 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
       if (scientist_data[i].admin == 1) {
         scientist_data[i].role = "Admin";
       }
-      else 
+      else
         scientist_data[i].role = "Scientist";
     }
 
@@ -889,7 +888,7 @@ app.get("/project-assign", requireAdmin, async function (req, res, next) {
     console.log(scientist_data);
 
     console.log("GOING TO PROJECT ASSIGN PAGE");
-    res.render('project_assign', {results: results, scientist_data:scientist_data }); 
+    res.render('project_assign', { results: results, scientist_data: scientist_data });
 
   } catch (error) {
     res.status(500).send(error); //Internal Server Error
@@ -923,7 +922,7 @@ app.get("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
       res.redirect('/project-assign');
     }
   });
-});     
+});
 
 
 // error handler
@@ -937,7 +936,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 
-  });
+});
 
 
 // TO DO
@@ -1015,35 +1014,35 @@ app.get("/projects/sci/:scientist_id/search/:input", async function (req, res, n
 
     console.log(real_id[0].scientist_id);
 
-  if (isAdmin) {
-    results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_search_all, [searchStr], (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+    if (isAdmin) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_projects_search_all, [searchStr], (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
-    });
-  }
-  else if (real_id[0].scientist_id == scientist_id) {
-    results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_search, [searchStr, scientist_id], (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+    }
+    else if (real_id[0].scientist_id == scientist_id) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_projects_search, [searchStr, scientist_id], (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
+    }
+    else {
+      res.redirect("/projects/sci/" + real_id[0].scientist_id);
+    }
+    res.render('projects', {
+      input: input,
+      results: results
     });
-  } 
-  else {
-    res.redirect("/projects/sci/" + real_id[0].scientist_id);
-  }
-  res.render('projects', {
-    input: input,
-    results: results
-  });
-  
+
   } catch (error) {
-    res.redirect("/error"); 
+    res.redirect("/error");
   }
 });
-  
+
 
 
 app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req, res, next) {
@@ -1068,7 +1067,7 @@ app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req,
           if (error) reject(error);
           else resolve(results);
         });
-      });  
+      });
     }
     else if (real_id[0].scientist_id == scientist_id) {
       results = await new Promise((resolve, reject) => {
@@ -1077,7 +1076,7 @@ app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req,
           else resolve(results);
         });
       });
-    } 
+    }
     else {
       res.redirect("/archiveprojects/sci/" + real_id[0].scientist_id);
     }
@@ -1085,28 +1084,28 @@ app.get("/archiveprojects/sci/:scientist_id/search/:input", async function (req,
       input: input,
       results: results
     });
-    } catch (error) {
-      res.redirect("/error"); 
-    }
-  });
+  } catch (error) {
+    res.redirect("/error");
+  }
+});
 
-  // db.execute(read_archive_projects_search, [searchStr], (error, results) => {
-  //   if (error)
-  //     res.status(500).send(error); //Internal Server Error 
-  //   else {
-  //     res.render('archive', {
-  //       input: input,
-  //       results: results
-  //     });
-  //   }
-  // });
+// db.execute(read_archive_projects_search, [searchStr], (error, results) => {
+//   if (error)
+//     res.status(500).send(error); //Internal Server Error 
+//   else {
+//     res.render('archive', {
+//       input: input,
+//       results: results
+//     });
+//   }
+// });
 
 
 app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
   db.execute(insertIntoInventory, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-  req.body.userInput7, req.body.userInput8, req.body.userInput10, req.body.userInput11, req.body.userInput12], (error, results) => {
+  req.body.userInput7, req.body.userInput8, req.body.userInput10, req.body.userInput11, req.body.userInput12, req.body.userInput13], (error, results) => {
     if (error) {
-      console.error("Error executing SQL query:", err);
+      console.error("Error executing SQL query:", error);
       res.status(500).send(error); //Internal Server Error 
     }
     else {
@@ -1119,7 +1118,7 @@ app.post("/inventory/inventoryformsubmit", async function (req, res, next) {
 
 app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id
- 
+
   db.execute(updateIngredient, [req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
   req.body.userInput7, req.body.userInput8, req.body.userInput10, req.body.userInput11, req.body.userInput12, req.body.userInput13, ingredient_id], (error, results) => {
     if (error)
@@ -1130,7 +1129,7 @@ app.post("/inventory/:ingredient_id/inventoryingredientupdate", async function (
   });
 });
 
-app.get("/projects/:project_id/addedIngredient/:type/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", (req,res) => { 
+app.get("/projects/:project_id/addedIngredient/:type/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", (req, res) => {
   let project_id = req.params.project_id;
   let type = req.params.type;
   let trial_num = req.params.trial_num;
@@ -1139,16 +1138,16 @@ app.get("/projects/:project_id/addedIngredient/:type/trial:trial_num/ingredient:
   let phase = req.params.phase_num;
 
 
- if (type == "percent")
+  if (type == "percent")
     type = "percent_of_ingredient";
-  else  
+  else
     type = "total_amount";
 
 
   if (type == "percent_of_ingredient") {
     db.execute(insertIntoPhase, [project_id, trial_num, phase, cellContent, '', ingredient_id], (error, results) => {
       if (error)
-      res.status(500).send(error); //Internal Server Error 
+        res.status(500).send(error); //Internal Server Error 
       else {
         res.redirect("/projects/" + project_id);
       }
@@ -1157,7 +1156,7 @@ app.get("/projects/:project_id/addedIngredient/:type/trial:trial_num/ingredient:
   else {
     db.execute(insertIntoPhase, [project_id, trial_num, phase, '', cellContent, ingredient_id], (error, results) => {
       if (error)
-      res.status(500).send(error); //Internal Server Error 
+        res.status(500).send(error); //Internal Server Error 
       else {
         res.redirect("/projects/" + project_id);
       }
@@ -1177,7 +1176,7 @@ app.get("/projects/:project_id/cellEdited/:type/trial:trial_num/ingredient:ingre
 
   if (type == "percent")
     type = "percent_of_ingredient";
-  else  
+  else
     type = "total_amount";
 
   console.log("POJSEA;FLKJ ASDF");
@@ -1192,7 +1191,7 @@ app.get("/projects/:project_id/cellEdited/:type/trial:trial_num/ingredient:ingre
 
   db.execute(editFormulaIngredient, [cellContent, project_id, trial_num, ingredient_id], (error, results) => {
     if (error)
-    res.status(500).send(error); //Internal Server Error 
+      res.status(500).send(error); //Internal Server Error 
     else {
       res.redirect("/projects/" + project_id);
     }
@@ -1215,7 +1214,7 @@ app.post("/projects/:project_id/projectupdate", async function (req, res, next) 
 
 app.post("/projects/sci/:scientist_id/projectformsubmit", async function (req, res, next) {
   let scientist_id = req.params.scientist_id
- 
+
   try {
     const results = await new Promise((resolve, reject) => {
       db.execute(insertIntoProjects, [req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.contactName, req.body.contactEmail], (error, results) => {
@@ -1280,12 +1279,12 @@ app.post("/projects/:project_id/phaseformsubmit", async function (req, res, next
 
 app.post("/project-assign/edituser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
- 
+
   let name = req.body.name;
   let email = req.body.email;
   let admin = req.body.role;
 
-  
+
 
   try {
     if (isAdmin) {
@@ -1299,16 +1298,16 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
   catch (error) {
     next(error);
   }
- });
+});
 
 
- app.post("/project_assign/deleteuser/:scientist_id", async function (req, res, next) {
+app.post("/project_assign/deleteuser/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
- 
+
   try {
     if (isAdmin) {
-    db.execute(deleteUser, [scientist_id]);
-    res.redirect("/project-assign");
+      db.execute(deleteUser, [scientist_id]);
+      res.redirect("/project-assign");
     }
     else {
       res.redirect("/");
@@ -1317,9 +1316,9 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
   catch (error) {
     next(error);
   }
- });
+});
 
- app.get("/project_assign/search/:input", (req, res) => {
+app.get("/project_assign/search/:input", (req, res) => {
   console.log("HERE CHECK HERE IM HERE FOR PROJECT ASSIGN SEARCH");
   let input = req.params.input;
   let searchStr = `%${input}%`;
@@ -1328,11 +1327,11 @@ app.post("/project-assign/edituser/:scientist_id", async function (req, res, nex
   db.execute(read_projects_search_project_assign, [searchStr], (error, results) => {
     if (error) reject(error);
     else resolve(results);
-    });
-  }); 
+  });
+});
 
 
-app.get("/projects/:project_id", async function (req,res,next) {
+app.get("/projects/:project_id", async function (req, res, next) {
   let project_id = req.params.project_id
   let error;
 
@@ -1359,169 +1358,171 @@ app.get("/projects/:project_id", async function (req,res,next) {
       });
     });
 
-  if (isAdmin || assigned.length !== 0) {
-    const project_data = await new Promise((resolve, reject) => {
-      console.log("SINGLE PROJECT QUERY EXECUTE");
-      db.execute(singleProjectQuery, [project_id], (error, project_data) => {
-        if (error) reject(error);
-        else resolve(project_data);
-      });
-    });
-
-    const trial_data = await new Promise((resolve, reject) => {
-      console.log("GET TRIALS EXECUTE");
-      db.execute(getTrials, [project_id], (error, trial_data) => {
-        if (error) reject(error);
-        else resolve(trial_data);
-      });
-    });
-
-
-    console.log("TRIAL DATA");
-    console.log(trial_data);
-
-
-    const ing_data = await new Promise((resolve, reject) => {
-      db.execute(getFormulaIngredients, [project_id], (error, ing_data) => {
-        if (error) reject(error);
-        else resolve(ing_data);
-      });
-    });
-
-    let sum_data = [];
-    for (let i = 0; i < trial_data.length; i++) {
-      const sum = await new Promise((resolve, reject) => {
-        db.execute(selectTrialSums, [project_id, trial_data[i].trial_num], (error, sum_data) => {
+    if (isAdmin || assigned.length !== 0) {
+      const project_data = await new Promise((resolve, reject) => {
+        console.log("SINGLE PROJECT QUERY EXECUTE");
+        db.execute(singleProjectQuery, [project_id], (error, project_data) => {
           if (error) reject(error);
-          else resolve(sum_data);
+          else resolve(project_data);
         });
       });
 
-      console.log("SUMSUMSUSMSUMS");
-      console.log(sum[0]);
-
-      if (sum[0].percentSum)
-        sum_data.push(sum[0].percentSum);
-      else  
-        sum_data.push(0);
-    }
-
-    const ingredient_dict = [];
-
-    var editable_dict = [];
-    var approved_dict = [];
-
-    for (let j = 0; j < trial_data.length; j++) {
-      const approved = await new Promise((resolve, reject) => {
-        db.execute(getApproved, [project_id, trial_data[j].trial_num], (error, approved) => {
+      const trial_data = await new Promise((resolve, reject) => {
+        console.log("GET TRIALS EXECUTE");
+        db.execute(getTrials, [project_id], (error, trial_data) => {
           if (error) reject(error);
-          else resolve(approved);
+          else resolve(trial_data);
         });
       });
-      
-      approved_dict[j] = approved[0].approved;
-    }
 
-    for (let i = 0; i < ing_data.length; i++) {
-      ingredient_dict[i] = [];
-      editable_dict[i] = [];
 
-    
-      for (let j = 0; j < trial_data.length; j++) {
+      console.log("TRIAL DATA");
+      console.log(trial_data);
 
-        const trialIngData = await new Promise((resolve, reject) => {
-          db.execute(getIngredientTrialInfo, [project_id, trial_data[j].trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+
+      const ing_data = await new Promise((resolve, reject) => {
+        db.execute(getFormulaIngredients, [project_id], (error, ing_data) => {
+          if (error) reject(error);
+          else resolve(ing_data);
+        });
+      });
+
+      let sum_data = [];
+      for (let i = 0; i < trial_data.length; i++) {
+        const sum = await new Promise((resolve, reject) => {
+          db.execute(selectTrialSums, [project_id, trial_data[i].trial_num], (error, sum_data) => {
             if (error) reject(error);
-            else resolve(trialIngData);
+            else resolve(sum_data);
           });
         });
 
-        console.log("\n\nTRIALING");
-        console.log(trialIngData);
+        console.log("SUMSUMSUSMSUMS");
+        console.log(sum[0]);
 
-        ingredient_dict[i][j] = trialIngData;
-       
-        if (trialIngData.length === 0) {
-          ingredient_dict[i][j] = [{
-            trial_num: trial_data[j].trial_num,
-            ingredient_id: ing_data[i].ingredient_id,
-            phase: ing_data[i].phase,
-            percent_of_ingredient: ''
-          }];   
-          editable_dict[i][j] = "true";
-        }
-
-        const ed = await new Promise((resolve, reject) => {
-          db.execute(getEditability, [project_id, trial_data[j].trial_num], (error, ed) => {
-            if (error) reject(error);
-            else resolve(ed);
-          });
-        });
-
-        console.log("EDITABLE");
-        console.log(trial_data[j].trial_num);
-        console.log(ed);
-
-        if (ed[0].editable == '1') {
-          editable_dict[i][j] = "true";
-          console.log("true");
-        }
-        else {
-          editable_dict[i][j] = "false";
-          console.log("false");
-        }
-
-
-       
+        if (sum[0].percentSum)
+          sum_data.push(sum[0].percentSum);
+        else
+          sum_data.push(0);
       }
+
+      const ingredient_dict = [];
+
+      var editable_dict = [];
+      var approved_dict = [];
+
+      for (let j = 0; j < trial_data.length; j++) {
+        const approved = await new Promise((resolve, reject) => {
+          db.execute(getApproved, [project_id, trial_data[j].trial_num], (error, approved) => {
+            if (error) reject(error);
+            else resolve(approved);
+          });
+        });
+
+        approved_dict[j] = approved[0].approved;
+      }
+
+      for (let i = 0; i < ing_data.length; i++) {
+        ingredient_dict[i] = [];
+        editable_dict[i] = [];
+
+
+        for (let j = 0; j < trial_data.length; j++) {
+
+          const trialIngData = await new Promise((resolve, reject) => {
+            db.execute(getIngredientTrialInfo, [project_id, trial_data[j].trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+              if (error) reject(error);
+              else resolve(trialIngData);
+            });
+          });
+
+          console.log("\n\nTRIALING");
+          console.log(trialIngData);
+
+          ingredient_dict[i][j] = trialIngData;
+
+          if (trialIngData.length === 0) {
+            ingredient_dict[i][j] = [{
+              trial_num: trial_data[j].trial_num,
+              ingredient_id: ing_data[i].ingredient_id,
+              phase: ing_data[i].phase,
+              percent_of_ingredient: ''
+            }];
+            editable_dict[i][j] = "true";
+          }
+
+
+
+          const ed = await new Promise((resolve, reject) => {
+            db.execute(getEditability, [project_id, trial_data[j].trial_num], (error, ed) => {
+              if (error) reject(error);
+              else resolve(ed);
+            });
+          });
+
+          console.log("EDITABLE");
+          console.log(trial_data[j].trial_num);
+          console.log(ed);
+
+          if (ed[0].editable == '1') {
+            editable_dict[i][j] = "true";
+            console.log("true");
+          }
+          else {
+            editable_dict[i][j] = "false";
+            console.log("false");
+          }
+
+
+
+        }
+      }
+
+
+
+      const inventory_data = await new Promise((resolve, reject) => {
+        console.log("INVENTORY EXECUTE");
+        db.execute(read_inventory_all_alph, (error, inventory_data) => {
+          if (error) reject(error);
+          else resolve(inventory_data);
+        });
+      })
+
+      const ingredientDictJSON = JSON.stringify(ingredient_dict);
+      const editableDictJSON = JSON.stringify(editable_dict);
+      const approvedDictJSON = JSON.stringify(approved_dict);
+
+      console.log(ingredientDictJSON);
+      if (error)
+        res.redirect("/error");
+      else {
+        res.render('formulas', {
+          project_id: project_id,
+          ing_data: ing_data,
+          project_data: project_data,
+          trial_data: trial_data.length,
+          trialData: trial_data,
+          inventory_data: inventory_data,
+          ingredient_dict: ingredientDictJSON,
+          sum_data_json: JSON.stringify(sum_data),
+          editable_dict: editableDictJSON,
+          approved_dict: approvedDictJSON,
+          messages: req.flash('success')
+        });
+      }
+
+
     }
-    
 
-
-    const inventory_data = await new Promise((resolve, reject) => {
-      console.log("INVENTORY EXECUTE");
-      db.execute(read_inventory_all_alph, (error, inventory_data) => {
-        if (error) reject(error);
-        else resolve(inventory_data);
-      });
-    })
-
-    const ingredientDictJSON = JSON.stringify(ingredient_dict);
-    const editableDictJSON = JSON.stringify(editable_dict);
-    const approvedDictJSON = JSON.stringify(approved_dict);
-
-    console.log(ingredientDictJSON);
-    if (error)
-      res.redirect("/error");
     else {
-      res.render('formulas', {
-        project_id: project_id,
-        ing_data: ing_data,
-        project_data: project_data,
-        trial_data: trial_data.length,
-        trialData: trial_data,
-        inventory_data: inventory_data,
-        ingredient_dict: ingredientDictJSON,
-        sum_data_json: JSON.stringify(sum_data), 
-        editable_dict: editableDictJSON,
-        approved_dict: approvedDictJSON, 
-        messages: req.flash('success')
-      });
+      res.redirect("/projects/sci/" + real_id[0].scientist_id);
     }
-           
-         
-  }
-
-  else {
-    res.redirect("/projects/sci/" + real_id[0].scientist_id);
-  } 
   } catch (error) {
     console.log(error);
     res.redirect("/error");
   }
 });
 
-app.get("/projects/:project_id/removeTrialApproval/:trial_num", async function (req,res,next) {
+app.get("/projects/:project_id/removeTrialApproval/:trial_num", async function (req, res, next) {
   let project_id = req.params.project_id;
   let trial_num = req.params.trial_num;
   let error;
@@ -1555,12 +1556,12 @@ app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async functio
       if (error) reject(error);
       else resolve(ing_data);
     });
-  }); 
+  });
 
   const ingredient_dict = [];
   for (let i = 0; i < ing_data.length; i++) {
     const trialIngData = await new Promise((resolve, reject) => {
-     
+
       console.log(ing_data[i].ingredient_id);
 
       db.execute(getIngredientTrialInfo, [project_id, trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
@@ -1569,8 +1570,8 @@ app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async functio
       });
     });
 
-   
-    trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient/100)*totalAmount;
+
+    trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient / 100) * totalAmount;
     ingredient_dict[i] = trialIngData[0];
 
 
@@ -1580,11 +1581,13 @@ app.get("/projects/:project_id/:trial_num/:amount/makeformsubmit", async functio
     });
   }
 
+
+
   db.execute(markUneditable, [project_id, trial_num], (error, results) => {
     if (error)
       res.status(500).send(error);
   });
-  
+
   res.redirect('/projects/' + project_id + "/" + trial_num + "/batchsheet/" + totalAmount);
 });
 
@@ -1614,137 +1617,158 @@ app.get("/projects/:project_id/:trial_num/batchsheet/:amount", async function (r
       });
     });
 
+    const procedure_results = await new Promise((resolve, reject) => {
+      db.execute(get_procedure, [project_id], (error, procedure_results) => {
+        if (error) reject(error);
+        else resolve(procedure_results);
+      });
+    });
+
+    const proc_info = await new Promise((resolve, reject) => {
+      db.execute(get_procedure_info, [project_id], (error, procedure_info) => {
+        if (error) reject(error);
+        else resolve(procedure_info);
+      });
+    });
+
     console.log(real_id[0].scientist_id);
 
-  const assigned = await new Promise((resolve, reject) => {
-    console.log("ASSIGNED EXECUTE");
-    db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
-      if (error) reject(error);
-      else resolve(assigned);
-    });
-  });
-
-  if (isAdmin || assigned.length !== 0) {
-    const project_data = await new Promise((resolve, reject) => {
-      console.log("SINGLE PROJECT QUERY EXECUTE");
-      db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+    const assigned = await new Promise((resolve, reject) => {
+      console.log("ASSIGNED EXECUTE");
+      db.execute("select * from project_assign where scientist_id = ? and project_id = ?", [real_id[0].scientist_id, project_id], (error, assigned) => {
         if (error) reject(error);
-        else resolve(project_data);
+        else resolve(assigned);
       });
     });
 
-
-
-  const ing_data = await new Promise((resolve, reject) => {
-    db.execute(getFormulaIngredientsForTrial, [project_id, trial_num], (error, ing_data) => {
-      if (error) reject(error);
-      else resolve(ing_data);
-    });
-  }); 
-
-  console.log("\n\ning_data");
-  console.log(ing_data);
-
-  const sum = await new Promise((resolve, reject) => {
-    db.execute(selectTrialSums, [project_id, trial_num], (error, sum) => {
-      if (error) reject(error);
-      else resolve(sum);
-    });
-  });
-
-  console.log(sum);
-
-  var formulaComplete = 1;
-  if (sum[0].percentSum != 100) {
-    formulaComplete = 0;
-  }
-
-  const inventory_data = await new Promise((resolve, reject) => {
-    console.log("INVENTORY EXECUTE");
-    db.execute(read_inventory_all_alph, (error, inventory_data) => {
-      if (error) reject(error);
-      else resolve(inventory_data);
-    });
-  });
-
-  
-
-  const ingredient_dict = [];
-  let maxVal = Number.POSITIVE_INFINITY;
-
-  for (let i = 0; i < ing_data.length; i++) {
-    const trialIngData = await new Promise((resolve, reject) => {
-     
-      console.log(ing_data[i].ingredient_id);
-
-      db.execute(getIngredientTrialInfo, [project_id, trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
-        if (error) reject(error);
-        else resolve(trialIngData);
+    if (isAdmin || assigned.length !== 0) {
+      const project_data = await new Promise((resolve, reject) => {
+        console.log("SINGLE PROJECT QUERY EXECUTE");
+        db.execute(singleProjectQuery, [project_id], (error, project_data) => {
+          if (error) reject(error);
+          else resolve(project_data);
+        });
       });
-    });
 
-    trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient/100)*amount;
-    ingredient_dict[i] = trialIngData[0];
 
-    const curAmount = await new Promise((resolve, reject) => {
-      console.log("INVENTORY EXECUTE");
-      db.execute(getIngAmount, [ing_data[i].ingredient_id], (error, curAmount) => {
-        if (error) reject(error);
-        else resolve(curAmount);
+
+      const ing_data = await new Promise((resolve, reject) => {
+        db.execute(getFormulaIngredientsForTrial, [project_id, trial_num], (error, ing_data) => {
+          if (error) reject(error);
+          else resolve(ing_data);
+        });
       });
-    });
 
-    console.log("\n\nTESTING HERE");
-    console.log(ing_data[i].ingredient_id);
-    console.log(curAmount);
-    console.log(trialIngData[0].amount);
-    console.log("FINISHED");
+      console.log("\n\ning_data");
+      console.log(ing_data);
 
-    let localMax = curAmount[0].amt/(trialIngData[0].amount/100);
-    console.log("\n\nINTERMEDIATE STEP");
-    console.log(localMax);
-    if (localMax < maxVal) {
-      maxVal = localMax; 
+      const sum = await new Promise((resolve, reject) => {
+        db.execute(selectTrialSums, [project_id, trial_num], (error, sum) => {
+          if (error) reject(error);
+          else resolve(sum);
+        });
+      });
+
+      console.log(sum);
+
+      var formulaComplete = 1;
+      if (sum[0].percentSum != 100) {
+        formulaComplete = 0;
+      }
+
+      const inventory_data = await new Promise((resolve, reject) => {
+        console.log("INVENTORY EXECUTE");
+        db.execute(read_inventory_all_alph, (error, inventory_data) => {
+          if (error) reject(error);
+          else resolve(inventory_data);
+        });
+      });
+
+
+
+      const ingredient_dict = [];
+      let maxVal = Number.POSITIVE_INFINITY;
+
+
+      for (let i = 0; i < ing_data.length; i++) {
+        const trialIngData = await new Promise((resolve, reject) => {
+
+          console.log(ing_data[i].ingredient_id);
+
+          db.execute(getIngredientTrialInfo, [project_id, trial_num, ing_data[i].ingredient_id], (error, trialIngData) => {
+            if (error) reject(error);
+            else resolve(trialIngData);
+          });
+        });
+
+        trialIngData[0]['amount'] = (trialIngData[0].percent_of_ingredient / 100) * amount;
+        ingredient_dict[i] = trialIngData[0];
+
+        const curAmount = await new Promise((resolve, reject) => {
+          console.log("INVENTORY EXECUTE");
+          db.execute(getIngAmount, [ing_data[i].ingredient_id], (error, curAmount) => {
+            if (error) reject(error);
+            else resolve(curAmount);
+          });
+        });
+
+        console.log("\n\nTESTING HERE");
+        console.log(ing_data[i].ingredient_id);
+        console.log(curAmount);
+        console.log(trialIngData[0].amount);
+        console.log("FINISHED");
+
+        let localMax = curAmount[0].amt / (trialIngData[0].amount / 100);
+        console.log("\n\nINTERMEDIATE STEP");
+        console.log(localMax);
+        if (localMax < maxVal) {
+          maxVal = localMax;
+        }
+      }
+
+      console.log("\n\nTHIS IS THE MAX VAL: ");
+      console.log(maxVal);
+
+      var sufficient = 1;
+      if (maxVal < amount)
+        sufficient = 0;
+
+      maxVal = Math.trunc(maxVal);
+
+      console.log("\n\nHELLOW HELLO\n\n");
+      console.log(ingredient_dict);
+      console.log("\n\n");
+      const ingredientDictJSON = JSON.stringify(ingredient_dict);
+
+
+      if (error)
+        res.redirect("/error");
+      else {
+        res.render('batchsheet', {
+          project_id: project_id,
+          trial_num: trial_num,
+          ing_data: ing_data,
+          project_data: project_data,
+          sum: sum[0].percentSum,
+          ingredient_dict: ingredient_dict,
+          amount: amount,
+          sufficient: sufficient,
+          maxVal: maxVal,
+          formulaComplete: formulaComplete,
+          procedure_info: proc_info,
+          project_id: project_id,
+          procedure_results: procedure_results
+        });
+      }
+
     }
+    else {
+      res.redirect("/projects/sci/" + real_id[0].scientist_id);
+    }
+  } catch (error) {
+    console.log(error);
+    res.redirect("/error");
   }
-
-  console.log("\n\nTHIS IS THE MAX VAL: ");
-  console.log(maxVal);
-   
-  var sufficient = 1;
-  if (maxVal < amount)
-    sufficient = 0;
-
-  maxVal = Math.trunc(maxVal); 
-
-
-  const ingredientDictJSON = JSON.stringify(ingredient_dict);
-
-  if (error)
-  res.redirect("/error");
-else {
-  res.render('batchsheet', {
-    project_id: project_id,
-    trial_num: trial_num,
-    ing_data: ing_data,
-    project_data: project_data,
-    sum: sum[0].percentSum,
-    ingredient_dict: ingredient_dict,
-    amount: amount,
-    sufficient: sufficient,
-    maxVal: maxVal,
-    formulaComplete: formulaComplete
-  });
-}
-
-}
-else {
-  res.redirect("/projects/sci/" + real_id[0].scientist_id);
-} 
-} catch (error) {
-  console.log(error);
-  res.redirect("/error");
-}
 
 });
 
@@ -1828,7 +1852,7 @@ app.get("/projects/:project_id/procedure/cellEdited/:phase/:column/:cellContent"
 app.get("/projects/:project_id/deleteTrial/:trial_num", (req, res) => {
   let trial_num = req.params.trial_num;
   let project_id = req.params.project_id;
-  
+
   db.execute(delete_trial, [trial_num, project_id], (error, results) => {
     db.execute(delete_trial2, [project_id, trial_num], (error, results) => {
       if (error)
@@ -1844,7 +1868,7 @@ app.get("/projects/:project_id/deleteTrial/:trial_num", (req, res) => {
 app.get("/projects/:project_id/approveTrial/:trial_num", (req, res) => {
   let trial_num = req.params.trial_num;
   let project_id = req.params.project_id;
-  
+
   db.execute(approve_trial, [project_id, trial_num], (error, results) => {
     db.execute(markUneditable, [project_id, trial_num], (error, results) => {
       if (error)
@@ -1861,7 +1885,7 @@ app.get("/projects/:project_id/approveTrial/:trial_num", (req, res) => {
 app.get("/projects/:project_id/deleteFormulaIngredient/:ingredient_id", (req, res) => {
   let project_id = req.params.project_id;
   let ingredient_id = req.params.ingredient_id;
-  
+
   db.execute(delete_formula_ingredient, [project_id, ingredient_id], (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
@@ -1887,60 +1911,60 @@ app.get("/archive/sci/:scientist_id", async function (req, res, next) {
 
     console.log(real_id[0].scientist_id);
 
-  if (isAdmin) {
-    console.log("admin!!");
-    results = await new Promise((resolve, reject) => {
-      db.execute(read_inactive_ingredients_all_sql, (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+    if (isAdmin) {
+      console.log("admin!!");
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_inactive_ingredients_all_sql, (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
-    });
 
-    console.log(results);
+      console.log(results);
 
-    project_results = await new Promise((resolve, reject) => {
-      db.execute(read_inactive_projects_all_sql, (error, project_results) => {
-        if (error) reject(error);
-        else resolve(project_results);
+      project_results = await new Promise((resolve, reject) => {
+        db.execute(read_inactive_projects_all_sql, (error, project_results) => {
+          if (error) reject(error);
+          else resolve(project_results);
+        });
       });
-    });
 
-    console.log(project_results);
-    
-  }
-  else if (real_id[0].scientist_id == scientist_id) {
-    console.log("not admin!!");
-    results = await new Promise((resolve, reject) => {
-      db.execute(read_inactive_ingredients_all_sql, (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
-      });
-    });
+      console.log(project_results);
 
-    project_results = await new Promise((resolve, reject) => {
-      db.execute(read_inactive_projects_archived, [scientist_id], (error, project_results) => {
-        if (error) reject(error);
-        else resolve(project_results);
+    }
+    else if (real_id[0].scientist_id == scientist_id) {
+      console.log("not admin!!");
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_inactive_ingredients_all_sql, (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
-    });
-  } 
-  else {
-    res.redirect("/archive/sci/" + real_id[0].scientist_id);
-  }
-  res.render('archive', { results: results, project_results: project_results });
+
+      project_results = await new Promise((resolve, reject) => {
+        db.execute(read_inactive_projects_archived, [scientist_id], (error, project_results) => {
+          if (error) reject(error);
+          else resolve(project_results);
+        });
+      });
+    }
+    else {
+      res.redirect("/archive/sci/" + real_id[0].scientist_id);
+    }
+    res.render('archive', { results: results, project_results: project_results });
 
   } catch (error) {
-    res.redirect("/error"); 
+    res.redirect("/error");
   }
 });
 
-app.get("/projects", async function (req,res,next) {
+app.get("/projects", async function (req, res, next) {
   db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
     res.redirect("/projects/sci/" + results[0].scientist_id);
   });
 });
 
-app.get("/archive", async function (req,res,next) {
+app.get("/archive", async function (req, res, next) {
   db.execute("SELECT scientist_id FROM scientist WHERE email = ?", [req.oidc.user.email], (error, results) => {
     res.redirect("/archive/sci/" + results[0].scientist_id);
   });
@@ -1958,31 +1982,31 @@ app.get("/projects/sci/:scientist_id", async function (req, res, next) {
       });
     });
 
-  if (isAdmin) {
-    results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_all_sql, (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+    if (isAdmin) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(read_projects_all_sql, (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
-    });
     }
-  else if (real_id[0].scientist_id == scientist_id) {
-    results = await new Promise((resolve, reject) => {
-      db.execute(getProjectsAssignedToScientist, [scientist_id], (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
+    else if (real_id[0].scientist_id == scientist_id) {
+      results = await new Promise((resolve, reject) => {
+        db.execute(getProjectsAssignedToScientist, [scientist_id], (error, results) => {
+          if (error) reject(error);
+          else resolve(results);
+        });
       });
-    });
-  } 
-  else {
-    res.redirect("/projects/sci/" + real_id[0].scientist_id);
-  }
-  // console.log("\n\n im gonna die \n\n");
-  // console.log(results);
-  res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
+    }
+    else {
+      res.redirect("/projects/sci/" + real_id[0].scientist_id);
+    }
+    // console.log("\n\n im gonna die \n\n");
+    // console.log(results);
+    res.render('projects', { results: results, sci_id: real_id[0].scientist_id });
 
   } catch (error) {
-    res.redirect("/error"); 
+    res.redirect("/error");
   }
 });
 

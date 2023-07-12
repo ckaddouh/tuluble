@@ -22,6 +22,7 @@
     {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="/partials/color.css">
+    <link rel="stylesheet" href="/styles/formula.css">
     
 </head>
     <style>
@@ -40,13 +41,17 @@
            {{> logout}}
         </div>
 
-        <div style="padding: 2% 2% 0% 2%">
+        <div id="contentContainer" style="padding: 2% 2% 0% 2%">
 
         {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
-                    <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+
+                    <div  class="exclude-pdf">
+                        <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+                    </div>
+
                     {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
                     <p>&nbsp;</p>
                     <p><b>Client:</b> {{this.client}}</p>
@@ -64,6 +69,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
         <script src="/routes/formulas.js"></script>
+
+        <script src="path/to/jspdf.debug.js"></script>
+        <script src="path/to/html2canvas.js"></script>
+
+        {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> --}}
+
+        <!-- Include jQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Include jsPDF -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
 
 
         {{!-- clicking new ingredient button --}}
@@ -86,62 +102,146 @@
             })
         </script>
 
+        <script>
+            let phaseCount = 1;
+            document.getElementById("phaseCount").innerHTML = phaseCount;
+        </script>
 
-            <div class="row">
-                <div style="overflow-x: scroll; display: flex;" >
-                    <table class="table1 scrollable" style="table-layout: fixed; width: 50%">
-                        <tr>
-                            <th style = "width:85px">Phase</th>
-                            <th style = "width: 200px">Trade Name</th>
-                            <th style="width: 200px">INCI</th>
-                            <th style="width: 200px">Supplier</th>
-                            <th style="width: 150px">Lot Number</th>
-                            
-                        </tr>
-                    
 
-                        {{#each ing_data}}
-                            <tr style="overflow: scroll; height: 85px">
-                            
+        <style>
+            @media (max-width: 992px) {
+            .hide-column {
+                display: none;
+            }
+            }
+        </style>
 
-                                <td>{{phase}}</td>
-                                <td>{{trade_name}}</td>
-                                <td>{{inci_name}}</td>
-                                <td>{{supplier}}</td>
-                                <td>{{lot_num}}</td>
-                               
+        <script>
+
+            // Get all the elements with the 'truncate-decimal' class
+                var elements = document.getElementsByClassName('truncate-decimal');
+
+                // Loop through each element
+                for (var i = 0; i < elements.length; i++) {
+                var element = elements[i];
+                
+                // Get the text content of the element
+                var text = element.textContent.trim();
+                
+                // Truncate the decimal value to a specified length (e.g., 4)
+                var truncatedText = parseFloat(text).toFixed(4);
+                
+                // Update the element's text content with the truncated value
+                element.textContent = truncatedText;
+                }
+        </script>
+
+
+        <div class="row">
+            <div class="bothTables">
+                <div class="col s7 push-s0" style="overflow-x: scroll;"><span>
+                    <table class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">
+                            <tr>
+                                <th style = "width:85px">Phase</th>
+                                <th style = "width: 200px">Trade Name</th>
+                                <th style="width: 200px">INCI</th>
+                                <th style="width: 200px">Supplier</th>
+                                <th style="width: 150px">Lot Number</th>
+                                    
+                                <div>
+                                    <th class="pdf-only" style="width: 150px; display:none;">Percentage</th>
+                                    <th class="pdf-only" style="width: 150px; display:none;">Amount</th>
+                                </div>
+                                
                             </tr>
-                        {{/each}}
-
-                 
-
-
-                    </div>
-                    
-                    
                         
-                    </div>
-                    
-                    
 
-                    <div style="overflow-x: scroll; display: flex;">
-                        <table class = "table2 scrollable" id = "info" style = "table-layout: fixed; width: 50%">
+                            {{#each ing_data}}
+                                <tr style="overflow: scroll; height: 85px">
+                                
+
+                                    <td>{{phase}}</td>
+                                    <td>{{trade_name}}</td>
+                                    <td>{{inci_name}}</td>
+                                    <td>{{supplier}}</td>
+                                    <td>{{lot_num}}</td>
+                                    {{#each ../ingredient_dict}}
+                                    <div>
+                                        {{!-- <td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td> --}}
+                                        <td id="amountContainer" class="pdf-only ingContainer" style="display:none;">{{percent_of_ingredient}}</td>
+                                    </div>
+                                    <div>
+                                        {{!-- <td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td> --}}
+                                        <td id="amountContainer" class="pdf-only ingContainer" style="display:none;">{{amount}}</td>
+                                    </div>
+                                    {{/each}}
+                                </tr>
+                            {{/each}}
+                        </table>
+                    </span>
+                    </div>
+
+                <div class="col s5 push-s0 exclude-pdf" style="overflow-x: scroll;"><span>
+                    <table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">
                             <tr>
                                 <th>Percentage</th>
                                 <th>Amount</th>
                             </tr>
                             {{#each ingredient_dict}}
                             <tr>
-                                <td>{{percent_of_ingredient}}</td>
-                                <td>{{amount}}</td>
+                                <td>
+                                    <p>&nbsp;</p>
+                                    {{percent_of_ingredient}}
+                                    <p>&nbsp;</p>
+                                </td>
+                            
+                                <td>
+                                    <p>&nbsp;</p>
+                                    <span class="truncate-decimal">{{amount}}</span>
+                                    <p>&nbsp;</p>
+                                    </td>
                             </tr>
                             {{/each}}
                         </table> 
-                    </div>
+                    </span>
+                </div>
+            </div>
+        </div>
 
                 <div class="row">
-                    <p>&nbsp;</p>
-                   
+
+
+                    {{#each ingredient_dict}}
+                        <p>Phase <span class="myVariable"></span> is {{this.percent_of_ingredient}}% of the formula. You will need {{this.amount}} grams of this ingredient.</p>
+                        {{/each}}
+
+                        <script>
+                        var myVariables = document.getElementsByClassName("myVariable");
+                        var myVariable = 1;
+
+                        for (var i = 0; i < myVariables.length; i++) {
+                            myVariables[i].textContent = myVariable.toString();
+                            myVariable++;
+                        }
+                        </script>
+
+
+
+
+                    {{!-- {{#each ing_data}}
+                        <p>The formula for {{this.inci_name}} is {{#each ../ingredient_dict}}{{#if (eq ../inci_name this.inci_name)}}{{percent_of_ingredient}}%{{/if}}{{/each}}. You will need {{#each ../ingredient_dict}}{{#if (eq ../inci_name this.inci_name)}}{{amount}}{{/if}}{{/each}} grams.</p>
+                    {{/each}} --}}
+
+
+                    {{!-- {{#each ing_data}}
+                        <p>The formula is 
+                            {{#each ../ingredient_dict}}
+                            {{#if @first}}{{this.percent_of_ingredient}}%{{else}}, {{this.percent_of_ingredient}}%{{/if}}
+                            {{/each}}
+                            {{this.inci_name}}. You will need {{amount}} grams.
+                        </p>
+                        {{/each}} --}}
+                <div class="exclude-pdf">
                     
                     {{#unless sufficient}}
                     <div>
@@ -156,12 +256,13 @@
                     {{/unless}}
 
                     {{#ifBothTrue sufficient formulaComplete}}
-                    <div class="row">
+                    <div class="row exclude-pdf">
                         <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
                     </div>                    
                     {{/ifBothTrue }}
+                    </div>
 
-                    <div id="makeFormulaIngredient" class="modal">
+                    <div id="makeFormulaIngredient" class="exclude-pdf modal">
                         <div class="modal-content">
                         <h6>Are you sure you would like to make <b>{{amount}}</b> grams of <b>{{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}</b>? </h6>
                         <p>&nbsp;</p>
@@ -171,12 +272,136 @@
                         <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
                         </div>
                     </div>
+
+                    <div class="row exclude-pdf">
+                        <a href="#seeProcedure" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">See Procedure</a>
+                    </div> 
+
+                    <div id="seeProcedure" class="modal">
+                        <div class="modal-content">
+                            <table id="procedure-table" class="sortable">
+                                <thead>
+                                    <tr id = "ing">
+                                        <th>Phase</th>
+                                        <th>Procedure</th>
+                                        <th>Comments/Ingredients</th>
+                                        <th>Initial Temperature (C)</th>
+                                        <th>Final Temperature (C)</th>
+                                        <th>Timing (min)</th>
+                                        <th>Initial Mixing (rpm)</th>
+                                        <th>Final Mixing (rpm)</th>
+                                        <th>Mixer Type</th>
+                                        <th>Blade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {{#each procedure_results}}
+                                    <tr>
+                                        <td contenteditable="true">{{phase_num}}</td>
+                                        <td contenteditable="true">{{proc}}</td>
+                                        <td contenteditable="true">{{comments}}</td>
+                                        <td contenteditable="true">{{temp_init}}</td>
+                                        <td contenteditable="true">{{temp_final}}</td>
+                                        <td contenteditable="true">{{timing}}</td>
+                                        <td contenteditable="true">{{mixing_init}}</td>
+                                        <td contenteditable="true">{{mixing_final}}</td>
+                                        <td contenteditable="true">{{mixer_type}}</td>
+                                        <td contenteditable="true">{{blade}}</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
+                
                     
 
-                </div>
+
+                <button id="convertToPdf" class="btn waves-effect waves-luluble-pink luluble-pink exclude-pdf">Convert to PDF</button>
+
+                <p>&nbsp;</p>
                     
             </div>
+
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                <script>
+                    function incrementIndex(index) {
+                        return index + 1;
+                    }
+                </script>
+
+
+
+                <script>
+                    // Attach an event listener to the button
+                    document.getElementById('convertToPdf').addEventListener('click', function() {
+                    // Create a new jsPDF instance with landscape orientation
+                    var doc = new jsPDF('landscape');
+
+                    // Get the HTML content of the specific element
+                    var html = document.getElementById('contentContainer').innerHTML;
+
+                    // Make necessary modifications to the HTML content
+                    // Remove any existing scripts and stylesheets
+                    html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+                    html = html.replace(/<link\b[^<]*(?:(?!<\/link>)<[^<]*)*<\/link>/gi, '');
+
+                    // Modify the table size in the HTML content
+
+                    //html = html.replace('<div class="bothTables">', '<div class="col s5 push-s0" style="overflow-x: scroll;"><div style="display: flex;">');
+                    html = html.replace('<table class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">', '<table class="pdf-table scrollable" style="width: 5000px; font-size: 9px; padding: 0px; margin: 50;">');
+                    //html = html.replace('<table class="pdf-table scrollable ingTable" style="table-layout: fixed; width: 50%">', '<table class="pdf-table scrollable" style="width: 50%; font-size: 10px; padding: 5px; margin: 0;">');
+
+                   // html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>\n<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table scrollable" style="width: 50%; font-size: 10px; padding: 5px; margin: 0;">');
+                    //html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span><table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">', '');
+
+                    //html = html.replace('<table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">','<table class = "pdf-table scrollable amtTable" id = "info" style = "width: 30%; font-size: 3px;">');
+                    //html = html.replace('<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table" style="width: 20%; font-size: 6px;">');
+                    html = html.replace('<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table" style="width: 100px; height: 50px; font-size: 10px; padding: 100px; margin: 100; height: 10px; width: 900px;">');
+
+                    html = html.replace('<table id="procedure-table" class="sortable">', '<table id="procedure-table" class="sortable" style="width: 200%; font-size: 5px; width: 300px; padding: 0px;"><br>');
+
+                   // html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>', '<div class="col s5 push-s6" style="overflow-x: scroll;"><div style="display: flex;">');
+                   // html = html.replace('</table>\n                </span>\n                </div>', '</table></div></div>');
+                    html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>', '<div style="overflow-x: scroll;"><span>');
+
+
+                    //hiding columns
+                    html = html.replace('<th class="pdf-only" style="width: 150px; display:none;">Amount</th>', '<th class="pdf-only" style="width: 150px;">Amount</th>');
+                    html = html.replace('<td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td>', '<td class="pdf-only">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td>')
+
+
+                    // Create a temporary wrapper element and set its innerHTML to the modified HTML
+                    var wrapper = document.createElement('div');
+                    wrapper.innerHTML = html;
+
+                    // Remove excluded elements from the HTML content
+                    var excludedElements = wrapper.getElementsByClassName('exclude-pdf');
+                    while (excludedElements.length > 0) {
+                        excludedElements[0].parentNode.removeChild(excludedElements[0]);
+                    }
+
+                    // Get the modified HTML content from the wrapper
+                    //var modifiedHtml = wrapper.innerHTML;
+                    //console.log(modifiedHtml);
+
+                    // Convert HTML to PDF
+                    doc.fromHTML(wrapper.innerHTML, 15, 15, {
+                        width: 280 // Adjust the width as per your requirements
+                    });
+
+                    // Save the PDF file
+                    doc.save('Batchsheet.pdf');
+                    });
+
+                </script>
+
+
+
             
 
 

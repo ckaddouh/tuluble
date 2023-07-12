@@ -1,0 +1,40 @@
+.equal-width-table th {
+    white-space: nowrap;
+  }
+  
+  .equal-width-table th:first-child,
+  .equal-width-table th:nth-child(2),
+  .equal-width-table th:nth-child(3) {
+    width: auto !important;
+    min-width: 100px;
+  }
+  
+
+  th {
+    padding: 10px 5px; /* Adjust the padding values as needed */
+    height: 0px; /* Adjust the height value as needed */
+  }
+
+  @media print {
+    .exclude-pdf {
+      display: none !important;
+    }
+  }
+
+  .pdf-only {
+    display: none; /* Hide the div on the website */
+  }
+
+ 
+@media screen {
+  .hide-on-screen {
+    display: none !important; /* Hide on the screen */ 
+  }
+}
+
+.truncate-decimal {
+  max-width: 5px; /* Set the maximum width of the cell */
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide the overflowing content */
+  text-overflow: ellipsis; /* Display an ellipsis (...) for truncated content */
+}
