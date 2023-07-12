@@ -190,6 +190,14 @@ const getAssignedProjectsQuery = `
     AND project_id = ?
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
 function insertIntoPhase(project_id, trial_num, phase, cellContent, ingredient_id, callback) {
     db.execute(insertIntoPhaseQuery, [project_id, trial_num, phase, cellContent, ingredient_id], callback);
 }
@@ -274,6 +282,9 @@ function getAssignedProjects(scientist_id, project_id, callback) {
   db.execute(getAssignedProjectsQuery, [scientist_id, project_id], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
 
 module.exports = { 
   insertIntoPhase, 
@@ -296,5 +307,6 @@ module.exports = {
   approve_trial,
   delete_formula_ingredient,
   getScientistID,
-  getAssignedProjects
+  getAssignedProjects,
+  requireAdmin
 };

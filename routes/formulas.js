@@ -3,9 +3,6 @@ var router = express.Router();
 const db = require("../db/formulas_queries.js");
 
 
-var isAdmin = true;
-
-
 router.get("/:project_id/addedIngredient/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", (req,res) => { 
   let project_id = req.params.project_id;
   let trial_num = req.params.trial_num;
@@ -78,6 +75,13 @@ router.get("/:project_id", async function (req,res,next) {
   let error;
 
   try {
+    const admin = await new Promise((resolve, reject) => {
+      db.requireAdmin(req.oidc.user.email, (error, admin) => {
+        if (error) reject (error);
+        else resolve(admin);
+      });
+    });
+
     const real_id = await new Promise((resolve, reject) => {
       db.getScientistID(req.oidc.user.email, (error, real_id) => {
         if (error) reject(error);
@@ -93,7 +97,7 @@ router.get("/:project_id", async function (req,res,next) {
       });
     });
 
-  if (isAdmin || assigned.length !== 0) {
+  if (admin[0].admin || assigned.length !== 0) {
     const project_data = await new Promise((resolve, reject) => {
       db.singleProject(project_id, (error, project_data) => {
         if (error) reject(error);
@@ -216,7 +220,8 @@ router.get("/:project_id", async function (req,res,next) {
         ingredient_dict: ingredientDictJSON,
         sum_data_json: JSON.stringify(sum_data), 
         editable_dict: editableDictJSON,
-        approved_dict: approvedDictJSON
+        approved_dict: approvedDictJSON,
+        isAdmin: admin[0].admin
       });
     }
            

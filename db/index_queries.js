@@ -30,6 +30,14 @@ const read_inventory_search = `
     ingredient.inci_name LIKE ? AND ingredient.active = 1
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
 function getLowAmounts(callback) {
   db.execute(getLowAmountsQuery, callback);
 }
@@ -38,4 +46,8 @@ function getExpired(callback) {
   db.execute(getExpiredQuery, callback);
 }
 
-module.exports = { getLowAmounts, getExpired };
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
+
+module.exports = { getLowAmounts, getExpired, requireAdmin};

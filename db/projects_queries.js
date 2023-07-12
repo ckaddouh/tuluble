@@ -85,6 +85,15 @@ const getScientistIDQuery = `
         email = ?
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
+
 function read_projects_search_all(callback) {
     db.execute(read_projects_search_all_query, callback);
 }
@@ -125,6 +134,10 @@ function getScientistID(email, callback) {
     db.execute(getScientistIDQuery, [email], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
+
 module.exports = {
     read_projects_search_all, 
     read_projects_search, 
@@ -135,5 +148,6 @@ module.exports = {
     read_projects_all_sql,
     getProjectsAssignedToScientist,
     archiveProject,
-    getScientistID
+    getScientistID,
+    requireAdmin
 };

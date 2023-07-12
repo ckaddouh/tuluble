@@ -26,6 +26,15 @@ const get_procedure_info_query = `
     projects.project_id = ?
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
+
 function get_procedure(project_id, callback) {
   db.execute(get_procedure_query, [project_id], callback);
 }
@@ -38,9 +47,14 @@ function get_procedure_info(project_id, callback) {
   db.execute(get_procedure_info_query, [project_id], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
+
 
 module.exports = { 
   get_procedure,
   insert_procedure,
-  get_procedure_info
+  get_procedure_info,
+  requireAdmin
 };

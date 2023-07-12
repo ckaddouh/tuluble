@@ -81,6 +81,14 @@ const unarchiveProjectQuery = `
   WHERE project_id = ?
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
 
 function read_archive_inventory_search(inci_name, callback) {
     db.execute(read_archive_inventory_search_query, [inci_name], callback);
@@ -118,15 +126,19 @@ function unarchiveProject(project_id, callback) {
     db.execute(unarchiveProjectQuery, [project_id], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
 
 module.exports = {
-    read_archive_inventory_search,
-    getScientistID,
-    read_archive_projects_search_all,
-    read_archive_projects_search,
-    read_inactive_ingredients_all_sql,
-    read_inactive_projects_all_sql,
-    read_inactive_projects_archived,
-    unarchiveIngredient,
-    unarchiveProject
+  read_archive_inventory_search,
+  getScientistID,
+  read_archive_projects_search_all,
+  read_archive_projects_search,
+  read_inactive_ingredients_all_sql,
+  read_inactive_projects_all_sql,
+  read_inactive_projects_archived,
+  unarchiveIngredient,
+  unarchiveProject,
+  requireAdmin
 }

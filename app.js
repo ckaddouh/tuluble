@@ -6,7 +6,6 @@ var logger = require('morgan');
 const flash = require('express-flash');
 const session = require('express-session');
 
-// var userInput = inventory.get(inputValue1);
 
 var indexRouter = require('./routes/index');
 var inventoryRouter = require('./routes/inventory');
@@ -15,6 +14,7 @@ var formulasRouter = require('./routes/formulas');
 var procedureRouter = require('./routes/procedure');
 var batchsheetRouter = require('./routes/batchsheet');
 var archiveRouter = require('./routes/archive');
+var projectAssignRouter = require('./routes/project-assign');
 
 const { auth } = require('express-openid-connect');
 const db = require("./db/db_connection");
@@ -74,6 +74,7 @@ app.use('/projects', projectsRouter);
 app.use('/procedure', procedureRouter);
 app.use('/batchsheet', batchsheetRouter);
 app.use('/archive', archiveRouter);
+app.use('/project-assign', projectAssignRouter);
 
 
 const authConfig = {
@@ -88,230 +89,9 @@ const authConfig = {
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(authConfig));
 
-function requireAdmin(req, res, next) {
-  if (isAdmin)
-    next();
-  else
-    res.redirect("/");
-  // next("AGHHH NOT ALLOWED");
-}
-
-const selectTrialNums = `
-  SELECT 
-    trial_num, project_id
-  FROM
-    formulas
-  WHERE
-    formulas.project_id = ?
-  GROUP BY
-    trial_num
-`
-
-const selectFormulaIngredients = `
-  SELECT
-    trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
-  FROM 
-    formulas, formula_ingredient, ingredient
-  WHERE
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
-`
-
-const selectTrialData = `
-  SELECT
-    formulas.batch_date, formulas.trial_num, formulas.formulator, formulas.project_id, SUM(total_amount) as s, SUM(percent_of_ingredient) as percent
-  FROM 
-    formulas, formula_ingredient
-  WHERE
-    formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.trial_num = ?
-    AND formulas.project_id = ?
-`
-
-const selectBasicTrialData = `
-  SELECT 
-    formulas.batch_date, formulas.formulator, formulas.formula_id
-  FROM 
-    formulas
-  WHERE
-    formulas.trial_num = ?
-    AND formulas.project_id = ?
-  LIMIT 1
-`
-
-const findIngredientID = `
-  SELECT ingredient_id
-  FROM ingredient
-  WHERE ingredient.lot_num = ?
-`
-
-const selectSearchedIngredients = `
-  SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier
-  FROM
-    ingredient
-  WHERE 
-    ingredient_id IN ?
-    AND classifier_id = ?
-`
-
-const read_projects_search_project_assign = `
-SELECT
-  project_name, projects.project_id, client, date
-FROM
-  projects
-WHERE
-  projects.project_name LIKE ?
-  AND projects.active = 1
-`
-
-const select_ing_per_phase = `
-  SELECT
-    trade_name
-  FROM 
-    formulas, formula_ingredient, ingredient
-  WHERE
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.formula_id = formula_ingredient.formula_id
-    AND formulas.project_id = ?
-    AND formulas.trial_num = ?
-    AND formula_ingredient.phase = ?
-`
 
 
-const getIngredientIDs = `
-  SELECT
-    ingredient.ingredient_id
-  FROM 
-    formula_ingredient, ingredient
-  WHERE
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formula_ingredient.trial_num = ?
-    AND formula_ingredient.project_id = ?
-`
 
-const getAmount = `
-  SELECT
-    DISTINCT total_amount
-  FROM 
-    formula_ingredient, formulas
-  WHERE
-    formulas.project_id = ?
-    AND formulas.trial_num = ?
-    AND formula_ingredient.ingredient_id = ?
-`
-
-const computeMax = `
-  UPDATE
-    ingredient
-  SET 
-    amt = amt - (? * (?/?))
-  WHERE 
-    ingredient_id = ?
-`
-
-const getTotalAmountOfFormula = `
-  SELECT
-    SUM(total_amount) as s
-  FROM 
-    formula_ingredient
-  WHERE
-    formula_ingredient.trial_num = ?
-    AND formula_ingredient.project_id = ?
-`
-
-const getAllScientists = `
-  SELECT 
-    scientist.name, scientist.scientist_id, scientist.admin, scientist.email
-  FROM 
-    scientist
-`
-
-const getScientistForProject = `
-  SELECT
-    name, scientist.scientist_id
-  FROM
-    scientist, project_assign
-  WHERE
-    project_id = ?
-    AND scientist.scientist_id = project_assign.scientist_id
-`
-
-const removeScientistFromProject = `
-  DELETE FROM 
-    project_assign 
-  WHERE
-    project_id = ?
-    AND scientist_id = ?
-`
-
-const addScientist = `
-  INSERT INTO 
-    scientist (name, email, admin)
-    VALUES (?, ?, 0)
-`
-
-const newFormulaDisplay = `
-  SELECT
-    formulas.trial_num, trade_name, inci_name, phase, percent_of_ingredient, total_amount, ingredient.ingredient_id, lot_num
-  FROM 
-    formulas, formula_ingredient, ingredient
-  WHERE
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.project_id = formula_ingredient.project_id
-    AND formulas.trial_num = formula_ingredient.trial_num
-    AND formulas.project_id = ?
-    ORDER BY formulas.trial_num
-`
-
-const formulaDisplayAttempt3 = `
-  SELECT DISTINCT 
-    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.lot_num
-  FROM 
-    formulas, formula_ingredient, ingredient
-  WHERE 
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.project_id = formula_ingredient.project_id
-    AND formulas.trial_num = formula_ingredient.trial_num
-    AND formulas.project_id = ?
-    ORDER BY formulas.trial_num
-`
-
-const getTrialInfo = `
-  SELECT DISTINCT 
-    formulas.trial_num, formulas.formula_id, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, formula_ingredient.percent_of_ingredient, formula_ingredient.total_amount, ingredient.ingredient_id, ingredient.lot_num
-  FROM 
-    formulas, formula_ingredient, ingredient
-  WHERE 
-    formula_ingredient.ingredient_id = ingredient.ingredient_id
-    AND formulas.project_id = formula_ingredient.project_id
-    AND formulas.trial_num = formula_ingredient.trial_num
-    AND formulas.project_id = ?
-    AND formulas.trial_num = ?
-`
-
-const editUser = `
-  UPDATE scientist
-  SET 
-    name = ?,
-    email = ?,
-    admin = ?
-  WHERE 
-    scientist_id = ?
-`
-
-const deleteUser = `
-  DELETE FROM scientist
-  WHERE scientist_id = ?
-`
-
-const getRemainingScientistsForProject = `
-  SELECT * 
-  FROM scientist
-  WHERE scientist_id NOT IN (SELECT scientist_id FROM project_assign where project_id = ?)
-`
 
 const partialsPath = path.join(__dirname, "public/partials");
 hbs.registerPartials(partialsPath);
@@ -377,100 +157,7 @@ app.use(flash());
 app.get('/profile', (req, res) => {
   const user = req.oidc.user.nickname;
 });
-
-// app.get("/", (req, res) => {
-//   db.execute(getLowAmounts, (error, results) => {
-//     db.execute(getExpired, (error, results2) => {
-//       if (error)
-//         res.redirect("/error"); //Internal Server Error
-//       else {
-//         res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname });
-//       }
-//     });
-//   });
-// });
-
-
-app.get("/project-assign", requireAdmin, async function (req, res, next) {
-  try {
-    const results = await new Promise((resolve, reject) => {
-      db.execute(read_projects_all_sql, (error, results) => {
-        if (error) reject(error);
-        else resolve(results);
-      });
-    });
-
-
-    for (let i = 0; i < results.length; i++) {
-      const scientists = await new Promise((resolve, reject) => {
-        db.execute(getScientistForProject, [results[i].project_id], (error, scientists) => {
-          if (error) reject(error);
-          else resolve(scientists);
-        });
-      });
-
-      results[i].scientists = scientists;
-    }
-
-    for (let i = 0; i < results.length; i++) {
-      const remainingScientists = await new Promise((resolve, reject) => {
-        db.execute(getRemainingScientistsForProject, [results[i].project_id], (error, remainingScientists) => {
-          if (error) reject(error);
-          else resolve(remainingScientists);
-        });
-      });
-
-      results[i].remainingScientists = remainingScientists;
-    }
-
-    const scientist_data = await new Promise((resolve, reject) => {
-      db.execute(getAllScientists, (error, scientist_data) => {
-        if (error) reject(error);
-        else resolve(scientist_data);
-      });
-    });
-
-    for (let i = 0; i < scientist_data.length; i++) {
-      if (scientist_data[i].admin == 1) {
-        scientist_data[i].role = "Admin";
-      }
-      else
-        scientist_data[i].role = "Scientist";
-    }
-
-    res.render('project_assign', {results: results, scientist_data:scientist_data }); 
-
-  } catch (error) {
-    res.status(500).send(error); //Internal Server Error
-  }
-});
-
-
-app.get("/project-assign/addScientist/:project_id/:scientist_id", (req, res) => {
-  let project_id = req.params.project_id
-  let scientist_id = req.params.scientist_id
-
-  db.execute(assignScientistToProject, [project_id, scientist_id], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.redirect('/project-assign');
-    }
-  });
-});
-
-app.get("/project-assign/remove/:project_id/:scientist_id", (req, res) => {
-  let project_id = req.params.project_id
-  let scientist_id = req.params.scientist_id
-
-  db.execute(removeScientistFromProject, [project_id, scientist_id], (error, results) => {
-    if (error)
-      res.status(500).send(error); //Internal Server Error
-    else {
-      res.redirect('/project-assign');
-    }
-  });
-});
+ 
 
 
 // error handler
@@ -484,60 +171,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 
-});
-
-
-
-app.post("/project-assign/edituser/:scientist_id", async function (req, res, next) {
-  let scientist_id = req.params.scientist_id;
-
-  let name = req.body.name;
-  let email = req.body.email;
-  let admin = req.body.role;
-
-
-
-  try {
-    if (isAdmin) {
-      db.execute(editUser, [name, email, admin, scientist_id]);
-      res.redirect("/project-assign");
-    }
-    else {
-      res.redirect("/")
-    }
-  }
-  catch (error) {
-    next(error);
-  }
-});
-
-
-app.post("/project_assign/deleteuser/:scientist_id", async function (req, res, next) {
-  let scientist_id = req.params.scientist_id;
-
-  try {
-    if (isAdmin) {
-      db.execute(deleteUser, [scientist_id]);
-      res.redirect("/project-assign");
-    }
-    else {
-      res.redirect("/");
-    }
-  }
-  catch (error) {
-    next(error);
-  }
-});
-
- app.get("/project_assign/search/:input", (req, res) => {
-  let input = req.params.input;
-  let searchStr = `%${input}%`;
-
-  // db.execute(read_project_data_for_assign, [searchStr], (error, results) => {
-  db.execute(read_projects_search_project_assign, [searchStr], (error, results) => {
-    if (error) reject(error);
-    else resolve(results);
-  });
 });
 
 

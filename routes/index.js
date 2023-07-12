@@ -16,7 +16,14 @@ const authConfig = {
 
 router.use(auth(authConfig));
 
-router.get('/', (req, res, next) => {
+router.get('/', async function (req, res, next) {
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
   db.getLowAmounts((error, results) => {
     if (error) {
       res.redirect('/error'); // Internal Server Error
@@ -25,7 +32,7 @@ router.get('/', (req, res, next) => {
         if (error) {
           res.redirect('/error'); // Internal Server Error
         } else {
-          res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname});
+          res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname, isAdmin: admin[0].admin});
         }
       });
     }

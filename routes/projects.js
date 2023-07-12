@@ -2,8 +2,6 @@ const express = require('express');
 var router = express.Router();
 const db = require("../db/projects_queries.js");
 
-var isAdmin = true;
-
 
 router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
   let input = req.params.input
@@ -13,6 +11,14 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
 
   let results;
 
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
+
   try {
     const real_id = await new Promise((resolve, reject) => {
       db.getScientistID(req.oidc.user.email, (error, real_id) => {
@@ -21,7 +27,7 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
       });
     });
 
-  if (isAdmin) {
+  if (admin[0].admin) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_search_all(searchStr, (error, results) => {
         if (error) reject(error);
@@ -43,7 +49,8 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
   }
   res.render('projects', {
     input: input,
-    results: results
+    results: results,
+    isAdmin: admin[0].admin
   });
   
   } catch (error) {
@@ -116,7 +123,16 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
   let scientist_id = req.params.scientist_id;
   let results;
 
+  
+
   try {
+    const admin = await new Promise((resolve, reject) => {
+      db.requireAdmin(req.oidc.user.email, (error, admin) => {
+        if (error) reject (error);
+        else resolve(admin);
+      });
+    });
+
     const real_id = await new Promise((resolve, reject) => {
       db.getScientistID(req.oidc.user.email, (error, real_id) => {
         if (error) reject(error);
@@ -124,14 +140,14 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
     });
 
-  if (isAdmin) {
+  if (admin[0].admin) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_all_sql((error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
     });
-    }
+  }
   else if (real_id[0].scientist_id == scientist_id) {
     results = await new Promise((resolve, reject) => {
       db.getProjectsAssignedToScientist(scientist_id, (error, results) => {
@@ -145,7 +161,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
   }
 
   
-  res.render('projects', { results: results, sci_id: real_id[0].scientist_id});
+  res.render('projects', { results: results, sci_id: real_id[0].scientist_id, isAdmin: admin[0].admin});
 
   } catch (error) {
     res.redirect("/error"); 

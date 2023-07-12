@@ -97,6 +97,14 @@ const getIngAmountQuery = `
   WHERE ingredient_id = ?
 `
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
 
 function getFormulaIngredientsForTrial(project_id, trial_num, callback) {
     db.execute(getFormulaIngredientsForTrialQuery, [project_id, trial_num], callback);
@@ -138,6 +146,10 @@ function getIngAmount(ingredient_id, callback) {
     db.execute(getIngAmountQuery, [ingredient_id], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
+
 
 module.exports = {
     getFormulaIngredientsForTrial,
@@ -149,5 +161,6 @@ module.exports = {
     singleProject,
     selectTrialSums,
     read_inventory_all_alph,
-    getIngAmount
+    getIngAmount,
+    requireAdmin
 };

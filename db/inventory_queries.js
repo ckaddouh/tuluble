@@ -48,6 +48,14 @@ const archiveIngredient_query = `
   WHERE ingredient_id = ?
 `;
 
+const checkAdminQuery = `
+  SELECT 
+    admin 
+  FROM 
+    scientist 
+  WHERE email = ?
+`
+
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
 }
@@ -76,6 +84,10 @@ function archiveIngredient(ingredientId, callback) {
   db.execute(archiveIngredient_query, [ingredientId], callback);
 }
 
+function requireAdmin(email, callback) {
+  db.execute(checkAdminQuery, [email], callback);
+}
+
 module.exports = {
   read_inventory_all_sql,
   read_inventory_classifier_sql,
@@ -83,4 +95,5 @@ module.exports = {
   insertIntoInventory,
   updateIngredient,
   archiveIngredient,
+  requireAdmin
 };

@@ -3,43 +3,70 @@ var router = express.Router();
 const db = require("../db/inventory_queries.js");
 
 
-router.get('/', (req, res, next) => {
+router.get('/', async function (req, res, next) {
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
   db.read_inventory_all_sql((error, results) => {
     if (error) 
       res.status(500).send(error); // Internal Server Error
     else {
       res.render('inventory', {
-        results: results
+        results: results,
+        isAdmin: admin[0].admin
       });
     }
   });
 });
 
 
-router.get("/:classifier_id", (req, res) => {
+router.get("/:classifier_id", async function (req, res, next) {
   let classifier_id = req.params.classifier_id;
+
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
+
   db.read_inventory_classifier_sql(classifier_id, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
       res.render('inventory', {
         classifier_id: classifier_id,
-        results: results
+        results: results,
+        isAdmin: admin[0].admin
       });
     }
   });
 });
 
-router.get("/search/:input", (req, res) => {
+router.get("/search/:input", async function (req, res, next) {
   let input = req.params.input;
   let searchStr = `%${input}%`;
+
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
   db.read_inventory_search(searchStr, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
       res.render('inventory', {
         input: input,
-        results: results
+        results: results,
+        isAdmin: admin[0].admin
       });
     }
   });

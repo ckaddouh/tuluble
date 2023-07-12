@@ -1,8 +1,6 @@
 const express = require('express');
 var router = express.Router();
 const db = require("../db/procedure_queries.js");
-const mysql = require('mysql');
-
 
 var colName = "";
 
@@ -36,8 +34,15 @@ router.post("/:project_id/procformsubmit", (req, res) => {
       });
   });
   
-router.get("/:project_id", (req, res) => {
+router.get("/:project_id", async function (req, res) {
   let project_id = req.params.project_id
+
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
 
   db.get_procedure(project_id, (error, results) => {
     db.get_procedure_info(project_id, (error, proc_info) => {
@@ -47,7 +52,8 @@ router.get("/:project_id", (req, res) => {
         res.render('procedure', {
           results: results,
           procedure_info: proc_info,
-          project_id: project_id
+          project_id: project_id,
+          isAdmin: admin[0].admin
         });
       }
     });

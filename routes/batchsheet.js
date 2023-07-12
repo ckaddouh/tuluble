@@ -12,9 +12,6 @@ router.use(session({
 
 router.use(flash());
 
-var isAdmin = true;
-
-
 router.get("/:project_id/:trial_num/:amount/makeformsubmit", async function (req, res, next) {
     let project_id = req.params.project_id
     let trial_num = req.params.trial_num
@@ -65,12 +62,19 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
     let error
 
     try {
-        const real_id = await new Promise((resolve, reject) => {
-        db.getScientistID(req.oidc.user.email, (error, real_id) => {
-            if (error) reject(error);
-            else resolve(real_id);
+      const admin = await new Promise((resolve, reject) => {
+        db.requireAdmin(req.oidc.user.email, (error, admin) => {
+          if (error) reject (error);
+          else resolve(admin);
         });
-        });
+      });
+
+      const real_id = await new Promise((resolve, reject) => {
+      db.getScientistID(req.oidc.user.email, (error, real_id) => {
+          if (error) reject(error);
+          else resolve(real_id);
+      });
+      });
 
 
     const assigned = await new Promise((resolve, reject) => {
@@ -80,7 +84,7 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
         });
     });
     
-    if (isAdmin || assigned.length !== 0) {
+    if (admin[0].admin || assigned.length !== 0) {
       const project_data = await new Promise((resolve, reject) => {
         db.singleProject(project_id, (error, project_data) => {
           if (error) reject(error);
@@ -175,7 +179,8 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
       sufficient: sufficient,
       maxVal: maxVal,
       formulaComplete: formulaComplete, 
-      messages: req.flash('warning')
+      messages: req.flash('warning'),
+      isAdmin: admin[0].admin
     });
   }
   

@@ -2,18 +2,25 @@ const express = require('express');
 var router = express.Router();
 const db = require("../db/archive_queries.js");
 
-var isAdmin = true;
-
-router.get("/ingredient/search/:input", (req, res) => {
+router.get("/ingredient/search/:input", async function (req, res, next) {
     let input = req.params.input
     let searchStr = `%${input}%`;
+
+    const admin = await new Promise((resolve, reject) => {
+      db.requireAdmin(req.oidc.user.email, (error, admin) => {
+        if (error) reject (error);
+        else resolve(admin);
+      });
+    });
+
     db.read_archive_inventory_search(searchStr, (error, results) => {
       if (error)
         res.status(500).send(error); //Internal Server Error 
       else {
         res.render('archive', {
           input: input,
-          results: results
+          results: results,
+          isAdmin: admin[0].admin
         });
       }
     });
@@ -29,6 +36,14 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
     let results;
   
     try {
+
+      const admin = await new Promise((resolve, reject) => {
+        db.requireAdmin(req.oidc.user.email, (error, admin) => {
+          if (error) reject (error);
+          else resolve(admin);
+        });
+      });
+
       const real_id = await new Promise((resolve, reject) => {
         db.getScientistID(req.oidc.user.email, (error, real_id) => {
           if (error) reject(error);
@@ -36,7 +51,7 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
         });
       });
   
-      if (isAdmin) {
+      if (admin[0].admin) {
         results = await new Promise((resolve, reject) => {
           db.read_archive_projects_search_all(searchStr, (error, results) => {
             if (error) reject(error);
@@ -57,7 +72,8 @@ router.get("/projects/sci/:scientist_id/search/:input", async function (req, res
       }
       res.render("archive", {
         input: input,
-        results: results
+        results: results,
+        isAdmin: admin[0].admin
       });
       } catch (error) {
         res.redirect("/error"); 
@@ -76,6 +92,13 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
     let projects;
   
     try {
+      const admin = await new Promise((resolve, reject) => {
+        db.requireAdmin(req.oidc.user.email, (error, admin) => {
+          if (error) reject (error);
+          else resolve(admin);
+        });
+      });
+
       const real_id = await new Promise((resolve, reject) => {
         db.getScientistID(req.oidc.user.email, (error, real_id) => {
           if (error) reject(error);
@@ -84,7 +107,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
       });
   
   
-    if (isAdmin) {
+    if (admin[0].admin) {
       results = await new Promise((resolve, reject) => {
         db.read_inactive_ingredients_all_sql((error, results) => {
           if (error) reject(error);
@@ -124,7 +147,7 @@ router.get("/sci/:scientist_id", async function (req, res, next) {
     else {
       res.redirect("/archive/sci/" + real_id[0].scientist_id);
     }
-    res.render('archive', { results: results, project_results: project_results });
+    res.render('archive', { results: results, project_results: project_results, isAdmin: admin[0].admin });
   
     } catch (error) {
       res.redirect("/error"); 
