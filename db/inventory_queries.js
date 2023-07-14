@@ -27,17 +27,11 @@ const read_inventory_search_query = `
     inci_name LIKE ?
 `;
 
-const insertIntoInventory_query = `
-  INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`;
-
 const updateIngredient_query = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?, hazardous = ?, hazardDetails = ?, encoding = ?
   WHERE 
     ingredient_id = ?
 `;
@@ -56,6 +50,12 @@ const checkAdminQuery = `
   WHERE email = ?
 `
 
+const insertIntoInventoryQuery = `
+  INSERT INTO 
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`
+
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
 }
@@ -66,12 +66,6 @@ function read_inventory_classifier_sql(classifierId, callback) {
 
 function read_inventory_search(searchStr, callback) {
   db.execute(read_inventory_search_query, [searchStr], callback);
-}
-
-function insertIntoInventory(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, callback) {
-  db.execute(insertIntoInventory_query, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12], callback);
 }
 
 function updateIngredient(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
@@ -87,6 +81,12 @@ function archiveIngredient(ingredientId, callback) {
 function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
+
+function insertIntoInventory(inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
+  supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails, callback) {
+    db.execute(insertIntoInventoryQuery, [inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
+      supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails], callback);
+  }
 
 module.exports = {
   read_inventory_all_sql,

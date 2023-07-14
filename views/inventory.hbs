@@ -65,19 +65,18 @@
 
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">INCI Name:</label></b>
-                                <input type="text" name="userInput1" required id="userInput1" placeholder="Enter INCI Name"
+                                <input type="text" name="inci_name" required id="inci_name" placeholder="Enter INCI Name"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s/-%\()]*$">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Trade Name:</label></b>
-                                <input type="text" name="userInput2" required id="userInput2" placeholder="Enter Trade Name"
+                                <input type="text" name="trade_name" required id="trade_name" placeholder="Enter Trade Name"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s()-]*$">
                                 <p> </p>
 
-                                {{#if (eq isAdmin 2)}}
                                 <b><label for="tuluble">Encoding:</label></b>
-                                <input type="text" name="userInput14" required id="userInput14" placeholder="Enter Ingredient Encoding"
+                                <input type="text" name="encoding" required id="encoding" placeholder="Enter Ingredient Encoding"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
                                 <br>
@@ -95,28 +94,27 @@
 
                                 <div id="textBoxContainer" style="display: none;">
                                 <b><label for="tuluble">Hazard Details:</label></b>
-                                <input type="text" name="userInput6" id="userInput6" placeholder="Enter Hazard Details"
+                                <input type="text" name="hazardDetails" id="hazardDetails" placeholder="Enter Hazard Details"
                                     maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
                                 <br>
                                 </div>
-                                {{/if}}
 
                                 {{!-- Field 3 --}}
                                 <b><label for="tuluble">Amount Available:</label></b>
-                                <input type="number" name="userInput3" required id="userInput3" placeholder="Enter Amount"
+                                <input type="number" name="amt" required id="amt" placeholder="Enter Amount"
                                     maxlength="20">
                                 <p> </p>
 
                                 {{!-- Field 4 --}}
                                 <b><label for="tuluble">Shelf:</label></b>
-                                <input type="text" name="userInput4" required id="userInput4" placeholder="Enter Shelf"
+                                <input type="text" name="shelf" required id="shelf" placeholder="Enter Shelf"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
                                 <b><label for="tuluble">Classifier:</label></b>
                                 {{!-- <input type="text" name="userInput5" id="userInput5" placeholder="Enter Classifier"
                                     maxlength="20"> --}}
-                                <select name="userInput5" required id="userInput5" class="browser-default">
+                                <select name="classifier" required id="classifier" class="browser-default">
                                     <option value="0" disabled selected>Choose your classifier</option>
                                     <option value="Thickener">Thickeners</option>
                                     <option value="Oils">Oils</option>
@@ -136,35 +134,35 @@
                                 <p> &nbsp;</p>
 
                                 <b><label for="tuluble">Lot Number:</label></b>
-                                <input type="text" name="userInput6" required id="userInput6" placeholder="Enter Lot Number"
+                                <input type="text" name="lot_num" required id="lot_num" placeholder="Enter Lot Number"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
                                 <b><label for="tuluble">Cost Per Kilo:</label></b>
-                                <input type="text" name="userInput13" required id="userInput13" placeholder="Enter Cost Per Kilo"
+                                <input type="text" name="cost" required id="cost" placeholder="Enter Cost Per Kilo"
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
                                 <b><label for="tuluble">Expiration Date:</label></b>
-                                <input type="date" name="userInput12" required id="userInput12" placeholder="Enter Expiration Date">
+                                <input type="date" name="expiration" required id="expiration" placeholder="Enter Expiration Date">
                                 <p> </p>
 
                                 <b><label for="tuluble">Date Recieved:</label></b>
-                                <input type="date" name="userInput7" required id="userInput7" placeholder="Enter Date Received">
+                                <input type="date" name="date_received" required id="date_received" placeholder="Enter Date Received">
                                 <p> </p>
 
                                 <b><label for="tuluble">Supplier:</label></b>
-                                <input type="text" name="userInput8" required id="userInput8" placeholder="Enter Supplier"
+                                <input type="text" name="supplier" required id="supplier" placeholder="Enter Supplier"
                                     maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
                                 <b><label for="tuluble">COA Documents:</label></b>
-                                <input type="url" name="userInput10" required id="userInput10" placeholder="Enter Link"
+                                <input type="url" name="coa" required id="coa" placeholder="Enter Link"
                                     maxlength="200">
                                 <p> </p>
 
                                 <b><label for="tuluble">MSDS Documents:</label></b>
-                                <input type="url" name="userInput11" required id="userInput11" placeholder="Enter Link"
+                                <input type="url" name="msds" required id="msds" placeholder="Enter Link"
                                     maxlength="200">
                                 <p> </p>
 
@@ -190,12 +188,15 @@
                 const textBoxContainer = document.getElementById('textBoxContainer');
 
                 hazardousSwitch.addEventListener('change', function() {
-                if (hazardousSwitch.checked) {
-                    textBoxContainer.style.display = 'block';
-                } else {
-                    textBoxContainer.style.display = 'none';
-                }
+                    if (hazardousSwitch.checked) {
+                        console.log(hazardousSwitch.checked);
+                        textBoxContainer.style.display = 'block';
+                    } else {
+                        console.log(hazardousSwitch.checked);
+                        textBoxContainer.style.display = 'none';
+                    }
                 });
+
             </script>
 
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -213,7 +214,7 @@
                 $(document).ready(function () {
                     $("#add_button").click(function () {
 
-                        const selects = document.querySelector('#userInput5');
+                        const selects = document.querySelector('#classifier');
                         let theSelectedOption;
 
                         selects.addEventListener('change', (event) => {
@@ -221,42 +222,36 @@
                             theSelectedOption = event.target.value;
                         });
 
-                    const inputValue1 = $("#userInput1").val();
-                    const inputValue2 = $("#userInput2").val();
-                    const inputValue3 = $("#userInput3").val();
-                    const inputValue4 = $("#userInput4").val();
-                    const inputValue5 = theSelectedOption;
-                    const inputValue6 = $("#userInput6").val();
-                    const inputValue7 = $("#userInput7").val();
-                    const inputValue8 = $("#userInput8").val();
-                    const inputValue9 = $("#userInput9").val();
-                    const inputValue10 = $("#userInput10").val();
-                    const inputValue11 = $("#userInput11").val();
-                    const inputValue12 = $("#userInput12").val();
+                        let isHazardous = 0;
+                        const hSwitch = document.getElementById('hazardousSwitch');
+                        isHazardous = hSwitch.checked;
+                         
 
-                    module.exports = {inputValue1};
-                    module.exports = {inputValue2};
-                    module.exports = {inputValue3};
-                    module.exports = {inputValue4};
-                    module.exports = {inputValue5};
-                    module.exports = {inputValue6};
-                    module.exports = {inputValue7};
-                    module.exports = {inputValue8};
-                    module.exports = {inputValue9};
-                    module.exports = {inputValue10};
-                    module.exports = {inputValue11};
-                    module.exports = {inputValue12};
+                      
+                        const inci_name = $("#inci_name").val();
+                        const trade_name = $("#trade_name").val();
+                        const encoding = $("#encoding").val();
+                        const classifier = theSelectedOption;
+                        const amt = $("#amt").val();
+                        const shelf = $("#shelf").val();
+                        const lot_num = $("#lot_num").val();
+                        const cost = $("#cost").val();
+                        const expiration = $("#expiration").val();
+                        const date_received = $("#date_received").val();
+                        const supplier = $("#supplier").val();
+                        const coa = $("#coa").val();
+                        const msds = $("#msds").val();
+                        
+                        let hazardDetails = "N/A";
+                        if (isHazardous)
+                            hazardDetails = $("#hazardDetails").val();
 
-                        window.location = "inventory/inventoryformsubmit";
-                        //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
                     });
                 });
             </script>
 
-            {{!-- <script src="app.js"></script> --}}
-
-            {{!-- dropdown script --}}
-            <script>
+       
+            {{!-- <script>
                 const select = document.querySelector('#myDropdown');
                 let selectedOption;
 
@@ -274,7 +269,7 @@
                     console.log(header);
                 });
                 header.innerHTML = "Inventory - " + selectedOption;
-            </script>
+            </script> --}}
 
             <script>
                 $(document).ready(function () {
@@ -373,7 +368,6 @@
                 <table id="my-table" class="scrollable">
                     <thead>
                         <tr id="ing">
-                            {{#if isAdmin}}
                             <th id="inci">INCI Name
                                 <a id="sort-inci-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
@@ -385,20 +379,11 @@
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
-                            {{else}}
                             <th id="trade">Ingredient ID
                                 <a id="sort-trade-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
-                            {{/if}}
-                            {{#if (eq isAdmin 2)}}
-                             <th id="trade">Ingredient ID
-                                <a id="sort-trade-button" class="waves-effect">
-                                    <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
-                                </a>
-                            </th>
-                            {{/if}}
                             <th id="trade">Supplier
                                 <a id="sort-supplier-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
@@ -494,18 +479,17 @@
                                                     {{!-- <h2>Textbook</h2> --}}
 
                                                     <b><label for="tuluble">INCI Name:</label></b>
-                                                    <input type="text" name="userInput1" id="userInput1"
+                                                    <input type="text" name="inci_name_edit" id="inci_name_edit"
                                                         value="{{this.inci_name}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                 {{!-- Field 2 --}}
                                                 <b><label for="tuluble">Trade Name:</label></b>
-                                                <input type="text" name = "userInput2" id="userInput2" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
+                                                <input type="text" name = "trade_name_edit" id="trade_name_edit" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
-                                                {{#if (eq ../isAdmin 2)}}
                                                 <b><label for="tuluble">Encoding:</label></b>
-                                                <input type="text" name="userInput6" id="userInput6" value="{{this.encoding}}"
+                                                <input type="text" name="encoding_edit" id="encoding_edit" value="{{this.encoding}}"
                                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
                                                 <br>
@@ -523,28 +507,27 @@
 
                                                 <div id="textBoxContainerEdit" style="display: none;">
                                                 <b><label for="tuluble">Hazard Details:</label></b>
-                                                <input type="text" name="userInput6" id="userInput6" placeholder="{{this.hazardDetails}}"
+                                                <input type="text" name="hazardDetailsEdit" id="hazardDetailsEdit" placeholder="{{this.hazardDetails}}"
                                                     maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
                                                 <br>
                                                 </div>
-                                                {{/if}}
 
 
                                                     {{!-- Field 3 --}}
                                                     <b><label for="tuluble">Amount Available:</label></b>
-                                                    <input type="number" name="userInput3" id="userInput3"
+                                                    <input type="number" name="amt_edit" id="amt_edit"
                                                         value="{{this.amt}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                     {{!-- Field 4 --}}
                                                     <b><label for="tuluble">Shelf:</label></b>
-                                                    <input type="text" name="userInput4" id="userInput4"
+                                                    <input type="text" name="shelf_edit" id="shelf_edit"
                                                         value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Select Classifier:</label></b>
                                                 
-                                                    <select name="userInput5" id="userInput5" class="browser-default">
+                                                    <select name="classifier_edit" id="classifier_edit" class="browser-default">
                                                         <option value="Thickener" {{isSelected "Thickener" classifier_id}}>Thickeners</option>
                                                         <option value="Oils" {{isSelected "Oils" classifier_id}}>Oils</option>
                                                         <option value="Butters" {{isSelected "Butters" classifier_id}}>Butters</option>
@@ -565,37 +548,37 @@
                                                     <p> &nbsp;</p>
 
                                                     <b><label for="tuluble">Lot Number:</label></b>
-                                                    <input type="text" name="userInput6" id="userInput6"
+                                                    <input type="text" name="lot_num_edit" id="lot_num_edit"
                                                         value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Cost Per Kilo:</label></b>
-                                                    <input type="text" name="userInput13" id="userInput13"
+                                                    <input type="text" name="cost_edit" id="cost_edit"
                                                         value="{{this.cost}}" pattern="^[a-zA-Z0-9\s$]*$">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Expiration Date:</label></b>
-                                                    <input type="date" class="datepicker" name="userInput12" id="userInput12"
+                                                    <input type="date" id="expiration_edit" name="expiration_edit"
                                                         value="{{formatDate this.expiration}}" >
                                                     <p> </p>
 
-                                                    <b><label for="tuluble">Date Recieved:</label></b>
-                                                    <input type="date" class="datepicker" name="userInput7" id="userInput7"
+                                                    <b><label for="tuluble">Date Received:</label></b>
+                                                    <input type="date" name="date_received_edit" id="date_received_edit"
                                                         value="{{formatDate this.date_received}}" >
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Supplier:</label></b>
-                                                    <input type="text" class="datepicker" name="userInput8" id="userInput8"
+                                                    <input type="text" id="supplier_edit" name="supplier_edit" 
                                                         value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">COA Link:</label></b>
-                                                    <input type="text" name="userInput10" id="userInput10"
+                                                    <input type="text" name="coa_edit" id="coa_edit"
                                                         value="{{this.coa}}" maxlength="100">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">MSDS Link:</label></b>
-                                                    <input type="text" name="userInput11" id="userInput11"
+                                                    <input type="text" name="msds_edit" id="msds_edit"
                                                         value="{{this.msds}}" maxlength="100">
                                                     <p> </p>
 
@@ -616,22 +599,28 @@
                             </td>
                         </tr>
                         <script>
-                            const hazardousSwitch = document.getElementById('hazardousSwitchEdit');
-                            const textBoxContainer = document.getElementById('textBoxContainerEdit');
+                            const hazardousSwitchObj = document.getElementById('hazardousSwitchEdit');
+                            const textBoxContainer2 = document.getElementById('textBoxContainerEdit');
 
-                            hazardousSwitch.addEventListener('change', function() {
-                            if (hazardousSwitch.checked) {
-                                textBoxContainer.style.display = 'block';
+                            hazardousSwitchObj.addEventListener('change', function() {
+                            if (hazardousSwitchObj.checked) {
+                                textBoxContainer2.style.display = 'block';
                             } else {
-                                textBoxContainer.style.display = 'none';
+                                textBoxContainer2.style.display = 'none';
                             }
                             });
                         </script>
 
                         <script>
-                            const hazardousValue = {{hazardous}}; // Assuming {{this.hazardous}} contains a boolean value
+                            const hazardousValue = {{hazardous}}; 
 
                             hazardousSwitchEdit.checked = hazardousValue;
+
+                            if (hazardousSwitchObj.checked) {
+                                textBoxContainer2.style.display = 'block';
+                            } else {
+                                textBoxContainer2.style.display = 'none';
+                            }
 
                         </script>
 
@@ -647,27 +636,21 @@
             $(document).ready(function () {
                 $("#update_button").click(function () {
 
-                    const selected = document.querySelector('#userInput5');
+                    const selected = document.querySelector('#classifier');
                     let newSelectedOption;
 
                     selected.addEventListener('change', (event) => {
                         newSelectedOption = event.target.value;
                     });
 
-                    const inputValue1 = $("#userInput1").val();
-                    const inputValue2 = $("#userInput2").val();
-                    const inputValue3 = $("#userInput3").val();
-                    const inputValue4 = $("#userInput4").val();
-                    const inputValue5 = newSelectedOption;
-                    const inputValue6 = $("#userInput6").val();
-                    const inputValue7 = $("#userInput7").val();
-                    const inputValue8 = $("#userInput8").val();
-                    const inputValue9 = $("#userInput9").val();
-                    const inputValue10 = $("#userInput10").val();
-                    const inputValue11 = $("#userInput11").val();
-                    const inputValue12 = $("#userInput12").val();
-                    const inputValue14 = $("#userInput14").val();
-                    const hazardous = $("#hazardousSwitch").val();
+            
+         
+                    const classifier = newSelectedOption;
+                    const hazardousSwitchEdit = $("#hazardousSwitchEdit").checked;
+                   
+                    let hazardDetails = "N/A";
+                    if (hazardousSwitchEdit)
+                        hazardDetails = $("#hazardDetails").val();
                 });
             });
         </script>
