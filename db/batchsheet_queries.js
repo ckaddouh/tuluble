@@ -105,6 +105,14 @@ const checkAdminQuery = `
   WHERE email = ?
 `
 
+const get_procedure_query = `
+  SELECT 
+    phase_num, proc, comments, temp_init, temp_final, timing, mixing_init, mixing_final, mixer_type, blade, project_id, procedure_item_id
+  FROM 
+    procedure_item
+  WHERE 
+    project_id = ?
+`
 
 function getFormulaIngredientsForTrial(project_id, trial_num, callback) {
     db.execute(getFormulaIngredientsForTrialQuery, [project_id, trial_num], callback);
@@ -150,6 +158,9 @@ function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
 
+function get_procedure(project_id, callback) {
+  db.execute(get_procedure_query, [project_id], callback);
+}
 
 module.exports = {
     getFormulaIngredientsForTrial,
@@ -162,5 +173,6 @@ module.exports = {
     selectTrialSums,
     read_inventory_all_alph,
     getIngAmount,
-    requireAdmin
+    requireAdmin,
+    get_procedure
 };

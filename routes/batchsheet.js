@@ -3,6 +3,7 @@ var router = express.Router();
 const db = require("../db/batchsheet_queries.js");
 const flash = require('express-flash');
 const session = require('express-session');
+const { EmptyResultError } = require('sequelize');
 
 router.use(session({
     secret: 'asekfjaosieug8ase9f7jsf', 
@@ -91,6 +92,8 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
           else resolve(project_data);
         });
       });
+
+      const project_name = project_data[0].project_name;
   
   
     const ing_data = await new Promise((resolve, reject) => {
@@ -163,7 +166,14 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
       req.flash('warning', 'You are lacking the ingredients to produce ' + amount + ' grams of this formula. The maximum amount you can make is ' + maxVal + ' grams.');
     }
     
-    const ingredientDictJSON = JSON.stringify(ingredient_dict);
+
+    const procedureData = await new Promise((resolve, reject) => {
+      db.get_procedure(project_id, (error, procedureData) => {
+        if (error) reject(error);
+        else resolve(procedureData);
+      });
+    });
+
   
     if (error)
     res.redirect("/error");
@@ -180,7 +190,9 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
       maxVal: maxVal,
       formulaComplete: formulaComplete, 
       messages: req.flash('warning'),
-      isAdmin: admin[0].admin
+      isAdmin: admin[0].admin,
+      procedureData: procedureData,
+      project_name: project_name
     });
   }
   }
