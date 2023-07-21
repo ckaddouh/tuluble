@@ -73,8 +73,30 @@ router.get("/search/:input", async function (req, res, next) {
 });
 
 router.post("/inventoryformsubmit", async function (req, res, next) {
-  db.insertIntoInventory(req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-    req.body.userInput7, req.body.userInput8, req.body.userInput10, req.body.userInput11, req.body.userInput12, (error, results) => {
+  console.log(req.body.hazardousSwitch);
+  console.log(req.body.newInciName);
+  console.log(req.body.newTradeName);
+  console.log(req.body.newEncoding);
+  console.log(req.body.userInput4);
+  console.log(req.body.userInput5);
+  console.log("this is going to be 7");
+  console.log(req.body.userInput6);
+  console.log("this is the end of 7");
+  console.log(req.body.userInput7);
+  console.log(req.body.userInput8);
+  console.log(req.body.userInput10);
+  console.log(req.body.userInput11);
+  console.log(req.body.userInput12);
+  //console.log(req.body.theSwitchValue);
+  console.log(req.body.userInput14);
+  console.log(req.body.hazardDetails);
+
+  const theSwitchValue = req.body.hazardousSwitch === 'on' ? 1 : 0;
+  console.log("HEYYYYY inside function");
+  console.log("THE SWITCH VALUE" + theSwitchValue);
+
+  db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
+    req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, theSwitchValue, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
       if (error) {
         res.redirect('/error');
       } else {
@@ -85,9 +107,32 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
 
 router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
+  console.log(req.body.hazardousSwitchEdit);
+  const theSwitchValueEdit = req.body.hazardousSwitchEdit === 'on' ? 1 : 0;
+  const hazardDetailsEdit = theSwitchValueEdit === 0 ? '' : req.body.hazardDetails;
+  console.log("THIS IS TEH SWITCH VALYE: " + theSwitchValueEdit);
+  console.log("THIS IS TEH HARZARD DETAILS: " + hazardDetailsEdit);
 
-  db.updateIngredient(req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.userInput4, req.body.userInput5, req.body.userInput6,
-    req.body.userInput7, req.body.userInput8, req.body.userInput10, req.body.userInput11, req.body.userInput12, req.body.userInput13, ingredient_id, (error, results) => {
+  console.log(req.body.userInput1);
+  console.log(req.body.userInput2);
+  console.log(req.body.userInput3);
+  console.log(req.body.userInput4);
+  console.log(req.body.userInput5);
+  console.log(req.body.userInput6);
+  console.log("thisis going ot be 7");
+  console.log(req.body.userInput7);
+  console.log("This is the end fo 7");
+  console.log(req.body.userInput8);
+  console.log(req.body.userInput10);
+  console.log(req.body.userInput11);
+  console.log(req.body.userInput12);
+  console.log(theSwitchValueEdit);
+  console.log(req.body.userInput14);
+  console.log(hazardDetailsEdit);
+  console.log(req.body.userInput13);
+
+  db.updateIngredient(req.body.editInciName, req.body.editTradeName, req.body.editAmount, req.body.editShelf, req.body.editClassifier, req.body.editLotNum,
+    req.body.editReceived, req.body.editSupplier, req.body.editCOA, req.body.editMSDS, req.body.editExpiration,theSwitchValueEdit, req.body.editEncoding, hazardDetailsEdit, req.body.editCost, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {

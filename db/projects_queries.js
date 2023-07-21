@@ -102,16 +102,16 @@ function read_projects_search(searchStr, scientist_id, callback) {
     db.execute(read_projects_search_query, [searchStr, scientist_id], callback);
 }
 
-function updateProject(project_name, client, date, client_name, client_email, callback) {
-    db.execute(updateProjectQuery, [project_name, client, date, client_name, client_email], callback);
+function updateProject(editProjectName, editClientName, editDate, editContact, editEmail, callback) {
+    db.execute(updateProjectQuery, [editProjectName, editClientName, editDate, editContact, editEmail], callback);
 }
 
-function insertIntoProjects(project_name, client, date, client_name, client_email, callback) {
-    db.execute(insertIntoProjectsQuery, [project_name, client, date, client_name, client_email], callback);
+function insertIntoProjects(newProjectName, newClientName, newDate, newContact, newEmail, callback) {
+    db.execute(insertIntoProjectsQuery, [newProjectName, newClientName, newDate, newContact, newEmail], callback);
 }
 
-function getProjectID(project_name, client, date, callback) {
-    db.execute(getProjectIDQuery, [project_name, client, date], callback);
+function getProjectID(newProjectName, newClientName, newDate, callback) {
+    db.execute(getProjectIDQuery, [newProjectName, newClientName, newDate], callback);
 }
 
 function assignScientistToProject(project_id, scientist_id, callback) {

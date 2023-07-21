@@ -11,20 +11,20 @@ router.post("/:project_id/procformsubmit", (req, res) => {
     let project_id = req.params.project_id
     let trial_num = req.params.trial_num
   
-    let userInput1 = req.body.userInput1;
-    let userInput2 = req.body.userInput2;
-    let userInput3 = req.body.userInput3;
-    let userInput4 = req.body.userInput4;
-    let userInput5 = req.body.userInput5;
-    let userInput6 = req.body.userInput6;
-    let userInput7 = req.body.userInput7;
-    let userInput8 = req.body.userInput8;
-    let userInput9 = req.body.userInput9;
-    let userInput10 = req.body.userInput10;
+    let phaseNumber = req.body.phaseNumber;
+    let theProcedure = req.body.theProcedure;
+    let procComments = req.body.procComments;
+    let initialTemp = req.body.initialTemp;
+    let finalTemp = req.body.finalTemp;
+    let timing = req.body.timing;
+    let initialMixSpeed = req.body.initialMixSpeed;
+    let finalMixSpeed = req.body.finalMixSpeed;
+    let mixerType = req.body.mixerType;
+    let blade = req.body.blade;
   
   
-    db.insert_procedure(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6, userInput7,
-      userInput8, userInput9, userInput10, project_id, (error, results) => {
+    db.insert_procedure(phaseNumber, theProcedure, procComments, initialTemp, finalTemp, timing, initialMixSpeed,
+      finalMixSpeed, mixerType, blade, project_id, (error, results) => {
         if (error) {
           res.status(500).send(error); 
         }
@@ -107,4 +107,9 @@ router.get("/:project_id/deleteProcedureStep/:proc_id", (req, res) => {
 
 
 
+
 module.exports = router;
+
+// $(document).ready(function() {
+//   $('.modal').modal();
+// });

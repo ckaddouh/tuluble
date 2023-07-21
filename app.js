@@ -21,17 +21,28 @@ const db = require("./db/db_connection");
 const hbs = require("hbs");
 const moment = require('moment');
 
-hbs.registerHelper('eq', function(a, b) {
-  console.log(a);
-  console.log(b);
-  console.log(a===b);
+hbs.registerHelper('eq', function (a, b) {
   return a === b;
 });
-hbs.registerHelper('formatDate', function(date) {
+hbs.registerHelper('formatDate', function (date) {
+  // Convert the date string to a JavaScript Date object
+  var dateObj = new Date(date);
+
+  // Get the individual components of the date
+  var year = dateObj.getFullYear();
+  var month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  var day = String(dateObj.getDate()).padStart(2, '0');
+
+  // Concatenate the components to form the 'yyyy-mm-dd' format
+  var formattedDate = year + '-' + month + '-' + day;
+
+  return formattedDate;
+});
+hbs.registerHelper('formatDate2', function (date) {
   return moment(date).format('LL');
 });
 
-hbs.registerHelper('ifBothTrue', function(a, b, options) {
+hbs.registerHelper('ifBothTrue', function (a, b, options) {
   if (a && b) {
     return options.fn(this);
   } else {
@@ -39,7 +50,7 @@ hbs.registerHelper('ifBothTrue', function(a, b, options) {
   }
 });
 
-hbs.registerHelper('ifEitherTrue', function(a, b, options) {
+hbs.registerHelper('ifEitherTrue', function (a, b, options) {
   if (a || b) {
     return options.fn(this);
   } else {
@@ -156,7 +167,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use(session({
-  secret: 'asekfjaosieug8ase9f7jsf', 
+  secret: 'asekfjaosieug8ase9f7jsf',
   resave: false,
   saveUninitialized: false
 }));
@@ -167,7 +178,7 @@ app.use(flash());
 app.get('/profile', (req, res) => {
   const user = req.oidc.user.nickname;
 });
- 
+
 
 
 // error handler

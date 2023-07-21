@@ -2,7 +2,6 @@ const express = require('express');
 var router = express.Router();
 const db = require("../db/projects_queries.js");
 
-
 router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
   let input = req.params.input
   let scientist_id = req.params.scientist_id
@@ -66,17 +65,15 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
 
 router.post("/:project_id/projectupdate", async function (req, res, next) {
   let project_id = req.params.project_id
+  console.log("I am within the projectupdate fucniton");
 
-  try {
-    db.updateProject(req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.contactName1, req.body.contactEmail1, project_id, (error, results) => {
-      if (error) reject(error);
-      else resolve(results);
-    });
-    res.redirect("/projects");
-  }
-  catch (error) {
-    next(error);
-  }
+db.updateProject(req.body.editProjectName, req.body.editClientName, req.body.editDate, req.body.editContact, req.body.editEmail, project_id, (error, results) => {
+      if (error) {
+        res.redirect("/error");
+      } else {
+        res.redirect("/projects");
+      }
+  });
 });
 
 
@@ -85,14 +82,14 @@ router.post("/sci/:scientist_id/projectformsubmit", async function (req, res, ne
  
   try {
     const results = await new Promise((resolve, reject) => {
-      db.insertIntoProjects(req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, req.body.contactName, req.body.contactEmail, (error, results) => {
+      db.insertIntoProjects(req.body.newProjectName, req.body.newClientName, req.body.newDate, req.body.newContact, req.body.newEmail, (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
     });
 
     const project_id = await new Promise((resolve, reject) => {
-      db.getProjectID(req.body.userInputP1, req.body.userInputP2, req.body.userInputP3, (error, project_id) => {
+      db.getProjectID(req.body.newProjectName, req.body.newClientName, req.body.newDate, (error, project_id) => {
         if (error) reject(error);
         else resolve(project_id);
       });

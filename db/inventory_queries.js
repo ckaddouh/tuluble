@@ -2,7 +2,7 @@ const db = require("./db_connection");
 
 const read_inventory_all_sql_query = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous, hazardDetails
     FROM
         ingredient
     WHERE 
@@ -11,7 +11,7 @@ const read_inventory_all_sql_query = `
 
 const read_inventory_classifier_sql_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost, encoding, hazardous, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -20,7 +20,7 @@ const read_inventory_classifier_sql_query = `
 
 const read_inventory_search_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -29,15 +29,15 @@ const read_inventory_search_query = `
 
 const insertIntoInventory_query = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, hazardous, encoding, hazardDetails, cost)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 const updateIngredient_query = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, hazardous = ?, encoding = ?, hazardDetails = ?, cost = ?
   WHERE 
     ingredient_id = ?
 `;
@@ -68,16 +68,16 @@ function read_inventory_search(searchStr, callback) {
   db.execute(read_inventory_search_query, [searchStr], callback);
 }
 
-function insertIntoInventory(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, callback) {
-  db.execute(insertIntoInventory_query, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12], callback);
+function insertIntoInventory(newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum,
+    newReceived, newSupplier, newCOA, newMSDS, newExpiration, hazardousSwitch, newEncoding, hazardDetails, newCost, callback) {
+  db.execute(insertIntoInventory_query, [newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum,
+    newReceived, newSupplier, newCOA, newMSDS, newExpiration, hazardousSwitch, newEncoding, hazardDetails, newCost], callback);
 }
 
-function updateIngredient(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, userInput13, ingredientId, callback) {
-  db.execute(updateIngredient_query, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, userInput13, ingredientId], callback);
+function updateIngredient(editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
+    editReceived, editSupplier, editCOA, editMSDS, editExpiration, hazardousSwitchEdit, editEncoding, hazardDetailsEdit, editCost, ingredientId, callback) {
+  db.execute(updateIngredient_query, [editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
+    editReceived, editSupplier, editCOA, editMSDS, editExpiration, hazardousSwitchEdit, editEncoding, hazardDetailsEdit, editCost, ingredientId], callback);
 }
 
 function archiveIngredient(ingredientId, callback) {
