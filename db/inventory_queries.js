@@ -56,6 +56,12 @@ const checkAdminQuery = `
   WHERE email = ?
 `
 
+const insertIntoInventoryQuery = `
+  INSERT INTO 
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`
+
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
 }
@@ -87,6 +93,12 @@ function archiveIngredient(ingredientId, callback) {
 function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
+
+function insertIntoInventory(inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
+  supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails, callback) {
+    db.execute(insertIntoInventoryQuery, [inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
+      supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails], callback);
+  }
 
 module.exports = {
   read_inventory_all_sql,

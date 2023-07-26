@@ -11,16 +11,21 @@ router.get('/', async function (req, res, next) {
     });
   });
 
-  db.read_inventory_all_sql((error, results) => {
-    if (error) 
-      res.status(500).send(error); // Internal Server Error
-    else {
-      res.render('inventory', {
-        results: results,
-        isAdmin: admin[0].admin
-      });
-    }
-  });
+  if (admin[0].admin === 1 || admin[0].admin === 2) {
+    db.read_inventory_all_sql((error, results) => {
+      if (error) 
+        res.status(500).send(error); // Internal Server Error
+      else {
+        res.render('inventory', {
+          results: results,
+          isAdmin: admin[0].admin
+        });
+      }
+    });
+  }
+  else {
+    res.redirect("/index");
+  }
 });
 
 
@@ -34,7 +39,7 @@ router.get("/:classifier_id", async function (req, res, next) {
     });
   });
 
-
+  if (admin[0].admin === 1 || admin[0].admin === 2) {
   db.read_inventory_classifier_sql(classifier_id, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
@@ -46,6 +51,10 @@ router.get("/:classifier_id", async function (req, res, next) {
       });
     }
   });
+  }
+  else {
+    res.redirect("/index");
+  }
 });
 
 router.get("/search/:input", async function (req, res, next) {
@@ -59,6 +68,7 @@ router.get("/search/:input", async function (req, res, next) {
     });
   });
 
+  if (admin[0].admin === 1 || admin[0].admin === 2) {
   db.read_inventory_search(searchStr, (error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
@@ -70,40 +80,59 @@ router.get("/search/:input", async function (req, res, next) {
       });
     }
   });
+  }
+  else {
+    res.redirect("/index");
+  }
 });
 
 router.post("/inventoryformsubmit", async function (req, res, next) {
-  console.log(req.body.hazardousSwitch);
-  console.log(req.body.newInciName);
-  console.log(req.body.newTradeName);
-  console.log(req.body.newEncoding);
-  console.log(req.body.userInput4);
-  console.log(req.body.userInput5);
-  console.log("this is going to be 7");
-  console.log(req.body.userInput6);
-  console.log("this is the end of 7");
-  console.log(req.body.userInput7);
-  console.log(req.body.userInput8);
-  console.log(req.body.userInput10);
-  console.log(req.body.userInput11);
-  console.log(req.body.userInput12);
-  //console.log(req.body.theSwitchValue);
-  console.log(req.body.userInput14);
-  console.log(req.body.hazardDetails);
-
   const theSwitchValue = req.body.hazardousSwitch === 'on' ? 1 : 0;
-  console.log("HEYYYYY inside function");
-  console.log("THE SWITCH VALUE" + theSwitchValue);
 
-  db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
-    req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, theSwitchValue, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
-      if (error) {
-        res.redirect('/error');
-      } else {
-        res.redirect('/inventory');
-      }
+  console.log("in func");
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
     });
+  });
+
+  console.log("admin check finished");
+
+  if (admin[0].admin === 1 || admin[0].admin === 2) {
+    console.log("hazardous submit");
+    console.log(req.body.inci_name);
+    console.log(req.body.trade_name);
+    console.log(req.body.amt);
+    console.log(req.body.shelf);
+    console.log(req.body.classifier);
+    console.log(req.body.lot_num);
+    console.log(req.body.date_received);
+    console.log(req.body.supplier);
+    console.log(req.body.coa);
+    console.log(req.body.msds);
+    console.log(req.body.expiration);
+    console.log(req.body.encoding);
+    console.log(req.body.isHazardous);
+    console.log(req.body.hazardDetails);
+
+
+    db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
+    req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, theSwitchValue, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
+        if (error) {
+          console.log("error");
+          res.redirect('/error');
+        } else {
+          console.log("redirecting");
+          res.redirect('/inventory');
+        }
+      });
+  }
+  else {
+    res.redirect("/index");
+  }
 });
+
 
 router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
