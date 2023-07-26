@@ -2,7 +2,7 @@ const db = require("./db_connection");
 
 const read_inventory_all_sql_query = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous, hazardDetails
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardDetails
     FROM
         ingredient
     WHERE 
@@ -11,7 +11,7 @@ const read_inventory_all_sql_query = `
 
 const read_inventory_classifier_sql_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost, encoding, hazardous, hazardDetails
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost, encoding, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -20,7 +20,7 @@ const read_inventory_classifier_sql_query = `
 
 const read_inventory_search_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous, hazardDetails
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -37,7 +37,7 @@ const updateIngredient_query = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, hazardous = ?, encoding = ?, hazardDetails = ?, cost = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?, hazardDetails = ?, encoding = ?
   WHERE 
     ingredient_id = ?
 `;
@@ -58,9 +58,10 @@ const checkAdminQuery = `
 
 const insertIntoInventoryQuery = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
+
 
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
@@ -73,17 +74,11 @@ function read_inventory_classifier_sql(classifierId, callback) {
 function read_inventory_search(searchStr, callback) {
   db.execute(read_inventory_search_query, [searchStr], callback);
 }
-
-function insertIntoInventory(newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum,
-    newReceived, newSupplier, newCOA, newMSDS, newExpiration, hazardousSwitch, newEncoding, hazardDetails, newCost, callback) {
-  db.execute(insertIntoInventory_query, [newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum,
-    newReceived, newSupplier, newCOA, newMSDS, newExpiration, hazardousSwitch, newEncoding, hazardDetails, newCost], callback);
-}
-
-function updateIngredient(editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
-    editReceived, editSupplier, editCOA, editMSDS, editExpiration, hazardousSwitchEdit, editEncoding, hazardDetailsEdit, editCost, ingredientId, callback) {
-  db.execute(updateIngredient_query, [editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
-    editReceived, editSupplier, editCOA, editMSDS, editExpiration, hazardousSwitchEdit, editEncoding, hazardDetailsEdit, editCost, ingredientId], callback);
+        
+function updateIngredient(inci_name, trade_name, amt, shelf, classifier_id, lot_num,
+    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id, callback) {
+  db.execute(updateIngredient_query, [inci_name, trade_name, amt, shelf, classifier_id, lot_num,
+    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id], callback);
 }
 
 function archiveIngredient(ingredientId, callback) {
@@ -95,9 +90,9 @@ function requireAdmin(email, callback) {
 }
 
 function insertIntoInventory(inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-  supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails, callback) {
+  supplier, coa, msds, expiration, encoding, hazardousDetails, callback) {
     db.execute(insertIntoInventoryQuery, [inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-      supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails], callback);
+      supplier, coa, msds, expiration, encoding, hazardousDetails], callback);
   }
 
 module.exports = {

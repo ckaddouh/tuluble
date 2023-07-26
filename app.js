@@ -42,6 +42,10 @@ hbs.registerHelper('formatDate2', function (date) {
   return moment(date).format('LL');
 });
 
+hbs.registerHelper('notEq', function(a, b) {
+  return a !== b;
+});
+
 hbs.registerHelper('ifBothTrue', function (a, b, options) {
   if (a && b) {
     return options.fn(this);

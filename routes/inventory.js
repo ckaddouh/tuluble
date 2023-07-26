@@ -113,17 +113,15 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
     console.log(req.body.msds);
     console.log(req.body.expiration);
     console.log(req.body.encoding);
-    console.log(req.body.isHazardous);
     console.log(req.body.hazardDetails);
 
 
-    db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
-    req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, theSwitchValue, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
+    db.insertIntoInventory(req.body.inci_name, req.body.trade_name, req.body.amt, req.body.shelf, req.body.classifier, req.body.lot_num,
+      req.body.date_received, req.body.supplier, req.body.coa, req.body.msds, req.body.expiration, req.body.encoding, req.body.hazardDetails, (error, results) => {
         if (error) {
-          console.log("error");
+          console.log(error);
           res.redirect('/error');
         } else {
-          console.log("redirecting");
           res.redirect('/inventory');
         }
       });
@@ -136,32 +134,9 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
 
 router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
-  console.log(req.body.hazardousSwitchEdit);
-  const theSwitchValueEdit = req.body.hazardousSwitchEdit === 'on' ? 1 : 0;
-  const hazardDetailsEdit = theSwitchValueEdit === 0 ? '' : req.body.hazardDetails;
-  console.log("THIS IS TEH SWITCH VALYE: " + theSwitchValueEdit);
-  console.log("THIS IS TEH HARZARD DETAILS: " + hazardDetailsEdit);
 
-  console.log(req.body.userInput1);
-  console.log(req.body.userInput2);
-  console.log(req.body.userInput3);
-  console.log(req.body.userInput4);
-  console.log(req.body.userInput5);
-  console.log(req.body.userInput6);
-  console.log("thisis going ot be 7");
-  console.log(req.body.userInput7);
-  console.log("This is the end fo 7");
-  console.log(req.body.userInput8);
-  console.log(req.body.userInput10);
-  console.log(req.body.userInput11);
-  console.log(req.body.userInput12);
-  console.log(theSwitchValueEdit);
-  console.log(req.body.userInput14);
-  console.log(hazardDetailsEdit);
-  console.log(req.body.userInput13);
-
-  db.updateIngredient(req.body.editInciName, req.body.editTradeName, req.body.editAmount, req.body.editShelf, req.body.editClassifier, req.body.editLotNum,
-    req.body.editReceived, req.body.editSupplier, req.body.editCOA, req.body.editMSDS, req.body.editExpiration,theSwitchValueEdit, req.body.editEncoding, hazardDetailsEdit, req.body.editCost, ingredient_id, (error, results) => {
+  db.updateIngredient(req.body.inci_name_edit, req.body.trade_name_edit, req.body.amt_edit, req.body.shelf_edit, req.body.classifier_edit, req.body.lot_num_edit,
+    req.body.date_received_edit, req.body.supplier_edit, req.body.coa_edit, req.body.msds_edit, req.body.expiration_edit, req.body.cost_edit, req.body.hazardDetailsEdit, req.body.encoding_edit, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {

@@ -82,23 +82,11 @@
                                 <p> </p>
                                 <br>
 
-                                <b><label for="tuluble">Hazardous?*</label></b>
-                                <div class="switch">
-                                <label>
-                                    No
-                                    <input type="checkbox" id="hazardousSwitch" name="hazardousSwitch">
-                                    <span class="lever"></span>
-                                    Yes
-                                </label>
-                                </div>
-                                <br>
 
-                                <div id="textBoxContainer" style="display: none;">
                                 <b><label for="tuluble">Hazard Details:</label></b>
                                 <input type="text" name="hazardDetails" id="hazardDetails" placeholder="Enter Hazard Details"
                                     maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
                                 <br>
-                                </div>
 
                                 {{!-- Field 3 --}}
                                 <b><label for="tuluble">Amount Available:</label></b>
@@ -184,26 +172,6 @@
             </div>
 
 
-            <script>
-                // these aren't used to be called by inventory.js, it's for the addEvenListner below
-                const hazardousSwitch = document.getElementById('hazardousSwitch');
-                const textBoxContainer = document.getElementById('textBoxContainer');
-                console.log("This is the HazardousSwtich vairable:" + hazardousSwitch);
-                console.log("This is the teboxconainer varibale:" + textBoxContainer);
-
-                hazardousSwitch.addEventListener('change', function() {
-                    if (hazardousSwitch.checked) {
-                        console.log(hazardousSwitch.checked);
-                        textBoxContainer.style.display = 'block';
-                    } else {
-                        console.log(hazardousSwitch.checked);
-                        textBoxContainer.style.display = 'none';
-                    }
-                });
-
-            </script>
-
-
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -215,47 +183,6 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 
             
-            <script>
-                $(document).ready(function () {
-                    $("#add_button").click(function () {
-
-                        window.location = "inventory/inventoryformsubmit";
-                        //$(window).attr("location", "inventoryformsubmit/" + inputValue1);
-                        const selects = document.querySelector('#classifier');
-                        let theSelectedOption;
-
-                        selects.addEventListener('change', (event) => {
-                            //window.location.href = "inventory/"
-                            theSelectedOption = event.target.value;
-                        });
-
-                        let isHazardous = 0;
-                        const hSwitch = document.getElementById('hazardousSwitch');
-                        isHazardous = hSwitch.checked;
-                         
-
-                      
-                        const inci_name = $("#inci_name").val();
-                        const trade_name = $("#trade_name").val();
-                        const encoding = $("#encoding").val();
-                        const classifier = theSelectedOption;
-                        const amt = $("#amt").val();
-                        const shelf = $("#shelf").val();
-                        const lot_num = $("#lot_num").val();
-                        const cost = $("#cost").val();
-                        const expiration = $("#expiration").val();
-                        const date_received = $("#date_received").val();
-                        const supplier = $("#supplier").val();
-                        const coa = $("#coa").val();
-                        const msds = $("#msds").val();
-                        
-                        let hazardDetails = "N/A";
-                        if (isHazardous)
-                            hazardDetails = $("#hazardDetails").val();
-
-                    });
-                });
-            </script>
 
 
             <script>
@@ -436,8 +363,7 @@
                             </td>
                             <td>{{this.trade_name}}</td>             
                             {{/ifEitherTrue}}
-
-                            <td>{{this.encoding}} {{#if this.hazardous}}<i class="btn tooltipped material-icons" data-position="bottom" data-tooltip="I am a tooltip">warning</i>{{/if}}</td>
+                            <td>{{this.encoding}} {{#if this.hazardDetails}}<i class="btn tooltipped material-icons" data-position="bottom" data-tooltip="{{hazardDetails}}">warning</i>{{/if}}</td>
                             <td>{{this.supplier}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>
@@ -474,32 +400,16 @@
                                                 <input type="text" name = "editTradeName" id="ediTradeName" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
 
-                                                {{#if (eq ../isAdmin 2)}}
-                                                <div class={{ingredient_id}}>
-                                                    <b><label for="tuluble">Encoding:</label></b>
-                                                    <input type="text" name="editEncoding" id="editEncoding" value="{{this.encoding}}"
-                                                        maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
-                                                    <p> </p>
-                                                    <br>
+                                                <b><label for="tuluble">Encoding:</label></b>
+                                                <input type="text" name="encoding_edit" id="encoding_edit" value="{{this.encoding}}"
+                                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                                <p> </p>
+                                                <br>
 
-                                                    <b><label for="tuluble">Hazardous?</label></b>
-                                                    <div class="switch" id={{ingredient_id}}>
-                                                    <label>
-                                                        No
-                                                        <input type="checkbox" id="hazardousSwitchEdit" name="hazardousSwitchEdit" {{#if (eq this.hazardous 1)}}checked{{/if}} >
-                                                        <span class="lever"></span>
-                                                        Yes
-                                                    </label>
-                                                    </div>
-                                                    <br>
-
-                                                    <div id="textBoxContainerEdit" name="textBoxContainerEdit" data-ingredient-id="{{ingredient_id}}" style="{{#if (eq this.hazardous 0)}}display: none;{{/if}}">
-                                                    <b><label for="tuluble">Hazard Details:</label></b>
-                                                    <input type="text" name="hazardDetails" id="hazardDetails" value="{{this.hazardDetails}}"
-                                                        maxlength="60" pattern="^[a-zA-Z0-9\s.]*$">
-                                                    <br>
-                                                    </div>
-                                                </div>
+                                                <b><label for="tuluble">Hazard Details:</label></b>
+                                                <input type="text" name="hazardDetailsEdit" id="hazardDetailsEdit" value="{{this.hazardDetails}}"
+                                                    maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
+                                                <br>
 
 
                                                     {{!-- Field 3 --}}
@@ -588,6 +498,8 @@
                             </td>
                         </tr>
 
+
+
                         {{/each}}
                     </tbody>
                 </table>
@@ -635,23 +547,6 @@
 
         <script>
             $(document).ready(function () {
-                $("#update_button").click(function () {
-
-                    const selected = document.querySelector('#classifier');
-                    let newSelectedOption;
-
-                    selected.addEventListener('change', (event) => {
-                        newSelectedOption = event.target.value;
-                    });
-
-                    const inputValue5 = newSelectedOption;
-                });
-            });
-        </script>
-
-
-        <script>
-            $(document).ready(function () {
                 $('.modal').modal();
             })
         </script>
@@ -683,6 +578,13 @@
                     }
                 }
             }
+        </script>
+
+
+        <script>
+            $(document).ready(function(){
+                $('.tooltipped').tooltip();
+            });
         </script>
 
         <script>
