@@ -17,6 +17,8 @@ const authConfig = {
 router.use(auth(authConfig));
 
 router.get('/', async function (req, res, next) {
+  let error;
+  
   const admin = await new Promise((resolve, reject) => {
     db.requireAdmin(req.oidc.user.email, (error, admin) => {
       if (error) reject (error);
@@ -25,19 +27,17 @@ router.get('/', async function (req, res, next) {
   });
 
   if (admin[0].admin === 0 || admin[0].admin === 1) {
-    db.getLowAmounts((error, results) => {
-      if (error) {
-        res.redirect('/error'); // Internal Server Error
-      } else {
-        db.getExpired((error, results2) => {
-          if (error) {
-            res.redirect('/error'); // Internal Server Error
-          } else {
-            res.render('index', { runningLow: results, expired: results2, profileInfo: req.oidc.user.nickname, isAdmin: admin[0].admin});
-          }
-        });
-      }
-    });
+    if (error) {
+      res.redirect('/error'); // Internal Server Error
+    } else {
+      db.getExpired((error, expired) => {
+        if (error) {
+          res.redirect('/error'); // Internal Server Error
+        } else {
+          res.render('index', {expired, profileInfo: req.oidc.user.nickname, isAdmin: admin[0].admin});
+        }
+      });
+    }
   }
   else {
     res.redirect("/inventory");
