@@ -111,17 +111,15 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
     console.log(req.body.msds);
     console.log(req.body.expiration);
     console.log(req.body.encoding);
-    console.log(req.body.isHazardous);
     console.log(req.body.hazardDetails);
 
 
     db.insertIntoInventory(req.body.inci_name, req.body.trade_name, req.body.amt, req.body.shelf, req.body.classifier, req.body.lot_num,
-      req.body.date_received, req.body.supplier, req.body.coa, req.body.msds, req.body.expiration, req.body.encoding, req.body.hazardous, req.body.hazardDetails, (error, results) => {
+      req.body.date_received, req.body.supplier, req.body.coa, req.body.msds, req.body.expiration, req.body.encoding, req.body.hazardDetails, (error, results) => {
         if (error) {
-          console.log("error");
+          console.log(error);
           res.redirect('/error');
         } else {
-          console.log("redirecting");
           res.redirect('/inventory');
         }
       });
@@ -134,25 +132,8 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
 router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
 
-  console.log(req.body.inci_name_edit);
-  console.log(req.body.trade_name_edit);
-  console.log(req.body.amt_edit);
-  console.log(req.body.shelf_edit);
-  console.log(req.body.classifier_edit);
-  console.log(req.body.lot_num_edit);
-  console.log(req.body.date_received_edit);
-  console.log(req.body.supplier_edit);
-  console.log(req.body.coa_edit);
-  console.log(req.body.msds_edit);
-  console.log(req.body.expiration_edit);
-  console.log(req.body.cost_edit);
-  console.log(req.body.hazardousSwitchEdit);
-  console.log(req.body.hazardDetailsEdit);
-  console.log(req.body.encoding_edit);
-
-  db.updateIngredient(req.body.inci_name, req.body.trade_name, req.body.amt, req.body.shelf, req.body.classifier, req.body.lot_num,
-    req.body.date_received, req.body.supplier, req.body.coa, req.body.msds, req.body.expiration, req.body.cost, 
-    req.body.lily, req.body.hazardDetails, req.body.encoding, ingredient_id, (error, results) => {
+  db.updateIngredient(req.body.inci_name_edit, req.body.trade_name_edit, req.body.amt_edit, req.body.shelf_edit, req.body.classifier_edit, req.body.lot_num_edit,
+    req.body.date_received_edit, req.body.supplier_edit, req.body.coa_edit, req.body.msds_edit, req.body.expiration_edit, req.body.cost_edit, req.body.hazardDetailsEdit, req.body.encoding_edit, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {

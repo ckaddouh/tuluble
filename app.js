@@ -24,6 +24,11 @@ const moment = require('moment');
 hbs.registerHelper('eq', function(a, b) {
   return a === b;
 });
+
+hbs.registerHelper('notEq', function(a, b) {
+  return a !== b;
+});
+
 hbs.registerHelper('formatDate', function(date) {
   return moment(date).format('LL');
 });

@@ -2,7 +2,7 @@ const db = require("./db_connection");
 
 const read_inventory_all_sql_query = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardDetails
     FROM
         ingredient
     WHERE 
@@ -11,7 +11,7 @@ const read_inventory_all_sql_query = `
 
 const read_inventory_classifier_sql_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost, encoding, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -20,7 +20,7 @@ const read_inventory_classifier_sql_query = `
 
 const read_inventory_search_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardDetails
   FROM
     ingredient
   WHERE 
@@ -31,7 +31,7 @@ const updateIngredient_query = `
   UPDATE 
     ingredient
   SET 
-    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?, hazardous = ?, hazardDetails = ?, encoding = ?
+    inci_name = ?, trade_name = ?, amt = ?, shelf = ?, classifier_id = ?, lot_num = ?, date_received = ?, supplier = ?, coa = ?, msds = ?, expiration = ?, cost = ?, hazardDetails = ?, encoding = ?
   WHERE 
     ingredient_id = ?
 `;
@@ -52,9 +52,10 @@ const checkAdminQuery = `
 
 const insertIntoInventoryQuery = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
+
 
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
@@ -67,11 +68,11 @@ function read_inventory_classifier_sql(classifierId, callback) {
 function read_inventory_search(searchStr, callback) {
   db.execute(read_inventory_search_query, [searchStr], callback);
 }
-
-function updateIngredient(userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, userInput13, ingredientId, callback) {
-  db.execute(updateIngredient_query, [userInput1, userInput2, userInput3, userInput4, userInput5, userInput6,
-    userInput7, userInput8, userInput10, userInput11, userInput12, userInput13, ingredientId], callback);
+        
+function updateIngredient(inci_name, trade_name, amt, shelf, classifier_id, lot_num,
+    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id, callback) {
+  db.execute(updateIngredient_query, [inci_name, trade_name, amt, shelf, classifier_id, lot_num,
+    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id], callback);
 }
 
 function archiveIngredient(ingredientId, callback) {
@@ -83,9 +84,9 @@ function requireAdmin(email, callback) {
 }
 
 function insertIntoInventory(inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-  supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails, callback) {
+  supplier, coa, msds, expiration, encoding, hazardousDetails, callback) {
     db.execute(insertIntoInventoryQuery, [inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-      supplier, coa, msds, expiration, encoding, hazardous, hazardousDetails], callback);
+      supplier, coa, msds, expiration, encoding, hazardousDetails], callback);
   }
 
 module.exports = {

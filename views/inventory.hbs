@@ -81,23 +81,11 @@
                                 <p> </p>
                                 <br>
 
-                                <b><label for="tuluble">Hazardous?*</label></b>
-                                <div class="switch">
-                                <label>
-                                    No
-                                    <input type="checkbox" id="hazardousSwitch">
-                                    <span class="lever"></span>
-                                    Yes
-                                </label>
-                                </div>
-                                <br>
 
-                                <div id="textBoxContainer" style="display: none;">
                                 <b><label for="tuluble">Hazard Details:</label></b>
                                 <input type="text" name="hazardDetails" id="hazardDetails" placeholder="Enter Hazard Details"
                                     maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
                                 <br>
-                                </div>
 
                                 {{!-- Field 3 --}}
                                 <b><label for="tuluble">Amount Available:*</label></b>
@@ -183,22 +171,6 @@
             </div>
 
 
-            <script>
-                const hazardousSwitch = document.getElementById('hazardousSwitch');
-                const textBoxContainer = document.getElementById('textBoxContainer');
-
-                hazardousSwitch.addEventListener('change', function() {
-                    if (hazardousSwitch.checked) {
-                        console.log(hazardousSwitch.checked);
-                        textBoxContainer.style.display = 'block';
-                    } else {
-                        console.log(hazardousSwitch.checked);
-                        textBoxContainer.style.display = 'none';
-                    }
-                });
-
-            </script>
-
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -210,45 +182,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 
             
-            <script>
-                $(document).ready(function () {
-                    $("#add_button").click(function () {
 
-                        const selects = document.querySelector('#classifier');
-                        let theSelectedOption;
-
-                        selects.addEventListener('change', (event) => {
-                            //window.location.href = "inventory/"
-                            theSelectedOption = event.target.value;
-                        });
-
-                        let isHazardous = 0;
-                        const hSwitch = document.getElementById('hazardousSwitch');
-                        isHazardous = hSwitch.checked;
-                         
-
-                      
-                        const inci_name = $("#inci_name").val();
-                        const trade_name = $("#trade_name").val();
-                        const encoding = $("#encoding").val();
-                        const classifier = theSelectedOption;
-                        const amt = $("#amt").val();
-                        const shelf = $("#shelf").val();
-                        const lot_num = $("#lot_num").val();
-                        const cost = $("#cost").val();
-                        const expiration = $("#expiration").val();
-                        const date_received = $("#date_received").val();
-                        const supplier = $("#supplier").val();
-                        const coa = $("#coa").val();
-                        const msds = $("#msds").val();
-                        
-                        let hazardDetails = "N/A";
-                        if (isHazardous)
-                            hazardDetails = $("#hazardDetails").val();
-
-                    });
-                });
-            </script>
 
 
             <script>
@@ -430,8 +364,7 @@
                             </td>
                             <td>{{this.trade_name}}</td>             
                             {{/ifEitherTrue}}
-
-                            <td>{{this.encoding}} {{#if this.hazardous}}<i class="btn tooltipped material-icons" data-position="bottom" data-tooltip="I am a tooltip">warning</i>{{/if}}</td>
+                            <td>{{this.encoding}} {{#if this.hazardDetails}}<i class="btn tooltipped material-icons" data-position="bottom" data-tooltip="{{hazardDetails}}">warning</i>{{/if}}</td>
                             <td>{{this.supplier}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>
@@ -474,23 +407,10 @@
                                                 <p> </p>
                                                 <br>
 
-                                                <b><label for="tuluble">Hazardous?</label></b>
-                                                <div class="switch">
-                                                <label>
-                                                    No
-                                                    <input type="checkbox" id="hazardousSwitchEdit">
-                                                    <span class="lever"></span>
-                                                    Yes
-                                                </label>
-                                                </div>
-                                                <br>
-
-                                                <div id="textBoxContainerEdit" style="display: none;">
                                                 <b><label for="tuluble">Hazard Details:</label></b>
-                                                <input type="text" name="hazardDetailsEdit" id="hazardDetailsEdit" placeholder="{{this.hazardDetails}}"
+                                                <input type="text" name="hazardDetailsEdit" id="hazardDetailsEdit" value="{{this.hazardDetails}}"
                                                     maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
                                                 <br>
-                                                </div>
 
 
                                                     {{!-- Field 3 --}}
@@ -578,31 +498,8 @@
                                 </div>
                             </td>
                         </tr>
-                        <script>
-                            const hazardousSwitchObj = document.getElementById('hazardousSwitchEdit');
-                            const textBoxContainer2 = document.getElementById('textBoxContainerEdit');
 
-                            hazardousSwitchObj.addEventListener('change', function() {
-                            if (hazardousSwitchObj.checked) {
-                                textBoxContainer2.style.display = 'block';
-                            } else {
-                                textBoxContainer2.style.display = 'none';
-                            }
-                            });
-                        </script>
 
-                        <script>
-                            const hazardousValue = {{hazardous}}; 
-
-                            hazardousSwitchEdit.checked = hazardousValue;
-
-                            if (hazardousSwitchObj.checked) {
-                                textBoxContainer2.style.display = 'block';
-                            } else {
-                                textBoxContainer2.style.display = 'none';
-                            }
-
-                        </script>
 
                         {{/each}}
                     </tbody>
@@ -611,29 +508,6 @@
         </div>
         </div>
 
-
-        <script>
-            $(document).ready(function () {
-                $("#update_button").click(function () {
-
-                    const selected = document.querySelector('#classifier');
-                    let newSelectedOption;
-
-                    selected.addEventListener('change', (event) => {
-                        newSelectedOption = event.target.value;
-                    });
-
-            
-         
-                    const classifier = newSelectedOption;
-                    const hazardousSwitchEdit = $("#hazardousSwitchEdit").checked;
-                   
-                    let hazardDetails = "N/A";
-                    if (hazardousSwitchEdit)
-                        hazardDetails = $("#hazardDetails").val();
-                });
-            });
-        </script>
 
         <script>
             $(document).ready(function () {
@@ -668,6 +542,13 @@
                     }
                 }
             }
+        </script>
+
+
+        <script>
+            $(document).ready(function(){
+                $('.tooltipped').tooltip();
+            });
         </script>
 
         <script>
