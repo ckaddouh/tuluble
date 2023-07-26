@@ -2,7 +2,7 @@ const db = require("./db_connection");
 
 const read_archive_inventory_search_query = `
 SELECT
-  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost
+  ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost
 FROM
   ingredient
 WHERE
@@ -42,7 +42,7 @@ WHERE
 
 const read_inactive_ingredients_all_sql_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost
   FROM
     ingredient
   WHERE 

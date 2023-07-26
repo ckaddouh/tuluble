@@ -22,9 +22,6 @@ const hbs = require("hbs");
 const moment = require('moment');
 
 hbs.registerHelper('eq', function(a, b) {
-  console.log(a);
-  console.log(b);
-  console.log(a===b);
   return a === b;
 });
 hbs.registerHelper('formatDate', function(date) {

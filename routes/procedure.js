@@ -81,28 +81,26 @@ router.get("/:project_id/deleteProcedureStep/:proc_id", (req, res) => {
 });
 
   
-// router.get("/:project_id/cellEdited/:phase/:column/:cellContent", (req, res) => {
-//   let cellContent = req.params.cellContent;
-//   let phase = req.params.phase;
-//   let column = req.params.column;
-//   let project_id = req.params.project_id;
+router.get("/:project_id/cellEdited/:phase/:column/:cellContent", (req, res) => {
+  let cellContent = req.params.cellContent;
+  let phase = req.params.phase;
+  let column = req.params.column;
+  let project_id = req.params.project_id;
 
 
-//   const colList = ["phase_num", "proc", "comments", "temp_init", "temp_final", "timing", "mixing_init", "mixing_final", "mixer_type", "blade"];
+  const colList = ["phase_num", "proc", "comments", "temp_init", "temp_final", "timing", "mixing_init", "mixing_final", "mixer_type", "blade"];
 
-//   const colName = colList[column];
+  const colName = colList[column-1];
 
-//   const edit_procedure_query = "UPDATE procedure_item SET " + colName + " = ? WHERE phase_num = ? AND project_id = ?";
+  db.edit_procedure_item(colName, cellContent, phase, project_id, (error, proc_info) => {
+    if (error)
+      res.status(500).send(error); //Internal Server Error 
+    else {
+      res.redirect("/procedure/" + project_id);
+    }
+  });
 
-//   db.execute(edit_procedure_query, [cellContent, phase, project_id], (error, proc_info) => {
-//     if (error)
-//       res.status(500).send(error); //Internal Server Error 
-//     else {
-//       res.redirect("/procedure/" + project_id);
-//     }
-//   });
-
-// });
+});
 
 
 

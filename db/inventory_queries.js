@@ -2,7 +2,7 @@ const db = require("./db_connection");
 
 const read_inventory_all_sql_query = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding
     FROM
         ingredient
     WHERE 
@@ -11,7 +11,7 @@ const read_inventory_all_sql_query = `
 
 const read_inventory_classifier_sql_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost, encoding, hazardous
   FROM
     ingredient
   WHERE 
@@ -20,7 +20,7 @@ const read_inventory_classifier_sql_query = `
 
 const read_inventory_search_query = `
   SELECT
-    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds, cost, encoding, hazardous
+    ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds, cost, encoding, hazardous
   FROM
     ingredient
   WHERE 

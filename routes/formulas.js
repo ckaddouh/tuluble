@@ -60,7 +60,10 @@ router.post("/:project_id/formulaformsubmit", async function (req, res, next) {
 router.post("/:project_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
 
+  console.log("in phase form submit");
+
   db.insertIntoPhase(project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput2, (error, results) => {
+    console.log("running query");
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
@@ -226,6 +229,7 @@ router.get("/:project_id", async function (req,res,next) {
     const ingredientDictJSON = JSON.stringify(ingredient_dict);
     const editableDictJSON = JSON.stringify(editable_dict);
     const approvedDictJSON = JSON.stringify(approved_dict);
+    const trialDictJSON = JSON.stringify(trial_data);
 
     if (error)
       res.redirect("/error");
@@ -236,6 +240,7 @@ router.get("/:project_id", async function (req,res,next) {
         project_data: project_data,
         trial_data: trial_data.length,
         trialData: trial_data,
+        trialDataJSON: trialDictJSON,
         inventory_data: inventory_data,
         ingredient_dict: ingredientDictJSON,
         sum_data_json: JSON.stringify(sum_data), 

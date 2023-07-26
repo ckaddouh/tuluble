@@ -42,6 +42,7 @@ const delete_procedure_item_query = `
 `
 
 
+
 function get_procedure(project_id, callback) {
   db.execute(get_procedure_query, [project_id], callback);
 }
@@ -62,11 +63,16 @@ function delete_procedure_item(procedure_item_id, callback) {
   db.execute(delete_procedure_item_query, [procedure_item_id], callback);
 }
 
+function edit_procedure_item(colName, cellContent, phase_num, project_id, callback) {
+  db.execute("UPDATE procedure_item SET " + colName + " = ? WHERE phase_num = ? AND project_id = ?", [cellContent, phase_num, project_id], callback);
+}
+
 
 module.exports = { 
   get_procedure,
   insert_procedure,
   get_procedure_info,
   requireAdmin,
-  delete_procedure_item
+  delete_procedure_item,
+  edit_procedure_item
 };
