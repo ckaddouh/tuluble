@@ -65,15 +65,26 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
 
 router.post("/:project_id/projectupdate", async function (req, res, next) {
   let project_id = req.params.project_id
-  console.log("I am within the projectupdate fucniton");
 
-db.updateProject(req.body.editProjectName, req.body.editClientName, req.body.editDate, req.body.editContact, req.body.editEmail, project_id, (error, results) => {
-      if (error) {
-        res.redirect("/error");
-      } else {
-        res.redirect("/projects");
-      }
-  });
+  console.log(project_id);
+  console.log(req.body.userInput1);
+  console.log(req.body.userInput2);
+  console.log(req.body.userInput3);
+  console.log(req.body.contactName1);
+  console.log(req.body.contactEmail1);
+
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.updateProject(req.body.userInput1, req.body.userInput2, req.body.userInput3, req.body.contactName1, req.body.contactEmail1, project_id, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
+      });
+    });
+    res.redirect("/projects");
+  }
+  catch (error) {
+    next(error);
+  }
 });
 
 

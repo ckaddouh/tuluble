@@ -82,7 +82,7 @@
                                 <p> </p>
                                 <br>
 
-                                <b><label for="tuluble">Hazardous?</label></b>
+                                <b><label for="tuluble">Hazardous?*</label></b>
                                 <div class="switch">
                                 <label>
                                     No
@@ -112,7 +112,7 @@
                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
-                                <b><label for="tuluble">Classifier:</label></b>
+                                <b><label for="tuluble">Classifier:*</label></b>
                                 {{!-- <input type="text" name="userInput5" id="userInput5" placeholder="Enter Classifier"
                                     maxlength="20"> --}}
                                 <select name="newClassifier" required id="newClassifier" class="browser-default">
@@ -257,26 +257,6 @@
                 });
             </script>
 
-       
-            {{!-- <script>
-                const select = document.querySelector('#myDropdown');
-                let selectedOption;
-
-                select.addEventListener('change', (event) => {
-                    selectedOption = event.target.value;
-
-                    if (window.location.href.indexOf("inventory/") !== -1) {
-                        window.location.href = "/inventory/" + selectedOption;
-                    }
-                    else {
-                        window.location.href = "/inventory/" + selectedOption;
-                    }
-                    sleep(1000);
-                    let header = document.getElementById("inventoryTitle");
-                    console.log(header);
-                });
-                header.innerHTML = "Inventory - " + selectedOption;
-            </script> --}}
 
             <script>
                 $(document).ready(function () {
@@ -375,6 +355,7 @@
                 <table id="my-table" class="scrollable">
                     <thead>
                         <tr id="ing">
+                            {{#ifEitherTrue (eq isAdmin 1) (eq isAdmin 2)}}
                             <th id="inci">INCI Name
                                 <a id="sort-inci-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
@@ -386,6 +367,7 @@
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
+                            {{/ifEitherTrue}}
                             <th id="trade">Ingredient ID
                                 <a id="sort-trade-button" class="waves-effect">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
@@ -418,7 +400,7 @@
                     <tbody>
                         {{#each results}}
                         <tr>
-                            {{#if ../isAdmin}}
+                            {{#ifEitherTrue (eq ../isAdmin 1) (eq ../isAdmin 2)}}
                             <td>{{this.inci_name}}
                                 <a href="#terms{{ingredient_id}}" class="modal-trigger">
                                     <span class="large material-icons">info_outline</span>
@@ -432,9 +414,9 @@
                                         <div class="col s12">&nbsp;</div>
                                         <div class="col s6">
                                             
-                                                <b>Trade Name:</b> {{this.trade_name}}<br></br>
-                                                <b>INCI Name:</b> {{this.inci_name}}<br></br>
-                                                <b>Amount Available:</b> {{this.amt}} {{this.unit}}<br></br>
+                                                <b>Trade Name: </b> {{this.trade_name}}<br></br>
+                                                <b>INCI Name: </b> {{this.inci_name}}<br></br>
+                                                <b>Amount Available: </b> {{this.amt}} {{this.unit}}<br></br>
                                                 <b>Supplier:</b> {{this.supplier}}<br></br>
                                                 <b>Lot Number:</b> {{this.lot_num}}<br></br>
                                                 <b>Shelf:</b> {{this.shelf}}<br></br>
@@ -452,13 +434,10 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{this.trade_name}}</td>                       
-                            {{else}}
-                                <td>{{this.encoding}} {{#if (eq this.hazardous 0)}}{{/if}}</td>
-                            {{/if}}
-                            {{#if (eq ../isAdmin 2)}}
-                                <td>{{this.encoding}} {{#if this.hazardous}}<i style="white-space: nowrap; height: 5px" class="tooltipped material-icons" data-position="top" data-tooltip="{{this.hazardDetails}}">warning</i>{{/if}}</td>
-                            {{/if}}
+                            <td>{{this.trade_name}}</td>             
+                            {{/ifEitherTrue}}
+
+                            <td>{{this.encoding}} {{#if this.hazardous}}<i class="btn tooltipped material-icons" data-position="bottom" data-tooltip="I am a tooltip">warning</i>{{/if}}</td>
                             <td>{{this.supplier}}</td>
                             <td>{{this.amt}} {{this.unit}}</td>
                             <td>{{this.shelf}}</td>

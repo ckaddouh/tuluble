@@ -102,7 +102,7 @@ const getEditabilityQuery = `
 
 const read_inventory_all_alph_query = `
     SELECT
-        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, tsca_approved, supplier, coa, msds
+        ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, coa, msds
     FROM
         ingredient
     WHERE 

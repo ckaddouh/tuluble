@@ -221,7 +221,7 @@
 
                                         {{!-- Field 1 --}}
                                         <b><label for="tuluble">Phase:</label></b>
-                                        <input type="text" name = "userInput1" id="userInput1" placeholder="Enter Phase Name" maxlength="20">
+                                        <input type="number" name = "userInput1" id="userInput1" placeholder="Enter Phase Number" maxlength="20">
                                         <p> </p>
 
                                         {{!-- Field 2 --}}
@@ -237,7 +237,7 @@
 
  
                                         <b><label for="tuluble">Percent of Ingredient:</label></b>
-                                        <input type="number" name = "userInput3" id="userInput3" placeholder="Enter Percent" maxlength="20">
+                                        <input type="number" name = "userInput3" id="userInput3" placeholder="Enter Percent" maxlength="20" step="0.01">
                                         <p> </p>
 
 
@@ -306,7 +306,6 @@
                             var inputValue2 = $("#userInput2").val();
                             var inputValue3 = $("#userInput3").val();
 
-                            window.location.href += "/phaseformsubmit";
                             });
                         });
                     </script>
@@ -360,13 +359,14 @@
                     const ingredients = JSON.parse('{{{ingredient_dict}}}');
                     const editable = JSON.parse('{{{editable_dict}}}');
                     const approved = JSON.parse('{{{approved_dict}}}');
+                    const trialDataJSON = JSON.parse('{{{trialDataJSON}}}');
 
-                    console.log(ingredients);
-                    console.log("EDITABLE");
-                    console.log(editable);
                   
                     const trial_data = {{trial_data}};
+
+                
                     $("#info").append("<tr>");
+
 
                         
                     
@@ -377,14 +377,16 @@
                     }
                     for (let i = 0; i < trial_data; i++) {
                         console.log(i);
+                        console.log(trial_data[i]);
+
                         if (approved[i] == '1') {
-                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial "+(i+1)+" Percentage <a href= '/formulas/{{project_id}}/removeTrialApproval/" + (i+1) + "' class='material-icons modal-trigger'>close</a> </th>");
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px; border: 1px solid black;\" class = \"green lighten-4\">Trial " + trialDataJSON[i].trial_num + " Percentage <a href= '/formulas/{{project_id}}/removeTrialApproval/" + trialDataJSON[i].trial_num + "' class='material-icons modal-trigger'>close</a> </th>");
                         }
                         else {
-                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial "+(i+1)+" Percentage <a href= '#approveTrial" + (i+1) + "' class='material-icons table-icon modal-trigger'>check</a> </th>");
+                            $("#info").append("<th style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; height: 10px\">Trial " + trialDataJSON[i].trial_num + " Percentage <a href= '#approveTrial" + trialDataJSON[i].trial_num + "' class='material-icons table-icon modal-trigger'>check</a> </th>");
                         }
                     }
-                    $("#info").append("</tr>");
+                    $("#info").append("</tr>")
                     
                    
                    console.log(ingredients);
@@ -393,21 +395,19 @@
                             $("#info").append("<tr >");
                             for(let trial = 0; trial < ingredients[ing].length; trial++)
                             {
-                                console.log("hi");
                                 // console.log(ingredients[ing][trial][0].trial_num);
                                 if (ingredients[ing][trial].length !== 0){
-                                    console.log("YOOHOO");
                                     console.log(editable[ing][trial]);
                                     if (approved[trial] == '1') {
-                                        $("#info").append("<td class = \"green lighten-4\" style=\"height: 85px; border: 1px solid black;\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                        $("#info").append("<td class = \"green lighten-4\" style=\"height: 85px; border: 1px solid black;\"id = 'trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                     }
                                     else {
-                                        $("#info").append("<td style=\"height: 85px\"id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");    
+                                        $("#info").append("<td style=\"height: 85px\"id = 'trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");    
                                     }
                                 }
                                 // ELSE SHOULD NEVER BE REACHED
                                 else {
-                                    $("#info").append("<td id = 'percent/trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
+                                    $("#info").append("<td id = 'trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] + "' contenteditable='true' style-\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\"></td>");
                                 }
 
                                
@@ -436,7 +436,7 @@
                     $("#info").append("<tr>");
                     for (let trial = 0; trial < trial_data; trial++) {
                         console.log(trial);
-                        $("#info").append(`<td colspan=1><a href= '#deleteTrial${trial+1}' class='material-icons modal-trigger'>delete</a></td>`);
+                        $("#info").append(`<td colspan=1><a href= '#deleteTrial` + trialDataJSON[trial].trial_num + `'class='material-icons modal-trigger'>delete</a></td>`);
                     }
                     
                 
@@ -452,7 +452,7 @@
                 {{#each trialData}}
                 <div class="modal" id="deleteTrial{{trial_num}}">
                     <div style="padding: 5% 5% 5% 5%">
-                        <h6>Are you sure you would like to delete this trial? {{trial_num}}</h6>
+                        <h6>Are you sure you would like to delete trial {{trial_num}}?</h6>
                         </div>
                         <div class="modal-footer">
                         <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/formulas/{{../project_id}}/deleteTrial/{{trial_num}}">YES</a>
