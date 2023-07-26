@@ -69,7 +69,7 @@ router.get("/search/:input", async function (req, res, next) {
   });
 
   if (admin[0].admin === 1 || admin[0].admin === 2) {
-  db.read_inventory_search(searchStr, (error, results) => {
+  db.read_inventory_search(searchStr,(error, results) => {
     if (error)
       res.status(500).send(error); //Internal Server Error 
     else {
