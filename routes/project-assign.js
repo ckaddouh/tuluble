@@ -137,7 +137,7 @@ router.post("/edituser/:scientist_id", async function (req, res, next) {
 
   
     try {
-      if (isAdmin[0].admin) {
+      if (isAdmin[0].admin == 1) {
         db.editUser(name, email, adminInput, scientist_id, (error, results) => {
             if (error)
                 res.status(500).send(error);
@@ -166,7 +166,7 @@ router.post("/deleteuser/:scientist_id", async function (req, res, next) {
     });
 
     try {
-      if (admin[0].admin) {
+      if (admin[0].admin == 1) {
         db.deleteUser(scientist_id, (error, results) => {
             if (error)
                 res.status(500).send(error);
@@ -191,6 +191,27 @@ router.get("/search/:input", (req, res) => {
       if (error) reject(error);
       else resolve(results);
       });
+}); 
+
+router.post("/createScientist", async function (req, res, next) {
+
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
+  console.log(req.body.newScientistName);
+  console.log(req.body.newScientistEmail);
+  console.log(req.body.newRole);
+
+  if (admin[0].admin == 1) {
+    db.addScientist(req.body.newScientistName, req.body.newScientistEmail, req.body.newRole, (error, results) => {
+      if (error) reject(error);
+      else resolve(results);
+      });
+  }
 }); 
 
 

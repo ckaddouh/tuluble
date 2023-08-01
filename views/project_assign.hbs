@@ -249,18 +249,52 @@
            </div>
        </div>
 
+       <div class="col s2 m4 l2">
+            <a href="#createScientist" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add a Scientist</a>
+        </div>
+
+        <div class="modal" id="createScientist">
+            <div style="padding: 5% 5% 5% 5%">
+                {{!-- <b><span>Add a New Ingredient</span></b> --}}
+                <h1 style="font-size:40px;">Add a New Scientist</h1>
+
+                <form method="POST" action="/project-assign/createScientist">
+                    <article class="regular">
+                        {{!-- <h2>Textbook</h2> --}}
+
+                        {{!-- Field 1 --}}
+                        <b><label for="tuluble">Scientist Name:</label></b>
+                        <input type="text" name = "newScientistName" id="newScientistName" placeholder="Enter Scientist Name" maxlength="100">
+                        <p> </p>
+
+                        {{!-- Field 2 --}}
+                        <b><label for="tuluble">Scientist Email:</label></b>
+                        <input type="text" name = "newScientistEmail" id="newScientistEmail" placeholder="Enter Scientist Email" maxlength="100">
+                        <p> </p>
+
+                        {{!-- Field 3 --}}
+                        <b><label for="tuluble">Scientist Role:</label></b>
+                        <select name="newRole" id="newRole" class="browser-default">
+                            <option value="2" {{isSelected "Inventory Admin" role}}>Inventory Admin</option>
+                            <option value="0" {{isSelected "Scientist" role}}>Scientist</option>
+                            <option value="1" {{isSelected "Admin" role}}>Admin</option>
+                        </select>
+                      
+
+                        <div class="add_scientist_button">
+                        <button id = "add_scientist_button" 
+                        type="submit"
+                        class="btn waves-effect waves-luluble-pink luluble-pink"
+                        >Add Scientist</button>
+                        </div>
+                        <p> </p>
+                    </form>
+                </article>
+            </div>
+        </div>
+
 
        </div>
-       {{!-- ^^whole thing close --}}
-
-
-   {{!-- </a> --}}
-  
-   {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-
-<!-- Materialize JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> --}}
 
 
 <script>
@@ -308,14 +342,6 @@
                <span><b>Number of Formulas: </b>2<br></br><b>Other: </b>Information</span>
            </div>
            <div class="col s12">&nbsp;</div>
-           {{!-- <div class="col s12 m6 l3">
-               <p></p>
-           </div>
-           <div class="col s12 m6 l3">
-               <p></p>
-           </div> --}}
-
-
        </div>
    </div>
 

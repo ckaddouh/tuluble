@@ -2,6 +2,7 @@ const express = require('express');
 var router = express.Router();
 const db = require("../db/projects_queries.js");
 
+
 router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
   let input = req.params.input
   let scientist_id = req.params.scientist_id

@@ -89,6 +89,12 @@ const checkAdminQuery = `
   WHERE email = ?
 `
 
+const addScientistQuery = `
+  INSERT INTO 
+    scientist
+  (name, email, admin) VALUES (?, ?, ?)
+`
+
 
 function read_projects_all_sql(callback) {
     db.execute(read_projects_all_sql_query, callback);
@@ -134,6 +140,10 @@ function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
 
+function addScientist(name, email, admin, callback) {
+  db.execute(addScientistQuery, [name, email, admin], callback);
+}
+
 
 
 
@@ -148,5 +158,6 @@ module.exports = {
     deleteUser,
     read_projects_search_project_assign,
     getScientistID,
-    requireAdmin
+    requireAdmin, 
+    addScientist
 };
