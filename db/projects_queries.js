@@ -94,44 +94,44 @@ const checkAdminQuery = `
 `
 
 
-function read_projects_search_all(callback) {
-    db.execute(read_projects_search_all_query, callback);
+function read_projects_search_all(input, callback) {
+  db.execute(read_projects_search_all_query, [input], callback);
 }
 
 function read_projects_search(searchStr, scientist_id, callback) {
-    db.execute(read_projects_search_query, [searchStr, scientist_id], callback);
+  db.execute(read_projects_search_query, [searchStr, scientist_id], callback);
 }
 
 function updateProject(editProjectName, editClientName, editDate, editContact, editEmail, callback) {
-    db.execute(updateProjectQuery, [editProjectName, editClientName, editDate, editContact, editEmail], callback);
+  db.execute(updateProjectQuery, [editProjectName, editClientName, editDate, editContact, editEmail], callback);
 }
 
 function insertIntoProjects(newProjectName, newClientName, newDate, newContact, newEmail, callback) {
-    db.execute(insertIntoProjectsQuery, [newProjectName, newClientName, newDate, newContact, newEmail], callback);
+  db.execute(insertIntoProjectsQuery, [newProjectName, newClientName, newDate, newContact, newEmail], callback);
 }
 
 function getProjectID(newProjectName, newClientName, newDate, callback) {
-    db.execute(getProjectIDQuery, [newProjectName, newClientName, newDate], callback);
+  db.execute(getProjectIDQuery, [newProjectName, newClientName, newDate], callback);
 }
 
 function assignScientistToProject(project_id, scientist_id, callback) {
-    db.execute(assignScientistToProjectQuery, [project_id, scientist_id], callback);
+  db.execute(assignScientistToProjectQuery, [project_id, scientist_id], callback);
 }
 
 function read_projects_all_sql(callback) {
-    db.execute(read_projects_all_sql_query, callback);
+  db.execute(read_projects_all_sql_query, callback);
 }
 
 function getProjectsAssignedToScientist(scientist_id, callback) {
-    db.execute(getProjectsAssignedToScientistQuery, [scientist_id], callback);
+  db.execute(getProjectsAssignedToScientistQuery, [scientist_id], callback);
 }
 
 function archiveProject(project_id, callback) {
-    db.execute(archiveProjectQuery, [project_id], callback);
+  db.execute(archiveProjectQuery, [project_id], callback);
 }
 
 function getScientistID(email, callback) {
-    db.execute(getScientistIDQuery, [email], callback);
+  db.execute(getScientistIDQuery, [email], callback);
 }
 
 function requireAdmin(email, callback) {
@@ -139,15 +139,15 @@ function requireAdmin(email, callback) {
 }
 
 module.exports = {
-    read_projects_search_all, 
-    read_projects_search, 
-    updateProject, 
-    insertIntoProjects, 
-    getProjectID, 
-    assignScientistToProject, 
-    read_projects_all_sql,
-    getProjectsAssignedToScientist,
-    archiveProject,
-    getScientistID,
-    requireAdmin
+  read_projects_search_all,
+  read_projects_search,
+  updateProject,
+  insertIntoProjects,
+  getProjectID,
+  assignScientistToProject,
+  read_projects_all_sql,
+  getProjectsAssignedToScientist,
+  archiveProject,
+  getScientistID,
+  requireAdmin
 };

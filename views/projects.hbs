@@ -89,7 +89,7 @@
                 const regex = /^[a-zA-Z0-9\s]*$/;
                 let searchBar = document.getElementById('gsearch');
                 let searchButton = document.getElementById('search-button');
-                let searchTerm;
+                let searchTerm = "";
                 const currentURL = String(window.location.href);
                 const scientistIDIndex = currentURL.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
                 const scientistIDString = currentURL.slice(scientistIDIndex);

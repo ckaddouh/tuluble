@@ -2,8 +2,8 @@ const express = require('express');
 var router = express.Router();
 const db = require("../db/projects_queries.js");
 
-
 router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
+  console.log("ARE YOU INSIDE THIS FUNCTION????????");
   let input = req.params.input
   let scientist_id = req.params.scientist_id
 
@@ -20,16 +20,20 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
 
 
   try {
+    console.log("ARE YOU WITHIN THE TRY THIN??");
     const real_id = await new Promise((resolve, reject) => {
       db.getScientistID(req.oidc.user.email, (error, real_id) => {
+        console.log("did you get inside here scientist");
         if (error) reject(error);
         else resolve(real_id);
       });
     });
 
   if (admin[0].admin === 1) {
+    console.log("am i admin 1");
     results = await new Promise((resolve, reject) => {
       db.read_projects_search_all(searchStr, (error, results) => {
+        console.log("ARE YOU INSIDE READ PROJECTS SEARCH ALL");
         if (error) reject(error);
         else resolve(results);
       });
@@ -39,15 +43,18 @@ router.get("/sci/:scientist_id/search/:input", async function (req, res, next) {
   else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
     results = await new Promise((resolve, reject) => {
       db.read_projects_search(searchStr, scientist_id, (error, results) => {
+        console.log("ARE YOU INSIDE READ PROJECTS SEARCH ??????");
         if (error) reject(error);
         else resolve(results);
       });
     });
   } 
   else if (admin[0].admin === 1) {
+    console.log("ARE YOU HERE INVENTORY???");
     res.redirect("/inventory");
   }
   else {
+    console.log("ARE YOU GUYS HERE IN ELSE");
     res.redirect("/projects/sci/" + real_id[0].scientist_id);
   }
   res.render('projects', {
