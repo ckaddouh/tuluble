@@ -35,7 +35,27 @@
 
             </center>
 
-            <h3 style="color:#e700a2">Notifications</h3>
+            {{!-- <div class="row"> --}}
+                <h3 style="color:#e700a2">Notifications</h3>
+
+                {{!-- <label>Classifier select</label>
+                <select id="myDropdown" class="browser-default">
+                    <option value="0" disabled selected>Filter by classifier</option>
+                    <option value="Thickener">Thickeners</option>
+                    <option value="Oils">Oils</option>
+                    <option value="Butters">Butters</option>
+                    <option value="Surfactants">Surfactants</option>
+                    <option value="Functional-Active">Functional/Active</option>
+                    <option value="Preservatives">Preservatives</option>
+                    <option value="Extracts-Fragrances-Flavor">Extracts/Fragrances/Flavor</option>
+                    <option value="Experimental">Experimental</option>
+                    <option value="Colorants">Colorants</option>
+                    <option value="Absorbents">Absorbents</option>
+                    <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
+                    <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
+                    <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                </select>
+            </div> --}}
 
             <center>
                 <table class="tableFixHead">
@@ -72,4 +92,20 @@
         <a>&nbsp;</a>
     
     </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the select element
+            var selectElement = document.getElementById('myDropdown');
+
+            // Add an event listener for the 'change' event
+            selectElement.addEventListener('change', function() {
+                // Get the selected value
+                var selectedValue = selectElement.value;
+                
+                // Do something with the selected value
+                window.location.assign("/" + selectedValue);
+            });
+        });
+    </script>
 </html>

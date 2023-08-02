@@ -116,8 +116,8 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
     console.log(req.body.hazardDetails);
 
 
-    db.insertIntoInventory(req.body.inci_name, req.body.trade_name, req.body.amt, req.body.shelf, req.body.classifier, req.body.lot_num,
-      req.body.date_received, req.body.supplier, req.body.coa, req.body.msds, req.body.expiration, req.body.encoding, req.body.hazardDetails, (error, results) => {
+    db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
+      req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
         if (error) {
           console.log(error);
           res.redirect('/error');
@@ -135,8 +135,8 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
 router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
 
-  db.updateIngredient(req.body.inci_name_edit, req.body.trade_name_edit, req.body.amt_edit, req.body.shelf_edit, req.body.classifier_edit, req.body.lot_num_edit,
-    req.body.date_received_edit, req.body.supplier_edit, req.body.coa_edit, req.body.msds_edit, req.body.expiration_edit, req.body.cost_edit, req.body.hazardDetailsEdit, req.body.encoding_edit, ingredient_id, (error, results) => {
+  db.updateIngredient(req.body.editInciName, req.body.editTradeName, req.body.editAmount, req.body.editShelf, req.body.editClassifier, req.body.editLotNum,
+    req.body.editReceived, req.body.editSupplier, req.body.editCOA, req.body.editMSDS, req.body.editExpiration, req.body.editCost, req.body.hazardDetailsEdit, req.body.editEncoding, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {

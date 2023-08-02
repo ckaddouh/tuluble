@@ -219,6 +219,22 @@
         </div>
 
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get the select element
+                var selectElement = document.getElementById('myDropdown');
+
+                // Add an event listener for the 'change' event
+                selectElement.addEventListener('change', function() {
+                    // Get the selected value
+                    var selectedValue = selectElement.value;
+                    
+                    // Do something with the selected value
+                    window.location.assign("/inventory/" + selectedValue);
+                });
+            });
+        </script>
+
+        <script>
             function redirectToPage() {
                 const clearedUrl = "http://localhost:3000/inventory";
                 const currentUrl = window.location.href;
@@ -347,7 +363,7 @@
                                                 <b>Supplier:</b> {{this.supplier}}<br></br>
                                                 <b>Lot Number:</b> {{this.lot_num}}<br></br>
                                                 <b>Shelf:</b> {{this.shelf}}<br></br>
-                                                <b>Cost:</b>{{#if this.cost}} ${{this.cost}} Per Kilogram{{else}} No Cost Given{{/if}}<br></br>
+                                                <b>Cost:</b>{{#if this.cost}} ${{this.cost}} Per Kilogram{{else}} {{/if}}<br></br>
                                         </div>
                                         <div class="col s6">
                                             <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
@@ -401,7 +417,7 @@
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Encoding:</label></b>
-                                                <input type="text" name="encoding_edit" id="encoding_edit" value="{{this.encoding}}"
+                                                <input type="text" name="editEncoding" id="editEncoding" value="{{this.encoding}}"
                                                     maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
                                                 <p> </p>
                                                 <br>

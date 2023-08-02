@@ -58,8 +58,8 @@ const checkAdminQuery = `
 
 const insertIntoInventoryQuery = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails, cost)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 
@@ -75,10 +75,10 @@ function read_inventory_search(searchStr, callback) {
   db.execute(read_inventory_search_query, [searchStr, searchStr], callback);
 }
         
-function updateIngredient(inci_name, trade_name, amt, shelf, classifier_id, lot_num,
-    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id, callback) {
-  db.execute(updateIngredient_query, [inci_name, trade_name, amt, shelf, classifier_id, lot_num,
-    date_received, supplier, coa, msds, expiration, cost, hazardDetails, encoding, ingredient_id], callback);
+function updateIngredient(editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
+    editReceived, editSupplier, editCOA, editMSDS, editExpiration, editCost, hazardDetails, editEncoding, ingredient_id, callback) {
+  db.execute(updateIngredient_query, [editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
+    editReceived, editSupplier, editCOA, editMSDS, editExpiration, editCost, hazardDetails, editEncoding, ingredient_id], callback);
 }
 
 function archiveIngredient(ingredientId, callback) {
@@ -89,10 +89,10 @@ function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
 
-function insertIntoInventory(inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-  supplier, coa, msds, expiration, encoding, hazardousDetails, callback) {
-    db.execute(insertIntoInventoryQuery, [inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, 
-      supplier, coa, msds, expiration, encoding, hazardousDetails], callback);
+function insertIntoInventory(newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum, newReceived, 
+  newSupplier, newCOA, newMSDS, newExpiration, newEncoding, hazardousDetails, newCost, callback) {
+    db.execute(insertIntoInventoryQuery, [newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum, newReceived, 
+      newSupplier, newCOA, newMSDS, newExpiration, newEncoding, hazardousDetails, newCost], callback);
   }
 
 module.exports = {
