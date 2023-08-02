@@ -206,11 +206,16 @@ router.post("/createScientist", async function (req, res, next) {
   console.log(req.body.newScientistEmail);
   console.log(req.body.newRole);
 
-  if (admin[0].admin == 1) {
+  if (admin[0].admin === 1) {
     db.addScientist(req.body.newScientistName, req.body.newScientistEmail, req.body.newRole, (error, results) => {
-      if (error) reject(error);
-      else resolve(results);
-      });
+      if (error)
+        res.status(500).send(error);
+      else    
+        res.redirect("/project-assign");
+    });
+  }
+  else {
+    res.redirect("/");
   }
 }); 
 
