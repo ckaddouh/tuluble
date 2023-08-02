@@ -19,6 +19,7 @@
         });
     </script>
 
+    {{!-- <script type="text/javascript" src="/routes/projects.js"></script> --}}
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="/partials/color.css">
     <link rel="stylesheet" href="/styles/formula.css">
@@ -43,9 +44,15 @@
         <div id="contentContainer" style="padding: 2% 2% 0% 2%">
 
         {{#each project_data}}
+            <!-- https://materializecss.com/cards.html -->
                 <div>
                     <h1>{{project_name}} Formulas </h1>
-                    <a href = "/formulas/{{project_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+
+                    <div  class="exclude-pdf">
+                        <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+                    </div>
+
+                    {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
                     <p>&nbsp;</p>
                     <p><b>Client:</b> {{this.client}}</p>
                     <p><b>Date:</b> {{formatDate this.date}}</p>
@@ -133,7 +140,7 @@
         <div class="row">
             <div class="bothTables">
                 <div class="col s7 push-s0" style="overflow-x: scroll;"><span>
-                    <table class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">
+                    <table id = "table1" class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">
                             <tr>
                                 <th style = "width:85px">Phase</th>
                                 <th style = "width: 200px">Trade Name</th>
@@ -174,7 +181,7 @@
                     </span>
                     </div>
 
-                <div class="col s5 push-s0 exclude-pdf" style="overflow-x: scroll;"><span>
+                <div class="col s5 push-s0" style="overflow-x: scroll;"><span>
                     <table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">
                             <tr>
                                 <th>Percentage</th>
@@ -202,6 +209,7 @@
         </div>
 
                 <div class="row">
+
                         <script>
                         var myVariables = document.getElementsByClassName("myVariable");
                         var myVariable = 1;
@@ -213,28 +221,21 @@
                         </script>
 
 
+
+
                 <div class="exclude-pdf">
                     
-                    {{#if messages}}
-                    <div style = "position: fixed;top: 60px;right: 20px;">
-                        {{#each messages}}
-                        <div class = "flash-message" style="background-color: #ffcdd2;padding: 10px;margin-bottom: 10px; border-radius: 5px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);word-wrap: break-word;max-width:300px;">
-                            <p>{{this}}</p>
-                        </div>
-                        {{/each}}
+                    {{#unless sufficient}}
+                    <div>
+                    <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
                     </div>
-                    {{/if}}
+                    {{/unless}}
 
-                    <script>
-                        var flashMessages = document.querySelectorAll('.flash-message');
-                        flashMessages.forEach(function(flashMessage, index) {
-                            setTimeout(function() {
-                            flashMessage.style.display = 'none';
-                            }, (index + 1) * 5000);
-                        });
-                    </script>
-
-
+                    {{#unless formulaComplete}}
+                    <div>
+                        <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
+                    </div>
+                    {{/unless}}
 
                     {{#ifBothTrue sufficient formulaComplete}}
                     <div class="row exclude-pdf">
@@ -250,7 +251,7 @@
                         <h8 style="color: red;">Note that these changes CANNOT BE REVERSED.</h8>
                         </div>
                         <div class="modal-footer">
-                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/batchsheet/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
+                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
                         </div>
                     </div>
 
@@ -316,74 +317,60 @@
                 </script>
 
 
+<!-- Include jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 
-                <script>
-                    // Attach an event listener to the button
-                    document.getElementById('convertToPdf').addEventListener('click', function() {
-                    // Create a new jsPDF instance with landscape orientation
-                    var doc = new jsPDF('landscape');
+<!-- Include html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 
-                    // Get the HTML content of the specific element
-                    var html = document.getElementById('contentContainer').innerHTML;
+<!-- Include jspdf-autotable library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
 
-                    // Make necessary modifications to the HTML content
-                    // Remove any existing scripts and stylesheets
-                    html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-                    html = html.replace(/<link\b[^<]*(?:(?!<\/link>)<[^<]*)*<\/link>/gi, '');
+<script>
+  document.getElementById('convertToPdf').addEventListener('click', function() {
+    // Get the content container element
+    var contentContainer = document.getElementById('contentContainer');
 
-                    // Modify the table size in the HTML content
+    var excludedElements = contentContainer.getElementsByClassName('exclude-pdf');
+    for (var i = 0; i < excludedElements.length; i++) {
+      excludedElements[i].style.display = 'none';
+    }
 
-                    //html = html.replace('<div class="bothTables">', '<div class="col s5 push-s0" style="overflow-x: scroll;"><div style="display: flex;">');
-                    html = html.replace('<table class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">', '<table class="pdf-table scrollable" style="width: 5000px; font-size: 9px; padding: 0px; margin: 50;">');
-                    //html = html.replace('<table class="pdf-table scrollable ingTable" style="table-layout: fixed; width: 50%">', '<table class="pdf-table scrollable" style="width: 50%; font-size: 10px; padding: 5px; margin: 0;">');
+    var pageWidth = contentContainer.offsetWidth;
+    var pageHeight = contentContainer.offsetHeight;
 
-                   // html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>\n<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table scrollable" style="width: 50%; font-size: 10px; padding: 5px; margin: 0;">');
-                    //html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span><table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">', '');
+    // Create a new jsPDF instance with landscape orientation and custom page size
+    var doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [pageWidth, pageHeight], // Set custom page size
+    });
 
-                    //html = html.replace('<table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">','<table class = "pdf-table scrollable amtTable" id = "info" style = "width: 30%; font-size: 3px;">');
-                    //html = html.replace('<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table" style="width: 20%; font-size: 6px;">');
-                    html = html.replace('<table class="pdf-table scrollable amtTable" id="info" style="width: 60%">', '<table class="pdf-table" style="width: 100px; height: 50px; font-size: 10px; padding: 100px; margin: 100; height: 10px; width: 900px;">');
+    // Use html2canvas to capture the content as an image with the correct dimensions
+    html2canvas(contentContainer, {
+      width: pageWidth,
+      height: pageHeight * 1.5, // Set a larger height to avoid cropping at the bottom
+      useCORS: true, // Use CORS to handle cross-origin images (if needed)
+      allowTaint: true, // Allow tainting for external images
+    }).then(function(canvas) {
+      // Convert the canvas image to a data URL
+      var imgData = canvas.toDataURL('image/jpeg', 1.0);
 
-                    html = html.replace('<table id="procedure-table" class="sortable">', '<table id="procedure-table" class="sortable" style="width: 200%; font-size: 5px; width: 300px; padding: 0px;"><br>');
+    for (var i = 0; i < excludedElements.length; i++) {
+        excludedElements[i].style.display = '';
+      }
 
-                   // html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>', '<div class="col s5 push-s6" style="overflow-x: scroll;"><div style="display: flex;">');
-                   // html = html.replace('</table>\n                </span>\n                </div>', '</table></div></div>');
-                    html = html.replace('<div class="col s5 push-s0" style="overflow-x: scroll;"><span>', '<div style="overflow-x: scroll;"><span>');
+      // Add the image to the PDF with the same dimensions as the content
+      // You can add a margin to ensure the table fits within the page
+      var margin = 10; // Set the desired margin in pixels
+      doc.addImage(imgData, 'JPEG', margin, margin, pageWidth - 1.5 * margin, pageHeight - 1.5 * margin);
 
+      // Save the PDF file
+      doc.save('Batchsheet.pdf');
+    });
+  });
+</script>
 
-                    //hiding columns
-                    html = html.replace('<th class="pdf-only" style="width: 150px; display:none;">Amount</th>', '<th class="pdf-only" style="width: 150px;">Amount</th>');
-                    html = html.replace('<td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td>', '<td class="pdf-only">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td>')
-
-
-                    // Create a temporary wrapper element and set its innerHTML to the modified HTML
-                    var wrapper = document.createElement('div');
-                    wrapper.innerHTML = html;
-
-                    // Remove excluded elements from the HTML content
-                    var excludedElements = wrapper.getElementsByClassName('exclude-pdf');
-                    while (excludedElements.length > 0) {
-                        excludedElements[0].parentNode.removeChild(excludedElements[0]);
-                    }
-
-                    // Get the modified HTML content from the wrapper
-                    //var modifiedHtml = wrapper.innerHTML;
-                    //console.log(modifiedHtml);
-
-                    // Convert HTML to PDF
-                    doc.fromHTML(wrapper.innerHTML, 15, 15, {
-                        width: 280 // Adjust the width as per your requirements
-                    });
-
-                    // Save the PDF file
-                    doc.save('Batchsheet.pdf');
-                    });
-
-                </script>
-
-
-
-            
 
 
 
