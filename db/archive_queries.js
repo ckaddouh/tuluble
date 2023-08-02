@@ -18,28 +18,6 @@ const getScientistIDQuery = `
       email = ?
 `
 
-const read_archive_projects_search_all_query = `
-SELECT
-  project_name, project_id, client, date
-FROM
-  projects
-WHERE
-  projects.project_name LIKE ? 
-  AND projects.active = 0
-`
-
-const read_archive_projects_search_query = `
-SELECT
-  project_name, projects.project_id, client, date
-FROM
-  projects, project_assign
-WHERE
-  projects.project_name LIKE ? 
-  AND project_assign.scientist_id = ?
-  AND project_assign.project_id = projects.project_id
-  AND projects.active = 0
-`
-
 const read_inactive_ingredients_all_sql_query = `
   SELECT
     ingredient_id, trade_name, classifier_id, lot_num, shelf, inci_name, amt, expiration, date_received, supplier, cost
@@ -98,14 +76,6 @@ function getScientistID(email, callback) {
     db.execute(getScientistIDQuery, [email], callback);
 }
 
-function read_archive_projects_search_all(project_name, callback) {
-    db.execute(read_archive_projects_search_all_query, [project_name], callback);
-}
-
-function read_archive_projects_search(project_name, scientist_id, callback) {
-    db.execute(read_archive_projects_search_query, [project_name, scientist_id], callback);
-}
-
 function read_inactive_ingredients_all_sql(callback) {
     db.execute(read_inactive_ingredients_all_sql_query, callback);
 }
@@ -133,8 +103,6 @@ function requireAdmin(email, callback) {
 module.exports = {
   read_archive_inventory_search,
   getScientistID,
-  read_archive_projects_search_all,
-  read_archive_projects_search,
   read_inactive_ingredients_all_sql,
   read_inactive_projects_all_sql,
   read_inactive_projects_archived,

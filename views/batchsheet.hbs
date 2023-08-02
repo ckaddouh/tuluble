@@ -202,12 +202,6 @@
         </div>
 
                 <div class="row">
-
-
-                    {{#each ingredient_dict}}
-                        <p>Phase <span class="myVariable"></span> is {{this.percent_of_ingredient}}% of the formula. You will need {{this.amount}} grams of this ingredient.</p>
-                        {{/each}}
-
                         <script>
                         var myVariables = document.getElementsByClassName("myVariable");
                         var myVariable = 1;
@@ -219,21 +213,6 @@
                         </script>
 
 
-
-
-                    {{!-- {{#each ing_data}}
-                        <p>The formula for {{this.inci_name}} is {{#each ../ingredient_dict}}{{#if (eq ../inci_name this.inci_name)}}{{percent_of_ingredient}}%{{/if}}{{/each}}. You will need {{#each ../ingredient_dict}}{{#if (eq ../inci_name this.inci_name)}}{{amount}}{{/if}}{{/each}} grams.</p>
-                    {{/each}} --}}
-
-
-                    {{!-- {{#each ing_data}}
-                        <p>The formula is 
-                            {{#each ../ingredient_dict}}
-                            {{#if @first}}{{this.percent_of_ingredient}}%{{else}}, {{this.percent_of_ingredient}}%{{/if}}
-                            {{/each}}
-                            {{this.inci_name}}. You will need {{amount}} grams.
-                        </p>
-                        {{/each}} --}}
                 <div class="exclude-pdf">
                     
                     {{#if messages}}

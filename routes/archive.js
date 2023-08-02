@@ -13,7 +13,7 @@ router.get("/ingredient/search/:input", async function (req, res, next) {
       });
     });
 
-    if (admin[0].admin === 0 || admin[0].admin === 1) {
+    if (admin[0].admin === 1) {
       db.read_archive_inventory_search(searchStr, (error, results) => {
         if (error)
           res.status(500).send(error); //Internal Server Error 
@@ -27,65 +27,8 @@ router.get("/ingredient/search/:input", async function (req, res, next) {
       });
     }
     else {
-      res.redirect("/inventory");
+      res.redirect("/");
     }
-});
-    
-  
-router.get("/projects/sci/:scientist_id/search/:input", async function (req, res, next) {
-    let input = req.params.input
-    let scientist_id = req.params.scientist_id
-  
-    let searchStr = `%${input}%`;
-  
-    let results;
-  
-    try {
-
-      const admin = await new Promise((resolve, reject) => {
-        db.requireAdmin(req.oidc.user.email, (error, admin) => {
-          if (error) reject (error);
-          else resolve(admin);
-        });
-      });
-
-      const real_id = await new Promise((resolve, reject) => {
-        db.getScientistID(req.oidc.user.email, (error, real_id) => {
-          if (error) reject(error);
-          else resolve(real_id);
-        });
-      });
-  
-      if (admin[0].admin === 1) {
-        results = await new Promise((resolve, reject) => {
-          db.read_archive_projects_search_all(searchStr, (error, results) => {
-            if (error) reject(error);
-            else resolve(results);
-          });
-        });  
-      }
-      else if (admin[0].admin === 0 && real_id[0].scientist_id == scientist_id) {
-        results = await new Promise((resolve, reject) => {
-          db.read_archive_projects_search(searchStr, scientist_id, (error, results) => {
-            if (error) reject(error);
-            else resolve(results);
-          });
-        });
-      } 
-      else if (admin[0].admin === 2) {
-        res.redirect("/inventory");
-      }
-      else {
-        res.redirect("/archive/projects/sci/" + real_id[0].scientist_id);
-      }
-      res.render("archive", {
-        input: input,
-        results: results,
-        isAdmin: admin[0].admin
-      });
-      } catch (error) {
-        res.redirect("/error"); 
-      }
 });
 
 router.get("/", async function (req,res,next) {

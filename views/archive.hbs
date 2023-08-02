@@ -78,8 +78,9 @@
                     </script>
 
                     <script>
+                
                         function redirectToPage() {
-                            const clearedUrl = "http://localhost:3000/archive";
+                            const clearedUrl = "/archive";
                             const currentUrl = window.location.href;
                             const word = "search"
                             const clear = document.querySelector('#clear-search');
@@ -243,29 +244,7 @@
                 
                     <div id="projects" class="col s12">
 
-                        <div style="display: flex; justify-content: flex-end;">
-                            <nav style="width: 30%;">
-                                <div class="nav-wrapper pink accent-1" >
-                                    <div class="input-field">
-                                        <input type="search" id="searchproj" name="searchproj">
-                                        <label for="search" class="label-icon"> <i class="material-icons">search</i></label>
-                                        {{!-- <input type="submit"> --}}
-                                        <i class="material-icons">close</i>
-                                    </div>
-                                </div>
-                            </nav>
-                        </div>
-                        <div style="text-align:right; margin-top:10px">
-                                <button id="clear-search"
-                                    name="clear-search" 
-                                    onclick="redirectToPage2()"
-                                    class="btn waves-effect waves-luluble-pink luluble-pink">
-                                    Clear Search</button>
-                        </div>
-
-
-                        {{!-- search script for archive projects --}}
-
+                
             <script>
                 //console.log("are you in sthis funciton");
                 const search2 = document.querySelector('#searchproj');
@@ -283,7 +262,6 @@
 
 
                 search2.addEventListener('change', (event) => {
-                    console.log("are you in sthis funciton");
                     event.preventDefault();
                     searchTerm2 = searchBar2.value.trim();
                     searchBar2.value = searchTerm2;
@@ -310,24 +288,6 @@
                     }
                 });
             </script>
-
-
-                    <script>
-                            console.log("are you in sthis funciton");
-
-                            function redirectToPage2() {
-                                const clearedUrl = "http://localhost:3000/archive/sci/" + scientistID2;
-                                const currentUrl = window.location.href;
-                                const word = "search"
-                                const clear = document.querySelector('#clear-search');
-
-                                if (currentUrl.toString().includes(word)) {
-                                        const newTabURL = clearedUrl + "#projects";
-                                        console.log(newTabURL);
-                                        window.location.href = newTabURL;
-                                }
-                            }
-                        </script>
 
 
                         <div class="col s2 m6 l6">

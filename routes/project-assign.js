@@ -183,15 +183,67 @@ router.post("/deleteuser/:scientist_id", async function (req, res, next) {
     }
 });
   
-router.get("/search/:input", (req, res) => {
+router.get("/search/:input", async function (req, res, next) {
     let input = req.params.input;
     let searchStr = `%${input}%`;
-  
-    db.read_projects_search_project_assign(searchStr, (error, results) => {
-      if (error) reject(error);
-      else resolve(results);
+
+  let results;
+
+  const admin = await new Promise((resolve, reject) => {
+    db.requireAdmin(req.oidc.user.email, (error, admin) => {
+      if (error) reject (error);
+      else resolve(admin);
+    });
+  });
+
+  console.log("after admin");
+
+  try {
+
+  if (admin[0].admin === 1) {
+    console.log("BEFORE");
+    results = await new Promise((resolve, reject) => {
+      db.read_projects_search_project_assign(searchStr, (error, results) => {
+        if (error) reject(error);
+        else resolve(results);
       });
-}); 
+    });
+    console.log("read projects");
+  }
+  else {
+    res.redirect("/");
+  }
+
+  const scientist_data = await new Promise((resolve, reject) => {
+    db.getAllScientists((error, scientist_data) => {
+      if (error) reject(error);
+      else resolve(scientist_data);
+    });
+  });
+
+  for (let i = 0; i < scientist_data.length; i++) {
+    if (scientist_data[i].admin == 1) {
+      scientist_data[i].role = "Admin";
+    }
+    else 
+      scientist_data[i].role = "Scientist";
+  }  
+
+  console.log("scientist data");
+
+  res.render('project_assign', {
+    input: input,
+    results: results,
+    scientist_data: scientist_data,
+    isAdmin: admin[0].admin
+  });
+
+  } catch (error) {
+    res.redirect("/error"); 
+  }
+});
+
+
 
 router.post("/createScientist", async function (req, res, next) {
 
