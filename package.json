@@ -25,5 +25,9 @@
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0"
+  },
+  "scripts": {
+  "start": "node app.js"
   }
+
 }
