@@ -245,13 +245,15 @@
                            {{/each}}
                            </tbody>
                        </table>
+
+                       <p>&nbsp;</p>
+
+                       <div class="col s2 m4 l6">
+                            <a href="#createScientist" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add a Scientist</a>
+                        </div>
               
            </div>
        </div>
-
-       <div class="col s2 m4 l2">
-            <a href="#createScientist" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">Add a Scientist</a>
-        </div>
 
         <div class="modal" id="createScientist">
             <div style="padding: 5% 5% 5% 5%">
@@ -279,20 +281,11 @@
                             <option value="0" {{isSelected "Scientist" role}}>Scientist</option>
                             <option value="1" {{isSelected "Admin" role}}>Admin</option>
                         </select>
-                      
-
-                        <div class="add_scientist_button">
-                        <button id = "add_scientist_button" 
-                        type="submit"
-                        class="btn waves-effect waves-luluble-pink luluble-pink"
-                        >Add Scientist</button>
-                        </div>
                         <p> </p>
                     </form>
                 </article>
             </div>
         </div>
-
 
        </div>
 
@@ -344,48 +337,6 @@
            <div class="col s12">&nbsp;</div>
        </div>
    </div>
-
-
-
-
-   <a href="#terms" class="btn-floating btn-large orange fixed-action-btn modal-trigger" >
-               <i class="large material-icons">create</i>
-               {{!-- <span class="large material-icons">create</span> --}}
-           </a>
-           <div class="modal" id="terms">
-                   <div style="padding: 5% 5% 5% 5%">
-                       <h1 style="font-size:40px;">Add a New Scientist</h1>
-
-
-                       <form method="POST" action="/project-assign/scientistformsubmit">
-                           <article class="regular">
-                               {{!-- <h2>Textbook</h2> --}}
-
-
-                               {{!-- Field 1 --}}
-                               <b><label for="tuluble">Scientist Name:</label></b>
-                               <input type="text" name = "scientistInput1" id="scientistInput1" placeholder="Enter Scientist Name" maxlength="100">
-                               <p> </p>
-
-
-                               {{!-- Field 2 --}}
-                               <b><label for="tuluble">Email:</label></b>
-                               <input type="text" name = "scientistInput2" id="scientistInput2" placeholder="Enter Email" maxlength="100">
-                               <p> </p>
-
-
-                               <div class="add_scientist_button">
-                               <button id = "add_scientist_button"
-                               type="submit"
-                               class="btn waves-effect waves-luluble-pink luluble-pink"
-                               >Add Scientist</button>
-                               {{!-- <a id="add_button" class="btn waves-effect waves-light luluble-pink">Add Ingredient</a> --}}
-                               </div>
-                               <p> </p>
-                           </form>
-                       </article>
-                   </div>
-               </div>
 
 
    </div>

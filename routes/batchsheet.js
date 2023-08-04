@@ -106,6 +106,13 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
         else resolve(sum);
       });
     });
+
+    const procedure_results = await new Promise((resolve, reject) => {
+      db.get_procedure(project_id, (error, procedure_results) => {
+        if (error) reject(error);
+        else resolve(procedure_results);
+      });
+    });
   
   
     var formulaComplete = 1;
@@ -180,7 +187,8 @@ router.get("/:project_id/:trial_num/:amount", async function (req, res, next) {
       maxVal: maxVal,
       formulaComplete: formulaComplete, 
       messages: req.flash('warning'),
-      isAdmin: admin[0].admin
+      isAdmin: admin[0].admin,
+      procedure_results: procedure_results
     });
   }
   }

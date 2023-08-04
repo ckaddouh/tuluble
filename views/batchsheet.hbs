@@ -6,13 +6,13 @@
     <title>{{project_name}} Batch Sheet </title>
     {{/each}}
 
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="styles.css" media="print">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
     <script>
         Handlebars.registerHelper('eq', function(a, b) {
             return a === b;
@@ -24,17 +24,17 @@
     <link rel="stylesheet" href="/partials/color.css">
     <link rel="stylesheet" href="/styles/formula.css">
     
-</head>
-    <style>
-        .container {
-        display: flex;
-        }
+    </head>
+        <style>
+            .container {
+            display: flex;
+            }
 
-</style>
+        </style>
 
-    <body style="display: flex; flex-direction: column;">
+        <body style="display: flex; flex-direction: column;">
         
-    <!-- NAVIGATION SIDEBAR -->
+        <!-- NAVIGATION SIDEBAR -->
         <div style="display: flex; justify-content:space-between;">
             {{> navbar}}
 
@@ -45,25 +45,23 @@
 
         {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
-                <div>
-                    <h1>{{project_name}} Formulas </h1>
+            <div>
+                <h1>{{project_name}} Formulas </h1>
 
-                    <div  class="exclude-pdf">
-                        <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
-                    </div>
-
-                    {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
-                    <p>&nbsp;</p>
-                    <p><b>Client:</b> {{this.client}}</p>
-                    <p><b>Date:</b> {{formatDate this.date}}</p>
-                    <p><b>Contact name: </b>{{client_name}}</p>
-                    <p><b>Contact email: </b>{{client_email}}</p>
-                    <p>&nbsp;</p>
+                <div  class="exclude-pdf">
+                    <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
                 </div>
+
+                {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
+                <p>&nbsp;</p>
+                <p><b>Client:</b> {{this.client}}</p>
+                <p><b>Date:</b> {{formatDate this.date}}</p>
+                <p><b>Contact name: </b>{{client_name}}</p>
+                <p><b>Contact email: </b>{{client_email}}</p>
+                <p>&nbsp;</p>
+            </div>
         {{/each}}          
           
-        
-
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -117,45 +115,41 @@
         </style>
 
         <script>
-
             // Get all the elements with the 'truncate-decimal' class
-                var elements = document.getElementsByClassName('truncate-decimal');
+            var elements = document.getElementsByClassName('truncate-decimal');
 
-                // Loop through each element
-                for (var i = 0; i < elements.length; i++) {
-                var element = elements[i];
-                
-                // Get the text content of the element
-                var text = element.textContent.trim();
-                
-                // Truncate the decimal value to a specified length (e.g., 4)
-                var truncatedText = parseFloat(text).toFixed(4);
-                
-                // Update the element's text content with the truncated value
-                element.textContent = truncatedText;
-                }
+            // Loop through each element
+            for (var i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            
+            // Get the text content of the element
+            var text = element.textContent.trim();
+            
+            // Truncate the decimal value to a specified length (e.g., 4)
+            var truncatedText = parseFloat(text).toFixed(4);
+            
+            // Update the element's text content with the truncated value
+            element.textContent = truncatedText;
+            }
         </script>
 
 
         <div class="row">
             <div class="bothTables">
-                <div class="col s7 push-s0" style="overflow-x: scroll;"><span>
-                    <table id = "table1" class="pdf-table scrollable ingTable responsive-table" style="table-layout: fixed; width: 50%">
-                            <tr>
-                                <th style = "width:85px">Phase</th>
-                                <th style = "width: 200px">Trade Name</th>
-                                <th style="width: 200px">INCI</th>
-                                <th style="width: 200px">Supplier</th>
-                                <th style="width: 150px">Lot Number</th>
-                                    
-                                <div>
-                                    <th class="pdf-only" style="width: 150px; display:none;">Percentage</th>
-                                    <th class="pdf-only" style="width: 150px; display:none;">Amount</th>
-                                </div>
-                                
-                            </tr>
-                        
-
+                <div class="col s7 push-s0" style="overflow-x: scroll;">
+                    <span>
+                        <table id = "table1" class="pdf-table scrollable ingTable" style="table-layout: fixed; width: 50%">
+                            <thead>
+                                <tr>
+                                    <th style = "width:85px">Phase</th>
+                                    <th style = "width: 200px">Trade Name</th>
+                                    <th style="width: 200px">INCI</th>
+                                    <th style="width: 200px">Supplier</th>
+                                    <th style="width: 150px">Lot Number</th>
+                                        
+                                </tr>
+                            </thead>
+                            
                             {{#each ing_data}}
                                 <tr style="overflow: scroll; height: 85px">
                                 
@@ -165,42 +159,36 @@
                                     <td>{{inci_name}}</td>
                                     <td>{{supplier}}</td>
                                     <td>{{lot_num}}</td>
-                                    {{#each ../ingredient_dict}}
-                                    <div>
-                                        {{!-- <td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td> --}}
-                                        <td id="amountContainer" class="pdf-only ingContainer" style="display:none;">{{percent_of_ingredient}}</td>
-                                    </div>
-                                    <div>
-                                        {{!-- <td class="pdf-only" style="display:none;">{{#each ../ingredient_dict}} {{amount}} {{/each}}</td> --}}
-                                        <td id="amountContainer" class="pdf-only ingContainer" style="display:none;">{{amount}}</td>
-                                    </div>
-                                    {{/each}}
                                 </tr>
                             {{/each}}
                         </table>
                     </span>
-                    </div>
+                </div>
 
-                <div class="col s5 push-s0" style="overflow-x: scroll;"><span>
-                    <table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">
+                <div class="col s5 push-s0" style="overflow-x: scroll;">
+                    <span>
+                        <table class = "pdf-table scrollable amtTable" id = "info" style = "width: 60%">
                             <tr>
                                 <th>Percentage</th>
                                 <th>Amount</th>
                             </tr>
+
                             {{#each ingredient_dict}}
-                            <tr>
-                                <td>
-                                    <p>&nbsp;</p>
-                                    {{percent_of_ingredient}}
-                                    <p>&nbsp;</p>
-                                </td>
-                            
-                                <td>
-                                    <p>&nbsp;</p>
-                                    <span class="truncate-decimal">{{amount}}</span>
-                                    <p>&nbsp;</p>
+                                <tr>
+
+                                    <td>
+                                        <p>&nbsp;</p>
+                                        {{percent_of_ingredient}}
+                                        <p>&nbsp;</p>
                                     </td>
-                            </tr>
+                                
+                                    <td>
+                                        <p>&nbsp;</p>
+                                        <span class="truncate-decimal">{{amount}}</span>
+                                        <p>&nbsp;</p>
+                                    </td>
+                                    
+                                </tr>
                             {{/each}}
                         </table> 
                     </span>
@@ -208,200 +196,240 @@
             </div>
         </div>
 
-                <div class="row">
+        <div class="row">
 
-                        <script>
-                        var myVariables = document.getElementsByClassName("myVariable");
-                        var myVariable = 1;
+            <script>
+                var myVariables = document.getElementsByClassName("myVariable");
+                var myVariable = 1;
 
-                        for (var i = 0; i < myVariables.length; i++) {
-                            myVariables[i].textContent = myVariable.toString();
-                            myVariable++;
-                        }
-                        </script>
+                for (var i = 0; i < myVariables.length; i++) {
+                    myVariables[i].textContent = myVariable.toString();
+                    myVariable++;
+                }
+            </script>
 
-
-
-
-                <div class="exclude-pdf">
+            <div class="exclude-pdf">
                     
-                    {{#unless sufficient}}
-                    <div>
-                    <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
+                {{#unless sufficient}}
+                <div>
+                <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
+                </div>
+                {{/unless}}
+
+                {{#unless formulaComplete}}
+                <div>
+                    <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
+                </div>
+                {{/unless}}
+
+                {{#ifBothTrue sufficient formulaComplete}}
+                <div class="row exclude-pdf">
+                    <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
+                </div>                    
+                {{/ifBothTrue }}
+                </div>
+
+                <div id="makeFormulaIngredient" class="exclude-pdf modal">
+                    <div class="modal-content">
+                    <h6>Are you sure you would like to make <b>{{amount}}</b> grams of <b>{{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}</b>? </h6>
+                    <p>&nbsp;</p>
+                    <h8 style="color: red;">Note that these changes CANNOT BE REVERSED.</h8>
                     </div>
-                    {{/unless}}
-
-                    {{#unless formulaComplete}}
-                    <div>
-                        <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
-                    </div>
-                    {{/unless}}
-
-                    {{#ifBothTrue sufficient formulaComplete}}
-                    <div class="row exclude-pdf">
-                        <a href="#makeFormulaIngredient" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">MAKE</a>
-                    </div>                    
-                    {{/ifBothTrue }}
-                    </div>
-
-                    <div id="makeFormulaIngredient" class="exclude-pdf modal">
-                        <div class="modal-content">
-                        <h6>Are you sure you would like to make <b>{{amount}}</b> grams of <b>{{#each project_data}}{{project_name}}{{/each}} Trial {{trial_num}}</b>? </h6>
-                        <p>&nbsp;</p>
-                        <h8 style="color: red;">Note that these changes CANNOT BE REVERSED.</h8>
-                        </div>
-                        <div class="modal-footer">
-                        <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
-                        </div>
-                    </div>
-
-                    <div class="row exclude-pdf">
-                        <a href="#seeProcedure" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">See Procedure</a>
-                    </div> 
-
-                    <div id="seeProcedure" class="modal">
-                        <div class="modal-content">
-                            <table id="procedure-table" class="sortable">
-                                <thead>
-                                    <tr id = "ing">
-                                        <th>Phase</th>
-                                        <th>Procedure</th>
-                                        <th>Comments/Ingredients</th>
-                                        <th>Initial Temperature (C)</th>
-                                        <th>Final Temperature (C)</th>
-                                        <th>Timing (min)</th>
-                                        <th>Initial Mixing (rpm)</th>
-                                        <th>Final Mixing (rpm)</th>
-                                        <th>Mixer Type</th>
-                                        <th>Blade</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {{#each procedure_results}}
-                                    <tr>
-                                        <td contenteditable="true">{{phase_num}}</td>
-                                        <td contenteditable="true">{{proc}}</td>
-                                        <td contenteditable="true">{{comments}}</td>
-                                        <td contenteditable="true">{{temp_init}}</td>
-                                        <td contenteditable="true">{{temp_final}}</td>
-                                        <td contenteditable="true">{{timing}}</td>
-                                        <td contenteditable="true">{{mixing_init}}</td>
-                                        <td contenteditable="true">{{mixing_final}}</td>
-                                        <td contenteditable="true">{{mixer_type}}</td>
-                                        <td contenteditable="true">{{blade}}</td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="modal-footer">
+                    <a class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger" href="/projects/{{project_id}}/{{trial_num}}/{{amount}}/makeformsubmit">YES</a>
                     </div>
                 </div>
 
-                
-                    
+                <div class="row exclude-pdf">
+                    <a href="#seeProcedure" class="btn waves-effect waves-luluble-pink luluble-pink modal-trigger">See Procedure</a>
+                </div> 
 
+                <div id="seeProcedure" class="modal">
+                    <div class="modal-content">
+                        <table id="procedure-table" class="sortable">
+                            <thead>
+                                <tr id = "ing">
+                                    <th>Phase</th>
+                                    <th>Procedure</th>
+                                    <th>Comments/Ingredients</th>
+                                    <th>Initial Temperature (C)</th>
+                                    <th>Final Temperature (C)</th>
+                                    <th>Timing (min)</th>
+                                    <th>Initial Mixing (rpm)</th>
+                                    <th>Final Mixing (rpm)</th>
+                                    <th>Mixer Type</th>
+                                    <th>Blade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                <button id="convertToPdf" class="btn waves-effect waves-luluble-pink luluble-pink exclude-pdf">Convert to PDF</button>
+                                {{#each procedure_results}}
+                                <tr>
+                                    <td contenteditable="true">{{phase_num}}</td>
+                                    <td contenteditable="true">{{proc}}</td>
+                                    <td contenteditable="true">{{comments}}</td>
+                                    <td contenteditable="true">{{temp_init}}</td>
+                                    <td contenteditable="true">{{temp_final}}</td>
+                                    <td contenteditable="true">{{timing}}</td>
+                                    <td contenteditable="true">{{mixing_init}}</td>
+                                    <td contenteditable="true">{{mixing_final}}</td>
+                                    <td contenteditable="true">{{mixer_type}}</td>
+                                    <td contenteditable="true">{{blade}}</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-                <p>&nbsp;</p>
+            <button id="exportButton" class="btn waves-effect waves-luluble-pink luluble-pink">Convert to CSV File</button>
+
+            <p>&nbsp;</p>
                     
             </div>
 
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-                <script>
-                    function incrementIndex(index) {
-                        return index + 1;
-                    }
-                </script>
+            <script>
+                function incrementIndex(index) {
+                    return index + 1;
+                }
+            </script>
 
+            <!-- Include jsPDF library -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
 
-<!-- Include jsPDF library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+            <!-- Include html2canvas library -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 
-<!-- Include html2canvas library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+            <!-- Include jspdf-autotable library -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
 
-<!-- Include jspdf-autotable library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.0/html2pdf.bundle.min.js"></script>
 
-<script>
-  document.getElementById('convertToPdf').addEventListener('click', function() {
-    // Get the content container element
-    var contentContainer = document.getElementById('contentContainer');
-
-    var excludedElements = contentContainer.getElementsByClassName('exclude-pdf');
-    for (var i = 0; i < excludedElements.length; i++) {
-      excludedElements[i].style.display = 'none';
-    }
-
-    var pageWidth = contentContainer.offsetWidth;
-    var pageHeight = contentContainer.offsetHeight;
-
-    // Create a new jsPDF instance with landscape orientation and custom page size
-    var doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [pageWidth, pageHeight], // Set custom page size
-    });
-
-    // Use html2canvas to capture the content as an image with the correct dimensions
-    html2canvas(contentContainer, {
-      width: pageWidth,
-      height: pageHeight * 1.5, // Set a larger height to avoid cropping at the bottom
-      useCORS: true, // Use CORS to handle cross-origin images (if needed)
-      allowTaint: true, // Allow tainting for external images
-    }).then(function(canvas) {
-      // Convert the canvas image to a data URL
-      var imgData = canvas.toDataURL('image/jpeg', 1.0);
-
-    for (var i = 0; i < excludedElements.length; i++) {
-        excludedElements[i].style.display = '';
-      }
-
-      // Add the image to the PDF with the same dimensions as the content
-      // You can add a margin to ensure the table fits within the page
-      var margin = 10; // Set the desired margin in pixels
-      doc.addImage(imgData, 'JPEG', margin, margin, pageWidth - 1.5 * margin, pageHeight - 1.5 * margin);
-
-      // Save the PDF file
-      doc.save('Batchsheet.pdf');
-    });
-  });
-</script>
+            <!-- Include SheetJS from CDN -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
 
 
+            <script>
+                // Function to handle the export
+                function exportToCSV() {
+                    const tableData = [];
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        var modals = document.querySelectorAll('.modal');
-        M.Modal.init(modals);
-        });
-        </script>
+                    // Collect data from projectInfo
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.modal');
-        var instances = M.Modal.init(elems);
-        });
-        </script>
+                    // Collect data from #table1 and #info
+                    const headersTable1 = [
+                        "Phase",
+                        "Trade Name",
+                        "INCI",
+                        "Supplier",
+                        "Lot Number",
+                        "Percentage",
+                        "Amount"
+                    ];
+                    const rowsTable1 = document.querySelectorAll("#table1 tbody tr");
+                    const amtRowsTable1 = document.querySelectorAll("#info tbody tr:not(:first-child)");
 
-        <script>
-        $(document).ready(function() {
-            $('.modal').modal();
-        });
-    </script>
+                    // Add headers for #table1 and #info as a separate row in the CSV
+                    tableData.push(headersTable1.join(","));
 
-    
-    
+                    // Collect data from each row in #table1 and #info
+                    rowsTable1.forEach((row, index) => {
+                        const rowData = [];
+                        const amtRow = amtRowsTable1[index];
+                        row.querySelectorAll("td").forEach((cell) => {
+                        rowData.push('"' + cell.textContent.trim() + '"'); // Use textContent instead of innerText
+                        });
 
-                </div>
+                        amtRow.querySelectorAll("td").forEach((cell) => {
+                        rowData.push('"' + cell.textContent.trim() + '"'); // Use textContent instead of innerText
+                        });
+
+                        tableData.push(rowData.join(","));
+                    });
+
+                    // Add an empty row between the tables
+                    tableData.push([]);
+
+                    // Add an empty row between the tables
+                    tableData.push([]);
+
+                    // Collect headers for #procedure-table
+                    const headersProcedureTable = [
+                        "Phase",
+                        "Procedure",
+                        "Comments/Ingredients",
+                        "Initial Temperature (C)",
+                        "Final Temperature (C)",
+                        "Timing (min)",
+                        "Initial Mixing (rpm)",
+                        "Final Mixing (rpm)",
+                        "Mixer Type",
+                        "Blade"
+                    ];
+
+                    // Add headers for #procedure-table as a separate row in the CSV
+                    tableData.push(headersProcedureTable.join(","));
+
+                    // Collect data from #procedure-table
+                    const procedureRows = document.querySelectorAll("#procedure-table tbody tr");
+
+                    // Collect data from each row in #procedure-table
+                    procedureRows.forEach((row) => {
+                        const rowData = [];
+                        row.querySelectorAll("td").forEach((cell) => {
+                        rowData.push('"' + cell.textContent.trim() + '"'); // Use textContent instead of innerText
+                        });
+
+                        tableData.push(rowData.join(","));
+                    });
+
+                    // Convert tableData to CSV format
+                    const csvContent = tableData.join("\n");
+
+                    // Download the CSV file
+                    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", "Batchsheet for Trial {{trial_num}} of {{#each project_data}}{{project_name}}{{/each}}.csv");
+                    link.style.display = "none";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
+                // Add a click event listener to the export button
+                document.getElementById("exportButton").addEventListener("click", exportToCSV);
+            </script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                var modals = document.querySelectorAll('.modal');
+                M.Modal.init(modals);
+                });
+            </script>
+
+            <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.modal');
+                var instances = M.Modal.init(elems);
+                });
+            </script>
+
+            <script>
+                $(document).ready(function() {
+                    $('.modal').modal();
+                });
+            </script>
+
             </div>
         </div>
+    </div>
 
-    </body>
-
+</body>
 
 </html>

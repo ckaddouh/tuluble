@@ -55,108 +55,12 @@
                     </div>
 
                     <div style="text-align:right; margin-top:10px">
-                        <button id="clear-search"
-                                        name="clear-search" 
-                                        onclick="redirectToPage()"
-                                        class="btn waves-effect waves-luluble-pink luluble-pink">
-                                        Clear Search</button>
+                        <button id="clear-search" name="clear-search" onclick="redirectToPage()" class="btn waves-effect waves-luluble-pink luluble-pink">Clear Search</button>
                     </div>
 
                     <div class="col s12 m6 offset-m3">
                         <p></p>
                     </div>
-
-                    <script> 
-                        document.addEventListener('DOMContentLoaded', function() {
-                            var elems = document.querySelectorAll('.sidenav');
-                            var instances = M.Sidenav.init(elems, options);
-                        });
-
-                        $(document).ready(function(){
-                            $('.sidenav').sidenav();
-                        });
-                    </script>
-
-                    <script>
-                
-                        function redirectToPage() {
-                            const clearedUrl = "/archive";
-                            const currentUrl = window.location.href;
-                            const word = "search"
-                            const clear = document.querySelector('#clear-search');
-
-                            if (currentUrl.toString().includes(word)) {
-                                    window.location.href = clearedUrl;
-                            }
-                        }
-                    </script>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                        var tabs = document.querySelectorAll('.tabs');
-                        M.Tabs.init(tabs);
-
-                        // Update URL when switching tabs
-                        var tabLinks = document.querySelectorAll('.tabs a');
-                        tabLinks.forEach(function(tabLink) {
-                            tabLink.addEventListener('click', function(event) {
-                            event.preventDefault();
-
-                            // Get the target tab ID from the href attribute
-                            var targetTabId = this.getAttribute('href').substring(1);
-
-                            // Update the URL
-                            history.pushState(null, null, '#' + targetTabId);
-                            });
-                        });
-
-                        // Handle back/forward navigation
-                        window.addEventListener('popstate', function() {
-                            // Get the current hash fragment from the URL
-                            var currentHash = window.location.hash;
-
-                            // Activate the corresponding tab based on the hash fragment
-                            var targetTab = document.querySelector('a[href="' + currentHash + '"]');
-                            if (targetTab) {
-                            var tabInstance = M.Tabs.getInstance(tabs);
-                            tabInstance.select(targetTab.parentNode);
-                            }
-                        });
-                        });
-                    </script>
-
-                    <script>
-                        const search = document.querySelector('#ingsearch');
-
-                        let searchBar = document.getElementById('ingsearch');
-                        let searchButton = document.getElementById('search-button');
-                        let searchTerm;
-
-                        search.addEventListener('change', (event) => {
-                            searchTerm = searchBar.value.trim();
-                            searchBar.value = searchTerm;
-
-                            const stateObj = { url: '/archive/ingredient' };
-                            const title = '';
-                            const newUrl = '/archive/ingredient';
-                            if (searchTerm.length === 0) {
-                                window.location.assign("/archive/ingredient");
-
-                            }
-                            else {
-                                if (window.location.href.indexOf("archive/ingredient/") !== -1) {
-                                    console.log(searchTerm);
-                                    window.location.assign("/archive/ingredient/search/" + searchTerm);
-
-                                }
-                                else {
-                                    console.log("archive/ingredient/" + searchTerm);
-                                    window.location.assign("/archive/ingredient/search/" + searchTerm);
-
-                                }
-                            }
-                        });
-                    </script>
 
                     {{!-- creates blank space --}}
                     <caption>&nbsp;</caption>
@@ -187,8 +91,8 @@
                                 <th id="unarchive">Unarchive</th>
                             </tr>
                         </thead>
-                        <tbody>
 
+                        <tbody>
                             {{#each results}}
                             <tr>
                                 <td>{{this.inci_name}}
@@ -196,12 +100,12 @@
                                         <span class="large material-icons">info_outline</span>
                                     </a>
                                     <div class="modal" id="terms{{ingredient_id}}">
-                                        <div class="row">
+                                        <div style="padding:20px" class="row">
                                             <div class="col s12">&nbsp;</div>
                                             <div class="col s12"><b><font size="+2">Ingredient Information</font></b></div>
                                             <div class="col s12">&nbsp;</div>
                                             <div class="col s6">
-                                                <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}} {{this.unit}}<b></b><b>Supplier:</b> {{this.supplier}}<br></br></span>
+                                                <span><b>Trade Name:</b> {{this.trade_name}}<br></br><b>INCI Name:</b> {{this.inci_name}}<br></br><b>Amount Available:</b> {{this.amt}} {{this.unit}}<b></b><br></br><b>Supplier:</b> {{this.supplier}}<br></br></span>
                                                 {{!-- <span>Ingredient:<br></br>Supplier:<br></br>Trade Name:<br></br>INCI Name:</span> --}}
                                             </div>
                                             <div class="col s6">
@@ -214,154 +118,179 @@
                                                 <div class="col s12 m6 l3"><p></p></div>
                                         </div>
                                     </div>
-
-                                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-                                    <script
-                                        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('.modal').modal();
-                                        })
-                                    </script>
-
-
                                 </td>
 
                                 <td>{{this.trade_name}}</td>
                                 <td>{{this.amt}} {{this.unit}}</td>
                                 <td>{{this.shelf}}</td>
+
                                 <td>
                                     <div class="delete_button">
                                         <a href="/archive/unarchive-ingredient/{{this.ingredient_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">Unarchive</a>
                                     </div>
-                            </td>
+                                </td>
                             </tr>
                             {{/each}}
                         </tbody>
                     </table>
-
                 </div>
                 
-                    <div id="projects" class="col s12">
-
                 
-            <script>
-                //console.log("are you in sthis funciton");
-                const search2 = document.querySelector('#searchproj');
-
-                const regex = /^[a-zA-Z0-9\s]*$/;
-                let searchBar2 = document.getElementById('searchproj');
-                let searchButton2 = document.getElementById('search-button');
-                let searchTerm2;
-                const currentURL2 = String(window.location.href);
-                console.log(currentURL2);
-                const scientistIDIndex2 = currentURL2.indexOf('/sci/') + 5; // Add 5 to exclude "/sci/"
-                const scientistIDString2 = currentURL2.slice(scientistIDIndex2);
-                console.log(scientistIDString2);
-                let scientistID2 = String(parseInt(scientistIDString2));
-
-
-                search2.addEventListener('change', (event) => {
-                    event.preventDefault();
-                    searchTerm2 = searchBar2.value.trim();
-                    searchBar2.value = searchTerm2;
-                    console.log(searchTerm2);
-
-                    function validateSearchInput(input) {
-                        return regex.test(input);
-                    }
-
-                    const stateObj = { url: "/archive/projects/sci/" + scientistID2 };
-                    const title = '';
-                    const newUrl = "/archive/projects/sci/" + scientistID2;
-
-                    if (searchTerm2.length === 0 || !validateSearchInput(searchTerm2)) {
-                        window.location.assign("/archive/projects");
-                    }
-                    else {
-                        if (window.location.href.indexOf("archive/projects/sci/" + scientistID2) !== -1) {
-                            window.location.assign("/archive/projects/sci/" + scientistID2 + "/search/" + searchTerm2);
-                        }
-                        else {
-                            window.location.assign("/archive/projects/sci/" + scientistID2 + "/search/" + searchTerm2);
-                        }
-                    }
-                });
-            </script>
-
-
-                        <div class="col s2 m6 l6">
-                                    
-                            {{#each project_results}}
-                                {{!-- <a href="#terms" class="modal-trigger"> --}}
-                                    <div class="card luluble-light-pink darken-1">
-                                        <div class="card-content white-text">
-                                            {{!-- projects/{{this.project_name}} --}}
-                                            <span class="card-title"><a style="color: black;"
-                                                    href="/projects/{{this.project_id}}"><b>{{this.project_name}}</a></b></span>
-                                            <p style="color: black;">Client: {{this.client}}</p>
-                                            <p style="color: black;">{{this.date}}</p>
-                                            <div class="col s12">&nbsp;</div>
-                                            <div class="row">
-                                                <div class = "col s12 m4 l4">
-                                                    <a href="#terms{{project_id}}" class="modal-trigger">
-                                                        <span class="btn-small luluble-light-grey">See More</span>
-                                                    </a>
-                                                </div>
-                                                <div class = "col s12 m4 l2"></div>
-                                                    <div class="delete_button">
-                                                        <a href="/archive/unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Unarchive</a>
-                                                    </div>
-                                    </div>
-                            </div>
-                            {{!-- </a> --}}
-
-                            <div class="modal" id="terms{{project_id}}">
-                                <div class="row">
+                <div id="projects" class="row">
+                    {{!-- <div > --}}
+                        <div class="col s7 m6 l6">
+                              {{#each project_results}}  
+                        {{!-- <a href="#terms" class="modal-trigger"> --}}
+                            <div class="card luluble-light-pink darken-1">
+                                <div class="card-content white-text">
+                                    {{!-- projects/{{this.project_name}} --}}
+                                    <span class="card-title"><a style="color: black;" href="/projects/{{this.project_id}}"><b>{{this.project_name}}</a></b></span>
+                                    <p style="color: black;">Client: {{this.client}}</p>
+                                    <p style="color: black;">{{this.date}}</p>
                                     <div class="col s12">&nbsp;</div>
-                                    <div class="col s12"><b><font size="+2">{{this.project_name}}</font></b></div>
-                                    <div class="col s12">&nbsp;</div>
-                                    <div class="col s6">
-                                        <span><b>Client:</b> {{this.client}}<br></br><b>Date:</b> {{formatDate this.date}}</span>
+                                    <div class="row">
+                                        <div class = "col s12 m4 l4">
+                                            <a href="#terms{{project_id}}" class="modal-trigger">
+                                                <span class="btn-small luluble-light-grey">See More</span>
+                                            </a>
+                                        </div>
+                                        <div class = "col s12 m4 l2"></div>
+                                            <div class="delete_button">
+                                                <a href="/archive/unarchive-project/{{this.project_id}}" class="btn waves-effect waves-light-grey luluble-light-grey">Unarchive</a>
+                                            </div>
                                     </div>
-                                    <div class="col s6">
-                                        <span><b>Number of Formulas:</b> 3<br></br><b>Other: </b>Information</span>
+                                </div>
+
+                                <div class="modal" id="terms{{project_id}}">
+                                    <div style="padding:20px" class="row">
+                                        
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s12"><b><font size="+2">{{this.project_name}}</font></b></div>
+                                        <div class="col s12">&nbsp;</div>
+                                        <div class="col s6">
+                                            <span><b>Client:</b> {{this.client}}<br></br><b>Date:</b> {{formatDate this.date}}</span>
+                                        </div>
+                                        <div class="col s6">
+                                            <span><b>Number of Formulas:</b> 3<br></br><b>Other: </b>Information</span>
+                                        </div>
+                                        <div class="col s12">&nbsp;</div>
                                     </div>
-                                    <div class="col s12">&nbsp;</div>
-                                    {{!-- <div class="col s12 m6 l3">
-                                        <p></p>
-                                    </div>
-                                    <div class="col s12 m6 l3">
-                                        <p></p>
-                                    </div> --}}
-                
                                 </div>
                             </div>
-                        </div>
 
-                        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-                        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-                        <script>
-                            $(document).ready(function () {
-                                $('.modal').modal();
-                            })
-                        </script>
-
-                        <div class="card-action"></div>
+                            <div class="card-action"></div>
                             {{/each}}
-
+                        </div>
                     </div>
                 </div>
-            
-                <script>
-                    $(document).ready(function(){
-                        $('.tabs').tabs();
-                    });
-
-                </script>
             </div>
         </div>
-    </div>
 
-</body>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.modal').modal();
+            })
+        </script>
+
+        <script> 
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('.sidenav');
+                var instances = M.Sidenav.init(elems, options);
+            });
+
+            $(document).ready(function(){
+                $('.sidenav').sidenav();
+            });
+        </script>
+
+        <script>
+            function redirectToPage() {
+                const clearedUrl = "/archive";
+                const currentUrl = window.location.href;
+                const word = "search"
+                const clear = document.querySelector('#clear-search');
+
+                if (currentUrl.toString().includes(word)) {
+                        window.location.href = clearedUrl;
+                }
+            }
+        </script>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            var tabs = document.querySelectorAll('.tabs');
+            M.Tabs.init(tabs);
+
+            // Update URL when switching tabs
+            var tabLinks = document.querySelectorAll('.tabs a');
+            tabLinks.forEach(function(tabLink) {
+                tabLink.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Get the target tab ID from the href attribute
+                var targetTabId = this.getAttribute('href').substring(1);
+
+                // Update the URL
+                history.pushState(null, null, '#' + targetTabId);
+                });
+            });
+
+            // Handle back/forward navigation
+            window.addEventListener('popstate', function() {
+                // Get the current hash fragment from the URL
+                var currentHash = window.location.hash;
+
+                // Activate the corresponding tab based on the hash fragment
+                var targetTab = document.querySelector('a[href="' + currentHash + '"]');
+                if (targetTab) {
+                var tabInstance = M.Tabs.getInstance(tabs);
+                tabInstance.select(targetTab.parentNode);
+                }
+            });
+            });
+        </script>
+
+        <script>
+            const search = document.querySelector('#ingsearch');
+
+            let searchBar = document.getElementById('ingsearch');
+            let searchButton = document.getElementById('search-button');
+            let searchTerm;
+
+            search.addEventListener('change', (event) => {
+                searchTerm = searchBar.value.trim();
+                searchBar.value = searchTerm;
+
+                const stateObj = { url: '/archive/ingredient' };
+                const title = '';
+                const newUrl = '/archive/ingredient';
+                if (searchTerm.length === 0) {
+                    window.location.assign("/archive/ingredient");
+
+                }
+                else {
+                    if (window.location.href.indexOf("archive/ingredient/") !== -1) {
+                        console.log(searchTerm);
+                        window.location.assign("/archive/ingredient/search/" + searchTerm);
+
+                    }
+                    else {
+                        console.log("archive/ingredient/" + searchTerm);
+                        window.location.assign("/archive/ingredient/search/" + searchTerm);
+
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            $(document).ready(function(){
+                $('.tabs').tabs();
+            });
+        </script>
+
+    </body>
 </html>
