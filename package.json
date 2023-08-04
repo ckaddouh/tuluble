@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@types/morgan": "^1.9.4",
+    "amplify": "^0.0.11",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "diagnostics_channel": "^1.1.0",
@@ -11,6 +12,9 @@
     "express-session": "^1.17.3",
     "hbs": "^4.2.0",
     "html2canvas": "^1.4.1",
+    "http-errors": "^2.0.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.31",
     "materialize-css": "^1.0.0",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",

@@ -25,15 +25,19 @@
         </li>
         {{#ifEitherTrue (eq isAdmin 0) (eq isAdmin 1)}}
         <li><a href="/"><i class="material-icons">home</i>Home</a></li>
+        {{/ifEitherTrue}}
+
+        {{#ifEitherTrue (eq isAdmin 2) (eq isAdmin 1)}}
         <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
+        {{/ifEitherTrue}}
+
+        {{#ifEitherTrue (eq isAdmin 0) (eq isAdmin 1)}}
         <li><a href="/projects"><i class="material-icons">import_contacts</i>Projects</a></li>
         <li><a href="/archive"><i class="material-icons">archive</i>Archive</a></li>
         {{/ifEitherTrue}}
+        
         {{#if (eq isAdmin 1)}}
             <li><a href="/project-assign"><i class="material-icons">assignment_ind</i>Assign</a></li>
-        {{/if}}
-        {{#if (eq isAdmin 2)}}
-            <li><a href="/inventory"><i class="material-icons">book</i>Inventory</a></li>
         {{/if}}
     </ul>
 

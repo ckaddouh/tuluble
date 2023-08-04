@@ -3,7 +3,7 @@ var router = express.Router();
 const db = require("../db/formulas_queries.js");
 
 
-router.get("/:project_id/addedIngredient/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", (req,res) => { 
+router.get("/:project_id/addedIngredient/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", async function (req,res, next) { 
   let project_id = req.params.project_id;
   let trial_num = req.params.trial_num;
   let ingredient_id = req.params.ingredient_id;
@@ -17,6 +17,8 @@ router.get("/:project_id/addedIngredient/trial:trial_num/ingredient:ingredient_i
       res.redirect("/formulas/" + project_id);
     }
   });
+
+  
 
 });
 
@@ -60,8 +62,6 @@ router.post("/:project_id/formulaformsubmit", async function (req, res, next) {
 router.post("/:project_id/phaseformsubmit", async function (req, res, next) {
   let project_id = req.params.project_id;
 
-  console.log("in phase form submit");
-
   db.insertIntoPhase(project_id, req.body.userInput0, req.body.userInput1, req.body.userInput3, req.body.userInput2, (error, results) => {
     console.log("running query");
     if (error)
@@ -70,6 +70,7 @@ router.post("/:project_id/phaseformsubmit", async function (req, res, next) {
       res.redirect( "/formulas/" + project_id);
     }
   });
+
 });
 
 

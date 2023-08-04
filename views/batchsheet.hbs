@@ -45,12 +45,12 @@
 
         {{#each project_data}}
             <!-- https://materializecss.com/cards.html -->
-            <div>
-                <h1>{{project_name}} Formulas </h1>
+                <div>
+                    <h1>{{project_name}} Formulas </h1>
 
-                <div  class="exclude-pdf">
-                    <a href = "/projects/" + {{project_id}} class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
-                </div>
+                    <div class="exclude-pdf">
+                        <a href = "/formulas/{{this.project_id}}" class="btn waves-effect waves-luluble-pink luluble-pink">BACK</a>
+                    </div>
 
                 {{!-- <button id = "back_button" class="btn waves-effect waves-luluble-pink luluble-pink"><a href = "/projects/" + {{project_id}}>BACK</a></button> --}}
                 <p>&nbsp;</p>
@@ -208,19 +208,7 @@
                 }
             </script>
 
-            <div class="exclude-pdf">
-                    
-                {{#unless sufficient}}
-                <div>
-                <p>NOTE: You are lacking the ingredients to produce {{amount}} grams of this formula. The maximum amount you can make is {{maxVal}} grams.</p>
-                </div>
-                {{/unless}}
-
-                {{#unless formulaComplete}}
-                <div>
-                    <p>WARNING: Formula ingredients do not sum to 100%. Please return and edit formula.</p>
-                </div>
-                {{/unless}}
+                <div class="exclude-pdf">
 
                 {{#ifBothTrue sufficient formulaComplete}}
                 <div class="row exclude-pdf">
@@ -289,7 +277,89 @@
                     
             </div>
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                <script>
+                    function incrementIndex(index) {
+                        return index + 1;
+                    }
+                </script>
+
+
+<!-- Include jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+
+<!-- Include html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+<!-- Include jspdf-autotable library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+  document.getElementById('convertToPdf').addEventListener('click', function() {
+    // Get the content container element
+    var contentContainer = document.getElementById('contentContainer');
+
+    var excludedElements = contentContainer.getElementsByClassName('exclude-pdf');
+    for (var i = 0; i < excludedElements.length; i++) {
+      excludedElements[i].style.display = 'none';
+    }
+
+    var pageWidth = contentContainer.offsetWidth;
+    var pageHeight = contentContainer.offsetHeight;
+
+    // Create a new jsPDF instance with landscape orientation and custom page size
+    var doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [pageWidth, pageHeight], // Set custom page size
+    });
+
+    // Use html2canvas to capture the content as an image with the correct dimensions
+    html2canvas(contentContainer, {
+      width: pageWidth,
+      height: pageHeight * 1.5, // Set a larger height to avoid cropping at the bottom
+      useCORS: true, // Use CORS to handle cross-origin images (if needed)
+      allowTaint: true, // Allow tainting for external images
+    }).then(function(canvas) {
+      // Convert the canvas image to a data URL
+      var imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+    for (var i = 0; i < excludedElements.length; i++) {
+        excludedElements[i].style.display = '';
+      }
+
+      // Add the image to the PDF with the same dimensions as the content
+      // You can add a margin to ensure the table fits within the page
+      var margin = 10; // Set the desired margin in pixels
+      doc.addImage(imgData, 'JPEG', margin, margin, pageWidth - 1.5 * margin, pageHeight - 1.5 * margin);
+
+      // Save the PDF file
+      doc.save('Batchsheet.pdf');
+    });
+  });
+</script>
+
+{{#if messages}}
+<div style = "position: fixed;top: 60px;right: 20px;">
+    {{#each messages}}
+    <div class = "flash-message" style="background-color: #ffcdd2;padding: 10px;margin-bottom: 10px; border-radius: 5px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);word-wrap: break-word;max-width:300px;">
+        <p>{{this}}</p>
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
+<script>
+    var flashMessages = document.querySelectorAll('.flash-message');
+    flashMessages.forEach(function(flashMessage, index) {
+        setTimeout(function() {
+        flashMessage.style.display = 'none';
+        }, (index + 1) * 5000);
+    });
+</script>
+
+
 
             <script>
                 function incrementIndex(index) {

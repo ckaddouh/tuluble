@@ -24,7 +24,7 @@ router.get('/', async function (req, res, next) {
     });
   }
   else {
-    res.redirect("/index");
+    res.redirect("/");
   }
 });
 
@@ -53,7 +53,7 @@ router.get("/:classifier_id", async function (req, res, next) {
   });
   }
   else {
-    res.redirect("/index");
+    res.redirect("/");
   }
 });
 
@@ -82,7 +82,7 @@ router.get("/search/:input", async function (req, res, next) {
   });
   }
   else {
-    res.redirect("/index");
+    res.redirect("/");
   }
 });
 
@@ -127,7 +127,7 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
       });
   }
   else {
-    res.redirect("/index");
+    res.redirect("/");
   }
 });
 
