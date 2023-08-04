@@ -216,7 +216,12 @@
                                 
                                     <article class="regular">
                                         <b><label for="tuluble">Trial:</label></b>
-                                        <input type="number" name = "userInput0" id="userInput0" placeholder="Enter Trial Number" maxlength="20">
+                                        <select name="userInput0" id="userInput0" class="browser-default">
+                                            <option value="0" disabled selected>Select a trial</option>
+                                            {{#each trialData}}
+                                                <option value="{{trial_num}}">{{trial_num}}</option>
+                                            {{/each}}
+                                        </select>
                                         <p> </p>
 
                                         {{!-- Field 1 --}}
