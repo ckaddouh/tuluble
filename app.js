@@ -72,7 +72,7 @@ const { literal, INTEGER } = require('sequelize');
 const { Console } = require('console');
 const { resolve } = require('path');
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 var app = express();
 
 var isAdmin = false;
