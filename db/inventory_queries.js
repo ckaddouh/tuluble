@@ -24,7 +24,7 @@ const read_inventory_search_query = `
   FROM
     ingredient
   WHERE 
-  inci_name LIKE ? OR lot_num LIKE ?
+  inci_name LIKE ? OR lot_num LIKE ? OR encoding LIKE ?
 `;
 
 const insertIntoInventory_query = `
@@ -72,7 +72,7 @@ function read_inventory_classifier_sql(classifierId, callback) {
 }
 
 function read_inventory_search(searchStr, callback) {
-  db.execute(read_inventory_search_query, [searchStr, searchStr], callback);
+  db.execute(read_inventory_search_query, [searchStr, searchStr, searchStr], callback);
 }
         
 function updateIngredient(editInciName, editTradeName, editAmount, editShelf, editClassifier, editLotNum,
