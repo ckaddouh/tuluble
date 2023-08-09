@@ -164,8 +164,9 @@
                             {{#if isAdmin}}
                             <th style = "width: 200px">Trade Name</th>
                             <th style="width: 200px">INCI</th>
+                            <th style="width: 200px">Encoding</th>
                             {{else}}
-                            <th style="width: 200px">Ingredient ID</th>
+                            <th style="width: 200px">Encoding</th>
                             {{/if}}
                             <th style="width: 200px">Supplier</th>
                             <th style="width: 150px">Lot Number</th>
@@ -191,6 +192,7 @@
                                 {{#if ../isAdmin}}
                                 <td>{{trade_name}}</td>
                                 <td>{{inci_name}}</td>
+                                <td>{{encoding}}</td>
                                 {{else}}
                                 <td>{{encoding}}</td>
                                 {{/if}}
