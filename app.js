@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const flash = require('express-flash');
 const session = require('express-session');
+var multer = require('multer');
+var upload = multer({dest: 'uploads/'})
 
 
 var indexRouter = require('./routes/index');

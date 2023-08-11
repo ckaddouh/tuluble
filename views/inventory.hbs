@@ -60,7 +60,7 @@
                         {{!-- <b><span>Add a New Ingredient</span></b> --}}
                         <h1 style="font-size:40px;">Add a New Ingredient</h1>
 
-                        <form method="POST" action="/inventory/inventoryformsubmit" class="validate">
+                        <form method="POST" action="/inventory/inventoryformsubmit" class="validate" enctype="multipart/form-data">
                             <article class="regular">
                                 {{!-- <h2>Textbook</h2> --}}
 
@@ -145,15 +145,15 @@
                                     maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
-                                <b><label for="tuluble">COA Documents:</label></b>
-                                <input type="url" name="newCOA" required id="newCOA" placeholder="Enter Link"
-                                    maxlength="200">
+                                <b><label for="tuluble">COA Documents (Only input JPG or PDF):</label></b>
+                                <span>File</span>
+                                <input type="file" name = "newCOA" id = "newCOA">
                                 <p> </p>
+                                <br>
 
-                                <b><label for="tuluble">MSDS Documents:</label></b>
-                                <input type="url" name="newMSDS" required id="newMSDS" placeholder="Enter Link"
-                                    maxlength="200">
-                                <p> </p>
+                                <b><label for="tuluble">MSDS Documents (Only input JPG or PDF):</label></b>
+                                <span>File</span>
+                                <input type="file" name = "newMSDS" id = "newMSDS">
 
                                 <div class="add_button">
                                     <button id="add_button" 
@@ -338,6 +338,7 @@
                             {{/ifEitherTrue}}
                             <th id="edit">Edit
                             </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -369,8 +370,8 @@
                                             <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
                                                 <b>Date Receieved: </b>{{formatDate2 this.date_received}}<br></br>
                                                 <b>Expiration Date: </b>{{formatDate2 this.expiration}}<br></br>
-                                                <b>COA:</b> <a href="{{this.coa}}">Link</a><br></br>
-                                                <b>MSDS:</b> <a href="{{this.msds}}">Link</a><br></br>
+                                                <b>COA:</b> <a target="_blank" href="/inventory/images/{{this.coa}}">Link</a><br></br>
+                                                <b>MSDS:</b> <a target="_blank" href="/inventory/images/{{this.msds}}">Link</a><br></br>
                                         </div>
 
                                         <div class="col s12">&nbsp;</div>
@@ -402,7 +403,7 @@
                                             {{!-- <b><span>Add a New Ingredient</span></b> --}}
                                             <h1 style="font-size:40px;">Edit Ingredient</h1>
 
-                                            <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate" class="validate">
+                                            <form method="POST" action="/inventory/{{ingredient_id}}/inventoryingredientupdate" class="validate" enctype="multipart/form-data">
                                                 <article class="regular">
                                                     {{!-- <h2>Textbook</h2> --}}
 
@@ -487,15 +488,24 @@
                                                         value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
-                                                    <b><label for="tuluble">COA Link:</label></b>
-                                                    <input type="text" name="editCOA" id="editCOA"
-                                                        value="{{this.coa}}" maxlength="100">
+                                                    <b><label for="tuluble">COA Documents (Only input JPG or PDF):</label></b>
+                                                    {{#if coa}}
+                                                        <p><a target = "_blank" href = "/inventory/images/{{this.coa}}">Currently assigned file</a></p>
+                                                    {{/if}}
+                                                    <span>File</span>
+                                                    <input type="file" name = "newCOAEdit" id = "newCOAEdit">
                                                     <p> </p>
+                                                    
+                                                    <br>
 
-                                                    <b><label for="tuluble">MSDS Link:</label></b>
-                                                    <input type="text" name="editMSDS" id="editMSDS"
-                                                        value="{{this.msds}}" maxlength="100">
-                                                    <p> </p>
+                                                    <b><label for="tuluble">MSDS Documents (Only input JPG or PDF):</label></b>
+                                                     {{#if msds}}
+                                                        <p><a target = "_blank" href = "/inventory/images/{{this.msds}}">Currently assigned file</a></p>
+                                                    {{/if}}
+                                                    <span>File</span>
+                                                    <input type="file" name = "newMSDSEdit" id = "newMSDSEdit">
+                                                    <p></p>
+                                                   
 
                                                     <div class="update_button">
                                                         <button id="update_button" 
