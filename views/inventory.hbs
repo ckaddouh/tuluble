@@ -300,29 +300,29 @@
                         <tr id="ing">
                             {{#ifEitherTrue (eq isAdmin 1) (eq isAdmin 2)}}
                             <th id="inci">INCI Name
-                                <a id="sort-inci-button" class="waves-effect">
+                                <a id="sort-inci-button" class="hoverable">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
 
                             </th>
                             <th id="trade">Trade Name
-                                <a id="sort-trade-button" class="waves-effect">
+                                <a id="sort-trade-button" class="hoverable">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
                             {{/ifEitherTrue}}
-                            <th id="trade">Encoding
-                                <a id="sort-trade-button" class="waves-effect">
+                            <th id="encoding">Encoding
+                                <a id="sort-encoding-button" class="hoverable">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
-                            <th id="trade">Supplier
-                                <a id="sort-supplier-button" class="waves-effect">
+                            <th id="supplier">Supplier
+                                <a id="sort-supplier-button" class="hoverable">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
-                            <th>Amount Available
-                                <a id="sort-amount-button" class="waves-effect">
+                            <th id="amount">Amount Available
+                                <a id="sort-amount-button" class="hoverable">
                                     <i class="large material-icons" style="font-size: 20px">arrow_drop_down</i>
                                 </a>
                             </th>
@@ -643,37 +643,38 @@
         </script>
 
             <script>
-            document.getElementById('sort-supplier-button').addEventListener('click', function () {
-                sortTableByTrade(2); // Sort by the first column
-            });
+                document.getElementById('sort-supplier-button').addEventListener('click', function () {
+                    sortTableBySupplier(3); // Sort by the first column (0-based index)
+                });
 
-            function sortTableByTrade(columnIndex) {
-                var table, rows, switching, i, x, y, shouldSwitch;
-                table = document.getElementById('my-table');
-                switching = true;
-                while (switching) {
-                    switching = false;
-                    rows = table.rows;
-                    for (i = 1; i < (rows.length - 1); i++) {
-                        shouldSwitch = false;
-                        x = rows[i].getElementsByTagName('TD')[columnIndex];
-                        y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
-                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
+                function sortTableBySupplier(columnIndex) {
+                    var table, rows, switching, i, x, y, shouldSwitch;
+                    table = document.getElementById('my-table');
+                    switching = true;
+                    while (switching) {
+                        switching = false;
+                        rows = table.rows;
+                        for (i = 1; i < (rows.length - 1); i++) {
+                            shouldSwitch = false;
+                            x = rows[i].getElementsByTagName('TD')[columnIndex];
+                            y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        if (shouldSwitch) {
+                            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                            switching = true;
                         }
                     }
-                    if (shouldSwitch) {
-                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                        switching = true;
-                    }
                 }
-            }
-        </script>
+            </script>
+
 
         <script>
             document.getElementById('sort-amount-button').addEventListener('click', function () {
-                sortTableByAmount(2); // Sort by the first column
+                sortTableByAmount(4); // Sort by the first column
             });
 
             function sortTableByAmount(columnIndex) {
@@ -700,6 +701,42 @@
                 }
             }
         </script>
+
+        <script>
+            document.getElementById('sort-encoding-button').addEventListener('click', function () {
+                sortTableByEncoding(2); // Sort by the third column (0-based index)
+            });
+
+            function extractNumericValue(cellContent) {
+                // Extract numeric part from the cell content (assuming it's always at the end)
+                var matches = cellContent.match(/\d+$/);
+                return matches ? parseInt(matches[0]) : 0;
+            }
+
+            function sortTableByEncoding(columnIndex) {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('my-table');
+                switching = true;
+                while (switching) {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        shouldSwitch = false;
+                        x = extractNumericValue(rows[i].getElementsByTagName('TD')[columnIndex].innerHTML);
+                        y = extractNumericValue(rows[i + 1].getElementsByTagName('TD')[columnIndex].innerHTML);
+                        if (x > y) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+        </script>
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
