@@ -15,7 +15,7 @@ const read_inventory_classifier_sql_query = `
   FROM
     ingredient
   WHERE 
-    classifier_id = ?
+    classifier_id = ? AND active = 1
 `;
 
 const read_inventory_search_query = `
@@ -24,13 +24,14 @@ const read_inventory_search_query = `
   FROM
     ingredient
   WHERE 
-  inci_name LIKE ? OR lot_num LIKE ? OR encoding LIKE ?
+  (inci_name LIKE ? OR lot_num LIKE ? OR encoding LIKE ?)
+  AND active = 1
 `;
 
 const insertIntoInventory_query = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, hazardous, encoding, hazardDetails, cost)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, hazardous, encoding, hazardDetails, cost, active)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
 `;
 
 const updateIngredient_query = `
@@ -58,8 +59,17 @@ const checkAdminQuery = `
 
 const insertIntoInventoryQuery = `
   INSERT INTO 
-    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails, cost)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ingredient (inci_name, trade_name, amt, shelf, classifier_id, lot_num, date_received, supplier, coa, msds, expiration, encoding, hazardDetails, cost, active)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+`
+
+const getExistingFilePathsQuery = `
+  SELECT 
+    coa, msds
+  FROM
+    ingredient
+  WHERE
+    ingredient_id = ?
 `
 
 
@@ -93,7 +103,11 @@ function insertIntoInventory(newInciName, newTradeName, newAmount, newShelf, new
   newSupplier, newCOA, newMSDS, newExpiration, newEncoding, hazardousDetails, newCost, callback) {
     db.execute(insertIntoInventoryQuery, [newInciName, newTradeName, newAmount, newShelf, newClassifier, newLotNum, newReceived, 
       newSupplier, newCOA, newMSDS, newExpiration, newEncoding, hazardousDetails, newCost], callback);
-  }
+}
+
+function getExistingFilePaths(ingredient_id, callback) {
+  db.execute(getExistingFilePathsQuery, [ingredient_id], callback);
+}
 
 module.exports = {
   read_inventory_all_sql,
@@ -102,5 +116,6 @@ module.exports = {
   insertIntoInventory,
   updateIngredient,
   archiveIngredient,
-  requireAdmin
+  requireAdmin,
+  getExistingFilePaths
 };

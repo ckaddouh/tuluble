@@ -57,6 +57,8 @@ router.get("/", async function (req, res, next) {
         if (scientist_data[i].admin == 1) {
           scientist_data[i].role = "Admin";
         }
+        else if (scientist_data[i].admin == 2)
+          scientist_data[i].role = "Inventory Admin";
         else 
           scientist_data[i].role = "Scientist";
       }  
@@ -135,9 +137,10 @@ router.post("/edituser/:scientist_id", async function (req, res, next) {
       });
     });
 
-  
+    console.log("before try");
     try {
-      if (isAdmin[0].admin == 1) {
+      if (isAdmin[0].admin === 1) {
+        console.log("admin = 1");
         db.editUser(name, email, adminInput, scientist_id, (error, results) => {
             if (error)
                 res.status(500).send(error);

@@ -1,6 +1,12 @@
 const express = require('express');
 var router = express.Router();
 const db = require("../db/inventory_queries.js");
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const { uploadFile, getFileStream } = require('../s3')
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
 
 
 router.get('/', async function (req, res, next) {
@@ -86,10 +92,10 @@ router.get("/search/:input", async function (req, res, next) {
   }
 });
 
-router.post("/inventoryformsubmit", async function (req, res, next) {
-  const theSwitchValue = req.body.hazardousSwitch === 'on' ? 1 : 0;
+router.post("/inventoryformsubmit", upload.fields([{ name: 'newCOA', maxCount: 1 }, { name: 'newMSDS', maxCount: 1 }]), async function (req, res, next) {
+  const newCOAFile = req.files['newCOA'][0];
+  const newMSDSFile = req.files['newMSDS'][0];
 
-  console.log("in func");
   const admin = await new Promise((resolve, reject) => {
     db.requireAdmin(req.oidc.user.email, (error, admin) => {
       if (error) reject (error);
@@ -97,27 +103,20 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
     });
   });
 
-  console.log("admin check finished");
+
+  const result1 = await uploadFile(newCOAFile);
+  const result2 = await uploadFile(newMSDSFile);
+
+  await unlinkFile(newCOAFile.path);
+  await unlinkFile(newMSDSFile.path);
+
 
   if (admin[0].admin === 1 || admin[0].admin === 2) {
-    console.log("hazardous submit");
-    console.log(req.body.inci_name);
-    console.log(req.body.trade_name);
-    console.log(req.body.amt);
-    console.log(req.body.shelf);
-    console.log(req.body.classifier);
-    console.log(req.body.lot_num);
-    console.log(req.body.date_received);
-    console.log(req.body.supplier);
-    console.log(req.body.coa);
-    console.log(req.body.msds);
-    console.log(req.body.expiration);
-    console.log(req.body.encoding);
-    console.log(req.body.hazardDetails);
-
+    const coaPath = newCOAFile.path.substring(8);
+    const msdsPath = newMSDSFile.path.substring(8);
 
     db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
-      req.body.newReceived, req.body.newSupplier, req.body.newCOA, req.body.newMSDS, req.body.newExpiration, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
+      req.body.newReceived, req.body.newSupplier, coaPath, msdsPath, req.body.newExpiration, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
         if (error) {
           console.log(error);
           res.redirect('/error');
@@ -132,17 +131,90 @@ router.post("/inventoryformsubmit", async function (req, res, next) {
 });
 
 
-router.post("/:ingredient_id/inventoryingredientupdate", async function (req, res, next) {
+router.post("/:ingredient_id/inventoryingredientupdate", upload.fields([{ name: 'newCOAEdit', maxCount: 1 }, { name: 'newMSDSEdit', maxCount: 1 }]), async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
 
+  let encoding = req.body.editEncoding;
+  if (!encoding)
+    encoding = "";
+
+  console.log('HELLO');
+  console.log(req.files);
+
+  var coaPath;
+  var msdsPath;
+
+  console.log("before file paths");
+  const filePaths = await new Promise((resolve, reject) => {
+    db.getExistingFilePaths(ingredient_id, (error, filePaths) => {
+      if (error) reject (error);
+      else resolve(filePaths);
+    });
+  });
+
+  console.log("filePaths");
+  console.log(filePaths);
+
+  if(req.files && req.files['newCOAEdit'] && req.files['newCOAEdit'].length > 0 && req.files['newMSDSEdit'] && req.files['newMSDSEdit'].length > 0) {
+    const newCOAFile = req.files['newCOAEdit'][0];
+    const newMSDSFile = req.files['newMSDSEdit'][0];
+
+    const result1 = await uploadFile(newCOAFile);
+    const result2 = await uploadFile(newMSDSFile);
+
+    await unlinkFile(newCOAFile.path);
+    await unlinkFile(newMSDSFile.path);
+
+    coaPath = newCOAFile.path.substring(8);
+    msdsPath = newMSDSFile.path.substring(8);
+  }
+  else if (req.files && req.files['newCOAEdit'] && req.files['newCOAEdit'].length > 0) {
+    const newCOAFile = req.files['newCOAEdit'][0];    
+    const result1 = await uploadFile(newCOAFile);
+    await unlinkFile(newCOAFile.path);
+
+    coaPath = newCOAFile.path.substring(8);
+    msdsPath = filePaths[0]['msds'];
+  }
+  else if (req.files && req.files['newMSDSEdit'] && req.files['newMSDSEdit'].length > 0) {
+    const newMSDSFile = req.files['newMSDSEdit'][0];    
+    const result2 = await uploadFile(newMSDSFile);
+    await unlinkFile(newMSDSFile.path);
+
+    coaPath = filePaths[0]['coa'];
+    msdsPath = newMSDSFile.path.substring(8);
+  }
+  else {
+    coaPath = filePaths[0]['coa'];
+    msdsPath = filePaths[0]['msds'];
+  }
+  
+  console.log("hazardous submit");
+  console.log(req.body.editInciName);
+  console.log(req.body.editTradeName);
+  console.log(req.body.editAmount);
+  console.log(req.body.editShelf);
+  console.log(req.body.editClassifier);
+  console.log(req.body.editLotNum);
+  console.log(req.body.editReceived);
+  console.log(req.body.editSupplier);
+  console.log(req.body.editExpiration);
+  console.log(req.body.editEncoding);
+  console.log(req.body.hazardDetails);
+  console.log(req.body.editCost);
+  console.log(coaPath);
+  console.log(msdsPath);
+
+
   db.updateIngredient(req.body.editInciName, req.body.editTradeName, req.body.editAmount, req.body.editShelf, req.body.editClassifier, req.body.editLotNum,
-    req.body.editReceived, req.body.editSupplier, req.body.editCOA, req.body.editMSDS, req.body.editExpiration, req.body.editCost, req.body.hazardDetailsEdit, req.body.editEncoding, ingredient_id, (error, results) => {
+    req.body.editReceived, req.body.editSupplier, coaPath, msdsPath, req.body.editExpiration, req.body.editCost, req.body.hazardDetailsEdit, encoding, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {
         res.redirect('/inventory');
       }
-    });
+  });
+
 });
 
 
@@ -157,6 +229,13 @@ router.get("/archive-ingredient/:ingredient_id", (req, res) => {
   });
 });
 
+
+router.get("/images/:key", (req, res) => {
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+
+  readStream.pipe(res);
+});
 
 
 
