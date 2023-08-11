@@ -17,12 +17,16 @@ router.get("/:project_id/:trial_num/:amount/makeformsubmit", async function (req
     let trial_num = req.params.trial_num
     let totalAmount = req.params.amount
 
+    console.log("make");
+
     const ing_data = await new Promise((resolve, reject) => {
     db.getFormulaIngredientsForTrial(project_id, trial_num, (error, ing_data) => {
         if (error) reject(error);
         else resolve(ing_data);
     });
     }); 
+
+    console.log("ing");
 
     const ingredient_dict = [];
     for (let i = 0; i < ing_data.length; i++) {
@@ -47,11 +51,13 @@ router.get("/:project_id/:trial_num/:amount/makeformsubmit", async function (req
         });
     }
   
+    console.log("before unedit");
     db.markUneditable(project_id, trial_num, (error, results) => {
       if (error)
         res.status(500).send(error);
     });
     
+    console.log("after");
     res.redirect('/batchsheet/' + project_id + "/" + trial_num + "/" + totalAmount);
 });
 
