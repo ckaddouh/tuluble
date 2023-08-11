@@ -51,7 +51,7 @@ const getFormulaIngredientsQuery= `
 
 const getFormulaIngredientsENCODEDQuery= `
   SELECT DISTINCT 
-    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.encoding, formula_ingredient.phase, ingredient.lot_num
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.encoding, formula_ingredient.phase, ingredient.lot_num, ingredient.hazardDetails
   FROM 
 	  formula_ingredient, ingredient
   WHERE 
