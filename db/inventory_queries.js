@@ -72,6 +72,24 @@ const getExistingFilePathsQuery = `
     ingredient_id = ?
 `
 
+const getMaxEncodingQuery = `
+  SELECT
+    COUNT(*) as max
+  FROM 
+    ingredient
+  WHERE
+    LEFT(encoding, 3) = ?
+`
+
+const getOldEncodingQuery = `
+  SELECT 
+    encoding
+  FROM 
+    ingredient
+  WHERE 
+    ingredient_id = ?
+`
+
 
 function read_inventory_all_sql(callback) {
   db.execute(read_inventory_all_sql_query, callback);
@@ -109,6 +127,14 @@ function getExistingFilePaths(ingredient_id, callback) {
   db.execute(getExistingFilePathsQuery, [ingredient_id], callback);
 }
 
+function getMaxEncoding(encoding, callback) {
+  db.execute(getMaxEncodingQuery, [encoding], callback);
+}
+
+function getOldEncoding(ingredient_id, callback) {
+  db.execute(getOldEncodingQuery, [ingredient_id], callback)
+}
+
 module.exports = {
   read_inventory_all_sql,
   read_inventory_classifier_sql,
@@ -117,5 +143,7 @@ module.exports = {
   updateIngredient,
   archiveIngredient,
   requireAdmin,
-  getExistingFilePaths
+  getExistingFilePaths,
+  getMaxEncoding,
+  getOldEncoding
 };

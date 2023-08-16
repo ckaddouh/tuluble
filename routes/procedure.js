@@ -4,14 +4,12 @@ const db = require("../db/procedure_queries.js");
 
 var colName = "";
 
-router.post("/:project_id/procformsubmit", (req, res) => {
+router.post("/:project_id/procformsubmit", async function (req, res) {
 
   console.log("\n\nN PROCEDURE FUNCTION");
 
     let project_id = req.params.project_id
-    let trial_num = req.params.trial_num
-  
-    let phaseNumber = req.body.phaseNumber;
+
     let theProcedure = req.body.theProcedure;
     let procComments = req.body.procComments;
     let initialTemp = req.body.initialTemp;
@@ -21,6 +19,15 @@ router.post("/:project_id/procformsubmit", (req, res) => {
     let finalMixSpeed = req.body.finalMixSpeed;
     let mixerType = req.body.mixerType;
     let blade = req.body.blade;
+
+    const maxPhase = await new Promise((resolve, reject) => {
+      db.get_max_phase(project_id, (error, maxPhase) => {
+        if (error) reject (error);
+        else resolve(maxPhase);
+      });
+    });
+
+    let phaseNumber = maxPhase[0].max + 1;
   
   
     db.insert_procedure(phaseNumber, theProcedure, procComments, initialTemp, finalTemp, timing, initialMixSpeed,
@@ -87,10 +94,18 @@ router.get("/:project_id/cellEdited/:phase/:column/:cellContent", (req, res) => 
   let column = req.params.column;
   let project_id = req.params.project_id;
 
+  console.log("IN PROCEDURE EDIT");
+  console.log(cellContent);
+
+
 
   const colList = ["phase_num", "proc", "comments", "temp_init", "temp_final", "timing", "mixing_init", "mixing_final", "mixer_type", "blade"];
 
   const colName = colList[column-1];
+
+  console.log(colName);
+  console.log(phase);
+  console.log(project_id);
 
   db.edit_procedure_item(colName, cellContent, phase, project_id, (error, proc_info) => {
     if (error)
@@ -99,7 +114,6 @@ router.get("/:project_id/cellEdited/:phase/:column/:cellContent", (req, res) => 
       res.redirect("/procedure/" + project_id);
     }
   });
-
 });
 
 
