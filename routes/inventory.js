@@ -93,8 +93,8 @@ router.get("/search/:input", async function (req, res, next) {
 });
 
 router.post("/inventoryformsubmit", upload.fields([{ name: 'newCOA', maxCount: 1 }, { name: 'newMSDS', maxCount: 1 }]), async function (req, res, next) {
-  const newCOAFile = req.files['newCOA'][0];
-  const newMSDSFile = req.files['newMSDS'][0];
+  var coaPath;
+  var msdsPath;
 
   const admin = await new Promise((resolve, reject) => {
     db.requireAdmin(req.oidc.user.email, (error, admin) => {
@@ -103,18 +103,45 @@ router.post("/inventoryformsubmit", upload.fields([{ name: 'newCOA', maxCount: 1
     });
   });
 
+  if(req.files && req.files['newCOA'] && req.files['newCOA'].length > 0 && req.files['newMSDS'] && req.files['newMSDS'].length > 0) {
+    const newCOAFile = req.files['newCOA'][0];
+    const newMSDSFile = req.files['newMSDS'][0];
 
-  const result1 = await uploadFile(newCOAFile);
-  const result2 = await uploadFile(newMSDSFile);
+    const result1 = await uploadFile(newCOAFile);
+    const result2 = await uploadFile(newMSDSFile);
 
-  await unlinkFile(newCOAFile.path);
-  await unlinkFile(newMSDSFile.path);
+    await unlinkFile(newCOAFile.path);
+    await unlinkFile(newMSDSFile.path);
 
+    coaPath = newCOAFile.path.substring(8);
+    msdsPath = newMSDSFile.path.substring(8);
+  }
+  else if (req.files && req.files['newCOA'] && req.files['newCOA'].length > 0) {
+    const newCOAFile = req.files['newCOA'][0];
+
+    const result1 = await uploadFile(newCOAFile);
+
+    await unlinkFile(newCOAFile.path);
+
+    coaPath = newCOAFile.path.substring(8);
+    msdsPath = "";
+  }
+  else if (req.files && req.files['newMSDS'] && req.files['newMSDS'].length > 0) {
+    const newMSDSFile = req.files['newMSDS'][0];
+
+    const result2 = await uploadFile(newMSDSFile);
+
+    await unlinkFile(newMSDSFile.path);
+
+    coaPath = "";
+    msdsPath = newMSDSFile.path.substring(8);
+  }
+  else {
+    coaPath = "";
+    msdsPath = ""
+  }
 
   if (admin[0].admin === 1 || admin[0].admin === 2) {
-    const coaPath = newCOAFile.path.substring(8);
-    const msdsPath = newMSDSFile.path.substring(8);
-
     db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
       req.body.newReceived, req.body.newSupplier, coaPath, msdsPath, req.body.newExpiration, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
         if (error) {
