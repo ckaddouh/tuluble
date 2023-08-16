@@ -362,15 +362,17 @@
                                             
                                                 <b>Trade Name: </b> {{this.trade_name}}<br></br>
                                                 <b>INCI Name: </b> {{this.inci_name}}<br></br>
+                                                <b>Encoding: </b> {{this.encoding}}<br></br>
                                                 <b>Classifier: </b> {{this.classifier_id}} <br></br>
                                                 <b>Amount Available: </b> {{this.amt}} <br></br>
                                                 <b>Supplier:</b> {{this.supplier}}<br></br>
                                                 <b>Lot Number:</b> {{this.lot_num}}<br></br>
                                                 <b>Shelf:</b> {{this.shelf}}<br></br>
-                                                <b>Cost:</b>{{#if this.cost}} ${{this.cost}} Per Kilogram{{else}} {{/if}}<br></br>
                                         </div>
                                         <div class="col s6">
-                                            <span><b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
+                                            <span>
+                                                <b>Cost:</b>{{#if this.cost}} ${{this.cost}} Per Kilogram{{else}} {{/if}}<br></br>
+                                                <b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
                                                 <b>Date Receieved: </b>{{formatDate2 this.date_received}}<br></br>
                                                 <b>Expiration Date: </b>{{formatDate2 this.expiration}}<br></br>
                                                 <b>COA:</b> <a target="_blank" href="/inventory/images/{{this.coa}}">Link</a><br></br>
