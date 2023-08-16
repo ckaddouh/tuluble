@@ -187,13 +187,13 @@
                                                            {{!-- Field 1 --}}
                                                            <form method="POST" action="/project-assign/edituser/{{scientist_id}}">
                                                                 <b><label for="tuluble">Name:</label></b>
-                                                                <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100">
+                                                                <input type="text" name = "name" id="name" value="{{this.name}}" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                                 <p> </p>
 
 
                                                                 {{!-- Field 2 --}}
                                                                 <b><label for="tuluble">Email:</label></b>
-                                                                <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100">
+                                                                <input type="text" name = "email" id="email" value="{{this.email}}" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                                 <p> </p>
 
 
@@ -266,12 +266,12 @@
 
                         {{!-- Field 1 --}}
                         <b><label for="tuluble">Scientist Name:</label></b>
-                        <input type="text" name = "newScientistName" id="newScientistName" placeholder="Enter Scientist Name" maxlength="100">
+                        <input type="text" name = "newScientistName" id="newScientistName" placeholder="Enter Scientist Name" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                         <p> </p>
 
                         {{!-- Field 2 --}}
                         <b><label for="tuluble">Scientist Email:</label></b>
-                        <input type="text" name = "newScientistEmail" id="newScientistEmail" placeholder="Enter Scientist Email" maxlength="100">
+                        <input type="text" name = "newScientistEmail" id="newScientistEmail" placeholder="Enter Scientist Email" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                         <p> </p>
 
                         {{!-- Field 3 --}}

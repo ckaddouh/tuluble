@@ -47,6 +47,7 @@
                     <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
                     <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
                     <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                    <option value="Retest">Retest</option>
                 </select>
             </div>
 
@@ -67,25 +68,25 @@
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">INCI Name:</label></b>
                                 <input type="text" name="newInciName" required id="newInciName" placeholder="Enter INCI Name"
-                                    maxlength="200">
+                                    maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Trade Name:</label></b>
                                 <input type="text" name="newTradeName" required id="newTradeName" placeholder="Enter Trade Name"
-                                    maxlength="20" >
+                                    maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 <b><label for="tuluble">Encoding:</label></b>
                                 <input type="text" name="newEncoding" required id="newEncoding" placeholder="Enter Ingredient Encoding"
-                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[A-Z]*$" title="Please use only capital letters.">
                                 <p> </p>
                                 <br>
 
 
                                 <b><label for="tuluble">Hazard Details:</label></b>
                                 <input type="text" name="hazardDetails" id="hazardDetails" placeholder="Enter Hazard Details"
-                                    maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
+                                    maxlength="60" pattern="^[a-zA-Z.,\s]*$" title="Please do not use special characters.">
                                 <br>
 
                                 {{!-- Field 3 --}}
@@ -97,7 +98,7 @@
                                 {{!-- Field 4 --}}
                                 <b><label for="tuluble">Shelf:</label></b>
                                 <input type="text" name="newShelf" required id="newShelf" placeholder="Enter Shelf"
-                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 <b><label for="tuluble">Classifier:*</label></b>
@@ -118,18 +119,19 @@
                                     <option value="pH Adjusters (Acids)">pH Adjusters (Acids)</option>
                                     <option value="pH Adjusters (Bases)">pH Adjusters (Bases)</option>
                                     <option value="Distilled_Water-Ethyl_Alcohol">Distilled Water/Ethyl Alcohol</option>
+                                    <option value="Retest">Retest</option>
                                 </select>
                                 <p> </p>
                                 <p> &nbsp;</p>
 
                                 <b><label for="tuluble">Lot Number:</label></b>
                                 <input type="text" name="newLotNum" required id="newLotNum" placeholder="Enter Lot Number"
-                                    maxlength="20">
+                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()-]*$" title="Please use only capital letters and numbers.">
                                 <p> </p>
 
                                 <b><label for="tuluble">Cost Per Kilo:</label></b>
-                                <input type="text" name="newCost" id="newCost" placeholder="Enter Cost Per Kilo"
-                                    maxlength="20" pattern="^[a-zA-Z0-9\s]*$">
+                                <input type="number" name="newCost" id="newCost" placeholder="Enter Cost Per Kilo"
+                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s]*$">
                                 <p> </p>
 
                                 <b><label for="tuluble">Expiration Date:</label></b>
@@ -142,7 +144,7 @@
 
                                 <b><label for="tuluble">Supplier:</label></b>
                                 <input type="text" name="newSupplier" required id="newSupplier" placeholder="Enter Supplier"
-                                    maxlength="45" pattern="^[a-zA-Z0-9\s]*$">
+                                    maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 <b><label for="tuluble">COA Documents (Only input JPG or PDF):</label></b>
@@ -408,38 +410,38 @@
                                                 <article class="regular">
                                                     {{!-- <h2>Textbook</h2> --}}
 
-                                                    <b><label for="tuluble">INCI Name:</label></b>
-                                                    <input type="text" name="editInciName" id="editInciName"
-                                                        value="{{this.inci_name}}" maxlength="200" >
-                                                    <p> </p>
+                                                <b><label for="tuluble">INCI Name:</label></b>
+                                                <input type="text" name="editInciName" id="editInciName"
+                                                    value="{{this.inci_name}}" maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$">
+                                                <p> </p>
 
                                                 {{!-- Field 2 --}}
                                                 <b><label for="tuluble">Trade Name:</label></b>
-                                                <input type="text" name = "editTradeName" id="ediTradeName" value="{{this.trade_name}}" maxlength="200" pattern="^[a-zA-Z0-9\s]*$">
+                                                <input type="text" name = "editTradeName" id="ediTradeName" value="{{this.trade_name}}" maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                 <p> </p>
 
                                                 <b><label for="tuluble">Encoding:</label></b>
                                                 <input type="text" name="editEncoding" id="editEncoding" value="{{this.encoding}}"
-                                                    maxlength="20" >
+                                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[A-Z]*$" title="Please use only capital letters.">
                                                 <p> </p>
                                                 <br>
 
                                                 <b><label for="tuluble">Hazard Details:</label></b>
                                                 <input type="text" name="hazardDetailsEdit" id="hazardDetailsEdit" value="{{this.hazardDetails}}"
-                                                    maxlength="60" pattern="^[a-zA-Z0-9\s]*$">
+                                                    maxlength="60" pattern="^[a-zA-Z.,\s]*$" title="Please do not use special characters.">
                                                 <br>
 
 
                                                     {{!-- Field 3 --}}
                                                     <b><label for="tuluble">Amount Available:</label></b>
                                                     <input type="number" name="editAmount" id="editAmount"
-                                                        value="{{this.amt}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                        value="{{this.amt}}" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s]*$">
                                                     <p> </p>
 
                                                     {{!-- Field 4 --}}
                                                     <b><label for="tuluble">Shelf:</label></b>
                                                     <input type="text" name="editShelf" id="editShelf"
-                                                        value="{{this.shelf}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                        value="{{this.shelf}}" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s]*$" title="Please do not use special characters.">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Select Classifier:</label></b>
@@ -460,18 +462,19 @@
                                                         <option value="pH Adjusters (Bases)" {{isSelected "pH Adjusters (Bases)" classifier_id}}>pH Adjusters (Bases)</option>
                                                         <option value="Distilled_Water-Ethyl_Alcohol" {{isSelected "Distilled_Water-Ethyl_Alcohol" classifier_id}}>Distilled Water/Ethyl
                                                             Alcohol</option>
+                                                        <option value="Retest" {{isSelected "Retest" classifier_id}}>Retest</option>
                                                     </select>
                                                     <p> </p>
                                                     <p> &nbsp;</p>
 
                                                     <b><label for="tuluble">Lot Number:</label></b>
                                                     <input type="text" name="editLotNum" id="editLotNum"
-                                                        value="{{this.lot_num}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                        value="{{this.lot_num}}" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()-]*$" title="Please use only capital letters and numbers.">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Cost Per Kilo:</label></b>
-                                                    <input type="text" name="editCost" id="editCost"
-                                                        value="{{this.cost}}" pattern="^[a-zA-Z0-9\s$]*$">
+                                                    <input type="number" name="editCost" id="editCost"
+                                                        value="{{this.cost}}" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s$]*$">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">Expiration Date:</label></b>
@@ -486,7 +489,7 @@
 
                                                     <b><label for="tuluble">Supplier:</label></b>
                                                     <input type="text" class="datepicker" name="editSupplier" id="editSupplier"
-                                                        value="{{this.supplier}}" pattern="^[a-zA-Z0-9\s]*$">
+                                                       maxlength="200" value="{{this.supplier}}" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                     <p> </p>
 
                                                     <b><label for="tuluble">COA Documents (Only input JPG or PDF):</label></b>

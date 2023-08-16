@@ -164,12 +164,12 @@
                                                             {{!-- <h2>Textbook</h2> --}}
 
                                                             <b><label for="tuluble">Project Name:</label></b>
-                                                            <input type="text" name = "editProjectName" id="editProjectName" value="{{this.project_name}}">
+                                                            <input type="text" name = "editProjectName" id="editProjectName" value="{{this.project_name}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                             <p> </p>
 
                                                             {{!-- Field 2 --}}
                                                             <b><label for="tuluble">Client Name:</label></b>
-                                                            <input type="text" name = "editClientName" id="editClientName" value="{{this.client}}">
+                                                            <input type="text" name = "editClientName" id="editClientName" value="{{this.client}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                             <p> </p>
 
                                                             {{!-- Field 3 --}}
@@ -179,12 +179,12 @@
 
                                                             {{!-- Field 4 --}}
                                                             <b><label for="tuluble">Contact Name:</label></b>
-                                                            <input type="text" name = "editContact" id="editContact" value="{{this.client_name}}">
+                                                            <input type="text" name = "editContact" id="editContact" value="{{this.client_name}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                             <p> </p>
 
                                                             {{!-- Field 5 --}}
                                                             <b><label for="tuluble">Contact Email:</label></b>
-                                                            <input type="text" name = "editEmail" id="editEmail" value="{{this.client_email}}">
+                                                            <input type="text" name = "editEmail" id="editEmail" value="{{this.client_email}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                             <p> </p>
 
                                                             <div class="update_button">
@@ -258,12 +258,12 @@
 
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">Project Name:</label></b>
-                                <input type="text" name = "newProjectName" id="newProjectName" placeholder="Enter Project Name" maxlength="100">
+                                <input type="text" name = "newProjectName" id="newProjectName" placeholder="Enter Project Name" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Client Name:</label></b>
-                                <input type="text" name = "newClientName" id="newClientName" placeholder="Enter Client Name" maxlength="100">
+                                <input type="text" name = "newClientName" id="newClientName" placeholder="Enter Client Name" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 3 --}}
@@ -273,12 +273,12 @@
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Contact Name:</label></b>
-                                <input type="text" name = "newContact" id="newContact" placeholder="Enter Contact Name" maxlength="100">
+                                <input type="text" name = "newContact" id="newContact" placeholder="Enter Contact Name" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Contact Email:</label></b>
-                                <input type="text" name = "newEmail" id="newEmail" placeholder="Enter Contact Email" maxlength="80">
+                                <input type="text" name = "newEmail" id="newEmail" placeholder="Enter Contact Email" maxlength="80" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                

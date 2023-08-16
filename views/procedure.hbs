@@ -101,12 +101,12 @@
 
                                             {{!-- Field 2 --}}
                                             <b><label for="tuluble">Procedure:</label></b>
-                                            <input type="text" name = "theProcedure" id="theProcedure" placeholder="Enter Procedure" maxlength="300">
+                                            <input type="text" name = "theProcedure" id="theProcedure" placeholder="Enter Procedure" maxlength="300" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                             <p> </p>
 
                                             {{!-- Field 3 --}}
                                             <b><label for="tuluble">Comments/Ingredients:</label></b>
-                                            <input type="text" name = "procComments" id="procComments" placeholder="Enter Comments" maxlength="300">
+                                            <input type="text" name = "procComments" id="procComments" placeholder="Enter Comments" maxlength="300" pattern="^[a-zA-Z0-9.\s()]*$" title="Please do not use special characters.">
                                             <p> </p>
 
                                             <b><label for="tuluble">Initial Temperature (C):</label></b>
@@ -130,11 +130,11 @@
                                             <p> </p>
 
                                             <b><label for="tuluble">Mixer Type:</label></b>
-                                            <input type="text" name = "mixerType" id="mixerType" placeholder="Enter Mixer Type" maxlength="45">
+                                            <input type="text" name = "mixerType" id="mixerType" placeholder="Enter Mixer Type" maxlength="45" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                             <p> </p>
 
                                             <b><label for="tuluble">Blade:</label></b>
-                                            <input type="text" name = "blade" id="blade" placeholder="Enter Blade" maxlength="45">
+                                            <input type="text" name = "blade" id="blade" placeholder="Enter Blade" maxlength="45" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                             <p> </p>
 
                                             <div class="add_proc_button">
