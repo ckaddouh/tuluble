@@ -141,9 +141,23 @@ router.post("/inventoryformsubmit", upload.fields([{ name: 'newCOA', maxCount: 1
     msdsPath = ""
   }
 
+  const maxEncoding = await new Promise((resolve, reject) => {
+    db.getMaxEncoding(req.body.newEncoding, (error, maxEncoding) => {
+      if (error) reject (error);
+      else resolve(maxEncoding);
+    });
+  });
+
+  console.log(maxEncoding);
+
+  let max = maxEncoding[0].max + 1; 
+
+  
+  let encoding = req.body.newEncoding + String(max).padStart(4, '0');
+
   if (admin[0].admin === 1 || admin[0].admin === 2) {
     db.insertIntoInventory(req.body.newInciName, req.body.newTradeName, req.body.newAmount, req.body.newShelf, req.body.newClassifier, req.body.newLotNum,
-      req.body.newReceived, req.body.newSupplier, coaPath, msdsPath, req.body.newExpiration, req.body.newEncoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
+      req.body.newReceived, req.body.newSupplier, coaPath, msdsPath, req.body.newExpiration, encoding, req.body.hazardDetails, req.body.newCost, (error, results) => {
         if (error) {
           console.log(error);
           res.redirect('/error');
@@ -161,9 +175,44 @@ router.post("/inventoryformsubmit", upload.fields([{ name: 'newCOA', maxCount: 1
 router.post("/:ingredient_id/inventoryingredientupdate", upload.fields([{ name: 'newCOAEdit', maxCount: 1 }, { name: 'newMSDSEdit', maxCount: 1 }]), async function (req, res, next) {
   let ingredient_id = req.params.ingredient_id;
 
-  let encoding = req.body.editEncoding;
-  if (!encoding)
-    encoding = "";
+  const oldEncoding = await new Promise((resolve, reject) => {
+    db.getOldEncoding(ingredient_id, (error, oldEncoding) => {
+      if (error) reject (error);
+      else resolve(oldEncoding);
+    });
+  });
+
+
+  console.log("ENCODING");
+  console.log(oldEncoding[0].encoding); 
+  console.log(req.body.editEncoding);
+  let presetEncoding = req.body.editEncoding;
+  
+
+  if (!(oldEncoding[0].encoding) && presetEncoding) {
+    console.log("in if statement");
+
+    const maxEncoding = await new Promise((resolve, reject) => {
+      db.getMaxEncoding(presetEncoding, (error, maxEncoding) => {
+        if (error) reject (error);
+        else resolve(maxEncoding);
+      });
+    });
+    console.log("MAX ENCODING");
+    console.log(maxEncoding);
+  
+    let max = maxEncoding[0].max + 1; 
+  
+    
+    presetEncoding = req.body.editEncoding + String(max).padStart(4, '0');
+  }
+
+  if (!req.body.editEncoding)
+    presetEncoding = "";
+
+  console.log("NEW");
+  console.log(presetEncoding);
+
 
   console.log('HELLO');
   console.log(req.files);
@@ -234,7 +283,7 @@ router.post("/:ingredient_id/inventoryingredientupdate", upload.fields([{ name: 
 
 
   db.updateIngredient(req.body.editInciName, req.body.editTradeName, req.body.editAmount, req.body.editShelf, req.body.editClassifier, req.body.editLotNum,
-    req.body.editReceived, req.body.editSupplier, coaPath, msdsPath, req.body.editExpiration, req.body.editCost, req.body.hazardDetailsEdit, encoding, ingredient_id, (error, results) => {
+    req.body.editReceived, req.body.editSupplier, coaPath, msdsPath, req.body.editExpiration, req.body.editCost, req.body.hazardDetailsEdit, presetEncoding, ingredient_id, (error, results) => {
       if (error) {
         res.redirect("/error");
       } else {
@@ -263,7 +312,6 @@ router.get("/images/:key", (req, res) => {
 
   readStream.pipe(res);
 });
-
 
 
 
