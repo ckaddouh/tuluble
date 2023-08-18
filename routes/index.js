@@ -17,6 +17,8 @@ const authConfig = {
 router.use(auth(authConfig));
 
 router.get('/', async function (req, res, next) {
+  let error;
+
   res.locals.isAuthenticated = req.oidc.isAuthenticated();
 
   if (res.locals.isAuthenticated) {
@@ -63,9 +65,7 @@ router.get('/', async function (req, res, next) {
     }
 
   }
-  
-  let error;
-  
+    
   
 });
 
