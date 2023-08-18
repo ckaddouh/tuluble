@@ -184,6 +184,7 @@ const delete_formula_ingredient_query = `
     project_id = ?
     AND ingredient_id = ?
 `
+
 const getScientistIDQuery = `
   SELECT 
       scientist_id 
