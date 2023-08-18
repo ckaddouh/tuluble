@@ -375,8 +375,8 @@
                                                 <b>TSCA Approved:</b> {{this.tsca_approved}}<br></br>
                                                 <b>Date Receieved: </b>{{formatDate2 this.date_received}}<br></br>
                                                 <b>Expiration Date: </b>{{formatDate2 this.expiration}}<br></br>
-                                                <b>COA:</b> <a target="_blank" href="/inventory/images/{{this.coa}}">Link</a><br></br>
-                                                <b>MSDS:</b> <a target="_blank" href="/inventory/images/{{this.msds}}">Link</a><br></br>
+                                                <b>COA:</b> {{#if this.coa}}<a target="_blank" href="/inventory/images/{{this.coa}}">Link</a>{{/if}}<br></br>
+                                                <b>MSDS:</b> {{#if this.msds}}<a target="_blank" href="/inventory/images/{{this.msds}}">Link</a>{{/if}}<br></br>
                                         </div>
 
                                         <div class="col s12">&nbsp;</div>

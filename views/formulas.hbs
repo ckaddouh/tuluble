@@ -404,10 +404,10 @@
                                 if (ingredients[ing][trial].length !== 0){
                                     console.log(editable[ing][trial]);
                                     if (approved[trial] == '1') {
-                                        $("#info").append("<td class = \"green lighten-4\" style=\"height: 85px; border: 1px solid black;\"id = 'trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
+                                        $("#info").append("<td class = \"green lighten-4\" style=\"height: 85px; border: 1px solid black;\"id = 'trial" + trialDataJSON[trial].trial_num  + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");
                                     }
                                     else {
-                                        $("#info").append("<td style=\"height: 85px\"id = 'trial" + (trial+1) + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "/phase" + ingredients[ing][trial][0]['phase'] +  "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");    
+                                        $("#info").append("<td style=\"height: 85px\"id = 'trial" + trialDataJSON[trial].trial_num + "/ingredient" + ingredients[ing][trial][0]['ingredient_id'] + "' contenteditable='" + editable[ing][trial] + "' style=\"white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 20px;\">"+ingredients[ing][trial][0]['percent_of_ingredient']+"</td>");    
                                     }
                                 }
                                 // ELSE SHOULD NEVER BE REACHED

@@ -23,9 +23,8 @@ router.get("/:project_id/addedIngredient/trial:trial_num/ingredient:ingredient_i
 });
 
 
-router.get("/:project_id/cellEdited/:type/trial:trial_num/ingredient:ingredient_id/phase:phase_num/:cellContent", (req, res) => {
+router.get("/:project_id/cellEdited/trial:trial_num/ingredient:ingredient_id/:cellContent", (req, res) => {
   let project_id = req.params.project_id;
-  let type = req.params.type;
   let trial_num = req.params.trial_num;
   let ingredient_id = req.params.ingredient_id;
   let cellContent = req.params.cellContent;
