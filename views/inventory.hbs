@@ -68,7 +68,7 @@
                                 {{!-- Field 1 --}}
                                 <b><label for="tuluble">INCI Name:</label></b>
                                 <input type="text" name="newInciName" required id="newInciName" placeholder="Enter INCI Name"
-                                    maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
+                                    maxlength="200" pattern="[A-Za-z0-9[()]]+" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 2 --}}
@@ -414,7 +414,7 @@
 
                                                 <b><label for="tuluble">INCI Name:</label></b>
                                                 <input type="text" name="editInciName" id="editInciName"
-                                                    value="{{this.inci_name}}" maxlength="200" pattern="^(?!.*(?:DELETE|delete))[a-zA-Z0-9\s()]*$">
+                                                    value="{{this.inci_name}}" maxlength="200">
                                                 <p> </p>
 
                                                 {{!-- Field 2 --}}
@@ -424,7 +424,7 @@
 
                                                 <b><label for="tuluble">Encoding:</label></b>
                                                 <input type="text" name="editEncoding" id="editEncoding" value="{{this.encoding}}"
-                                                    maxlength="20" pattern="^(?!.*(?:DELETE|delete))[A-Z]*$" title="Please use only capital letters.">
+                                                    maxlength="20" pattern="^[A-Z0-9]*$" title="Please use only capital letters and numbers.">
                                                 <p> </p>
                                                 <br>
 
@@ -617,6 +617,22 @@
             $(document).ready(function(){
                 $('.tooltipped').tooltip();
             });
+        </script>
+
+
+        <script>
+        const editInciNameInput = document.getElementById("editInciName");
+
+        editInciNameInput.addEventListener("input", function () {
+            const value = this.value;
+            const pattern = /^[^/-]*$/;
+            
+            if (!pattern.test(value)) {
+            this.setCustomValidity("Please do not use hyphens or slashes.");
+            } else {
+            this.setCustomValidity("");
+            }
+        });
         </script>
 
         <script>
