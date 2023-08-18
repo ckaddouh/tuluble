@@ -39,7 +39,7 @@ const getTrialsQuery = `
 
 const getFormulaIngredientsQuery= `
   SELECT DISTINCT 
-    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.lot_num
+    ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, ingredient.lot_num
   FROM 
 	  formula_ingredient, ingredient
   WHERE 
