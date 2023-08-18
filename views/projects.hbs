@@ -172,6 +172,11 @@
                                                             <input type="text" name = "editClientName" id="editClientName" value="{{this.client}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                                             <p> </p>
 
+                                                            {{!-- Field 2.5 --}}
+                                                            <b><label for="tuluble">Project Code: </label></b>
+                                                            <input type="text" name = "editProjectCode" id="editProjectCode" value="{{this.project_code}}" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
+                                                            <p> </p>
+
                                                             {{!-- Field 3 --}}
                                                             <b><label for="tuluble">Date Started:</label></b>
                                                             <input type="date" name = "editDate" id="editDate" value="{{formatDate this.date}}">
@@ -264,6 +269,11 @@
                                 {{!-- Field 2 --}}
                                 <b><label for="tuluble">Client Name:</label></b>
                                 <input type="text" name = "newClientName" id="newClientName" placeholder="Enter Client Name" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
+                                <p> </p>
+
+                                {{!-- Field 2.5 --}}
+                                <b><label for="tuluble">Project Code:</label></b>
+                                <input type="text" name = "newProjectCode" id="newProjectCode" placeholder="Enter Project Code" maxlength="100" pattern="^[a-zA-Z0-9\s()]*$" title="Please do not use special characters.">
                                 <p> </p>
 
                                 {{!-- Field 3 --}}

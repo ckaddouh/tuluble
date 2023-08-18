@@ -279,6 +279,13 @@ router.get("/:project_id/removeTrialApproval/:trial_num", async function (req,re
       });
     });
 
+    const removed2 = await new Promise((resolve, reject) => {
+      db.makeEditable(project_id, trial_num, (error, removed2) => {
+        if (error) reject(error);
+        else resolve(removed2);
+      });
+    });
+
 
     res.redirect( "/formulas/" + project_id);
   } catch (error) {

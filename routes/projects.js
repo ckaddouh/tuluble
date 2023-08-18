@@ -85,7 +85,7 @@ router.post("/:project_id/projectupdate", async function (req, res, next) {
 
   try {
     const results = await new Promise((resolve, reject) => {
-      db.updateProject(req.body.editProjectName, req.body.editClientName, req.body.editDate, req.body.editContact, req.body.editEmail, project_id, (error, results) => {
+      db.updateProject(req.body.editProjectName, req.body.editClientName, req.body.editProjectCode, req.body.editDate, req.body.editContact, req.body.editEmail, project_id, (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });
@@ -103,7 +103,7 @@ router.post("/sci/:scientist_id/projectformsubmit", async function (req, res, ne
  
   try {
     const results = await new Promise((resolve, reject) => {
-      db.insertIntoProjects(req.body.newProjectName, req.body.newClientName, req.body.newDate, req.body.newContact, req.body.newEmail, (error, results) => {
+      db.insertIntoProjects(req.body.newProjectName, req.body.newClientName, req.body.newProjectCode, req.body.newDate, req.body.newContact, req.body.newEmail, (error, results) => {
         if (error) reject(error);
         else resolve(results);
       });

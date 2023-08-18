@@ -122,6 +122,16 @@ const removeTrialApprovalQuery = `
     AND trial_num = ?
 `
 
+const makeEditableQuery = `
+  UPDATE
+    formulas
+  SET
+    editable = 1
+  WHERE
+    project_id = ?
+    AND trial_num = ?
+`
+
 const getFormulaIngredientsForTrialQuery = `
   SELECT DISTINCT 
     ingredient.ingredient_id, ingredient.supplier, formula_ingredient.project_id, formula_ingredient.phase, ingredient.trade_name, ingredient.inci_name, formula_ingredient.phase, ingredient.lot_num
@@ -303,6 +313,10 @@ function requireAdmin(email, callback) {
   db.execute(checkAdminQuery, [email], callback);
 }
 
+function makeEditable(project_id, trial_num, callback) {
+  db.execute(makeEditableQuery, [project_id, trial_num], callback);
+}
+
 module.exports = { 
   insertIntoPhase, 
   editFormulaIngredient, 
@@ -326,5 +340,6 @@ module.exports = {
   delete_formula_ingredient,
   getScientistID,
   getAssignedProjects,
-  requireAdmin
+  requireAdmin,
+  makeEditable
 };

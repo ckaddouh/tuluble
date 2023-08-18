@@ -26,15 +26,15 @@ const updateProjectQuery = `
   UPDATE 
     projects
   SET 
-    project_name = ?, client = ?, date = ?, client_name = ?, client_email = ?
+    project_name = ?, client = ?, project_code = ?, date = ?, client_name = ?, client_email = ?
   WHERE 
     project_id = ?
 `
 
 const insertIntoProjectsQuery = `
   INSERT INTO 
-    projects (project_name, client, date, client_name, client_email, active)
-  VALUES (?, ?, ?, ?, ?, 1)
+    projects (project_name, client, project_code, date, client_name, client_email, active)
+  VALUES (?, ?, ?, ?, ?, ?, 1)
 `
 
 const getProjectIDQuery = `
@@ -52,7 +52,7 @@ const assignScientistToProjectQuery = `
 
 const read_projects_all_sql_query = `
     SELECT
-        project_name, project_id, client, date, client_name, client_email
+        project_name, project_id, client, date, client_name, client_email, project_code
     FROM
         projects
     WHERE 
@@ -102,12 +102,12 @@ function read_projects_search(searchStr, scientist_id, callback) {
   db.execute(read_projects_search_query, [searchStr, scientist_id], callback);
 }
 
-function updateProject(editProjectName, editClientName, editDate, editContact, editEmail, project_id, callback) {
-    db.execute(updateProjectQuery, [editProjectName, editClientName, editDate, editContact, editEmail, project_id], callback);
+function updateProject(editProjectName, editClientName, editProjectCode, editDate, editContact, editEmail, project_id, callback) {
+    db.execute(updateProjectQuery, [editProjectName, editClientName, editProjectCode, editDate, editContact, editEmail, project_id], callback);
 }
 
-function insertIntoProjects(newProjectName, newClientName, newDate, newContact, newEmail, callback) {
-  db.execute(insertIntoProjectsQuery, [newProjectName, newClientName, newDate, newContact, newEmail], callback);
+function insertIntoProjects(newProjectName, newClientName, newProjectCode, newDate, newContact, newEmail, callback) {
+  db.execute(insertIntoProjectsQuery, [newProjectName, newClientName, newProjectCode, newDate, newContact, newEmail], callback);
 }
 
 function getProjectID(newProjectName, newClientName, newDate, callback) {
